@@ -12,21 +12,14 @@ class AttendanceController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        // $this->middleware('permission:add-attendance', ['only' => ['create','store']]);
+        $this->middleware('permission:add-attendance|view-attendance', ['only' => ['index','store']]);
+        $this->middleware('permission:view-attendance', ['only' => ['view']]);
+        $this->middleware('permission:add-attendance', ['only' => ['store']]);
     }
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $attendances = Attendance::all();
-        return view('attendance.index', compact('attendances'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create($id)
+    public function index($id)
     {
         $child = Child::findOrFail($id);
         $childAttendance = Attendance::where('child_id', $id)->get();
@@ -35,23 +28,31 @@ class AttendanceController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Show the form for creating a new resource.
      */
-    public function store(StoreAttendanceRequest $request)
+    public function create(StoreAttendanceRequest $request, $id)
     {
         
-        $withmilk = $request->has('with_milk') ? 1 :0;
+    }
 
-        $child = Attendance::create([
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreAttendanceRequest $request, $id)
+    {
+        $withmilk = $request->has('with_milk') ? 1 : 0;
+
+        Attendance::create([
             'feeding_no' => $request->feeding_no,
             'child_id' => $request->child_id,
-            'date' => $request->date,
-            'with_milk' => $withmilk,
+            'feeding_date' => $request->feeding_date,
+            'with_milk' => $request->with_milk,
             'created_by_user_id' => auth()->id(),
         ]);
 
-        return redirect()->back()->with('success', 'Attendance recorded successfully.');
+        return redirect()->route('attendance.index', $id)->with('success', 'Attendance recorded successfully.');
     }
+
     /**
      * Display the specified resource.
      */

@@ -60,7 +60,7 @@
                                     <h5 class='col-md-6'>{{ $child->full_name }}</h5>
                                 </div>
                                 <div class="w-full">
-                                    <form method="post" action="{{ route('attendance.store') }}" class="flex flex-wrap items-center gap-4">
+                                    <form method="post" action="{{ route('attendance.store', $child->id) }}" class="flex flex-wrap items-center gap-4">
                                         @csrf
                                         <input type="hidden" name="child_id" value="{{ $child->id }}">
                                         
@@ -68,7 +68,10 @@
                                         <div class="flex items-center space-x-2 w-6/12">
                                             <label for="feeding_date" class="col-form-label">Feeding date:</label>
                                             <input type="date" class="form-control rounded border-gray-300"
-                                                id="feeding_date" name='feeding_date' value="{{ old('date') }}" required>
+                                                id="feeding_date" name='feeding_date' value="{{ old('feeding_date') }}">
+                                            @error('feeding_date')
+                                                <span class="text-xs text-red-600">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         
                                         <!-- With Milk Checkbox -->

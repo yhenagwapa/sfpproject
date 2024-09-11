@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAttendanceRequest extends FormRequest
+class UpdateEntryNutritionalStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth()->user()->can('add-attendance');
+        return false;
     }
 
     /**
@@ -22,13 +22,17 @@ class StoreAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'feeding_date' => ['required', 'date'],
+            'weight' => ['required', 'numeric'],
+            'height' => ['required', 'donumericuble'],
+            'actual_date_of_weighing' => ['required', 'date'],
         ];
     }
     public function messages()
     {
         return [
-            'feeding_date.required' => 'Please provice feeding date.',
+            'weight.required' => 'Please fill in weight.',
+            'weight.numeric' => 'Invalid entry',
+            'date_of_birth.required' => 'Please fill in actual date of weighing',
         ];
     }
 }

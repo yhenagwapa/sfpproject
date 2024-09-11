@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('feeding_no');
             $table->unsignedBigInteger('child_id'); 
-            $table->date('date');
+            $table->date('feeding_date');
             $table->boolean('with_milk');
             $table->unsignedBigInteger('created_by_user_id'); 
             $table->timestamps();

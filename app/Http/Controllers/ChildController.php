@@ -10,6 +10,7 @@ use App\Models\Attendance;
 use App\Http\Controllers\Log;
 use Illuminate\Http\Request;
 use App\Models\Psgc;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class ChildController extends Controller
@@ -75,14 +76,133 @@ class ChildController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $this->authorize('create-child');
-        
+
         $centers = ChildDevelopmentCenter::all();
 
-        return view('child.create', compact('centers'));
+        $psgc = new Psgc();
+
+        // Fetch all provinces for the form
+        $provinces = $psgc->getProvinces();
+        $cities = $psgc->allCities();      // Fetch all cities once
+        $barangays = $psgc->allBarangays(); // Fetch all barangays once
+
+        if ($request->has('province_psgc') && !empty($request->input('province_psgc'))) {
+            $province_psgc = $request->input('province_psgc');
+            // Fetch cities for the selected province
+            $cities = $psgc->allCities()->get($province_psgc, collect([]));
+        }
+    
+        // Check if city is selected
+        if ($request->has('city_name_psgc') && !empty($request->input('city_name_psgc'))) {
+            $city_psgc = $request->input('city_name_psgc');
+            $barangays = $psgc->getBarangays($city_psgc);
+        }
+
+        return view('child.create', compact('centers', 'provinces', 'cities', 'barangays'));
     }
+
+    // public function getProvinces($region_psgc)
+    // {
+    //     $provinces = Psgc::where('region_psgc', $region_psgc)
+    //                     ->distinct()
+    //                     ->orderBy("province_name")
+    //                     ->pluck('province_name', 'province_psgc');
+
+    //     return response()->json($provinces);
+
+    // }
+
+    // public function getCities($province_psgc)
+    // {
+    //     $cities = Psgc::where('province_psgc', $province_psgc)
+    //                 ->distinct()
+    //                 ->orderBy('city_name')
+    //                 ->pluck('city_name', 'city_name_psgc');
+            
+    //     return response()->json($cities);
+    // }
+
+    // public function getBarangays($city_psgc)
+    // {
+    //     $barangays = Psgc::where('city_name_psgc', $city_psgc)
+    //                     ->distinct()
+    //                     ->orderBy('brgy_name')
+    //                     ->pluck('brgy_name', 'brgy_psgc');
+        
+    //     return response()->json($barangays);
+    // }
+
+    // public function getPsgcId($region_psgc, $province_psgc, $city_name_psgc, $brgy_psgc)
+    // {
+    //     try {
+    //         $psgc = Psgc::where('region_psgc', $region_psgc)
+    //                     ->where('province_psgc', $province_psgc)
+    //                     ->where('city_name_psgc', $city_name_psgc)
+    //                     ->where('brgy_psgc', $brgy_psgc)
+    //                     ->pluck('psgc_id');
+    
+    //         return response()->json($psgc);
+    //     } catch (\Exception $e) {
+    //         // Log the error for debugging
+    //         \Log::error('Error fetching PSGC ID: ' . $e->getMessage());
+    
+    //         // Return a JSON response with an error message
+    //         return response()->json(['error' => 'Unable to fetch PSGC ID'], 500);
+    //     }
+    // }
+
+    // In your controller
+    // public function getLocationData(Request $request)
+    // {
+    //     $regionPsgc = $request->input('region_psgc');
+    //     $provincePsgc = $request->input('province_psgc');
+    //     $cityPsgc = $request->input('city_name_psgc');
+    //     // Get distinct provinces
+    //     $provinces = DB::table('psgcs')
+    //     ->where('region_psgc', $regionPsgc)
+    //     ->distinct()
+    //     ->pluck('province_psgc', 'province_name');
+
+    //     // Get distinct cities
+    //     $cities = DB::table('psgcs')
+    //         ->where('province_psgc', $provincePsgc)
+    //         ->distinct()
+    //         ->pluck('city_name_psgc', 'city_name');
+
+    //     // Get distinct barangays
+    //     $barangays = DB::table('psgcs')
+    //         ->where('city_name_psgc', $cityPsgc)
+    //         ->distinct()
+    //         ->pluck('brgy_psgc', 'brgy_name');
+
+    //         dd($provinces, $cities, $barangays);
+
+    //     return view('child.create', compact('provinces', 'cities', 'barangays'));
+    // }
+
+
+
+    // public function getLocationData($psgc_id)
+    // {
+    //     $location = Psgc::where('psgc_id', $psgc_id)->first();
+
+    //     if ($location) {
+    //         return response()->json([
+    //             'province_psgc' => $location->province_psgc,
+    //             'province_name' => $location->province_name,
+    //             'city_psgc' => $location->city_name_psgc,
+    //             'city_name' => $location->city_name,
+    //             'barangay_psgc' => $location->brgy_psgc,
+    //             'barangay_name' => $location->brgy_name,
+    //         ]);
+    //     } else {
+    //         return response()->json(['error' => 'Location not found'], 404);
+    //     }
+    // }
+
 
     /**
      * Store a newly created resource in storage.
@@ -91,7 +211,7 @@ class ChildController extends Controller
     {
         $this->authorize('create-child');
 
-        $validatedData = $request->validated();$request->validated();
+        $validatedData = $request->validated();
 
         // Check if the child already exists
         $childExists = Child::where('firstname', $request->firstname)
@@ -105,6 +225,17 @@ class ChildController extends Controller
         if ($childExists) {
             return redirect()->back()->with('error', 'Child already exists.');
         }
+
+        $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
+                ->where('city_name_psgc', $request->input('city_name_psgc'))
+                ->where('brgy_psgc', $request->input('brgy_psgc'))
+                ->first();
+
+        if ($psgc) {
+            $psgc_id = $psgc->psgc_id;
+        } else {
+            return redirect()->back()->withErrors(['msg' => 'Location not found']);
+        }
         
         $child = Child::create([
             'firstname' => $request->firstname,
@@ -114,7 +245,7 @@ class ChildController extends Controller
             'date_of_birth' => $request->date_of_birth,
             'sex' => $request->sex,
             'address' => $request->address,
-            'psgc_id' => $request->psgc_id,
+            'psgc_id' => $psgc_id,
             'zip_code' => $request->zip_code,
             'is_pantawid' => $request->is_pantawid,
             'pantawid_details' => $request->pantawid_details,

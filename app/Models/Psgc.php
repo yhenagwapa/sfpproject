@@ -14,71 +14,63 @@ class Psgc extends Model
 
 
 
-    public function getProvinces($region_psgc)
+    public function getProvinces()
     {
-        $provinces = Psgc::where('region_psgc', $region_psgc)
-                        ->distinct()
-                        ->orderBy("province_name")
-                        ->pluck('province_name', 'province_psgc');
-
-        return response()->json($provinces);
-
+        return Psgc::where('region_psgc', '110000000')
+            ->orderBy("province_name")
+            ->pluck('province_name', 'province_psgc');
     }
 
-    public function getCities($province_psgc)
-    {
-        $cities = Psgc::where('province_psgc', $province_psgc)
-                    ->distinct()
-                    ->orderBy('city_name')
-                    ->pluck('city_name', 'city_name_psgc');
-            
-        return response()->json($cities);
-    }
+    // Fetch all cities grouped by province PSGC
+    public function allCities()
+{
+    // Get all cities with distinct names
+    $cities = Psgc::whereNotNull('city_name_psgc')
+                   ->orderBy('city_name')
+                   ->distinct('city_name_psgc')
+                   ->get(['city_name_psgc', 'city_name', 'province_psgc']);
 
-    public function getBarangays($city_psgc)
+    // Group cities by province
+    $groupedCities = $cities->groupBy('province_psgc')->map(function($group) {
+        return $group->map(function($item) {
+            return [
+                'psgc' => $item->city_name_psgc,
+                'name' => $item->city_name
+            ];
+        });
+    });
+
+    return $groupedCities;
+}
+
+
+    // Fetch all barangays grouped by city PSGC
+    public function allBarangays()
     {
-        $barangays = Psgc::where('city_name_psgc', $city_psgc)
-                        ->distinct()
-                        ->orderBy('brgy_name')
-                        ->pluck('brgy_name', 'brgy_psgc');
-        
-        return response()->json($barangays);
+        return Psgc::whereNotNull('brgy_psgc')
+                    ->orderBy('brgy_name')
+                    ->get()
+                    ->groupBy('city_name_psgc')
+                    ->map(function($group) {
+                        return $group->map(function($item) {
+                            return ['psgc' => $item->brgy_psgc, 'name' => $item->brgy_name];
+                        });
+                    });
     }
 
     public function getPsgcId($region_psgc, $province_psgc, $city_name_psgc, $brgy_psgc)
     {
-        try {
-            $psgc = Psgc::where('region_psgc', $region_psgc)
-                        ->where('province_psgc', $province_psgc)
-                        ->where('city_name_psgc', $city_name_psgc)
-                        ->where('brgy_psgc', $brgy_psgc)
-                        ->pluck('psgc_id');
-    
-            return response()->json($psgc);
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            \Log::error('Error fetching PSGC ID: ' . $e->getMessage());
-    
-            // Return a JSON response with an error message
-            return response()->json(['error' => 'Unable to fetch PSGC ID'], 500);
-        }
+        return Psgc::where('region_psgc', $region_psgc)
+            ->where('province_psgc', $province_psgc)
+            ->where('city_name_psgc', $city_name_psgc)
+            ->where('brgy_psgc', $brgy_psgc)
+            ->pluck('psgc_id')
+            ->first();
     }
 
     public function getLocationData($psgc_id)
     {
-        $location = Psgc::where('psgc_id', $psgc_id)->first();
-
-        if ($location) {
-            return response()->json([
-                'province_psgc' => $location->province_psgc,
-                'province_name' => $location->province_name,
-                'city_psgc' => $location->city_name_psgc,
-                'city_name' => $location->city_name,
-                'barangay_psgc' => $location->brgy_psgc,
-                'barangay_name' => $location->brgy_name,
-            ]);
-        } else {
-            return response()->json(['error' => 'Location not found'], 404);
-        }
+        return Psgc::where('psgc_id', $psgc_id)->first();
     }
+
 }

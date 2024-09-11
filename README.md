@@ -72,9 +72,13 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ##### Last move here
 
-psgc issue
-add attendance issue
+psgc issue RESOLVED but create:267 Uncaught ReferenceError: filterCities is not defined
+    at HTMLSelectElement.onchange (create:267:71)
 
+
+attendance need to count 120 feedings
+ns to follow weight for age, weight for height and height for age calculation
+reports is urgent!
 =======
 # sfpproject
 SFP Onse Project
