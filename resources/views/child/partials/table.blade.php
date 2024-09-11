@@ -1,10 +1,10 @@
-<div class="col-6 mt-4 d-flex justify-content-end align-items-center">
+{{-- <div class="col-6 mt-4 d-flex justify-content-end align-items-center">
     <form method="GET" action="{{ route('child.search') }}" class="d-flex w-100">
         <input type="search" name="search" id='search' class="form-control me-2 rounded" placeholder="Search"
             value="{{ $search }}">
         <button type="submit" class="text-white bg-blue-600 rounded px-3 min-h-9">Search</button>
     </form>
-</div>
+</div> --}}
 <table id='children-table' class="table datatable mt-3">
     <thead class="text-base">
         <tr>

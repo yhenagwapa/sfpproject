@@ -8,6 +8,9 @@ use App\Http\Controllers\ChildController;
 use App\Http\Controllers\EntryNutritionalStatusController;
 use App\Http\Controllers\ExitNutritionalStatusController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\ChildDevelopmentCenterController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +70,10 @@ require __DIR__.'/auth.php';
     Route::post('nutritionalstatus/store', [ExitNutritionalStatusController::class, 'store'])->name('nutritionalstatus.store');
 
     Route::view('/reports', 'reports.index')->name('reports.index');
+    Route::get('/reports', [ReportsController::class, 'viewMasterlist'])->name('reports.index');
+
+    Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
+    Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');
 
 
 // });

@@ -113,7 +113,7 @@
                                     <div class="tab-pane fade show active" id="masterlist" role="tabpanel"
                                         aria-labelledby="masterlist-tab">
                                         <div class="col-md-12" id="masterlist-table">
-                                            @include('reports.partials.masterlist-table')
+                                            @include('reports.partials.masterlist-table', ['children' => $children])
                                         </div>
                                     </div>
 

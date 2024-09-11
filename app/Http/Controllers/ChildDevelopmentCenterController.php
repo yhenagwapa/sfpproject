@@ -5,12 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\ChildDevelopmentCenter;
 use App\Http\Requests\StoreChildDevelopmentCenterRequest;
 use App\Http\Requests\UpdateChildDevelopmentCenterRequest;
-use App\Http\Controllers\ChildController;
+use App\Models\ChildController;
+use Illuminate\Http\Request;
+use App\Models\Psgc;
 class ChildDevelopmentCenterController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:create-child-development-center', ['only' => ['index','create', 'store']]);
+        $this->middleware('permission:edit-child-develpment-center', ['only' => ['index', 'edit', 'update']]);options: 
+    }
+
     public function index()
     {
         $centers = ChildDevelopmentCenter::all();
@@ -30,9 +39,32 @@ class ChildDevelopmentCenterController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('centers.create');
+        $this->authorize('create-child');
+
+        $centers = ChildDevelopmentCenter::all();
+
+        $psgc = new Psgc();
+
+        // Fetch all provinces for the form
+        $provinces = $psgc->getProvinces();
+        $cities = $psgc->allCities();      // Fetch all cities once
+        $barangays = $psgc->allBarangays(); // Fetch all barangays once
+
+        if ($request->has('province_psgc') && !empty($request->input('province_psgc'))) {
+            $province_psgc = $request->input('province_psgc');
+            // Fetch cities for the selected province
+            $cities = $psgc->allCities()->get($province_psgc, collect([]));
+        }
+    
+        // Check if city is selected
+        if ($request->has('city_name_psgc') && !empty($request->input('city_name_psgc'))) {
+            $city_psgc = $request->input('city_name_psgc');
+            $barangays = $psgc->getBarangays($city_psgc);
+        }
+
+        return view('child.create', compact('centers', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -40,7 +72,39 @@ class ChildDevelopmentCenterController extends Controller
      */
     public function store(StoreChildDevelopmentCenterRequest $request)
     {
-        //
+        $this->authorize('create-child-development-center');
+
+        $validatedData = $request->validated();
+
+        // Check if the child already exists
+        $centerExists = ChildDevelopmentCenter::where('name', $request->name)
+                            ->exists();
+
+        if ($centerExists) {
+            return redirect()->back()->with('error', 'Center already exists.');
+        }
+
+        $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
+                ->where('city_name_psgc', $request->input('city_name_psgc'))
+                ->where('brgy_psgc', $request->input('brgy_psgc'))
+                ->first();
+
+        if ($psgc) {
+            $psgc_id = $psgc->psgc_id;
+        } else {
+            return redirect()->back()->withErrors(['msg' => 'Location not found']);
+        }
+        
+        $child = ChildDevelopmentCenter::create([
+            'center_name' => $request->center_name,
+            'psgc_id' => $psgc_id,
+            'address' => $request->address,
+            'zip_code' => $request->zip_code,
+            'assigned_user_id' => $request->assigned_user_id,
+            'created_by_user_id' => auth()->id(),
+        ]);
+
+        return redirect()->route('centers.index')->with('success', 'Child Development Center saved successfully');
     }
 
     /**

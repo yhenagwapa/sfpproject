@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('child_development_centers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('center_name');
             $table->string('address');
             $table->unsignedBigInteger('psgc_id')->nullable(); 
             $table->integer('zip_code');
+            $table->foreignId('assigned_user_id')->constrained('users')->nullable();
+            $table->foreignId('created_by_user_id')->constrained('users')->nullable();
             $table->timestamps();
         });
     }

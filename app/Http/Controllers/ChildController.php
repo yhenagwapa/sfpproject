@@ -19,7 +19,7 @@ class ChildController extends Controller
      * Display a listing of the resource.
      */
 
-     public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
         $this->middleware('permission:create-child|edit-child|delete-child', ['only' => ['index','show']]);
@@ -103,106 +103,6 @@ class ChildController extends Controller
 
         return view('child.create', compact('centers', 'provinces', 'cities', 'barangays'));
     }
-
-    // public function getProvinces($region_psgc)
-    // {
-    //     $provinces = Psgc::where('region_psgc', $region_psgc)
-    //                     ->distinct()
-    //                     ->orderBy("province_name")
-    //                     ->pluck('province_name', 'province_psgc');
-
-    //     return response()->json($provinces);
-
-    // }
-
-    // public function getCities($province_psgc)
-    // {
-    //     $cities = Psgc::where('province_psgc', $province_psgc)
-    //                 ->distinct()
-    //                 ->orderBy('city_name')
-    //                 ->pluck('city_name', 'city_name_psgc');
-            
-    //     return response()->json($cities);
-    // }
-
-    // public function getBarangays($city_psgc)
-    // {
-    //     $barangays = Psgc::where('city_name_psgc', $city_psgc)
-    //                     ->distinct()
-    //                     ->orderBy('brgy_name')
-    //                     ->pluck('brgy_name', 'brgy_psgc');
-        
-    //     return response()->json($barangays);
-    // }
-
-    // public function getPsgcId($region_psgc, $province_psgc, $city_name_psgc, $brgy_psgc)
-    // {
-    //     try {
-    //         $psgc = Psgc::where('region_psgc', $region_psgc)
-    //                     ->where('province_psgc', $province_psgc)
-    //                     ->where('city_name_psgc', $city_name_psgc)
-    //                     ->where('brgy_psgc', $brgy_psgc)
-    //                     ->pluck('psgc_id');
-    
-    //         return response()->json($psgc);
-    //     } catch (\Exception $e) {
-    //         // Log the error for debugging
-    //         \Log::error('Error fetching PSGC ID: ' . $e->getMessage());
-    
-    //         // Return a JSON response with an error message
-    //         return response()->json(['error' => 'Unable to fetch PSGC ID'], 500);
-    //     }
-    // }
-
-    // In your controller
-    // public function getLocationData(Request $request)
-    // {
-    //     $regionPsgc = $request->input('region_psgc');
-    //     $provincePsgc = $request->input('province_psgc');
-    //     $cityPsgc = $request->input('city_name_psgc');
-    //     // Get distinct provinces
-    //     $provinces = DB::table('psgcs')
-    //     ->where('region_psgc', $regionPsgc)
-    //     ->distinct()
-    //     ->pluck('province_psgc', 'province_name');
-
-    //     // Get distinct cities
-    //     $cities = DB::table('psgcs')
-    //         ->where('province_psgc', $provincePsgc)
-    //         ->distinct()
-    //         ->pluck('city_name_psgc', 'city_name');
-
-    //     // Get distinct barangays
-    //     $barangays = DB::table('psgcs')
-    //         ->where('city_name_psgc', $cityPsgc)
-    //         ->distinct()
-    //         ->pluck('brgy_psgc', 'brgy_name');
-
-    //         dd($provinces, $cities, $barangays);
-
-    //     return view('child.create', compact('provinces', 'cities', 'barangays'));
-    // }
-
-
-
-    // public function getLocationData($psgc_id)
-    // {
-    //     $location = Psgc::where('psgc_id', $psgc_id)->first();
-
-    //     if ($location) {
-    //         return response()->json([
-    //             'province_psgc' => $location->province_psgc,
-    //             'province_name' => $location->province_name,
-    //             'city_psgc' => $location->city_name_psgc,
-    //             'city_name' => $location->city_name,
-    //             'barangay_psgc' => $location->brgy_psgc,
-    //             'barangay_name' => $location->brgy_name,
-    //         ]);
-    //     } else {
-    //         return response()->json(['error' => 'Location not found'], 404);
-    //     }
-    // }
-
 
     /**
      * Store a newly created resource in storage.

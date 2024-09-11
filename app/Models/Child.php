@@ -34,6 +34,11 @@ class Child extends Model
         'created_by_user_id', 
         'updated_by_user_id'];
 
+    public function nutritionalStatus()
+    {
+        return $this->hasOne(EntryNutritionalStatus::class, 'child_id');
+    }
+
     public function getFullNameAttribute()
     {
         return trim("{$this->firstname} {$this->middlename} {$this->lastname}");

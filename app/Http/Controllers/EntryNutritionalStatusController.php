@@ -24,12 +24,13 @@ class EntryNutritionalStatusController extends Controller
     {
         $child = Child::findOrFail($id);
         $dob = $child->date_of_birth;
+        $actualDate = EntryNutritionalStatus::where('child_id', $id)
+                    ->value('actual_date_of_weighing');
+        
+        $actualDate = Carbon::parse($actualDate);
 
-        $today = Carbon::now();
-        $birthDate = Carbon::parse($dob);
-
-        $ageInYears = $today->diffInYears($birthDate);
-        $ageInMonths = $today->diffInMonths($birthDate) % 12;
+        $ageInYears = $actualDate->diffInYears(Carbon::parse($dob));
+        $ageInMonths = $actualDate->diffInMonths(Carbon::parse($dob)) % 12;
 
         $results = DB::table('entry_nutritional_statuses')
                     ->join('exit_nutritional_statuses','entry_nutritional_statuses.child_id', '=', 'exit_nutritional_statuses.child_id')
