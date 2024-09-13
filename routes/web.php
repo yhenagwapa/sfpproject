@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
-use App\Http\Controllers\EntryNutritionalStatusController;
-use App\Http\Controllers\ExitNutritionalStatusController;
+use App\Http\Controllers\NutritionalStatusController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ChildDevelopmentCenterController;
@@ -63,11 +62,12 @@ require __DIR__.'/auth.php';
     Route::get('/attendance/index/{child}', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/store/{child}', [AttendanceController::class, 'store'])->name('attendance.store');
 
-    Route::get('nutritionalstatus/{id}', [EntryNutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
-    Route::post('nutritionalstatus/store', [EntryNutritionalStatusController::class, 'store'])->name('nutritionalstatus.store');
+    Route::get('nutritionalstatus/{id}', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
+    Route::post('nutritionalstatus/store', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
+    Route::put('nutritionalstatus/store', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
 
-    Route::get('nutritionalstatus/{id}', [ExitNutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
-    Route::post('nutritionalstatus/store', [ExitNutritionalStatusController::class, 'store'])->name('nutritionalstatus.store');
+    // Route::get('nutritionalstatus/{id}', [ExitNutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
+    // Route::post('nutritionalstatus/store', [ExitNutritionalStatusController::class, 'store'])->name('nutritionalstatus.store');
 
     // Route::view('/reports', 'reports.index')->name('reports.index');
     // Separate routes for different reports

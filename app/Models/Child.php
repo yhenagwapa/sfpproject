@@ -36,7 +36,7 @@ class Child extends Model
 
     public function nutritionalStatus()
     {
-        return $this->hasOne(EntryNutritionalStatus::class, 'child_id');
+        return $this->hasOne(NutritionalStatus::class, 'child_id');
     }
 
     public function getFullNameAttribute()
