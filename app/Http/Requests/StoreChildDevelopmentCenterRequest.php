@@ -11,7 +11,7 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('create-child-development-center');
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name', ['required', 'string:255'],
+            'center_name', ['required', 'string:255'],
+            'assigned_user_id', ['required', 'exists:users,id'],
             'province_psgc' => ['required'],
             'city_name_psgc' => ['required'],
             'brgy_psgc' => ['required'],
@@ -33,8 +34,9 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Please fill in name of child development center',
-            'name.string' => 'Invalid entry.',
+            'center_name.required' => 'Please fill in name of child development center',
+            'center_name.string' => 'Invalid entry.',
+            'assigned_user_id' => 'Please select assigned worker.',
             'province_psgc.required' => 'Please select a province.',
             'city_name_psgc.required' => 'Please select a city.',
             'brgy_psgc.required' => 'Please select a barangay.',

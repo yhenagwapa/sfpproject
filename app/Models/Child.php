@@ -43,4 +43,8 @@ class Child extends Model
     {
         return trim("{$this->firstname} {$this->middlename} {$this->lastname}");
     }
+    public function center()
+    {
+        return $this->belongsTo(ChildDevelopmentCenter::class, 'child_development_center_id');
+    }
 }

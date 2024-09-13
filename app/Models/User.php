@@ -105,4 +105,11 @@ class User extends Authenticatable
         $user->syncPermissions($permissionModels);  
     }
 
+    public function getFullNameAttribute()
+    {
+        return "{$this->firstname} {$this->middlename} {$this->lastname} {$this->extension_name}";
+    }
+
+
+
 }

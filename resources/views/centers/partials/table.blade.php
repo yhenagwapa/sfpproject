@@ -8,6 +8,7 @@
     <thead>
         <tr>
             <th><b>Child Development Centers</b></th>
+            <th>Child Development Worker</th>
             <th>Province</th>
             <th>City/Municipality</th>
             <th>Barangay</th>
@@ -18,15 +19,27 @@
     <tbody class="centers-table">
         @foreach($centers as $center)
             <tr>
-                <td>{{ $center->name }}</td>
-                <td>{{ $center->name }}</td>
-                <td>{{ $center->name }}</td>
-                <td>{{ $center->name }}</td>
-                <td>{{ $center->name }}</td>
+                <<td>{{ $center->center_name }}</td>
+                <td>{{ $center->province->province_name}}</td>
+                <td>{{ $center->city->city_name_psgc}}</td>
+                <td>{{ $center->barangay->brgy_name}}</td>
+                <td>{{ $center->address}}</td>
+                <td>{{ $center->user->full_name}}</td>
                 <td>
-                    <a href="" >
-                        <i class="bi bi-pencil text-white border-2 border-blue-600 bg-blue-600 rounded px-3"></i>
-                    </a>
+                    <div class="flex space-x-2">
+                        @canany(['edit-child-development-center'])
+                            <a href="" class="relative group">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="#3968d2" class="w-6 h-6">
+                                        <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 5H7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2V7a2 2 0 0 0 -2 -2h-2" />  <rect x="9" y="3" width="6" height="4" rx="2" />  <path d="M9 14l2 2l4 -4" />
+                                    </svg>
+                                </button>
+                                <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-gray-800 text-white text-xs rounded px-2 py-1">
+                                    Edit
+                                </div>
+                            </a>
+                        @endcanany
+                    </div>
                 </td>
             </tr>
         @endforeach

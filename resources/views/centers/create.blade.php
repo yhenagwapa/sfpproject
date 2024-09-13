@@ -11,41 +11,26 @@
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('centers.index') }}">Child Development Centers</a></li>
-                    <li class="breadcrumb-item active">CDC Details</li>
+                    <li class="breadcrumb-item active">Child Development Centers Details</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
 
-        @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
+        @if ($errors->any())
+    <div class="alert alert-success">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
-
-        {{-- @if (session('success'))
-        <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
-          {{ session('success') }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      @endif
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var alert = document.getElementById('success-alert');
-            if (alert) {
-                // Automatically close the alert after 3 seconds (3000 milliseconds)
-                setTimeout(function () {
-                    var bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                }, 2000);
-            }
-        });
-    </script> --}}
 
         <div class="wrapper">
             <section class="section">
@@ -54,24 +39,36 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Child Development Center Details</h5>
-                                <form class="row" method="post" action="{{ route('child.store') }} ">
+                                <form class="row" method="post" action="{{ route('centers.store') }} ">
                                     @csrf
 
-                                    <div class='col-md-2 mt-2 text-gray-400 text-xs'>CDC Information</div>
-                                    <div class='col-md-10 mt-3 text-gray-400 text-xs'>
+                                    <div class='col-md-3 mt-2 text-gray-400 text-xs'>Child Development Center Information</div>
+                                    <div class='col-md-9 mt-3 text-gray-400 text-xs'>
                                         <hr>
                                     </div>
 
                                     <div class="col-md-12 mt-3 text-sm">
-                                        <label for="center_name">CDC Name</label><label for="center_name"
-                                            class="text-red-600">*</label>
-                                        <input type="text" class="form-control rounded border-gray-300" id="center_name"
-                                            name='center_name' value="{{ old('center_name') }}" autofocus>
+                                        <label for="center_name">Child Development Center Name<b class='text-red-600'>*</b></label>
+                                        <input type="text" class="form-control rounded border-gray-300" id="center_name" name="center_name" value="{{ old('center_name') }}" autofocus>
                                         @error('center_name')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
-
+                                
+                                    <div class="col-md-12 mt-2 text-sm">
+                                        <label for="assigned_user_id">Child Development Worker<b class='text-red-600'>*</b></label>
+                                        <select class="form-control rounded border-gray-300" id="assigned_user_id" name="assigned_user_id">
+                                            <option value="">Select a worker</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}" {{ old('assigned_user_id') == $user->id ? 'selected' : '' }}>
+                                                    {{ $user->full_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('assigned_user_id')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
 
                                     <div class='col-md-1 mt-4 text-gray-400 text-xs'>Address</div>
                                     <div class='col-md-11 mt-8 text-gray-400 text-xs'>
@@ -81,7 +78,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="region">Region</label><label for="region"
                                             class="text-red-600">*</label>
-                                        <select class="form-control" id="region">
+                                        <select class="form-control rounded border-gray-300" id="region">
                                             <option value="110000000" selected>Region XI</option>
                                         </select>
                                     </div>
@@ -91,7 +88,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="province">Province</label><label for="province"
                                             class="text-red-600">*</label>
-                                        <select class="form-control" id="province" name="province_psgc"
+                                        <select class="form-control rounded border-gray-300" id="province" name="province_psgc"
                                             onchange="filterCities()">
                                             <option value="" selected>Select Province</option>
                                             @foreach ($provinces as $psgc => $name)
@@ -108,7 +105,7 @@
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="city">City/Municipality</label><label for="city"
                                             class="text-red-600">*</label>
-                                        <select class="form-control" id="city" name="city_name_psgc"
+                                        <select class="form-control rounded border-gray-300" id="city" name="city_name_psgc"
                                             onchange="filterBarangays()">
                                             <option value="" selected>Select City/Municipality</option>
                                             @foreach ($cities as $psgc => $name)
@@ -125,7 +122,7 @@
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="barangay">Barangay</label><label for="barangay"
                                             class="text-red-600">*</label>
-                                        <select class="form-control" id="barangay" name="brgy_psgc">
+                                        <select class="form-control rounded border-gray-300" id="barangay" name="brgy_psgc">
                                             <option value="" selected>Select Barangay</option>
                                             @foreach ($barangays as $psgc => $name)
                                                 <option value="{{ $psgc }}"
@@ -140,42 +137,44 @@
 
 
                                     <div class="col-6 mt-2 text-sm">
-                                        <label for="house_no">House No./ Street/ Purok</label><label for="house_no"
+                                        <label for="address">House No./ Street/ Purok</label><label for="address"
                                             class="text-red-600">*</label>
-                                        <input type="text" class="form-control" id="house_no" name='house_no'
-                                            value="{{ old('house_no') }}">
-                                        @error('house_no')
+                                        <input type="text" class="form-control rounded border-gray-300" id="address" name='address'
+                                            value="{{ old('address') }}">
+                                        @error('address')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm">
-                                        <label for="zipcode">Zip Code</label><label for="zipcode"
+                                        <label for="zip_code">Zip Code</label><label for="zip_code"
                                             class="text-red-600">*</label>
-                                        <input type="text" class="form-control" id="zipcode" name='zipcode'
-                                            value="{{ old('zipcode') }}" maxlength="4">
-                                        @error('zipcode')
+                                        <input type="text" class="form-control rounded border-gray-300" id="zip_code" name='zip_code'
+                                            value="{{ old('zip_code') }}" maxlength="4">
+                                        @error('zip_code')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
 
-                                    <div class='col-md-1 mt-4 text-gray-400 text-xs'>Areas</div>
+                                    
+
+                                    {{-- <div class='col-md-1 mt-4 text-gray-400 text-xs'>Areas</div>
                                     <div class='col-md-11 mt-8 text-gray-400 text-xs'>
                                         <hr>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="col-md-12 mt-3 mb-0 text-sm">
+                                    {{-- <div class="col-md-12 mt-3 mb-0 text-sm">
                                         <label for="cdcname" class="mr-2">Area/s</label>
                                     </div>
                                     <div class="col-md-12" id="input-container">
                                         <div class="input-group mb-2">
-                                            <input type="text" class="form-control rounded border-gray-300 mr-3"
+                                            <input type="text" class="form-control rounded border-gray-300 rounded border-gray-300 mr-3"
                                                 name="cdcname[]" value="{{ old('cdcname') }}" autofocus>
                                             <button type="button"
                                                 class="text-white bg-blue-600 rounded text-sm text-nowrap px-4 min-h-9 add-more">
                                                 Add More
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-md-12 mt-4 text-right">
                                         <button type="submit"
@@ -192,7 +191,7 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <script>
+        {{-- <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const inputContainer = document.getElementById('input-container');
 
@@ -215,7 +214,7 @@
                     // Create a new input field
                     const newInput = document.createElement('input');
                     newInput.type = 'text';
-                    newInput.className = 'form-control rounded border-gray-300 mr-2';
+                    newInput.className = 'form-control rounded border-gray-300 rounded border-gray-300 mr-2';
                     newInput.name = 'cdcname[]'; // Use array notation to handle multiple inputs
 
                     // Create a new "Add More" button
@@ -287,7 +286,7 @@
                     addInput(); // Add the first new input field
                 });
             });
-        </script>
+        </script> --}}
 
 
         <script>

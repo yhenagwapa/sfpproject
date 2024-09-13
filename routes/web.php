@@ -69,11 +69,13 @@ require __DIR__.'/auth.php';
     Route::get('nutritionalstatus/{id}', [ExitNutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
     Route::post('nutritionalstatus/store', [ExitNutritionalStatusController::class, 'store'])->name('nutritionalstatus.store');
 
-    Route::view('/reports', 'reports.index')->name('reports.index');
-    Route::get('/reports', [ReportsController::class, 'viewMasterlist'])->name('reports.index');
+    // Route::view('/reports', 'reports.index')->name('reports.index');
+    // Separate routes for different reports
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
 
     Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
     Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');
+    Route::post('/centers/store', [ChildDevelopmentCenterController::class, 'store'])->name(name: 'centers.store');
 
 
 // });

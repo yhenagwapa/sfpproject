@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ChildDevelopmentCenter;
 use App\Http\Requests\StoreChildDevelopmentCenterRequest;
 use App\Http\Requests\UpdateChildDevelopmentCenterRequest;
-use App\Models\ChildController;
+use App\Models\Child;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Psgc;
 class ChildDevelopmentCenterController extends Controller
@@ -22,9 +23,8 @@ class ChildDevelopmentCenterController extends Controller
 
     public function index()
     {
-        $centers = ChildDevelopmentCenter::all();
-        
-        // Pass the centers to the view
+        $centers = ChildDevelopmentCenter::with(['user', 'province', 'city', 'barangay'])->get();
+
         return view('centers.index', compact('centers'));
     }
 
@@ -41,10 +41,10 @@ class ChildDevelopmentCenterController extends Controller
      */
     public function create(Request $request)
     {
-        $this->authorize('create-child');
+        $this->authorize('create-child-development-center');
 
         $centers = ChildDevelopmentCenter::all();
-
+        $users = User::role('child development worker')->get();
         $psgc = new Psgc();
 
         // Fetch all provinces for the form
@@ -64,7 +64,7 @@ class ChildDevelopmentCenterController extends Controller
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('child.create', compact('centers', 'provinces', 'cities', 'barangays'));
+        return view('centers.create', compact('centers', 'users', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -74,28 +74,29 @@ class ChildDevelopmentCenterController extends Controller
     {
         $this->authorize('create-child-development-center');
 
+        
+        // No need to use dd($request->all()) here in production
         $validatedData = $request->validated();
 
-        // Check if the child already exists
-        $centerExists = ChildDevelopmentCenter::where('name', $request->name)
-                            ->exists();
+        // Check if the center already exists
+        $centerExists = ChildDevelopmentCenter::where('center_name', $request->center_name)->exists();
 
         if ($centerExists) {
             return redirect()->back()->with('error', 'Center already exists.');
         }
 
-        $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
-                ->where('city_name_psgc', $request->input('city_name_psgc'))
-                ->where('brgy_psgc', $request->input('brgy_psgc'))
-                ->first();
+        $psgc = Psgc::where('province_psgc', $request->province_psgc)
+                    ->where('city_name_psgc', $request->city_name_psgc)
+                    ->where('brgy_psgc', $request->brgy_psgc)
+                    ->first();
 
         if ($psgc) {
             $psgc_id = $psgc->psgc_id;
         } else {
             return redirect()->back()->withErrors(['msg' => 'Location not found']);
         }
-        
-        $child = ChildDevelopmentCenter::create([
+
+        ChildDevelopmentCenter::create([
             'center_name' => $request->center_name,
             'psgc_id' => $psgc_id,
             'address' => $request->address,
@@ -106,6 +107,7 @@ class ChildDevelopmentCenterController extends Controller
 
         return redirect()->route('centers.index')->with('success', 'Child Development Center saved successfully');
     }
+
 
     /**
      * Display the specified resource.

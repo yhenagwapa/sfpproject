@@ -13,16 +13,15 @@ class ReportsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    
-    public function viewMasterlist() {
-        $children = Child::with('nutritionalStatus')->get();
-        
-        return view('reports.index', compact('children'));
-    }
-    
+
     public function index()
     {
-        //
+        $children = Child::with('nutritionalStatus')->get();
+        $childrenWithDisabilities = Child::where('is_person_with_disability', true)
+                    ->with('center') // Ensure the center relationship is loaded
+                    ->get();
+        
+        return view('reports.index', compact('children', 'childrenWithDisabilities'));
     }
 
     /**

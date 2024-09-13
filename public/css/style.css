@@ -425,9 +425,9 @@
     color: #4154f1;
   } */
   
-  .nav-link.active {
+  /* .nav-link.active {
     @apply border-b-2 border-blue-500 text-blue-500;
-  }
+  } */
   
   /*--------------------------------------------------------------
   # Header
@@ -768,33 +768,105 @@
     padding: 5px 0 0 0;
     margin: 0;
     list-style: none;
-  }
-  
-  .sidebar-nav .nav-content a {
+}
+
+.sidebar-nav .nav-content a {
     display: flex;
     align-items: center;
     font-size: 14px;
     font-weight: 600;
     color: #012970;
-    transition: 0.3;
+    transition: color 0.3s, background-color 0.3s; /* Ensure transition is correctly defined */
     padding: 10px 0 10px 40px;
-    transition: 0.3s;
-  }
-  
-  .sidebar-nav .nav-content a i {
-    font-size: 6px;
+    text-decoration: none; /* Ensure no underline */
+}
+
+.sidebar-nav .nav-content a i {
+    font-size: 14px; /* Adjusted to be more visible */
     margin-right: 8px;
     line-height: 0;
     border-radius: 50%;
+}
+
+.sidebar-nav .nav-content a:hover,
+.sidebar-nav .nav-content a.active {
+    color: #4154f1;
+}
+
+.sidebar-nav .nav-content a.active i {
+    background-color: #4154f1;
+}
+
+.sidebar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4154f1;
+    transition: 0.3;
+    background: #f6f9ff;
+    padding: 10px 15px;
+    border-radius: 4px;
   }
   
-  .sidebar-nav .nav-content a:hover,
-  .sidebar-nav .nav-content a.active {
+  .sidebar-nav .nav-link i {
+    font-size: 16px;
+    margin-right: 10px;
     color: #4154f1;
   }
   
-  .sidebar-nav .nav-content a.active i {
-    background-color: #4154f1;
+  .sidebar-nav .nav-link.collapsed {
+    color: #012970;
+    background: #fff;
+  }
+  
+  .sidebar-nav .nav-link.collapsed i {
+    color: #899bbd;
+  }
+  
+  .sidebar-nav .nav-link:hover {
+    color: #4154f1;
+    background: #f6f9ff;
+  }
+  
+  .sidebar-nav .nav-link:hover i {
+    color: #4154f1;
+  }
+  /*--------------------------------------------------------------
+  # Reports
+  --------------------------------------------------------------*/
+
+  .report-side-nav .report-link {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #4154f1;
+    transition: 0.3;
+    background: #f6f9ff;
+    padding: 8px 12px;
+    border-radius: 2px;
+  }
+  
+  .report-side-nav .report-link i {
+    margin-right: 10px;
+    color: #4154f1;
+  }
+  
+  .report-side-nav .report-link.collapsed {
+    color: #012970;
+    background: #fff;
+  }
+  
+  .report-side-nav .report-link:hover {
+    color: #4154f1;
+    background: #f6f9ff;
+    border-bottom:2px solid #4154f1;
+  }
+  
+  .report-side-nav .report-link:active {
+    color: #4154f1;
+    background: #f6f9ff;
+    border-bottom:2px solid #4154f1;
   }
   
   /*--------------------------------------------------------------
