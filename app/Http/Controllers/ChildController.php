@@ -29,21 +29,11 @@ class ChildController extends Controller
     }
     public function index(Request $request)
     {
-        $search = $request->input('search.value', '');
+        $assignedCdcId = auth()->user()->childDevelopmentCenter->id;
+    
+        $children = Child::where('child_development_center_id', $assignedCdcId)->get();
 
-        if ($request->ajax()) {
-            $query = Child::query();
-
-            if ($search) {
-                $query->where('firstname', 'like', '%' . $search . '%')
-                      ->orWhere('middlename', 'like', '%' . $search . '%')
-                      ->orWhere('lastname', 'like', '%' . $search . '%');
-            }
-
-            $children = $query->paginate(5);
-        }
-
-        return view('child.index', compact('search'));
+        return view('child.index', compact('children'));
     }
 
 
@@ -136,6 +126,15 @@ class ChildController extends Controller
         } else {
             return redirect()->back()->withErrors(['msg' => 'Location not found']);
         }
+
+        $childDevelopmentCenter = ChildDevelopmentCenter::where('assigned_user_id', auth()->id())->first();
+
+        if (!$childDevelopmentCenter) {
+            // Handle the case where the user is not assigned to any Child Development Center
+            return redirect()->back()->withErrors('You are not assigned to any Child Development Center.');
+        }
+
+       
         
         $child = Child::create([
             'firstname' => $request->firstname,
@@ -154,6 +153,7 @@ class ChildController extends Controller
             'is_indigenous_people' => $request->is_indigenous_people,
             'is_child_of_soloparent' => $request->is_child_of_soloparent,
             'is_lactose_intolerant' => $request->is_lactose_intolerant,
+            'child_development_center_id' => $childDevelopmentCenter->id,
             'created_by_user_id' => auth()->id(),
         ]);
 

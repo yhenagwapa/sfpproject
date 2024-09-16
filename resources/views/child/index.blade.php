@@ -42,9 +42,6 @@
                                     @endcan
                                 </div>
                             </div>
-                            @php
-                                $children = App\Models\Child::all(); // or use a method to fetch the data
-                            @endphp
                             <div class="col-md-12" id="children-table">
                                 @include('child.partials.table', ['children' => $children])
                             </div>

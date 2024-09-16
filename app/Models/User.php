@@ -110,6 +110,11 @@ class User extends Authenticatable
         return "{$this->firstname} {$this->middlename} {$this->lastname} {$this->extension_name}";
     }
 
+    public function childDevelopmentCenter()
+    {
+        return $this->hasOne(ChildDevelopmentCenter::class, 'assigned_user_id');
+    }
+
 
 
 }

@@ -28,7 +28,7 @@ class StoreAttendanceRequest extends FormRequest
     public function messages()
     {
         return [
-            'feeding_date.required' => 'Please provice feeding date.',
+            'feeding_date.required' => 'Please provide feeding date.',
         ];
     }
 }

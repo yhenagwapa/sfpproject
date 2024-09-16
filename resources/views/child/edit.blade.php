@@ -359,8 +359,8 @@
                                                 <option value="">Select a center</option>
                                                 @foreach ($centers as $center)
                                                     <option value="{{ $center->id }}"
-                                                        {{ $center->id == old('cdc_id', $child->child_development_center_id) ? 'selected' : '' }}>
-                                                        {{ $center->name }}
+                                                        {{ $center->id == old('child_development_center_id', $child->child_development_center_id) ? 'selected' : '' }}>
+                                                        {{ $center->center_name }}
                                                     </option>
                                                 @endforeach
                                             </select>

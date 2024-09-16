@@ -31,6 +31,7 @@ class Child extends Model
         'is_lactose_intolerant', 
         'deworming_date', 
         'vitamin_a_date', 
+        'child_development_center_id', 
         'created_by_user_id', 
         'updated_by_user_id'];
 
@@ -41,7 +42,7 @@ class Child extends Model
 
     public function getFullNameAttribute()
     {
-        return trim("{$this->firstname} {$this->middlename} {$this->lastname}");
+        return trim("{$this->firstname} {$this->middlename} {$this->lastname} {$this->extension_name}");
     }
     public function center()
     {

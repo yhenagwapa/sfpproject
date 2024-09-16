@@ -93,32 +93,32 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm">
-                                        <label for="extname">Extension Name</label>
+                                        <label for="extension_name">Extension Name</label>
                                         <select
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="extname" name='extname'>
+                                            id="extension_name" name='extension_name'>
                                             <option value="" disabled selected></option>
-                                            <option value="jr" {{ old('extname') == 'jr' ? 'selected' : '' }}>Jr
+                                            <option value="Jr" {{ old('extension_name') == 'jr' ? 'selected' : '' }}>Jr
                                             </option>
-                                            <option value="sr" {{ old('extname') == 'sr' ? 'selected' : '' }}>Sr
+                                            <option value="Sr" {{ old('extension_name') == 'sr' ? 'selected' : '' }}>Sr
                                             </option>
-                                            <option value="i" {{ old('extname') == 'i' ? 'selected' : '' }}>I</option>
-                                            <option value="ii" {{ old('extname') == 'ii' ? 'selected' : '' }}>II
+                                            <option value="I" {{ old('extension_name') == 'i' ? 'selected' : '' }}>I</option>
+                                            <option value="II" {{ old('extension_name') == 'ii' ? 'selected' : '' }}>II
                                             </option>
-                                            <option value="iii" {{ old('extname') == 'iii' ? 'selected' : '' }}>III
+                                            <option value="III" {{ old('extension_name') == 'iii' ? 'selected' : '' }}>III
                                             </option>
-                                            <option value="iv" {{ old('extname') == 'iv' ? 'selected' : '' }}>IV
+                                            <option value="IV" {{ old('extension_name') == 'iv' ? 'selected' : '' }}>IV
                                             </option>
-                                            <option value="v" {{ old('extname') == 'v' ? 'selected' : '' }}>V</option>
-                                            <option value="vi" {{ old('extname') == 'vi' ? 'selected' : '' }}>VI
+                                            <option value="V" {{ old('extension_name') == 'v' ? 'selected' : '' }}>V</option>
+                                            <option value="VI" {{ old('extension_name') == 'vi' ? 'selected' : '' }}>VI
                                             </option>
-                                            <option value="vii" {{ old('extname') == 'vii' ? 'selected' : '' }}>VII
+                                            <option value="VII" {{ old('extension_name') == 'vii' ? 'selected' : '' }}>VII
                                             </option>
-                                            <option value="viii" {{ old('extname') == 'viii' ? 'selected' : '' }}>VIII
+                                            <option value="VIII" {{ old('extension_name') == 'viii' ? 'selected' : '' }}>VIII
                                             </option>
-                                            <option value="ix" {{ old('extname') == 'ix' ? 'selected' : '' }}>IX
+                                            <option value="IX" {{ old('extension_name') == 'ix' ? 'selected' : '' }}>IX
                                             </option>
-                                            <option value="x" {{ old('extname') == 'x' ? 'selected' : '' }}>X</option>
+                                            <option value="X" {{ old('extension_name') == 'x' ? 'selected' : '' }}>X</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm">
@@ -147,23 +147,6 @@
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
-
-
-
-                                    {{-- <div class="col-md-12 mt-2 text-sm">
-                                        <label for="cdc_id">Child Development Center</label><label for="cdc_id" class="text-red-600">*</label>
-                                        <select  class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300" id="cdc_id" name='cdc_id' >
-                                            <option value="">Select a center</option>
-                                                @foreach ($centers as $center)
-                                                    <option value="{{ $center->id }}" {{ old('cdc_id', $child->cdc_id ?? '') == $center->id ? 'selected' : '' }}>
-                                                        {{ $center->name }}
-                                                    </option>
-                                                @endforeach
-                                        </select>
-                                        @error('cdc_id')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
-                                        </div> --}}
 
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="deworming_date">Deworming Date</label>
