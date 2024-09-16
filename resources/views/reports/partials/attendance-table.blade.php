@@ -1,7 +1,7 @@
-<table id='ns-consolidated-table' class="table datatable mt-3 text-xs text-center">
+<table id='attendance-table' class="table datatable mt-3 text-xs text-center">
     <thead class="border bg-gray-200">
         <tr>
-            <th class="border border-white" rowspan="3">NS table here</th>
+            <th class="border border-white" rowspan="3">Attendance table here</th>
             
         </tr>
         {{-- <tr>
@@ -42,7 +42,7 @@
             <th class="border border-white">Female</th>
         </tr> --}}
     </thead>
-    <tbody class="ns-consolidated-table text-xs">
+    <tbody class="attendance-table text-xs">
         <tr>
             
         </tr>
