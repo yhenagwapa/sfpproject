@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
+    
     <main id="main" class="main">
 
         <div class="pagetitle">
@@ -195,7 +195,7 @@
                                     </div>
                                     <div class="col-md-6 mt-4 text-sm additional-details">
                                         <select
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            class="form-control rounded border-gray-300"
                                             id="pantawid_details" name="pantawid_details"
                                             placeholder="Please specify if RCCT or MCCT" disabled>
                                             <option value="" disabled selected>Please specify </option>
@@ -225,7 +225,7 @@
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm additional-details">
                                         <input type="text"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            class="form-control rounded border-gray-300"
                                             id="person_with_disability_details" name="person_with_disability_details"
                                             placeholder="Please specify" disabled>
                                         @error('person_with_disability_details')

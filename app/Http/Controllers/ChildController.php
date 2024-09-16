@@ -163,26 +163,26 @@ class ChildController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $child = Child::findOrFail($id);
-        
-        // Fetch the province, city, and barangay based on psgc_id
-        $psgc = Psgc::find($child->psgc_id);
-        
-        // Check if the PSGC record exists
-        if ($psgc) {
-            $selectedProvincePsgc = $psgc->province_psgc;
-            $selectedCityPsgc = $psgc->city_name_psgc; // Adjust field names as necessary
-            $selectedBrgyPsgc = $psgc->brgy_psgc; // Adjust field names as necessary
-        } else {
-            $selectedProvincePsgc = null;
-            $selectedCityPsgc = null;
-            $selectedBrgyPsgc = null;
-        }
-    
-        $childAttendance = Attendance::where('child_id', $id)->get();
+        $this->authorize('edit-child');
+
+        $child = Child::findOrFail($id); 
         $centers = ChildDevelopmentCenter::all();
+
+        $psgc = new Psgc();
+
+        $psgcRecord = Psgc::find($child->psgc_id);
+        
+        $provinces = $psgc->getProvinces();
+        $cities = $psgc->getCities($psgcRecord->province_psgc);
+        $barangays = $psgc->getBarangays($psgcRecord->city_name_psgc);
+
+        $getallcities = $psgc->allCities();      // Fetch all cities once
+        $getallbarangays = $psgc->allBarangays();
+
+        // dd($provinces);
+
         $sexOptions = [
             'male' => 'Male',
             'female' => 'Female',
@@ -205,19 +205,11 @@ class ChildController extends Controller
             'rcct' => 'RCCT',
             'mcct' => 'MCCT'
         ];
-    
-        if (request()->ajax()) {
-            return response()->json([
-                'child' => $child,
-                'childAttendance' => $childAttendance,
-                'centers' => $centers,
-                'sexOptions' => $sexOptions,
-                'pantawidDetails' => $pantawidDetails,
-            ]);
-        }
-    
-        return view('child.edit', compact('child', 'childAttendance', 'centers', 'sexOptions', 'extNameOptions', 'pantawidDetails', 'selectedProvincePsgc', 'selectedCityPsgc', 'selectedBrgyPsgc'));
+
+        return view('child.edit', compact('child', 'centers', 'sexOptions', 'extNameOptions', 'pantawidDetails', 'psgcRecord', 'provinces', 'cities', 'barangays', 'getallcities', 'getallbarangays'));
     }
+
+
     
 
 
@@ -234,13 +226,10 @@ class ChildController extends Controller
      */
     public function update(UpdateChildRequest $request, Child $child)
     {
-        $validatedData = $request->validated();$request->validated();
-
-        // Check if the child already exists
+        $validatedData = $request->validated();
         
-        $child->update($request->validated());
+        $child->update($validatedData);
 
-        // Redirect to the index page with a success message
         return redirect()->route('child.index')->with('success', 'Child record updated successfully.');
     }
 

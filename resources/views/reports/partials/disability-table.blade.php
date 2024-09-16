@@ -1,5 +1,5 @@
 <table id='disability-table' class="table datatable mt-3 text-xs text-center">
-    <thead class="bg-gray-200">
+    <thead>
         <tr>
             <th class="border border-white">Name of Child</th>
             <th class="border border-white">Name of Child Development Center</th>
@@ -10,7 +10,7 @@
         
     </thead>
     <tbody class="disability-table text-xs">
-        @foreach ($childrenWithDisabilities as $childrenWithDisability) {
+        @foreach ($childrenWithDisabilities as $childrenWithDisability) 
             <tr>
                 <td>{{ $childrenWithDisability->full_name }}</td>
                 <td>
@@ -24,7 +24,7 @@
                 <td>{{ $childrenWithDisability->date_of_birth }}</td>
                 <td>{{ $childrenWithDisability->person_with_disability_details }}</td>
             </tr>
-        }
+        
         @endforeach
         
     </tbody>

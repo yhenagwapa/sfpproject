@@ -7,6 +7,7 @@ use App\Http\Requests\StoreChildDevelopmentCenterRequest;
 use App\Http\Requests\UpdateChildDevelopmentCenterRequest;
 use App\Models\Child;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\Psgc;
 class ChildDevelopmentCenterController extends Controller
@@ -18,22 +19,14 @@ class ChildDevelopmentCenterController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('permission:create-child-development-center', ['only' => ['index','create', 'store']]);
-        $this->middleware('permission:edit-child-develpment-center', ['only' => ['index', 'edit', 'update']]);options: 
+        $this->middleware('permission:edit-child-development-center', ['only' => ['index', 'edit', 'update']]);options: 
     }
 
     public function index()
     {
-        $centers = ChildDevelopmentCenter::with(['user', 'province', 'city', 'barangay'])->get();
+        $centers = ChildDevelopmentCenter::with(['user', 'psgc'])->get();
 
         return view('centers.index', compact('centers'));
-    }
-
-    public function passToChildCreate()
-    {
-        $centers = ChildDevelopmentCenter::all();
-        
-        // Pass the centers to the view
-        return view('child.index', compact('centers'));
     }
 
     /**
@@ -73,9 +66,7 @@ class ChildDevelopmentCenterController extends Controller
     public function store(StoreChildDevelopmentCenterRequest $request)
     {
         $this->authorize('create-child-development-center');
-
-        
-        // No need to use dd($request->all()) here in production
+       
         $validatedData = $request->validated();
 
         // Check if the center already exists
@@ -114,28 +105,60 @@ class ChildDevelopmentCenterController extends Controller
      */
     public function show($id)
     {
-        $centers = ChildDevelopmentCenter::find($id);
-        
-        return view('child.edit', compact('centers'));
+       
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ChildDevelopmentCenter $childDevelopmentCenter)
+    public function edit($id)
     {
-        $centers = ChildDevelopmentCenter::all();
+        $this->authorize('edit-child-development-center');
+
+        $center = ChildDevelopmentCenter::findOrFail($id); 
+        $users = User::role('child development worker')->get();
+        $psgc = new Psgc();
+
+        $psgcRecord = Psgc::find($center->psgc_id);
         
-        // Return the edit view with the child details and centers
-        return view('child.edit', compact('centers'));
+        $provinces = $psgc->getProvinces();  // Assuming this returns associative array
+        $cities = $psgc->getCities($psgcRecord->province_psgc);
+        $barangays = $psgc->getBarangays($psgcRecord->city_name_psgc);
+        $changedCities = $psgc->allCities();      // Fetch all cities once
+        $changedBrgys = $psgc->allBarangays();
+
+        // dd([
+        //     'provinces' => $provinces,
+        //     'cities' => $cities,
+        //     'barangays' => $barangays,
+        //     'psgcRecord' => $psgcRecord,
+        // ]);
+    
+
+        return view('centers.edit', [
+            'center' => $center,
+            'users' => $users,
+            'psgcRecord' => $psgcRecord,
+            'provinces' => $provinces,
+            'cities' => $cities,
+            'barangays' => $barangays,
+            'changedCities' => $changedCities,
+            'changedBrgys' => $changedBrgys,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChildDevelopmentCenterRequest $request, ChildDevelopmentCenter $childDevelopmentCenter)
+    public function update(UpdateChildDevelopmentCenterRequest $request, ChildDevelopmentCenter $center)
     {
-        //
+        $validatedData = $request->validated();
+
+        // dd($validatedData);
+        
+        $center->update($validatedData);
+
+        return redirect()->route('centers.index')->with('success', 'Child development center record updated successfully.');
     }
 
     /**

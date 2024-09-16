@@ -1,22 +1,22 @@
-<table id='masterlist-table' class="table datatable mt-3 text-xs text-center">
-    <thead class="bg-gray-200">
+<table id='masterlist-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
+    <thead>
         <tr>
-            <th class="border border-white" rowspan="2">Name of Child</th>
+            <th class="border border-white w-40" rowspan="2">Name of Child</th>
             <th class="border border-white" rowspan="2">Sex</th>
-            <th class="border border-white" rowspan="2">Date of Birth</th>
-            <th class="border border-white" rowspan="2">Actual Date of Weighing</th>
+            <th class="border border-white w-24" rowspan="2">Date of Birth</th>
+            <th class="border border-white w-24" rowspan="2">Actual Date of Weighing</th>
             <th class="border border-white" rowspan="2">Weight in kg.</th>
             <th class="border border-white" rowspan="2">Height in cm.</th>
             <th class="border border-white" colspan="2">Age in month/year</th>
             <th class="border border-white" colspan="3">Nutritional Status</th>
-            <th class="border border-white" rowspan="2">Summary of Undernourished Children</th>
+            <th class="border border-white w-10" rowspan="2">Summary of Undernourished Children</th>
             <th class="border border-white" rowspan="2">Deworming</th>
             <th class="border border-white" rowspan="2">Vitamin A</th>
-            <th class="border border-white" rowspan="2">Pantawid Member</th>
+            <th class="border border-white w-10" rowspan="2">Pantawid Member</th>
             <th class="border border-white" rowspan="2">IPs</th>
             <th class="border border-white" rowspan="2">PWD</th>
-            <th class="border border-white" rowspan="2">Child of Solo Parent</th>
-            <th class="border border-white" rowspan="2">Lactose Intolerant</th>
+            <th class="border border-white  w-10" rowspan="2">Child of Solo Parent</th>
+            <th class="border border-white  w-10" rowspan="2">Lactose Intolerant</th>
         </tr>
         <tr>
             <th class="border border-white">Month</th>
@@ -27,7 +27,7 @@
         </tr>
     </thead>
     <tbody class="masterlist-table text-xs">
-        @foreach ($children as $child) {
+        @foreach ($children as $child) 
             <tr>
                 <td>{{ $child->full_name }}</td>
                 <td>{{ $child->sex }}</td>
@@ -74,7 +74,7 @@
                 <td>{{ $child->is_child_of_soloparent }}</td>
                 <td>{{ $child->is_lactose_intolerant }}</td>
             </tr>
-        }
+        
         @endforeach
         @if (count($children) <= 0)
             <tr>

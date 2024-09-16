@@ -36,7 +36,7 @@ class Child extends Model
 
     public function nutritionalStatus()
     {
-        return $this->hasOne(NutritionalStatus::class, 'child_id');
+        return $this->hasOne(NutritionalStatus::class);
     }
 
     public function getFullNameAttribute()
@@ -45,6 +45,11 @@ class Child extends Model
     }
     public function center()
     {
-        return $this->belongsTo(ChildDevelopmentCenter::class, 'child_development_center_id');
+        return $this->belongsTo(ChildDevelopmentCenter::class, 'child_development_center_id', 'id');
     }
+    public function location()
+    {
+        return $this->belongsTo(Psgc::class, 'psgc_id', 'psgc_id');
+    }
+    
 }

@@ -11,7 +11,7 @@
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('centers.index') }}">Child Development Centers</a></li>
-                    <li class="breadcrumb-item active">Child Development Centers Details</li>
+                    <li class="breadcrumb-item active">{{ $center->center_name }}</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -57,8 +57,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Child Development Center Details</h5>
-                                <form class="row" method="post" action="{{ route('centers.store') }} ">
+                                <form class="row" method="post" action="{{ route('centers.update', $center->id) }}">
                                     @csrf
+                                    @method('put')
 
                                     <div class='col-md-3 mt-2 text-gray-400 text-xs'>Child Development Center Information
                                     </div>
@@ -68,7 +69,7 @@
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="center_name">Center Name<b class="text-red-600">*</b></label>
-                                        <input type="text" class="form-control rounded border-gray-300" id="center_name" name="center_name" value="{{ old('center_name') }}" autofocus>
+                                        <input type="text" class="form-control rounded border-gray-300" id="center_name" name="center_name" value="{{ old('center_name', $center->center_name) }}" autofocus>
 
                                         @error('center_name')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
@@ -79,17 +80,17 @@
                                         <label for="assigned_user_id">Child Development Worker<b class='text-red-600'>*</b></label>
                                         <select class="form-control rounded border-gray-300" id="assigned_user_id" name="assigned_user_id">
                                             <option value="" selected>Select Worker</option>
-                                                @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}" {{ old('assigned_user_id') == $user->id ? 'selected' : '' }}>
-                                                        {{ $user->full_name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                                
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}" {{ old('assigned_user_id', $center->assigned_user_id) == $user->id ? 'selected' : '' }}>
+                                                    {{ $user->full_name }} <!-- Display full name of the user -->
+                                                </option>
+                                            @endforeach
+                                        </select>
                                         @error('assigned_user_id')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    
 
                                     <div class='col-md-1 mt-4 text-gray-400 text-xs'>Address</div>
                                     <div class='col-md-11 mt-8 text-gray-400 text-xs'>
@@ -98,22 +99,22 @@
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="region">Region<b class="text-red-600">*</b></label>
-                                        <select class="form-control rounded border-gray-300" id="region">
+                                        <select class="form-control rounded border-gray-300" id="region" name="region_psgc">
                                             <option value="110000000" selected>Region XI</option>
                                         </select>
                                     </div>
 
+                                    <!-- Hidden Region (pre-selected) -->
                                     <input type="hidden" name="region_psgc" value="110000000">
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="province">Province<b class="text-red-600">*</b></label>
-                                        <select class="form-control rounded border-gray-300" id="province"
-                                            name="province_psgc" onchange="filterCities()">
+                                        <select class="form-control rounded border-gray-300" id="province" name="province_psgc">
                                             <option value="" selected>Select Province</option>
                                             @foreach ($provinces as $psgc => $name)
-                                                <option value="{{ $psgc }}"
-                                                    {{ old('province_psgc') == $psgc ? 'selected' : '' }}>
-                                                    {{ $name }}</option>
+                                                <option value="{{ $psgc }}" {{ old('province_psgc', $psgcRecord->province_psgc) == $psgc ? 'selected' : '' }}>
+                                                    {{ $name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         @error('province_psgc')
@@ -123,13 +124,12 @@
 
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="city">City/Municipality<b class="text-red-600">*</b></label>
-                                        <select class="form-control rounded border-gray-300" id="city"
-                                            name="city_name_psgc" onchange="filterBarangays()">
-                                            <option value="" selected>Select City/Municipality</option>
+                                        <select class="form-control rounded border-gray-300" id="city" name="city_name_psgc">
+                                            <option value="">Select City/Municipality</option>
                                             @foreach ($cities as $psgc => $name)
-                                                <option value="{{ $psgc }}"
-                                                    {{ old('city_name_psgc') == $psgc ? 'selected' : '' }}>
-                                                    {{ $name }}</option>
+                                                <option value="{{ $psgc }}" {{ old('city_name_psgc', $psgcRecord->city_name_psgc) == $psgc ? 'selected' : '' }}>
+                                                    {{ $name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         @error('city_name_psgc')
@@ -139,13 +139,12 @@
 
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="barangay">Barangay<b class="text-red-600">*</b></label>
-                                        <select class="form-control rounded border-gray-300" id="barangay"
-                                            name="brgy_psgc">
-                                            <option value="" selected>Select Barangay</option>
+                                        <select class="form-control rounded border-gray-300" id="barangay" name="brgy_psgc">
+                                            <option value="">Select Barangay</option>
                                             @foreach ($barangays as $psgc => $name)
-                                                <option value="{{ $psgc }}"
-                                                    {{ old('brgy_psgc') == $psgc ? 'selected' : '' }}>
-                                                    {{ $name }}</option>
+                                                <option value="{{ $psgc }}" {{ old('brgy_psgc', $psgcRecord->brgy_psgc) == $psgc ? 'selected' : '' }}>
+                                                    {{ $name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         @error('brgy_psgc')
@@ -154,10 +153,11 @@
                                     </div>
 
 
+                                
                                     <div class="col-6 mt-2 text-sm">
                                         <label for="address">House No./ Street/ Purok<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="address"
-                                            name='address' value="{{ old('address') }}">
+                                            name='address' value="{{ old('address', $center->address) }}">
                                         @error('address')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -165,7 +165,7 @@
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="zip_code">Zip Code<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="zip_code"
-                                            name='zip_code' value="{{ old('zip_code') }}" maxlength="4">
+                                            name='zip_code' value="{{ old('zip_code', $center->zip_code) }}" maxlength="4">
                                         @error('zip_code')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -212,72 +212,128 @@
                 const locations = {
                     provinces: @json($provinces),
                     cities: @json($cities),
-                    barangays: @json($barangays)
+                    barangays: @json($barangays),
+                    changedCities: @json($changedCities),
+                    changedBrgys: @json($changedBrgys)
                 };
+                
+                console.log(locations);
 
                 const provinceSelect = document.getElementById('province');
                 const citySelect = document.getElementById('city');
                 const barangaySelect = document.getElementById('barangay');
 
+                console.log('province psgc preselected', provinceSelect.value);
+                console.log('city psgc preselected', citySelect.value);
+                console.log('brgy psgc preselected', barangaySelect.value);
+        
                 // Function to filter cities based on selected province
                 function filterCities() {
-                    const provincePsgc = provinceSelect.value;
+                    let provincePsgc = provinceSelect.value;
+        
+                    if (provincePsgc && locations.cities[provincePsgc]) {
+                        // Populate cities
+                        Object.entries(locations.cities[provincePsgc]).forEach(([psgc, name]) => {
+                            const option = document.createElement('option');
+                            option.value = psgc;
+                            option.text = name;
+                            citySelect.appendChild(option);
+                        });
+                        
+                        citySelect.value = '{{ old('city_name_psgc', $psgcRecord->city_name_psgc) }}';
+                        filterBarangays();
+                    }
+                }
+        
+                // Function to filter barangays based on selected city
+                function filterBarangays() {
+                    let cityPsgc = citySelect.value;
+        
+                    if (cityPsgc && locations.barangays[cityPsgc]) {
+                        // Populate barangays
+                        Object.entries(locations.barangays[cityPsgc]).forEach(([psgc, name]) => {
+                            const option = document.createElement('option');
+                            option.value = psgc;
+                            option.text = name;
+                            barangaySelect.appendChild(option);
+                        });
+        
+                        // Set selected value
+                        barangaySelect.value = '{{ old('brgy_psgc', $psgcRecord->brgy_psgc) }}';
+                    }
+                }
+
+                filterCities();
+                filterBarangays();
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+
+                const newlocations = {
+                    changedCities: @json($changedCities),
+                    changedBrgys: @json($changedBrgys)
+                };
+
+                const newProvinceSelect = document.getElementById('province');
+                const newCitySelect = document.getElementById('city');
+                const newBarangaySelect = document.getElementById('barangay');
+
+                function filterCitiesWhenProvinceChanged() {
+                    const newProvincePsgc = newProvinceSelect.value;
 
                     // Clear existing options
                     citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
                     barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
 
-                    if (provincePsgc) {
-                        citySelect.style.display = 'block'; // Show the city dropdown
-                        if (locations.cities[provincePsgc]) {
-                            locations.cities[provincePsgc].forEach(city => {
+                    if (newProvincePsgc) {
+                        newCitySelect.style.display = 'block'; // Show the city dropdown
+                        if (locations.changedCities[newProvincePsgc]) {
+                            locations.changedCities[newProvincePsgc].forEach(city => {
                                 const option = document.createElement('option');
                                 option.value = city.psgc;
                                 option.text = city.name;
-                                citySelect.appendChild(option);
+                                newCitySelect.appendChild(option);
                             });
                         }
-                    } else {
-                        citySelect.style.display = 'disabled'; // Hide the city dropdown if no province is selected
-                    }
-
+                    } 
                     // Reset city and barangay selects
-                    citySelect.value = '';
-                    barangaySelect.value = '';
-                    barangaySelect.style.display = 'disabled'; // Hide barangay dropdown by default
+                    newCitySelect.value = '';
+                    newBarangaySelect.value = '';
+                   
                 }
 
                 // Function to filter barangays based on selected city
-                function filterBarangays() {
-                    const cityPsgc = citySelect.value;
+                function filterBarangaysWhenCitiesChanged() {
+                    const newCityPsgc = newCitySelect.value;
 
                     // Clear existing options
-                    barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+                    newBarangaySelect.innerHTML = '<option value="">Select Barangay</option>';
 
-                    if (cityPsgc) {
-                        barangaySelect.style.display = 'block'; // Show the barangay dropdown
-                        if (locations.barangays[cityPsgc]) {
-                            locations.barangays[cityPsgc].forEach(barangay => {
+                    if (newCityPsgc) {
+                        newBarangaySelect.style.display = 'block'; // Show the barangay dropdown
+                        if (locations.barangays[newCityPsgc]) {
+                            locations.barangays[newCityPsgc].forEach(barangay => {
                                 const option = document.createElement('option');
                                 option.value = barangay.psgc;
                                 option.text = barangay.name;
-                                barangaySelect.appendChild(option);
+                                newBarangaySelect.appendChild(option);
                             });
                         }
-                    } else {
-                        barangaySelect.style.display = 'disabled'; // Hide the barangay dropdown if no city is selected
                     }
                 }
 
-                // Attach event listeners
-                provinceSelect.addEventListener('change', filterCities);
-                citySelect.addEventListener('change', filterBarangays);
-
-                // Initialize visibility based on current selection
-                filterCities();
-                filterBarangays();
+                newProvinceSelect.addEventListener('change', filterCitiesWhenProvinceChanged);
+                newCitySelect.addEventListener('change', filterBarangaysWhenCitiesChanged);
+                     
             });
         </script>
+        
+        
+        
+        
+        
+        
 
 
         </section>

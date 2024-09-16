@@ -66,16 +66,14 @@ require __DIR__.'/auth.php';
     Route::post('nutritionalstatus/store', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
     Route::put('nutritionalstatus/store', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
 
-    // Route::get('nutritionalstatus/{id}', [ExitNutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
-    // Route::post('nutritionalstatus/store', [ExitNutritionalStatusController::class, 'store'])->name('nutritionalstatus.store');
-
-    // Route::view('/reports', 'reports.index')->name('reports.index');
-    // Separate routes for different reports
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
 
     Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
     Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');
     Route::post('/centers/store', [ChildDevelopmentCenterController::class, 'store'])->name(name: 'centers.store');
+    
+    Route::get('/centers/{id}/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
+    Route::put('/centers/{center}/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
 
 
 // });

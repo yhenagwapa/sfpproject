@@ -52,7 +52,7 @@
         <div class="wrapper">
             <section class="section">
                 <div class="row">
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <div class="card">
                             <div class="card-body mt-4 text-sm">
                                
@@ -75,7 +75,7 @@
                                         </a>
                                     </li>
                                     </li><li class="nav-item">
-                                        <a class="report-link collapsed" href="user-accounts.php">
+                                        <a class="report-link collapsed" href="#" data-target="undernourished">
                                             <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
                                             Undernourished
                                         </a>
@@ -93,7 +93,7 @@
                                         </a>
                                     </li>
                                     </li><li class="nav-item">
-                                        <a class="report-link collapsed" href="user-accounts.php">
+                                        <a class="report-link collapsed" href="#" data-target="monitoring">
                                             <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
                                             Monitoring
                                         </a>
@@ -108,7 +108,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-10">
+                    <div class="col-lg-9">
                         <div class="card">
                             <div class="card-body">
                                 <div id="report-content">
@@ -116,13 +116,55 @@
                                         <div class="card-title">
                                             <h5>Masterlist of Beneficiaries</h5>
                                         </div>
-                                        @include('reports.partials.masterlist-table', ['children' => $children])
+                                        <div style="overflow-x: auto; max-width: 100%;">
+                                            @include('reports.partials.masterlist-table', ['children' => $children])
+                                        </div>
+                                        <div class="mt-3">
+                                            {{ $children->links() }}
+                                        </div>
                                     </div>
+
+                                    <div id="malnourished-content">
+                                        <div class="card-title">
+                                            <h5>List of Malnourished Children</h5>
+                                        </div>
+                                        <div style="overflow-x: auto; max-width: 100%;">
+                                            @include('reports.partials.malnourished-table', ['children' => $children])
+                                        </div>
+                                    </div>
+
                                     <div id="disability-content">
                                         <div class="card-title">
                                             <h5>Persons with Disability</h5>
                                         </div>
-                                        @include('reports.partials.disability-table', ['childrenWithDisabilities' => $childrenWithDisabilities])
+                                        <div style="overflow-x: auto; max-width: 100%;">
+                                            @include('reports.partials.disability-table', ['childrenWithDisabilities' => $childrenWithDisabilities])
+                                        </div>
+                                        <div class="mt-3">
+                                            {{ $childrenWithDisabilities->links() }}
+                                        </div>
+                                    </div>
+
+                                    <div id="undernourished-content">
+                                        <div class="card-title">
+                                            <h5>Summary of Undernourished Children, Ethnicity, 4Ps, Deworming & Vitamin A
+                                            </h5>
+                                        </div>
+                                        <div style="overflow-x: auto; max-width: 100%;">
+                                            @include('reports.partials.undernourished-table', ['centers' => $centers])
+                                        </div>
+                                    </div>
+
+                                    <div id="monitoring-content">
+                                        <div class="card-title">
+                                            <h5>Weight and Height Monitoring</h5>
+                                        </div>
+                                        <div style="overflow-x: auto; max-width: 100%;">
+                                            @include('reports.partials.monitoring-table', ['children' => $children])
+                                        </div>
+                                        <div class="mt-3">
+                                            {{ $children->links() }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

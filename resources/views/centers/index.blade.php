@@ -35,18 +35,18 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-6 mt-4 d-flex align-items-center">
-                                    @can(['create-child'])
+                                    @can(['create-child-development-center'])
                                         <a href="{{ route('centers.create') }}"><button type="button"
                                                 class="bg-blue-600 text-white rounded px-3 min-h-9"><i
-                                                    class="bi bi-plus-circle"></i>Add Child Development Center</button></a>
+                                                    class="bi bi-plus-circle mr-2"></i>Add Center</button></a>
                                     @endcan
                                 </div>
                             </div>
                             @php
-                                $children = App\Models\ChildDevelopmentCenter::all(); // or use a method to fetch the data
+                                $centers = App\Models\ChildDevelopmentCenter::all(); // or use a method to fetch the data
                             @endphp
-                            <div class="col-md-12" id="children-table">
-                                
+                            <div class="col-md-12" id="centers-table">
+                                @include('centers.partials.table', ['centers' => $centers])
                             </div>
                         </div>
                     </div>
