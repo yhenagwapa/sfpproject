@@ -22,9 +22,9 @@ class AttendanceController extends Controller
     public function index($id)
     {
         $child = Child::findOrFail($id);
-        $childAttendance = Attendance::where('child_id', $id)->get();
+        $attendances = Attendance::where('child_id', $id)->paginate(10);
 
-        return view('attendance.index', compact('child', 'childAttendance'));
+        return view('attendance.index', compact('child', 'attendances'));
     }
 
     /**
@@ -38,19 +38,27 @@ class AttendanceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAttendanceRequest $request, $id)
+    public function store(StoreAttendanceRequest $request, $child_id)
     {
         $withmilk = $request->has('with_milk') ? 1 : 0;
-
+        $attendanceCount = Attendance::where('child_id', $child_id)->count();
+    
+        if ($attendanceCount >= 120) {
+            return redirect()->back()->withErrors(['error' => 'Attendance limit of 120 reached for this child.']);
+        }
+    
+        $validatedData = $request->validated();
+    
+        // Create the attendance record
         Attendance::create([
-            'feeding_no' => $request->feeding_no,
-            'child_id' => $request->child_id,
+            'child_id' => $child_id,
+            'feeding_no' => $attendanceCount + 1, 
             'feeding_date' => $request->feeding_date,
-            'with_milk' => $request->with_milk,
-            'created_by_user_id' => auth()->id(),
+            'with_milk' => $withmilk,
+            'created_by_user_id' => auth()->id(), 
         ]);
-
-        return redirect()->route('attendance.index', $id)->with('success', 'Attendance recorded successfully.');
+    
+        return redirect()->back()->with('success', 'Attendance added successfully.');
     }
 
     /**

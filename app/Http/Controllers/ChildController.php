@@ -22,23 +22,30 @@ class ChildController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:create-child|edit-child|delete-child', ['only' => ['index','show']]);
+        $this->middleware('permission:create-child|edit-child|delete-child|search-child', ['only' => ['index']]);
         $this->middleware('permission:create-child', ['only' => ['create','store']]);
         $this->middleware('permission:edit-child', ['only' => ['edit','update']]);
         $this->middleware('permission:delete-child', ['only' => ['destroy']]);
+        $this->middleware('permission:search-child', ['only' => ['search']]);
     }
     public function index(Request $request)
     {
-        $assignedCdcId = auth()->user()->childDevelopmentCenter->id;
-    
-        $children = Child::where('child_development_center_id', $assignedCdcId)->get();
-
+        if (auth()->user()->hasRole('admin')) {
+           
+            $children = Child::paginate(5);
+        }else{
+            $assignedCdcId = auth()->user()->childDevelopmentCenter->id;
+        
+            $children = Child::where('child_development_center_id', $assignedCdcId)->paginate(5);
+        }
         return view('child.index', compact('children'));
     }
 
 
     public function search(Request $request)
     {
+        
+
         $search = $request->search;
         // Use when for cleaner query building
         $children = Child::when($search, function ($query, $search) {

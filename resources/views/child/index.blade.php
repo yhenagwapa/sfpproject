@@ -45,6 +45,9 @@
                             <div class="col-md-12" id="children-table">
                                 @include('child.partials.table', ['children' => $children])
                             </div>
+                            <div class="mt-3">
+                                {{ $children->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,4 +58,5 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
 
+    
 </main><!-- End #main -->

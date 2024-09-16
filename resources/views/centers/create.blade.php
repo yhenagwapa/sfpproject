@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'SFP Onse ')
-
 @section('content')
 
     <main id="main" class="main">

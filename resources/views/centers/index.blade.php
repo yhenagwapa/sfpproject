@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('content')
+
 <main id="main" class="main">
 
     @if (session('success'))

@@ -75,5 +75,5 @@ require __DIR__.'/auth.php';
     Route::get('/centers/{id}/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
     Route::put('/centers/{center}/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
 
-
+    
 // });
