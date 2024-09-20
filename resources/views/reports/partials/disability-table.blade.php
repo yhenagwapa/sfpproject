@@ -10,7 +10,7 @@
         
     </thead>
     <tbody class="disability-table text-xs">
-        @foreach ($childrenWithDisabilities as $childrenWithDisability) 
+        @foreach ($isPwdChidlren as $childrenWithDisability) 
             <tr>
                 <td>{{ $childrenWithDisability->full_name }}</td>
                 <td>
@@ -20,7 +20,7 @@
                         No Center Assigned
                     @endif
                 </td>
-                <td>{{ $childrenWithDisability->sex }}</td>
+                <td>{{ $childrenWithDisability->sex->name }}</td>
                 <td>{{ $childrenWithDisability->date_of_birth }}</td>
                 <td>{{ $childrenWithDisability->person_with_disability_details }}</td>
             </tr>

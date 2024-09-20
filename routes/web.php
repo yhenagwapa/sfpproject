@@ -8,7 +8,11 @@ use App\Http\Controllers\ChildController;
 use App\Http\Controllers\NutritionalStatusController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\CycleImplementationController;
 use App\Http\Controllers\ChildDevelopmentCenterController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 
 
 /*
@@ -26,9 +30,14 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/register', [ProfileController::class, 'index'])->name('register');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -75,5 +84,10 @@ require __DIR__.'/auth.php';
     Route::get('/centers/{id}/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
     Route::put('/centers/{center}/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
 
+    Route::get('/cycle', [CycleImplementationController::class, 'index'])->name(name: 'cycle.index');
+    Route::get('/cycle/create', [CycleImplementationController::class, 'create'])->name(name: 'cycle.create');
+    Route::post('/cycle/store', [CycleImplementationController::class, 'store'])->name(name: 'cycle.store');
+    Route::get('/cycle/{id}/edit', [CycleImplementationController::class, 'edit'])->name(name: 'cycle.edit');
+    Route::put('/cycle/{cycle}/update', [CycleImplementationController::class, 'update'])->name(name: 'cycle.update');
     
 // });

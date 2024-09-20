@@ -54,56 +54,144 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="card">
-                            <div class="card-body mt-4 text-sm">
-                               
+                            <div class="report-card-body mt-4 text-sm">
+
                                 <ul class="report-side-nav" id="report-side-nav">
-                                    <li class="nav-item">
-                                        <a class="report-link collapsed active" href="#" data-target="masterlist">
-                                            <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
-                                            Masterlist
-                                        </a>
-                                    </li><li class="nav-item">
-                                        <a class="report-link collapsed" href="#" data-target="malnourished">
-                                            <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
-                                            Malnourished
-                                        </a>
-                                    </li>
-                                    </li><li class="nav-item">
-                                        <a class="report-link collapsed" href="#" data-target="disability">
-                                            <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
-                                            Persons with Disability
-                                        </a>
-                                    </li>
-                                    </li><li class="nav-item">
-                                        <a class="report-link collapsed" href="#" data-target="undernourished">
-                                            <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
-                                            Undernourished
-                                        </a>
-                                    </li>
-                                    </li><li class="nav-item">
-                                        <a class="report-link collapsed" href="#" data-target="ns-consolidated">
-                                            <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
-                                            Nutritional Status
-                                        </a>
-                                    </li>
-                                    </li><li class="nav-item">
-                                        <a class="report-link collapsed" href="#" data-target="age-bracket">
-                                            <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
-                                            Age Bracket
-                                        </a>
-                                    </li>
-                                    </li><li class="nav-item">
-                                        <a class="report-link collapsed" href="#" data-target="monitoring">
-                                            <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
-                                            Monitoring
-                                        </a>
-                                    </li>
-                                    </li><li class="nav-item">
-                                        <a class="report-link collapsed" href="#" data-target="attendance">
-                                            <svg class="h-3 w-3 mr-2"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" /></svg>
-                                            Actual Feeding Attendance
-                                        </a>
-                                    </li>
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <li class="nav-item">
+                                            <a class="report-link collapsed active" href="#" data-target="funded">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                    stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Masterlist
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                        <li class="nav-item">
+                                            <a class="report-link collapsed" href="#" data-target="malnourished">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                    stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Malnourished
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                        <li class="nav-item">
+                                            <a class="report-link collapsed" href="#" data-target="disability">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                    stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Persons with Disability
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                        <li class="nav-item">
+                                            <a class="report-link collapsed" href="#" data-target="undernourished">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                    stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Undernourished
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                        <li class="nav-item">
+                                            <a class="report-link collapsed" href="#" data-target="ns-consolidated">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                    stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Nutritional Status
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <li class="nav-item">
+                                            <a class="report-link collapsed" href="#" data-target="age-bracket">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24"
+                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Age Bracket
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <li class="nav-item">
+                                            <a class="report-link collapsed" href="#" data-target="monitoring">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24"
+                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Monitoring
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <li class="nav-item">
+                                            <a class="report-link collapsed" href="#" data-target="attendance">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24"
+                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Feeding Attendance
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <li class="nav-item">
+                                            <a class="report-link collapsed" href="#" data-target="unfunded">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24"
+                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Unfunded Children
+                                            </a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                         </div>
@@ -112,100 +200,139 @@
                         <div class="card">
                             <div class="card-body">
                                 <div id="report-content">
-                                    <div id="masterlist-content">
-                                        <div class="card-title">
-                                            <h5>Masterlist of Beneficiaries</h5>
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <div id="funded-content">
+                                            <div class="card-title">
+                                                <h5>Masterlist of Funded Beneficiaries</h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                @include('reports.partials.funded-table', [
+                                                    'isFunded' => $isFunded,
+                                                ])
+                                            </div>
+                                            <div class="mt-3">
+                                                {{ $isFunded->links() }}
+                                            </div>
                                         </div>
-                                        <div style="overflow-x: auto; max-width: 100%;">
-                                            @include('reports.partials.masterlist-table', ['children' => $children])
-                                        </div>
-                                        <div class="mt-3">
-                                            {{ $children->links() }}
-                                        </div>
-                                    </div>
+                                    @endif
 
-                                    <div id="malnourished-content">
-                                        <div class="card-title">
-                                            <h5>List of Malnourished Children</h5>
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                        <div id="malnourished-content">
+                                            <div class="card-title">
+                                                <h5>List of Malnourished Children</h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                {{-- @include('reports.partials.malnourished-table', ['children' => $children]) --}}
+                                            </div>
                                         </div>
-                                        <div style="overflow-x: auto; max-width: 100%;">
-                                            @include('reports.partials.malnourished-table', ['children' => $children])
-                                        </div>
-                                    </div>
+                                    @endif
 
-                                    <div id="disability-content">
-                                        <div class="card-title">
-                                            <h5>Persons with Disability</h5>
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                        <div id="disability-content">
+                                            <div class="card-title">
+                                                <h5>Persons with Disability</h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                @include('reports.partials.disability-table', [
+                                                    'isPwdChidlren' => $isPwdChidlren,
+                                                ])
+                                            </div>
                                         </div>
-                                        <div style="overflow-x: auto; max-width: 100%;">
-                                            @include('reports.partials.disability-table', ['childrenWithDisabilities' => $childrenWithDisabilities])
-                                        </div>
-                                        <div class="mt-3">
-                                            {{ $childrenWithDisabilities->links() }}
-                                        </div>
-                                    </div>
+                                    @endif
 
-                                    <div id="undernourished-content">
-                                        <div class="card-title">
-                                            <h5>Summary of Undernourished Children, Ethnicity, 4Ps, Deworming & Vitamin A
-                                            </h5>
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                        <div id="undernourished-content">
+                                            <div class="card-title">
+                                                <h5>Summary of Undernourished Children, Ethnicity, 4Ps, Deworming & Vitamin
+                                                    A
+                                                </h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                {{-- @include('reports.partials.undernourished-table', ['centers' => $centers]) --}}
+                                            </div>
                                         </div>
-                                        <div style="overflow-x: auto; max-width: 100%;">
-                                            @include('reports.partials.undernourished-table', ['centers' => $centers])
-                                        </div>
-                                    </div>
+                                    @endif
 
-                                    <div id="ns-consolidated-content">
-                                        <div class="card-title">
-                                            <h5>Consolidated Nutritional Status</h5>
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                        <div id="ns-consolidated-content">
+                                            <div class="card-title">
+                                                <h5>Consolidated Nutritional Status</h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                {{-- @include('reports.partials.ns-consolidated-table', ['centers' => $centers]) --}}
+                                            </div>
                                         </div>
-                                        <div style="overflow-x: auto; max-width: 100%;">
-                                            @include('reports.partials.ns-consolidated-table', ['centers' => $centers])
-                                        </div>
-                                    </div>
+                                    @endif
 
-                                    <div id="age-bracket-content">
-                                        <div class="card-title">
-                                            <h5>Age Bracket</h5>
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <div id="age-bracket-content">
+                                            <div class="card-title">
+                                                <h5>Age Bracket</h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                {{-- @include('reports.partials.age-bracket-table', ['centers' => $centers]) --}}
+                                            </div>
                                         </div>
-                                        <div style="overflow-x: auto; max-width: 100%;">
-                                            @include('reports.partials.age-bracket-table', ['centers' => $centers])
-                                        </div>
-                                    </div>
+                                    @endif
 
-                                    <div id="monitoring-content">
-                                        <div class="card-title">
-                                            <h5>Weight and Height Monitoring</h5>
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <div id="monitoring-content">
+                                            <div class="card-title">
+                                                <h5>Weight and Height Monitoring</h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                {{-- @include('reports.partials.monitoring-table', ['children' => $children]) --}}
+                                            </div>
                                         </div>
-                                        <div style="overflow-x: auto; max-width: 100%;">
-                                            @include('reports.partials.monitoring-table', ['children' => $children])
-                                        </div>
-                                        <div class="mt-3">
-                                            {{ $children->links() }}
-                                        </div>
-                                    </div>
+                                    @endif
 
-                                    <div id="attendance-content">
-                                        <div class="card-title">
-                                            <h5>Actual Feeding Attendance</h5>
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <div id="attendance-content">
+                                            <div class="card-title">
+                                                <h5>Actual Feeding Attendance</h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                {{-- @include('reports.partials.attendance-table', ['centers' => $centers]) --}}
+                                            </div>
                                         </div>
-                                        <div style="overflow-x: auto; max-width: 100%;">
-                                            @include('reports.partials.attendance-table', ['centers' => $centers])
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <div id="unfunded-content">
+                                            <div class="card-title">
+                                                <h5>Unfunded Children</h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                @include('reports.partials.unfunded-table', [
+                                                    'isNotFunded' => $isNotFunded,
+                                                ])
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </section>
         </div>
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 const reportLinks = document.querySelectorAll('.report-link');
 
                 reportLinks.forEach(link => {
-                    link.addEventListener('click', function (e) {
+                    link.addEventListener('click', function(e) {
                         e.preventDefault();
                         const target = this.getAttribute('data-target');
                         showContent(target);
@@ -224,8 +351,8 @@
                 }
 
                 // Show "masterlist" content by default
-                showContent('masterlist');
-            }); 
+                showContent('funded');
+            });
         </script>
 
         <script>
@@ -242,7 +369,6 @@
                     });
                 });
             });
-
         </script>
-          
+
     </main><!-- End #main -->

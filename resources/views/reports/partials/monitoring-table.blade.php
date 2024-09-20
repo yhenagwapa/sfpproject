@@ -1,4 +1,4 @@
-<table id='masterlist-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
+{{-- <table id='masterlist-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
     <thead class="border bg-gray-200">
         <tr>
             <th class="border border-white w-40" rowspan="2">Name of Child</th>
@@ -35,7 +35,7 @@
         @foreach ($children as $child) 
             <tr>
                 <td>{{ $child->full_name }}</td>
-                <td>{{ $child->sex }}</td>
+                <td>{{ $child->sex->name }}</td>
                 <td>{{ $child->date_of_birth }}</td>
 
                 
@@ -84,4 +84,4 @@
             </tr>
         @endif
     </tbody>
-</table>
+</table> --}}

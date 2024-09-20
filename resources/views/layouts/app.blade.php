@@ -21,12 +21,15 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
 
     <!-- Fonts and Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-    
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="{{ asset('js/main.js') }}" defer></script>
 
@@ -126,17 +129,30 @@
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="{{ route('child.index') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="#899bbd" class="mr-2 size-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                         </svg>
                         <span class="text-sm">Children</span>
                     </a>
                 </li><!-- End Child List Nav -->
+                
+                @canany(['create-cycle-implementation', 'edit-cycle-implementation', 'view-cycle-implementation'])
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="{{ route('cycle.index') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="#899bbd" class="mr-2 size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                            <span class="text-sm">Cycle Implementation</span>
+                        </a>
+                    </li><!-- End Cycle Nav -->
+                @endcanany
+
                 @canany(['create-child-development-center', 'edit-child-develpment-center'])
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="{{ route('centers.index')}}">
+                        <a class="nav-link collapsed" href="{{ route('centers.index') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -148,8 +164,8 @@
                     </li><!-- End CDC Page Nav -->
                 @endcanany
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="{{ route('reports.index') }}" >
+                {{-- <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ route('reports.index') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -157,8 +173,8 @@
                         </svg>
                         <span class="text-sm">Reports</span>
                     </a>
-                </li>
-                
+                </li> --}}
+
                 {{-- <li class="nav-item collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                     <a a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#forms-nav">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -226,7 +242,8 @@
                         </li>
                       </ul>
                 </li><!-- End Reports Nav --> --}}
-                @if (!auth()->user()->hasRole('child development worker'))
+
+                @if (auth()->user()->hasRole('admin'))
                     <li class="nav-heading">Admin Tools</li>
 
                     <li class="nav-item">
@@ -268,32 +285,30 @@
 
         </aside><!-- End Sidebar-->
 
-    </div>
-
-    <main class="container">
-        @yield('content')
-    </main>
+        <main class="container">
+            @yield('content')
+        </main>
 
 
-    <footer id="footer" class="footer">
-        <div class="copyright">
-            &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-        </div>
-        <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
-    </footer><!-- End Footer -->
+        <footer id="footer" class="footer">
+            <div class="copyright">
+                &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+        </footer><!-- End Footer -->
 
-    {{-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a> --}}
+        {{-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a> --}}
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
-    @vite(['resources/js/app.js'])
+        @vite(['resources/js/app.js'])
     </div>
 </body>
 

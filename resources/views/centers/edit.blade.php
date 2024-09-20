@@ -153,7 +153,7 @@
 
                                 
                                     <div class="col-6 mt-2 text-sm">
-                                        <label for="address">House No./ Street/ Purok<b class="text-red-600">*</b></label>
+                                        <label for="address">Purok<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="address"
                                             name='address' value="{{ old('address', $center->address) }}">
                                         @error('address')

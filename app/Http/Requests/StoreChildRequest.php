@@ -27,7 +27,7 @@ class StoreChildRequest extends FormRequest
             'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'date_of_birth' => ['required', 'date'],
-            'sex' => ['required', 'string'],
+            'sex_id' => ['required', 'exists:sexes,id'],
             // 'psgc_id' => ['required', 'exists:psgcs,psgc_id'],
             'province_psgc' => ['required'],
             'city_name_psgc' => ['required'],

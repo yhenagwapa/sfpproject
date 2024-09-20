@@ -54,7 +54,7 @@ class UpdateChildRequest extends FormRequest
             'lastname.required' => 'Please fill in this field.',
             'lastname.regex' => 'Invalid entry.',
             'date_of_birth.required' => 'Please fill in this field.',
-            'sex.required' => 'Please fill in this field.',
+            'sex_id.required' => 'Please fill in this field.',
             'child_development_center_id.required' => 'Please select a child development center.',
             'province.required' => 'Please select a province.',
             'city.required' => 'Please select a city.',

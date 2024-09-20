@@ -832,6 +832,12 @@
   .sidebar-nav .nav-link:hover i {
     color: #4154f1;
   }
+
+  .nav-link:active {
+    color: #4154f1;
+    background: #f6f9ff;
+    border-bottom:2px solid #4154f1;
+  }
   /*--------------------------------------------------------------
   # Reports
   --------------------------------------------------------------*/
@@ -843,12 +849,12 @@
     color: #4154f1;
     transition: 0.3;
     background: #f6f9ff;
-    padding: 8px 12px;
+    padding: 5px 9px;
     border-radius: 2px;
   }
   
   .report-side-nav .report-link i {
-    margin-right: 10px;
+    margin-right: 2px;
     color: #4154f1;
   }
   
@@ -869,6 +875,10 @@
     border-bottom:2px solid #4154f1;
   }
 
+  .report-card-body {
+    padding: 0 10px 10px 10px;
+    width: 100%;
+  }
   
   
   /*--------------------------------------------------------------

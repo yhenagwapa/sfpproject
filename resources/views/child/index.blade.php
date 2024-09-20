@@ -42,11 +42,28 @@
                                     @endcan
                                 </div>
                             </div>
-                            <div class="col-md-12" id="children-table">
-                                @include('child.partials.table', ['children' => $children])
+                            <h1 class="card-title mt-3 mb-0">Male Children<h1>
+                            <div class="col-md-12" id="maleChildren-table">
+                                @include('child.partials.malechild-table', ['maleChildren' => $maleChildren])
                             </div>
                             <div class="mt-3">
-                                {{ $children->links() }}
+                                {{ $maleChildren->links() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title mt-3 mb-0">Female Children<h1>
+                            <div class="col-md-12" id="femaleChildren-table">
+                                @include('child.partials.femalechild-table', ['femaleChildren' => $femaleChildren])
+                            </div>
+                            <div class="mt-3">
+                                {{ $femaleChildren->links() }}
                             </div>
                         </div>
                     </div>

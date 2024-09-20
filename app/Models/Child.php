@@ -17,7 +17,7 @@ class Child extends Model
         'lastname',
         'extension_name',
         'date_of_birth',
-        'sex',
+        'sex_id',
         'address',
         'psgc_id',
         'zip_code',
@@ -40,9 +40,14 @@ class Child extends Model
         return $this->hasOne(NutritionalStatus::class);
     }
 
+    public function sex()
+    {
+        return $this->belongsTo(Sex::class);
+    }
+
     public function getFullNameAttribute()
     {
-        return trim("{$this->firstname} {$this->middlename} {$this->lastname} {$this->extension_name}");
+        return trim("{$this->lastname}, {$this->firstname} {$this->middlename} {$this->extension_name}");
     }
     public function center()
     {
@@ -52,5 +57,8 @@ class Child extends Model
     {
         return $this->belongsTo(Psgc::class, 'psgc_id', 'psgc_id');
     }
-    
+    public function cycleImplementation()
+    {
+        return $this->belongsTo(CycleImplementation::class);
+    }
 }

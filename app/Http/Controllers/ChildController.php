@@ -6,6 +6,7 @@ use App\Models\Child;
 use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
 use App\Models\ChildDevelopmentCenter;
+use App\Models\Sex;
 use App\Models\Attendance;
 use App\Http\Controllers\Log;
 use Illuminate\Http\Request;
@@ -22,7 +23,6 @@ class ChildController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:create-child|edit-child|delete-child|search-child', ['only' => ['index']]);
         $this->middleware('permission:create-child', ['only' => ['create','store']]);
         $this->middleware('permission:edit-child', ['only' => ['edit','update']]);
         $this->middleware('permission:delete-child', ['only' => ['destroy']]);
@@ -30,34 +30,56 @@ class ChildController extends Controller
     }
     public function index(Request $request)
     {
-        if (auth()->user()->hasRole('admin')) {
-           
-            $children = Child::paginate(5);
-        }else{
+        if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal')) {
+            // Fetch all male and female children for admin
+            $maleChildren = Child::whereHas('sex', function($query) {
+                $query->where('name', 'Male'); 
+            })
+            ->where('is_funded', true)
+            ->paginate(5, ['*'], 'malePage'); 
+
+            $femaleChildren = Child::whereHas('sex', function($query) {
+                $query->where('name', 'Female'); 
+            })
+            ->where('is_funded', true)
+            ->paginate(5, ['*'], 'femalePage'); 
+        } else {
+            
             $assignedCdcId = auth()->user()->childDevelopmentCenter->id;
-        
-            $children = Child::where('child_development_center_id', $assignedCdcId)->paginate(5);
+            
+            $maleChildren = Child::where('child_development_center_id', $assignedCdcId)
+                ->whereHas('sex', function($query) {
+                    $query->where('name', 'Male');
+                })
+                ->where('is_funded', true)
+                ->paginate(5, ['*'], 'malePage');
+
+            $femaleChildren = Child::where('child_development_center_id', $assignedCdcId)
+                ->whereHas('sex', function($query) {
+                    $query->where('name', 'Female');
+                })->where('is_funded', true)
+                ->paginate(5, ['*'], 'femalePage');
         }
-        return view('child.index', compact('children'));
+
+        return view('child.index', compact('maleChildren', 'femaleChildren'));
     }
+
 
 
     public function search(Request $request)
     {
-        
-
         $search = $request->search;
         // Use when for cleaner query building
         $children = Child::when($search, function ($query, $search) {
             $query->where('firstname', 'like', "%{$search}%")
                 ->orWhere('middlename', 'like', "%{$search}%")
                 ->orWhere('lastname', 'like', "%{$search}%");
-        })->paginate(5)->appends(['search' => $search]); // Ensure to append the correct search query
+        })->paginate(5)->appends(['search' => $search]); 
 
         $childrenWithFullNames = $children->map(function ($child) {
             return [
                 'id' => $child->id,
-                'full_name' => $child->full_name, // Ensure full_name is defined on the Child model
+                'full_name' => $child->full_name,
                 'sex' => $child->sex,
                 'date_of_birth' => $child->date_of_birth,
             ];
@@ -65,7 +87,7 @@ class ChildController extends Controller
 
         return response()->json([
             'children' => $childrenWithFullNames,
-            'pagination_links' => (string) $children->links(), // Convert pagination links to a string
+            'pagination_links' => (string) $children->links(), 
         ]);
     
     }
@@ -78,6 +100,7 @@ class ChildController extends Controller
         $this->authorize('create-child');
 
         $centers = ChildDevelopmentCenter::all();
+        $sexOptions = Sex::all();
 
         $psgc = new Psgc();
 
@@ -98,7 +121,7 @@ class ChildController extends Controller
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('child.create', compact('centers', 'provinces', 'cities', 'barangays'));
+        return view('child.create', compact('centers', 'sexOptions', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -116,7 +139,7 @@ class ChildController extends Controller
                             ->where('lastname', $request->lastname)
                             ->where('extension_name', $request->extension_name)
                             ->where('date_of_birth', $request->date_of_birth)
-                            ->where('sex', $request->sex)
+                            ->where('sex_id', $request->sex_id)
                             ->exists();
 
         if ($childExists) {
@@ -149,7 +172,7 @@ class ChildController extends Controller
             'lastname' => $request->lastname,
             'extension_name' => $request->extension_name,
             'date_of_birth' => $request->date_of_birth,
-            'sex' => $request->sex,
+            'sex_id' => $request->sex_id,
             'address' => $request->address,
             'psgc_id' => $psgc_id,
             'zip_code' => $request->zip_code,
@@ -190,10 +213,8 @@ class ChildController extends Controller
 
         // dd($provinces);
 
-        $sexOptions = [
-            'male' => 'Male',
-            'female' => 'Female',
-        ];
+        $sexOptions = Sex::all();
+
         $extNameOptions = [
             'jr' => 'Jr',
             'sr' => 'Sr',

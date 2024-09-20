@@ -124,13 +124,12 @@
                                         </div>
                                         <div class="col-md-6 mt-2 text-sm">
                                             <label for="sex">Sex<b class="text-red-600">*</b></label>
-                                            <select class="form-control rounded border-gray-300" id="sex"
-                                                name="sex">
-                                                <option value="" disabled></option>
-                                                @foreach ($sexOptions as $value => $label)
-                                                    <option value="{{ $value }}"
-                                                        {{ old('sex', $child->sex) == $value ? 'selected' : '' }}>
-                                                        {{ $label }}
+                                            <select class="form-control rounded border-gray-300" id="sex" name="sex">
+                                                <option value="" disabled>Select Sex</option>
+                                                @foreach ($sexOptions as $sex)
+                                                    <option value="{{ $sex->id }}" 
+                                                        {{ old('sex', $child->sex_id) == $sex->id ? 'selected' : '' }}>
+                                                        {{ $sex->name }}
                                                     </option>
                                                 @endforeach
                                             </select>

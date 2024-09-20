@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Psgc;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -20,9 +22,16 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
-    }
+        $roles = Role::all();
+        $lgus = Psgc::where('region_psgc', '110000000')
+                    ->orderBy('city_name')
+                    ->distinct('city_name_psgc')
+                    ->get(['city_name_psgc', 'city_name', 'province_psgc']);
 
+
+        return view('auth.register', compact('roles', 'lgus'));
+    }
+    
     /**
      * Handle an incoming registration request.
      *

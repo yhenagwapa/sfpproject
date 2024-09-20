@@ -136,14 +136,16 @@
                                             class="text-red-600">*</label>
                                         <select
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="sex" name='sex'>
-                                            <option value="" disabled selected></option>
-                                            <option value="male" {{ old('sex') == 'male' ? 'selected' : '' }}>Male
-                                            </option>
-                                            <option value="female" {{ old('sex') == 'female' ? 'selected' : '' }}>Female
-                                            </option>
+                                            id="sex_id" name='sex_id'>
+                                            <option value="" disabled selected>Select sex</option>
+                                            @foreach ($sexOptions as $sex)
+                                                <option value="{{ $sex->id }}"
+                                                {{ $sex->id == old('sex_id', $sex->id) }}>
+                                                {{ $sex->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
-                                        @error('sex')
+                                        @error('sex_id')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>

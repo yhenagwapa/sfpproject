@@ -109,30 +109,35 @@ class NutritionalStatusController extends Controller
 
 
     public function storeExitDetails(UpdateNutritionalStatusRequest $request)
-    {
-        $validatedData = $request->validated();
+{
+    $validatedData = $request->validated();
 
-        $exitRecord = NutritionalStatus::where('child_id', $request->child_id)
-                    ->whereNotNull('exit_weight') // Ensure that exit_weight is not null
-                    ->whereNotNull('exit_height') // Ensure that exit_height is not null
-                    ->whereNotNull('exit_actual_date_of_weighing') // Ensure that exit_actual_date_of_weighing is not null
-                    ->first();
+    // Find the record based on child_id
+    $exitRecord = NutritionalStatus::where('child_id', $request->child_id)->first();
 
-        if ($exitRecord) {
-            return redirect()->back()->with(['error' => 'Exit details already exists.']);
-        }
-        
+    // Check if the record exists and if exit details are not null
+    if ($exitRecord && !is_null($exitRecord->exit_weight) && !is_null($exitRecord->exit_height) && !is_null($exitRecord->exit_actual_date_of_weighing)) {
+        return redirect()->back()->with(['error' => 'Exit details already exist for this child.']);
+    }
+
+    // If the exit details are null, update the record with new exit details
+    if ($exitRecord) {
         $exitRecord->update([
             'exit_weight' => $request->exit_weight,
             'exit_height' => $request->exit_height,
             'exit_actual_date_of_weighing' => $request->exit_actual_date_of_weighing,
-            'updated_by_user_id' => auth()->id(),   
+            'updated_by_user_id' => auth()->id(),
         ]);
-
-        // Redirect or return a response
-        return redirect()->route('nutritionalstatus.index', ['id' => $request->child_id])
-                     ->with('success', 'After 120 feeding days details updated successfully.');
+    } else {
+        // Handle case where no record exists (optional)
+        return redirect()->back()->with(['error' => 'No existing record found for this child.']);
     }
+
+    // Redirect or return a response
+    return redirect()->route('nutritionalstatus.index', ['id' => $request->child_id])
+                 ->with('success', 'Exit details updated successfully.');
+}
+
 
     /**
      * Display the specified resource.

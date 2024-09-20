@@ -16,13 +16,6 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
-    <link href="{{ asset('resources/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('resources/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('resources/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('resources/vendor/quill/quill.snow.css') }}" rel="stylesheet">
-    <link href="{{ asset('resources/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
-    <link href="{{ asset('resources/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
-    <link href="{{ asset('resources/vendor/simple-datatables/style.css') }}" rel="stylesheet">
 
     <!-- Bootstrap Icons CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -30,12 +23,6 @@
     <link href="https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-
-    <!-- Template Main CSS File -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
-    <!-- Template Main JS File -->
-    <script src="{{ mix('js/app.js') }}"></script>
 
     <x-auth-session-status class="mb-4" :status="session('status')" />
   </head>
@@ -108,14 +95,14 @@
                         <button class="btn btn-primary w-100 mb-4" type="submit">Login</button>
                       </div>
                       <div class="col-12">
-                        <p class="small mb-0">Don't have account? <a href="pages-register.html">Create an account</a></p> 
+                        <p class="small mb-0">Don't have account? <a href="{{ route('register')}}">Create an account</a></p> 
                       </div>
                     </form>
   
                   </div>
                 </div>
   
-                <div class="credits">
+                <div class="credits mt-5">
                   <!-- All the links in the footer should remain intact. -->
                   <!-- You can delete the links only if you purchased the pro version. -->
                   <!-- Licensing information: https://bootstrapmade.com/license/ -->
@@ -136,9 +123,6 @@
   
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-  
-    <!-- Template Main JS File -->
-    <script src="{{ asset('assets/js/main.js') }}"></script>
   
   </body>
 </html>
