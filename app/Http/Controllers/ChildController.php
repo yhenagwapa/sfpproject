@@ -23,45 +23,90 @@ class ChildController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:create-child', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-child', ['only' => ['edit','update']]);
+        $this->middleware('permission:create-child', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit-child', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete-child', ['only' => ['destroy']]);
         $this->middleware('permission:search-child', ['only' => ['search']]);
     }
     public function index(Request $request)
     {
-        if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal')) {
-            // Fetch all male and female children for admin
-            $maleChildren = Child::whereHas('sex', function($query) {
-                $query->where('name', 'Male'); 
-            })
-            ->where('is_funded', true)
-            ->paginate(5, ['*'], 'malePage'); 
+        if (auth()->user()->hasRole('admin')) {
 
-            $femaleChildren = Child::whereHas('sex', function($query) {
-                $query->where('name', 'Female'); 
+            $cdcId = $request->input('center_name', null);
+
+            $maleChildren = Child::whereHas('sex', function ($query) {
+                $query->where('name', 'Male');
             })
-            ->where('is_funded', true)
-            ->paginate(5, ['*'], 'femalePage'); 
+                ->where('is_funded', true)
+                ->paginate(5, ['*'], 'malePage');
+
+            $femaleChildren = Child::whereHas('sex', function ($query) {
+                $query->where('name', 'Female');
+            })
+                ->where('is_funded', true)
+                ->paginate(5, ['*'], 'femalePage');
+
+            return view('child.index', compact('maleChildren', 'femaleChildren', 'centers', 'cdcId'));
+
+        } elseif (auth()->user()->hasRole('lgu focal')) {
+
+            $userCityPsgc = auth()->user()->city_name_psgc;
+
+            $childCenterPsgc = Child::with('center')
+                ->whereNotNull('child_development_center_id')
+                ->first()->psgc_id;
+
+            $centerPsgc = Psgc::where('psgc_id', $childCenterPsgc)
+                ->select('psgc_id', 'city_name_psgc', 'city_name')
+                ->first();
+
+            $cdcId = $request->input('center_name', null);
+
+
+            if ($userCityPsgc == $centerPsgc->city_name_psgc) {
+                $cityNamePsgc = $centerPsgc->city_name_psgc;
+
+                $matchingPsgcs = Psgc::where('city_name_psgc', $cityNamePsgc)->pluck('psgc_id');
+
+                $centers = ChildDevelopmentCenter::whereIn('psgc_id', $matchingPsgcs)->get();
+
+                $maleChildren = Child::whereHas('sex', function ($query) {
+                    $query->where('name', 'Male');
+                })
+                    ->where('is_funded', true)
+                    ->paginate(5, ['*'], 'malePage');
+
+                // Query for female children whose psgc_id contains the user's city_psgc
+                $femaleChildren = Child::whereHas('sex', function ($query) {
+                    $query->where('name', 'Female');
+                })
+                    ->where('is_funded', true)
+                    ->paginate(5, ['*'], 'femalePage');
+            }
+
+            return view('child.index', compact('maleChildren', 'femaleChildren', 'centers', 'cdcId'));
+
         } else {
-            
+
             $assignedCdcId = auth()->user()->childDevelopmentCenter->id;
-            
+
             $maleChildren = Child::where('child_development_center_id', $assignedCdcId)
-                ->whereHas('sex', function($query) {
+                ->whereHas('sex', function ($query) {
                     $query->where('name', 'Male');
                 })
                 ->where('is_funded', true)
                 ->paginate(5, ['*'], 'malePage');
 
             $femaleChildren = Child::where('child_development_center_id', $assignedCdcId)
-                ->whereHas('sex', function($query) {
+                ->whereHas('sex', function ($query) {
                     $query->where('name', 'Female');
                 })->where('is_funded', true)
                 ->paginate(5, ['*'], 'femalePage');
+
+            return view('child.index', compact('maleChildren', 'femaleChildren'));
         }
 
-        return view('child.index', compact('maleChildren', 'femaleChildren'));
+        
     }
 
 
@@ -74,7 +119,7 @@ class ChildController extends Controller
             $query->where('firstname', 'like', "%{$search}%")
                 ->orWhere('middlename', 'like', "%{$search}%")
                 ->orWhere('lastname', 'like', "%{$search}%");
-        })->paginate(5)->appends(['search' => $search]); 
+        })->paginate(5)->appends(['search' => $search]);
 
         $childrenWithFullNames = $children->map(function ($child) {
             return [
@@ -87,9 +132,9 @@ class ChildController extends Controller
 
         return response()->json([
             'children' => $childrenWithFullNames,
-            'pagination_links' => (string) $children->links(), 
+            'pagination_links' => (string) $children->links(),
         ]);
-    
+
     }
 
     /**
@@ -114,7 +159,7 @@ class ChildController extends Controller
             // Fetch cities for the selected province
             $cities = $psgc->allCities()->get($province_psgc, collect([]));
         }
-    
+
         // Check if city is selected
         if ($request->has('city_name_psgc') && !empty($request->input('city_name_psgc'))) {
             $city_psgc = $request->input('city_name_psgc');
@@ -135,21 +180,21 @@ class ChildController extends Controller
 
         // Check if the child already exists
         $childExists = Child::where('firstname', $request->firstname)
-                            ->where('middlename', $request->middlename)
-                            ->where('lastname', $request->lastname)
-                            ->where('extension_name', $request->extension_name)
-                            ->where('date_of_birth', $request->date_of_birth)
-                            ->where('sex_id', $request->sex_id)
-                            ->exists();
+            ->where('middlename', $request->middlename)
+            ->where('lastname', $request->lastname)
+            ->where('extension_name', $request->extension_name)
+            ->where('date_of_birth', $request->date_of_birth)
+            ->where('sex_id', $request->sex_id)
+            ->exists();
 
         if ($childExists) {
             return redirect()->back()->with('error', 'Child already exists.');
         }
 
         $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
-                ->where('city_name_psgc', $request->input('city_name_psgc'))
-                ->where('brgy_psgc', $request->input('brgy_psgc'))
-                ->first();
+            ->where('city_name_psgc', $request->input('city_name_psgc'))
+            ->where('brgy_psgc', $request->input('brgy_psgc'))
+            ->first();
 
         if ($psgc) {
             $psgc_id = $psgc->psgc_id;
@@ -164,8 +209,8 @@ class ChildController extends Controller
             return redirect()->back()->withErrors('You are not assigned to any Child Development Center.');
         }
 
-       
-        
+
+
         $child = Child::create([
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
@@ -197,13 +242,13 @@ class ChildController extends Controller
     {
         $this->authorize('edit-child');
 
-        $child = Child::findOrFail($id); 
+        $child = Child::findOrFail($id);
         $centers = ChildDevelopmentCenter::all();
 
         $psgc = new Psgc();
 
         $psgcRecord = Psgc::find($child->psgc_id);
-        
+
         $provinces = $psgc->getProvinces();
         $cities = $psgc->getCities($psgcRecord->province_psgc);
         $barangays = $psgc->getBarangays($psgcRecord->city_name_psgc);
@@ -238,7 +283,7 @@ class ChildController extends Controller
     }
 
 
-    
+
 
 
     /**
@@ -246,7 +291,7 @@ class ChildController extends Controller
      */
     public function edit($id)
     {
-        
+
     }
 
     /**
@@ -255,11 +300,54 @@ class ChildController extends Controller
     public function update(UpdateChildRequest $request, Child $child)
     {
         $validatedData = $request->validated();
-        
+
         $child->update($validatedData);
 
         return redirect()->route('child.index')->with('success', 'Child record updated successfully.');
     }
+
+    public function filterByCdc(Request $request)
+    {
+        $cdcId = $request->input('center_name');
+
+        $userCityPsgc = auth()->user()->city_name_psgc;
+
+            $childCenterPsgc = Child::with('center')
+                ->whereNotNull('child_development_center_id')
+                ->first()->psgc_id;
+
+            $centerPsgc = Psgc::where('psgc_id', $childCenterPsgc)
+                ->select('psgc_id', 'city_name_psgc', 'city_name')
+                ->first();
+
+            if ($userCityPsgc == $centerPsgc->city_name_psgc) {
+                $cityNamePsgc = $centerPsgc->city_name_psgc;
+
+                $matchingPsgcs = Psgc::where('city_name_psgc', $cityNamePsgc)->pluck('psgc_id');
+
+                $centers = ChildDevelopmentCenter::whereIn('psgc_id', $matchingPsgcs)->get();
+
+                $maleChildren = Child::whereHas('sex', function ($query) {
+                    $query->where('name', 'Male');
+                })
+                    ->where('is_funded', true)
+                    ->where('child_development_center_id', $cdcId )
+                    ->paginate(5, ['*'], 'malePage');
+
+                // Query for female children whose psgc_id contains the user's city_psgc
+                $femaleChildren = Child::whereHas('sex', function ($query) {
+                    $query->where('name', 'Female');
+                })
+                    ->where('is_funded', true)
+                    ->where('child_development_center_id', $cdcId )
+                    ->paginate(5, ['*'], 'femalePage');
+            }
+
+        return view('child.index', compact('maleChildren', 'femaleChildren', 'centers' ,'cdcId'));
+    }
+
+
+
 
     /**
      * Remove the specified resource from storage.

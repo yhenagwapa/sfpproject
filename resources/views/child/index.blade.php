@@ -41,14 +41,31 @@
                                                     class="bi bi-plus-circle"></i>Add Child Profile</button></a>
                                     @endcan
                                 </div>
+                                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                    <form action="{{ route('child.filterByCdc') }}" method="POST">
+                                        @csrf
+                                        <div class="col-6 mt-4 d-flex align-items-center justify-end">
+                                            <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
+                                                <option value="" disabled selected>Select a Child Development Center</option>
+                                                @foreach ($centers as $center)
+                                                    <option value="{{ $center->id }}" {{ (old('center_name') == $center->id || $cdcId == $center->id) ? 'selected' : '' }}>
+                                                        {{ $center->center_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </form>
+                                @endif
                             </div>
                             <h1 class="card-title mt-3 mb-0">Male Children<h1>
-                            <div class="col-md-12" id="maleChildren-table">
-                                @include('child.partials.malechild-table', ['maleChildren' => $maleChildren])
-                            </div>
-                            <div class="mt-3">
+                                    <div class="col-md-12" id="maleChildren-table">
+                                        @include('child.partials.malechild-table', [
+                                            'maleChildren' => $maleChildren,
+                                        ])
+                                    </div>
+                                    {{-- <div class="mt-3">
                                 {{ $maleChildren->links() }}
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -59,12 +76,14 @@
                     <div class="card">
                         <div class="card-body">
                             <h1 class="card-title mt-3 mb-0">Female Children<h1>
-                            <div class="col-md-12" id="femaleChildren-table">
-                                @include('child.partials.femalechild-table', ['femaleChildren' => $femaleChildren])
-                            </div>
-                            <div class="mt-3">
+                                    <div class="col-md-12" id="femaleChildren-table">
+                                        @include('child.partials.femalechild-table', [
+                                            'femaleChildren' => $femaleChildren,
+                                        ])
+                                    </div>
+                                    {{-- <div class="mt-3">
                                 {{ $femaleChildren->links() }}
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -73,7 +92,10 @@
         </section>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @vite(['resources/js/app.js'])
 
     
+    
+    {{-- @vite(['resources/js/app.js']) --}}
+
+
 </main><!-- End #main -->

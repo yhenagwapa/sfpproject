@@ -15,6 +15,9 @@ class RoleSeeder extends Seeder
 
         $cdw = Role::create(['name' => 'child development worker',
                             'guard_name' => 'web']);
+        
+        $lguFocal= Role::create(['name' => 'lgu focal',
+                            'guard_name' => 'web']);
 
         $admin->givePermissionTo([
             'edit-child',
@@ -30,7 +33,10 @@ class RoleSeeder extends Seeder
             'register',
             'edit-user-profile',
             'delete-user',
-            'view-audit-logs'
+            'view-audit-logs',
+            'add-cycle-implementation',
+            'edit-cycle-implementation',
+            'view-cycle-implementation'
         ]);
 
         $cdw->givePermissionTo([
@@ -42,6 +48,15 @@ class RoleSeeder extends Seeder
             'print-report',
             'register',
             'edit-user-profile',
+            'view-cycle-implementation'
+        ]);
+
+        $lguFocal->givePermissionTo([
+            'view-report',
+            'print-report',
+            'register',
+            'edit-user-profile',
+            'view-cycle-implementation'
         ]);
     }
     

@@ -68,6 +68,9 @@ require __DIR__.'/auth.php';
     // Route::get('/psgc/{region_psgc}/{province_psgc}/{city_name_psgc}/{brgy_psgc}', [ChildController::class, 'getPsgcId'])->name('get.psgc_id');
     // Route::get('/location/{psgc_id}', [ChildController::class, 'getLocationData'])->name('location.get');
 
+    Route::post('/child/filter-by-cdc', [ChildController::class, 'filterByCdc'])->name('child.filterByCdc');
+
+
     Route::get('/attendance/index/{child}', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/store/{child}', [AttendanceController::class, 'store'])->name('attendance.store');
 

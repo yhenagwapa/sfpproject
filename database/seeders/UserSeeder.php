@@ -26,10 +26,10 @@ class UserSeeder extends Seeder
         ]);
         $admin->assignRole('admin');
 
-        // Creating Product Manager User
         $cdw = User::create([
-            'firstname' => 'child development worker',
-            'lastname' => 'child development worker',
+            'firstname' => 'child',
+            'middlename' => 'development',
+            'lastname' => 'worker',
             'contact_no' => '12345678901',
             'address' => 'Suazo St.',
             'zip_code' => '8000',
@@ -37,5 +37,28 @@ class UserSeeder extends Seeder
             'email' => 'cdw@cdw.com',
         ]);
         $cdw->assignRole('child development worker');
+
+        $lguFocal = User::create([
+            'firstname' => 'lgu',
+            'lastname' => 'focal',
+            'contact_no' => '123',
+            'address' => 'Suazo St.',
+            'zip_code' => '8000',
+            'password' => Hash::make('dswd12345'),
+            'email' => 'focal@focal.com',
+            
+        ]);
+        $lguFocal->assignRole('lgu focal');
+
+        $test = User::create([
+            'firstname' => 'test',
+            'lastname' => 'test',
+            'contact_no' => '12345678901',
+            'address' => 'Suazo St.',
+            'zip_code' => '8000',
+            'password' => Hash::make('dswd12345'),
+            'email' => 'test@test.com',
+        ]);
+        $test->assignRole('child development worker');
     }
 }

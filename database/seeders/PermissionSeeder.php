@@ -31,7 +31,10 @@ class PermissionSeeder extends Seeder
             'register',
             'edit-user-profile',
             'delete-user',
-            'view-audit-logs'
+            'view-audit-logs',
+            'add-cycle-implementation',
+            'edit-cycle-implementation',
+            'view-cycle-implementation'
          ];
  
           // Looping and Inserting Array's Permissions into Permission Table

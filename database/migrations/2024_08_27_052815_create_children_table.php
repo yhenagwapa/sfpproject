@@ -18,11 +18,9 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('extension_name')->nullable();
             $table->date('date_of_birth');
-            $table->string('sex');
             $table->string('address');
             $table->unsignedBigInteger('psgc_id')->nullable(); 
             $table->integer('zip_code');
-            $table->integer('child_development_center_id')->constrained('child_development_center')->nullable();
             $table->boolean('is_pantawid');   
             $table->string('pantawid_details')->nullable(); ;   
             $table->boolean('is_person_with_disability');    
