@@ -54,7 +54,7 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="card">
-                            <div class="report-card-body mt-4 text-sm">
+                            <div class="report-card-body mt-4 mb-2 text-sm">
 
                                 <ul class="report-side-nav" id="report-side-nav">
                                     @if (auth()->user()->hasRole('admin') ||
@@ -207,6 +207,7 @@
                                             <div class="card-title">
                                                 <h5>Masterlist of Funded Beneficiaries</h5>
                                             </div>
+                                            
                                             <div style="overflow-x: auto; max-width: 100%;">
                                                 @include('reports.partials.funded-table', [
                                                     'isFunded' => $isFunded,
@@ -224,7 +225,7 @@
                                                 <h5>List of Malnourished Children</h5>
                                             </div>
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                {{-- @include('reports.partials.malnourished-table', ['children' => $children]) --}}
+                                                @include('reports.partials.malnourished-table', ['isFunded' => $isFunded])
                                             </div>
                                         </div>
                                     @endif
@@ -236,7 +237,7 @@
                                             </div>
                                             <div style="overflow-x: auto; max-width: 100%;">
                                                 @include('reports.partials.disability-table', [
-                                                    'isPwdChidlren' => $isPwdChidlren,
+                                                    'isPwdChildren' => $isPwdChildren,
                                                 ])
                                             </div>
                                         </div>
@@ -250,7 +251,7 @@
                                                 </h5>
                                             </div>
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                {{-- @include('reports.partials.undernourished-table', ['centers' => $centers]) --}}
+                                                @include('reports.partials.undernourished-table', ['centers' => $centers])
                                             </div>
                                         </div>
                                     @endif
@@ -261,7 +262,7 @@
                                                 <h5>Consolidated Nutritional Status</h5>
                                             </div>
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                {{-- @include('reports.partials.ns-consolidated-table', ['centers' => $centers]) --}}
+                                                @include('reports.partials.ns-consolidated-table', ['centers' => $centers])
                                             </div>
                                         </div>
                                     @endif
@@ -274,7 +275,7 @@
                                                 <h5>Age Bracket</h5>
                                             </div>
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                {{-- @include('reports.partials.age-bracket-table', ['centers' => $centers]) --}}
+                                                @include('reports.partials.age-bracket-table', ['centers' => $centers])
                                             </div>
                                         </div>
                                     @endif
@@ -287,7 +288,7 @@
                                                 <h5>Weight and Height Monitoring</h5>
                                             </div>
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                {{-- @include('reports.partials.monitoring-table', ['children' => $children]) --}}
+                                                @include('reports.partials.monitoring-table', ['isFunded' => $isFunded])
                                             </div>
                                         </div>
                                     @endif
@@ -300,7 +301,7 @@
                                                 <h5>Actual Feeding Attendance</h5>
                                             </div>
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                {{-- @include('reports.partials.attendance-table', ['centers' => $centers]) --}}
+                                                @include('reports.partials.attendance-table', ['centers' => $centers])
                                             </div>
                                         </div>
                                     @endif
@@ -312,6 +313,7 @@
                                             <div class="card-title">
                                                 <h5>Unfunded Children</h5>
                                             </div>
+                                            
                                             <div style="overflow-x: auto; max-width: 100%;">
                                                 @include('reports.partials.unfunded-table', [
                                                     'isNotFunded' => $isNotFunded,

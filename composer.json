@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "league/csv": "^9.16",
+        "livewire/livewire": "*",
         "spatie/laravel-permission": "^6.9"
     },
     "require-dev": {

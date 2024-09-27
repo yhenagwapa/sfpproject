@@ -79,6 +79,8 @@ require __DIR__.'/auth.php';
     Route::put('nutritionalstatus/store', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
 
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::post('/reports/filter-funded-by-cdc', [ReportsController::class, 'filterFundedByCdc'])->name('reports.filterFundedByCdc');
+    Route::post('/reports/filter-unfunded-by-cdc', [ReportsController::class, 'filterUnfundedByCdc'])->name('reports.filterUnfundedByCdc');
 
     Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
     Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');

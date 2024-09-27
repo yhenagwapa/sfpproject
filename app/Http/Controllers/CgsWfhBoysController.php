@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\cgs_wfh_boy;
+use App\Models\cgs_wfh_boys;
 use Illuminate\Http\Request;
 
-class CgsWfhBoyController extends Controller
+class CgsWfhBoysController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class CgsWfhBoyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(cgs_wfh_boy $cgs_wfh_boy)
+    public function show(cgs_wfh_boys $cgs_wfh_boy)
     {
         //
     }
@@ -42,7 +42,7 @@ class CgsWfhBoyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(cgs_wfh_boy $cgs_wfh_boy)
+    public function edit(cgs_wfh_boys $cgs_wfh_boy)
     {
         //
     }
@@ -50,7 +50,7 @@ class CgsWfhBoyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, cgs_wfh_boy $cgs_wfh_boy)
+    public function update(Request $request, cgs_wfh_boys $cgs_wfh_boy)
     {
         //
     }
@@ -58,7 +58,7 @@ class CgsWfhBoyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(cgs_wfh_boy $cgs_wfh_boy)
+    public function destroy(cgs_wfh_boys $cgs_wfh_boy)
     {
         //
     }

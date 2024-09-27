@@ -1,4 +1,4 @@
-<table id='femaleChildren-table' class="table datatable mt-3 text-center">
+<table id='femaleChildrentable' class="table datatable mt-3 text-center">
     <thead class="text-base">
         <tr>
             <th rowspan="2">
@@ -18,15 +18,15 @@
         </tr>
 
     </thead>
-    <tbody class="femaleChildren-table text-sm">
+    <tbody class="femaleChildrentable text-sm">
         @foreach ($femaleChildren as $femaleChild)
             <tr>
                 <td>{{ $femaleChild->full_name }}</td>
                 <td>{{ $femaleChild->sex->name }}</td>
                 <td>{{ $femaleChild->date_of_birth }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ optional($femaleChild->nutritionalStatus)->entry_weight_for_age }}</td>
+                <td>{{ optional($femaleChild->nutritionalStatus)->entry_weight_for_height }}</td>
+                <td>{{ optional($femaleChild->nutritionalStatus)->entry_height_for_age }}</td>
                 @if (!auth()->user()->hasRole('lgu focal'))
                     <td>
                         <div class="flex space-x-2">

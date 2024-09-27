@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cgs_wfh_girls', function (Blueprint $table) {
             $table->id();
-            $table->double(column: 'age_month')->nullable();
+            $table->double(column: 'length_in_cm')->nullable();
             $table->double('severly_wasted')->nullable();
             $table->double('wasted_from')->nullable();
             $table->double('wasted_to')->nullable();
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->double('normal_to')->nullable();
             $table->double('overweight_from')->nullable();
             $table->double('overweight_to')->nullable();
+            $table->double('obese')->nullable();
             $table->year('year')->nullable();
             $table->timestamps();
         });

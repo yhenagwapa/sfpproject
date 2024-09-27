@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="{{ asset('js/main.js') }}" defer></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

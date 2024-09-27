@@ -1,4 +1,4 @@
-{{-- <table id='malnourished-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
+<table id='malnourished-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
     <thead>
         <tr>
             <th class="border border-white w-40" rowspan="2">Name of Child</th>
@@ -31,15 +31,15 @@
         </tr>
     </thead>
     <tbody class="malnourished-table text-xs">
-        @foreach ($children as $child)
+        @foreach ($isFunded as $fundedChild)
             <tr>
-                <td>{{ $child->full_name }}</td>
-                <td>{{ $child->sex->name }}</td>
-                <td>{{ $child->date_of_birth }}</td>
+                <td>{{ $fundedChild->full_name }}</td>
+                <td>{{ $fundedChild->sex->name }}</td>
+                <td>{{ $fundedChild->date_of_birth }}</td>
 
             </tr>
         @endforeach
-        @if (count($children) <= 0)
+        @if (count($isFunded) <= 0)
             <tr>
                 <td class="text-center" colspan="6">
                     @if (empty($search))
@@ -49,4 +49,4 @@
             </tr>
         @endif
     </tbody>
-</table> --}}
+</table>

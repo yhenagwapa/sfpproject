@@ -1,4 +1,21 @@
-
+@if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+    <div class="col-md-6 mt-4 text-sm">
+        <form action="{{ route('reports.filterFundedByCdc') }}" method="POST">
+            @csrf
+            <label for="center_name">Filter per center:</label>
+            <select class="form-control" name="funded_center_name" id="funded_center_name" onchange="this.form.submit()">
+                <option value="all_center" selected>All Child Development Center
+                </option>
+                @foreach ($centers as $center)
+                    <option value="{{ $center->id }}"
+                        {{ old('funded_center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                        {{ $center->center_name }}
+                    </option>
+                @endforeach
+            </select>
+        </form>
+    </div>
+@endif
 
 <table id='funded-table' class="table datatable text-xs text-center" style="min-width: 1800px;">
     <thead>
@@ -29,24 +46,25 @@
         </tr>
     </thead>
     <tbody class="funded-table text-xs">
-        @foreach ($isFunded as $fundedChild) 
+        @foreach ($isFunded as $fundedChild)
             <tr>
                 <td>{{ $fundedChild->full_name }}</td>
                 <td>{{ $fundedChild->sex->name }}</td>
                 <td>{{ $fundedChild->date_of_birth }}</td>
 
-                
+
                 @if ($fundedChild->nutritionalStatus)
-                
                     @php
                         $dob = \Carbon\Carbon::parse($fundedChild->date_of_birth);
-                        $actualDate = \Carbon\Carbon::parse($fundedChild->nutritionalStatus->entry_actual_date_of_weighing);
+                        $actualDate = \Carbon\Carbon::parse(
+                            $fundedChild->nutritionalStatus->entry_actual_date_of_weighing,
+                        );
                         $ageInYears = $actualDate->diffInYears($dob);
                         $ageInMonths = $actualDate->diffInMonths($dob) % 12;
                     @endphp
 
-                    <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>  
-                    <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td> 
+                    <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
                     <td>{{ $ageInMonths }}</td>
                     <td>{{ $ageInYears }}</td>
@@ -73,7 +91,6 @@
                 <td>{{ $fundedChild->is_child_of_soloparent ? 'Yes' : 'No' }}</td>
                 <td>{{ $fundedChild->is_lactose_intolerant ? 'Yes' : 'No' }}</td>
             </tr>
-        
         @endforeach
         @if (count($isFunded) <= 0)
             <tr>

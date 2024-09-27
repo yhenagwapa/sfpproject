@@ -5,7 +5,7 @@
         <button type="submit" class="text-white bg-blue-600 rounded px-3 min-h-9">Search</button>
     </form>
 </div> --}}
-<table id='maleChildren-table' class="table datatable mt-3 text-center">
+<table id='maleChildrentable' class="table datatable mt-3 text-center">
     <thead class="text-base">
         <tr>
             <th rowspan="2">
@@ -25,15 +25,15 @@
         </tr>
 
     </thead>
-    <tbody class="maleChildren-table text-sm">
+    <tbody class="maleChildrentable text-sm">
         @foreach ($maleChildren as $maleChild)
             <tr>
                 <td>{{ $maleChild->full_name }}</td>
                 <td>{{ $maleChild->sex->name }}</td>
                 <td>{{ $maleChild->date_of_birth }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ optional($maleChild->nutritionalStatus)->entry_weight_for_age }}</td>
+                <td>{{ optional($maleChild->nutritionalStatus)->entry_weight_for_height }}</td>
+                <td>{{ optional($maleChild->nutritionalStatus)->entry_height_for_age }}</td>
                 @if (!auth()->user()->hasRole('lgu focal'))
                     <td>
                         <div class="flex space-x-2">

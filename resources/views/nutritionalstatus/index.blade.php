@@ -126,7 +126,7 @@
                             </div>
                         @endif
 
-                        @if ($hasUponEntryData)
+                        @if (session('hasUponExitData'))
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-title">
@@ -213,5 +213,5 @@
                 </div>
             </section>
         </div>
-        @vite(['resources/js/app.js'])
+        {{-- @vite(['resources/js/app.js']) --}}
     </main><!-- End #main -->

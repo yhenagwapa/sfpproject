@@ -19,7 +19,7 @@ class WfhGirlsSeeder extends Seeder
 
         foreach ($csv as $record) {
             DB::table('cgs_wfh_girls')->insert([
-                'age_month' => $record['age_month'],
+                'length_in_cm' => $record['length_in_cm'],
                 'severly_wasted' => $record['severly_wasted'],
                 'wasted_from' => $record['wasted_from'],
                 'wasted_to' => $record['wasted_to'],
@@ -27,6 +27,7 @@ class WfhGirlsSeeder extends Seeder
                 'normal_to' => $record['normal_to'],
                 'overweight_from' => $record['overweight_from'],
                 'overweight_to' => $record['overweight_to'],
+                'obese' => $record['obese'],
             ]);
         }
     }

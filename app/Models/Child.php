@@ -54,6 +54,7 @@ class Child extends Model
     {
         return $this->belongsTo(ChildDevelopmentCenter::class, 'child_development_center_id', 'id');
     }
+    
     public function location()
     {
         return $this->belongsTo(Psgc::class, 'psgc_id', 'psgc_id');

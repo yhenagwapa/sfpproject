@@ -17,15 +17,25 @@ class NutritionalStatus extends Model
         'entry_weight_for_age',
         'entry_weight_for_height',
         'entry_height_for_age',
+        'entry_is_malnourish',
+        'entry_is_undernourish',
         'exit_weight',
         'exit_height',
         'exit_actual_date_of_weighing',
         'exit_weight_for_age',
         'exit_weight_for_height',
         'exit_height_for_age',
+        'exit_is_malnourish',
+        'exit_is_undernourish',
         'updated_by_user_id',
         'created_by_user_id'
     ];
+
+    protected $casts = [
+        'entry_is_malnourish' => 'boolean',
+        'entry_is_undernourish' => 'boolean',
+    ];
+    
 
     public function child()
     {

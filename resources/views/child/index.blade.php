@@ -33,39 +33,51 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-6 mt-4 d-flex align-items-center">
-                                    @can(['create-child'])
-                                        <a href="{{ route('child.create') }}"><button type="button"
-                                                class="bg-blue-600 text-white rounded px-3 min-h-9"><i
-                                                    class="bi bi-plus-circle"></i>Add Child Profile</button></a>
-                                    @endcan
-                                </div>
-                                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                            <div class="col-md-6 mt-4 d-flex align-items-center">
+                                {{-- @can(['create-child']) --}}
+                                <a href="{{ route('child.create') }}"><button type="button"
+                                        class="bg-blue-600 text-white rounded px-3 min-h-9"><i
+                                            class="bi bi-plus-circle"></i>Add Child Profile</button></a>
+                                {{-- @endcan --}}
+                            </div>
+                            {{-- <div class="col-md-6 mt-4 d-flex align-items-center">
+                                    <form id="searchForm" method="GET" action="{{ route('child.search') }}">
+                                        <input type="search" name="search" id='search'
+                                            class="form-control me-2 rounded" placeholder="Search"
+                                            value="{{ request()->input('search') }}">
+                                        <button type="submit"
+                                            class="text-white bg-blue-600 rounded px-3 min-h-9">Search</button>
+                                    </form>
+                                </div> --}}
+                            @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                <div class="col-md-6 mt-4 text-sm">
                                     <form action="{{ route('child.filterByCdc') }}" method="POST">
                                         @csrf
-                                        <div class="col-6 mt-4 d-flex align-items-center justify-end">
-                                            <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
-                                                <option value="" disabled selected>Select a Child Development Center</option>
-                                                @foreach ($centers as $center)
-                                                    <option value="{{ $center->id }}" {{ (old('center_name') == $center->id || $cdcId == $center->id) ? 'selected' : '' }}>
-                                                        {{ $center->center_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        <label for="center_name">Filter Children:</label>
+                                        <select class="form-control" name="center_name" id="center_name"
+                                            onchange="this.form.submit()">
+                                            <option value="all_center" selected>Select a Child Development Center
+                                            </option>
+                                            @foreach ($centers as $center)
+                                                <option value="{{ $center->id }}"
+                                                    {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                                                    {{ $center->center_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </form>
-                                @endif
-                            </div>
+                                </div>
+                            @endif
+
                             <h1 class="card-title mt-3 mb-0">Male Children<h1>
                                     <div class="col-md-12" id="maleChildren-table">
                                         @include('child.partials.malechild-table', [
                                             'maleChildren' => $maleChildren,
                                         ])
                                     </div>
-                                    {{-- <div class="mt-3">
-                                {{ $maleChildren->links() }}
-                            </div> --}}
+                                    <div class="mt-3">
+                                        {{ $maleChildren->links() }}
+                                    </div>
                         </div>
                     </div>
                 </div>
@@ -81,9 +93,9 @@
                                             'femaleChildren' => $femaleChildren,
                                         ])
                                     </div>
-                                    {{-- <div class="mt-3">
-                                {{ $femaleChildren->links() }}
-                            </div> --}}
+                                    <div class="mt-3">
+                                        {{ $femaleChildren->links() }}
+                                    </div>
                         </div>
                     </div>
                 </div>
@@ -93,8 +105,30 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    
-    
+    {{-- <script>
+        $(document).ready(function() {
+            $('#searchButton').on('click', function() {
+                let searchUrl = "{{ route('child.search') }}";
+                let query = $('#search').val();
+
+                $.ajax({
+                    url: searchUrl,
+                    method: 'GET',
+                    data: { search: query },
+                    success: function(response) {
+                        $('#maleChildren-table').html(response.maleChildrenTable);
+                        $('#femaleChildren-table').html(response.femaleChildrenTable);
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+        });
+    </script> --}}
+
+
     {{-- @vite(['resources/js/app.js']) --}}
 
 

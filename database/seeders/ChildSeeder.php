@@ -115,7 +115,7 @@ class ChildSeeder extends Seeder
             'created_by_user_id' => '4'
         ]);
 
-        $child5 = Child::create([
+        $child6 = Child::create([
             'cycle_implementation_id' => '1',
             'firstname' => 'fff',
             'lastname' => 'fff',

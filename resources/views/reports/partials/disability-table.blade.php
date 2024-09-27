@@ -10,7 +10,7 @@
         
     </thead>
     <tbody class="disability-table text-xs">
-        @foreach ($isPwdChidlren as $childrenWithDisability) 
+        @foreach ($isPwdChildren as $childrenWithDisability) 
             <tr>
                 <td>{{ $childrenWithDisability->full_name }}</td>
                 <td>
@@ -26,6 +26,14 @@
             </tr>
         
         @endforeach
-        
+        @if (count($isPwdChildren) <= 0)
+            <tr>
+                <td class="text-center" colspan="6">
+                    @if (empty($search))
+                        No Data found
+                    @endif
+                </td>
+            </tr>
+        @endif
     </tbody>
 </table>

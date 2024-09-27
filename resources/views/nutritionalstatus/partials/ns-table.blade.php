@@ -1,5 +1,5 @@
 <h5 class="card-title">Upon Entry</h5>
-<table class="table datatable table-auto mt-3 text-base text-center w-full">
+<table class="table datatable table-auto mt-3 text-sm text-center w-full">
     <thead>
         <tr>
             <th>Actual Date of Weighing</th>
@@ -10,13 +10,15 @@
             <th>Weight for Age</th>
             <th>Weight for Height</th>
             <th>Height for Age</th>
+            <th>Malnourish</th>
+            <th>Undernourish</th>
         </tr>
         
     </thead>
     <tbody class="text-base">
         @if (!$hasUponEntryData)
             <tr>
-                <td class="text-center text-red-600" colspan="8">
+                <td class="text-center text-red-600" colspan="10">
                     No data found.
                 </td>
             </tr>
@@ -28,9 +30,11 @@
                     <td>{{ $result->entry_height }}</td>
                     <td>{{ $entryAgeInMonths }}</td>
                     <td>{{ $entryAgeInYears }}</td>
-                    <td>{{ $result->entry_weight_for_age }}</td>
-                    <td>{{ $result->entry_weight_for_height }}</td>
-                    <td>{{ $result->entry_height_for_age }}</td>
+                    <td class="{{ $result->entry_weight_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->entry_weight_for_age }}</td>
+                    <td class="{{ $result->entry_weight_for_height !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->entry_weight_for_height }}</td>
+                    <td class="{{ $result->entry_height_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->entry_height_for_age }}</td>
+                    <td class="{{ $result->entry_is_malnourish ? 'text-red-500' : '' }}">{{ $result->entry_is_malnourish ? 'Yes' : 'No' }}</td>
+                    <td class="{{ $result->entry_is_undernourish ? 'text-red-500' : '' }}">{{ $result->entry_is_undernourish ? 'Yes' : 'No' }}</td>
                 </tr>
             @endforeach
         @endif
@@ -38,7 +42,7 @@
 </table>
 <div></div>
 <h5 class="card-title">After 120 Feeding Days</h5>
-<table class="table datatable table-auto mt-3 text-base text-center w-full">
+<table class="table datatable table-auto mt-3 text-sm text-center w-full">
     <thead>
         <tr>
             <th>Actual Date of Weighing</th>
@@ -49,12 +53,14 @@
             <th>Weight for Age</th>
             <th>Weight for Height</th>
             <th>Height for Age</th>
+            <th>Malnourish</th>
+            <th>Undernourish</th>
         </tr>
     </thead>
     <tbody class="text-base">
         @if (!$hasUponExitData)
             <tr>
-                <td class="text-center text-red-600" colspan="8">
+                <td class="text-center text-red-600" colspan="10">
                     No data found.
                 </td>
             </tr>
@@ -66,9 +72,11 @@
                     <td>{{ $result->exit_height }}</td>
                     <td>{{ $exitAgeInMonths }}</td>
                     <td>{{ $exitAgeInYears }}</td>
-                    <td>{{ $result->exit_weight_for_age }}</td>
-                    <td>{{ $result->exit_weight_for_height }}</td>
-                    <td>{{ $result->exit_height_for_age }}</td>
+                    <td class="{{ $result->exit_weight_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->exit_weight_for_age }}</td>
+                    <td class="{{ $result->exit_weight_for_height !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->exit_weight_for_height }}</td>
+                    <td class="{{ $result->exit_height_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->exit_height_for_age }}</td>
+                    <td class="{{ $result->exit_is_malnourish ? 'text-red-500' : '' }}">{{ $result->exit_is_malnourish ? 'Yes' : 'No' }}</td>
+                    <td class="{{ $result->exit_is_undernourish ? 'text-red-500' : '' }}">{{ $result->exit_is_undernourish ? 'Yes' : 'No' }}</td>
                 </tr>
             @endforeach
         @endif

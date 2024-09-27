@@ -1,4 +1,4 @@
-{{-- <table id='masterlist-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
+<table id='masterlist-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
     <thead class="border bg-gray-200">
         <tr>
             <th class="border border-white w-40" rowspan="2">Name of Child</th>
@@ -32,14 +32,14 @@
         </tr>
     </thead>
     <tbody class="masterlist-table text-xs">
-        @foreach ($children as $child) 
+        @foreach ($isFunded as $fundedChild) 
             <tr>
-                <td>{{ $child->full_name }}</td>
-                <td>{{ $child->sex->name }}</td>
-                <td>{{ $child->date_of_birth }}</td>
+                <td>{{ $fundedChild->full_name }}</td>
+                <td>{{ $fundedChild->sex->name }}</td>
+                <td>{{ $fundedChild->date_of_birth }}</td>
 
                 
-                @if ($child->nutritionalStatus)
+                @if ($fundedChild->nutritionalStatus)
                     @php
                         $dob = \Carbon\Carbon::parse($child->date_of_birth);
                         $entryActualDate = \Carbon\Carbon::parse($child->nutritionalStatus->entry_actual_date_of_weighing);
@@ -50,23 +50,23 @@
                         $exitAgeInMonths = $exitActualDate->diffInMonths($dob) % 12;
                     @endphp
 
-                    <td>{{ $child->nutritionalStatus->entry_actual_date_of_weighing }}</td>  
-                    <td>{{ $child->nutritionalStatus->entry_weight }}</td> 
-                    <td>{{ $child->nutritionalStatus->entry_height }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>  
+                    <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td> 
+                    <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
                     <td>{{ $entyrAgeInMonths }}</td>
                     <td>{{ $entryAgeInYears }}</td>
                     <td></td>
-                    <td>{{ $child->nutritionalStatus->entry_weight_for_age }}</td>
-                    <td>{{ $child->nutritionalStatus->entry_weight_for_height }}</td>
-                    <td>{{ $child->nutritionalStatus->entry_height_for_age }}</td>
-                    <td>{{ $child->nutritionalStatus->exit_actual_date_of_weighing }}</td>  
-                    <td>{{ $child->nutritionalStatus->exit_weight }}</td> 
-                    <td>{{ $child->nutritionalStatus->exit_height }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_age }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->exit_actual_date_of_weighing }}</td>  
+                    <td>{{ $fundedChild->nutritionalStatus->exit_weight }}</td> 
+                    <td>{{ $fundedChild->nutritionalStatus->exit_height }}</td>
                     <td>{{ $exitAgeInMonths }}</td>
                     <td>{{ $exitAgeInYears }}</td>
-                    <td>{{ $child->nutritionalStatus->exit_weight_for_age }}</td>
-                    <td>{{ $child->nutritionalStatus->entry_weight_for_height }}</td>
-                    <td>{{ $child->nutritionalStatus->exit_height_for_age }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->exit_weight_for_age }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->exit_height_for_age }}</td>
                     <td></td>
                 @else
                     <td></td>
@@ -74,7 +74,7 @@
             </tr>
         
         @endforeach
-        @if (count($children) <= 0)
+        @if (count($isFunded) <= 0)
             <tr>
                 <td class="text-center" colspan="6">
                     @if (empty($search))
@@ -84,4 +84,4 @@
             </tr>
         @endif
     </tbody>
-</table> --}}
+</table>
