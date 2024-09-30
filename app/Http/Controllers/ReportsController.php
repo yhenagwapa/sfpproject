@@ -16,8 +16,8 @@ class ReportsController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('permission:view-cycle-implementation', ['only' => ['view']]);
-        $this->middleware('permission:create-cycle-implementation', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-cycle-implementation', ['only' => ['edit','update']]);
+        $this->middleware('permission:create-cycle-implementation', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit-cycle-implementation', ['only' => ['edit', 'update']]);
     }
 
     public function index(Request $request)
@@ -27,7 +27,7 @@ class ReportsController extends Controller
 
         if (!$cycleImplementation) {
             return view('reports.index', [
-                'fundedChildren' => collect(), 
+                'fundedChildren' => collect(),
             ]);
         }
 
@@ -43,14 +43,14 @@ class ReportsController extends Controller
             ->where('is_funded', true)
             ->where('is_person_with_disability', true)
             ->where('cycle_implementation_id', $cycleImplementation->id);
-        
+
         if (auth()->user()->hasRole('admin')) {
-            
+
             $isFunded = $fundedChildren->paginate(10);
             $isNotFunded = $notFundedChildren->paginate(10);
             $isPwdChildren = $childrenWithDisabilities->paginate(10);
 
-            
+
             $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
                 ->where('is_funded', true)
                 ->selectRaw('count(*) as total')
@@ -61,12 +61,12 @@ class ReportsController extends Controller
                 })
                 ->map(function ($items) {
                     return [
-                        'male' => $items->get(1, 0),   
-                        'female' => $items->get(2, 0), 
+                        'male' => $items->get(1, 0),
+                        'female' => $items->get(2, 0),
                     ];
                 });
 
-            
+
             $countsPerCenter = Child::with('center')
                 ->where('is_funded', true)
                 ->get()
@@ -107,7 +107,7 @@ class ReportsController extends Controller
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
             return view('reports.index', compact(
-                'isFunded', 
+                'isFunded',
                 'isNotFunded',
                 'isPwdChildren',
                 'countsPerCenter',
@@ -116,7 +116,7 @@ class ReportsController extends Controller
                 'cdcId'
             ));
 
-        } elseif (auth()->user()->hasRole('lgu focal')){
+        } elseif (auth()->user()->hasRole('lgu focal')) {
             $userCityPsgc = auth()->user()->city_name_psgc;
 
             $matchingPsgcIds = Psgc::where('city_name_psgc', $userCityPsgc)
@@ -124,7 +124,7 @@ class ReportsController extends Controller
 
             $isFunded = $fundedChildren = Child::with('nutritionalStatus')
                 ->where('is_funded', true)
-                ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                     $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                 })
                 ->where('cycle_implementation_id', $cycleImplementation->id)
@@ -132,7 +132,7 @@ class ReportsController extends Controller
 
             $isNotFunded = $notFundedChildren = Child::with('nutritionalStatus')
                 ->where('is_funded', false)
-                ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                     $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                 })
                 ->where('cycle_implementation_id', $cycleImplementation->id)
@@ -141,16 +141,16 @@ class ReportsController extends Controller
             $isPwdChildren = $childrenWithDisabilities = Child::with('center')
                 ->where('is_funded', true)
                 ->where('is_person_with_disability', true)
-                ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                     $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                 })
                 ->where('cycle_implementation_id', $cycleImplementation->id)
                 ->paginate(10);
-                
+
             $centers = ChildDevelopmentCenter::whereIn('psgc_id', $matchingPsgcIds)->get();
 
             // $countsPerCenterAndGender = $this->getCountsPerCenterAndGender($matchingPsgcIds ?? null);
-            
+
             $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
                 ->where('is_funded', true)
                 ->selectRaw('count(*) as total')
@@ -161,12 +161,12 @@ class ReportsController extends Controller
                 })
                 ->map(function ($items) {
                     return [
-                        'male' => $items->get(1, 0),   
-                        'female' => $items->get(2, 0), 
+                        'male' => $items->get(1, 0),
+                        'female' => $items->get(2, 0),
                     ];
                 });
 
-            
+
             $countsPerCenter = Child::with('center')
                 ->where('is_funded', true)
                 ->get()
@@ -205,7 +205,7 @@ class ReportsController extends Controller
                 });
 
             return view('reports.index', compact(
-                'isFunded', 
+                'isFunded',
                 'isNotFunded',
                 'isPwdChildren',
                 'countsPerCenter',
@@ -213,9 +213,9 @@ class ReportsController extends Controller
                 'centers',
                 'cdcId'
             ));
-            
+
         } else {
-            
+
             $cdc = ChildDevelopmentCenter::where('assigned_user_id', auth()->id())->first();
 
             if (!$cdc) {
@@ -244,8 +244,8 @@ class ReportsController extends Controller
                 })
                 ->map(function ($items) {
                     return [
-                        'male' => $items->get(1, 0), 
-                        'female' => $items->get(2, 0), 
+                        'male' => $items->get(1, 0),
+                        'female' => $items->get(2, 0),
                     ];
                 });
 
@@ -288,7 +288,7 @@ class ReportsController extends Controller
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
             return view('reports.index', compact(
-                'isFunded', 
+                'isFunded',
                 'isNotFunded',
                 'isPwdChildren',
                 'countsPerCenter',
@@ -306,7 +306,7 @@ class ReportsController extends Controller
 
         if (!$cycleImplementation) {
             return view('reports.index', [
-                'fundedChildren' => collect(), 
+                'fundedChildren' => collect(),
             ]);
         }
 
@@ -322,14 +322,14 @@ class ReportsController extends Controller
             ->where('is_funded', true)
             ->where('is_person_with_disability', true)
             ->where('cycle_implementation_id', $cycleImplementation->id);
-        
+
         if (auth()->user()->hasRole('admin')) {
-            if ($cdcId == 'all_center'){
+            if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->paginate(10);
                 $isNotFunded = $notFundedChildren->paginate(10);
                 $isPwdChildren = $childrenWithDisabilities->paginate(10);
 
-                
+
                 $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
                     ->where('is_funded', true)
                     ->selectRaw('count(*) as total')
@@ -340,12 +340,12 @@ class ReportsController extends Controller
                     })
                     ->map(function ($items) {
                         return [
-                            'male' => $items->get(1, 0),   
-                            'female' => $items->get(2, 0), 
+                            'male' => $items->get(1, 0),
+                            'female' => $items->get(2, 0),
                         ];
                     });
 
-                
+
                 $countsPerCenter = Child::with('center')
                     ->where('is_funded', true)
                     ->get()
@@ -384,7 +384,7 @@ class ReportsController extends Controller
                     });
 
             } else {
-                $isFunded = $fundedChildren->where('child_development_center_id', $cdcId )->paginate(10);
+                $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->paginate(10);
                 $isNotFunded = $notFundedChildren->paginate(10);
                 $isPwdChildren = $childrenWithDisabilities->paginate(10);
 
@@ -398,12 +398,12 @@ class ReportsController extends Controller
                     })
                     ->map(function ($items) {
                         return [
-                            'male' => $items->get(1, 0),   
-                            'female' => $items->get(2, 0), 
+                            'male' => $items->get(1, 0),
+                            'female' => $items->get(2, 0),
                         ];
                     });
 
-                
+
                 $countsPerCenter = Child::with('center')
                     ->where('is_funded', true)
                     ->get()
@@ -445,7 +445,7 @@ class ReportsController extends Controller
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
             return view('reports.index', compact(
-                'isFunded', 
+                'isFunded',
                 'isNotFunded',
                 'isPwdChildren',
                 'countsPerCenter',
@@ -454,24 +454,24 @@ class ReportsController extends Controller
                 'cdcId'
             ));
 
-        } elseif (auth()->user()->hasRole('lgu focal')){
+        } elseif (auth()->user()->hasRole('lgu focal')) {
             $userCityPsgc = auth()->user()->city_name_psgc;
 
             $matchingPsgcIds = Psgc::where('city_name_psgc', $userCityPsgc)
                 ->pluck('psgc_id');
 
-            if($cdcId == 'all_center'){
+            if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren = Child::with('nutritionalStatus')
-                ->where('is_funded', true)
-                ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
-                    $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
-                })
-                ->where('cycle_implementation_id', $cycleImplementation->id)
-                ->paginate(10);
-                
+                    ->where('is_funded', true)
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
+                        $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
+                    })
+                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->paginate(10);
+
                 $isNotFunded = $notFundedChildren = Child::with('nutritionalStatus')
                     ->where('is_funded', false)
-                    ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                         $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                     })
                     ->where('cycle_implementation_id', $cycleImplementation->id)
@@ -480,28 +480,28 @@ class ReportsController extends Controller
                 $isPwdChildren = $childrenWithDisabilities = Child::with('center')
                     ->where('is_funded', true)
                     ->where('is_person_with_disability', true)
-                    ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                         $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                     })
                     ->where('cycle_implementation_id', $cycleImplementation->id)
                     ->paginate(10);
 
-                    $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
-                ->where('is_funded', true)
-                ->selectRaw('count(*) as total')
-                ->groupBy('child_development_center_id', 'sex_id')
-                ->get()
-                ->mapToGroups(function ($item) {
-                    return [$item->child_development_center_id => [$item->sex_id => $item->total]];
-                })
-                ->map(function ($items) {
-                    return [
-                        'male' => $items->get(1, 0),   
-                        'female' => $items->get(2, 0), 
-                    ];
-                });
+                $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
+                    ->where('is_funded', true)
+                    ->selectRaw('count(*) as total')
+                    ->groupBy('child_development_center_id', 'sex_id')
+                    ->get()
+                    ->mapToGroups(function ($item) {
+                        return [$item->child_development_center_id => [$item->sex_id => $item->total]];
+                    })
+                    ->map(function ($items) {
+                        return [
+                            'male' => $items->get(1, 0),
+                            'female' => $items->get(2, 0),
+                        ];
+                    });
 
-            
+
                 $countsPerCenter = Child::with('center')
                     ->where('is_funded', true)
                     ->get()
@@ -538,16 +538,16 @@ class ReportsController extends Controller
                             ],
                         ];
                     });
-            } else{
+            } else {
                 $isFunded = $fundedChildren = Child::with('nutritionalStatus')
-                ->where('is_funded', true)
-                ->where('child_development_center_id', $cdcId)
-                ->where('cycle_implementation_id', $cycleImplementation->id)
-                ->paginate(10);
-                
+                    ->where('is_funded', true)
+                    ->where('child_development_center_id', $cdcId)
+                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->paginate(10);
+
                 $isNotFunded = $notFundedChildren = Child::with('nutritionalStatus')
                     ->where('is_funded', false)
-                    ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                         $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                     })
                     ->where('cycle_implementation_id', $cycleImplementation->id)
@@ -556,28 +556,28 @@ class ReportsController extends Controller
                 $isPwdChildren = $childrenWithDisabilities = Child::with('center')
                     ->where('is_funded', true)
                     ->where('is_person_with_disability', true)
-                    ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                         $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                     })
                     ->where('cycle_implementation_id', $cycleImplementation->id)
                     ->paginate(10);
 
-                    $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
-                ->where('is_funded', true)
-                ->selectRaw('count(*) as total')
-                ->groupBy('child_development_center_id', 'sex_id')
-                ->get()
-                ->mapToGroups(function ($item) {
-                    return [$item->child_development_center_id => [$item->sex_id => $item->total]];
-                })
-                ->map(function ($items) {
-                    return [
-                        'male' => $items->get(1, 0),   
-                        'female' => $items->get(2, 0), 
-                    ];
-                });
+                $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
+                    ->where('is_funded', true)
+                    ->selectRaw('count(*) as total')
+                    ->groupBy('child_development_center_id', 'sex_id')
+                    ->get()
+                    ->mapToGroups(function ($item) {
+                        return [$item->child_development_center_id => [$item->sex_id => $item->total]];
+                    })
+                    ->map(function ($items) {
+                        return [
+                            'male' => $items->get(1, 0),
+                            'female' => $items->get(2, 0),
+                        ];
+                    });
 
-            
+
                 $countsPerCenter = Child::with('center')
                     ->where('is_funded', true)
                     ->get()
@@ -615,11 +615,11 @@ class ReportsController extends Controller
                         ];
                     });
             }
-            
+
             $centers = ChildDevelopmentCenter::whereIn('psgc_id', $matchingPsgcIds)->get();
 
             return view('reports.index', compact(
-                'isFunded', 
+                'isFunded',
                 'isNotFunded',
                 'isPwdChildren',
                 'countsPerCenter',
@@ -629,7 +629,7 @@ class ReportsController extends Controller
             ));
 
         } else {
-            
+
             $cdc = ChildDevelopmentCenter::where('assigned_user_id', auth()->id())->first();
 
             if (!$cdc) {
@@ -658,8 +658,8 @@ class ReportsController extends Controller
                 })
                 ->map(function ($items) {
                     return [
-                        'male' => $items->get(1, 0), 
-                        'female' => $items->get(2, 0), 
+                        'male' => $items->get(1, 0),
+                        'female' => $items->get(2, 0),
                     ];
                 });
 
@@ -704,7 +704,7 @@ class ReportsController extends Controller
         $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
         return view('reports.index', compact(
-            'isFunded', 
+            'isFunded',
             'isNotFunded',
             'isPwdChildren',
             'countsPerCenter',
@@ -721,7 +721,7 @@ class ReportsController extends Controller
 
         if (!$cycleImplementation) {
             return view('reports.index', [
-                'fundedChildren' => collect(), 
+                'fundedChildren' => collect(),
             ]);
         }
 
@@ -737,14 +737,14 @@ class ReportsController extends Controller
             ->where('is_funded', true)
             ->where('is_person_with_disability', true)
             ->where('cycle_implementation_id', $cycleImplementation->id);
-        
+
         if (auth()->user()->hasRole('admin')) {
-            if ($cdcId == 'all_center'){
+            if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->paginate(10);
                 $isNotFunded = $notFundedChildren->paginate(10);
                 $isPwdChildren = $childrenWithDisabilities->paginate(10);
 
-                
+
                 $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
                     ->where('is_funded', true)
                     ->selectRaw('count(*) as total')
@@ -755,12 +755,12 @@ class ReportsController extends Controller
                     })
                     ->map(function ($items) {
                         return [
-                            'male' => $items->get(1, 0),   
-                            'female' => $items->get(2, 0), 
+                            'male' => $items->get(1, 0),
+                            'female' => $items->get(2, 0),
                         ];
                     });
 
-                
+
                 $countsPerCenter = Child::with('center')
                     ->where('is_funded', true)
                     ->get()
@@ -800,7 +800,7 @@ class ReportsController extends Controller
 
             } else {
                 $isFunded = $fundedChildren->paginate(10);
-                $isNotFunded = $notFundedChildren->where('child_development_center_id', $cdcId )->paginate(10);
+                $isNotFunded = $notFundedChildren->where('child_development_center_id', $cdcId)->paginate(10);
                 $isPwdChildren = $childrenWithDisabilities->paginate(10);
 
                 $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
@@ -813,12 +813,12 @@ class ReportsController extends Controller
                     })
                     ->map(function ($items) {
                         return [
-                            'male' => $items->get(1, 0),   
-                            'female' => $items->get(2, 0), 
+                            'male' => $items->get(1, 0),
+                            'female' => $items->get(2, 0),
                         ];
                     });
 
-                
+
                 $countsPerCenter = Child::with('center')
                     ->where('is_funded', true)
                     ->get()
@@ -860,7 +860,7 @@ class ReportsController extends Controller
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
             return view('reports.index', compact(
-                'isFunded', 
+                'isFunded',
                 'isNotFunded',
                 'isPwdChildren',
                 'countsPerCenter',
@@ -869,25 +869,25 @@ class ReportsController extends Controller
                 'cdcId'
             ));
 
-        } elseif (auth()->user()->hasRole('lgu focal')){
+        } elseif (auth()->user()->hasRole('lgu focal')) {
             $userCityPsgc = auth()->user()->city_name_psgc;
 
             $matchingPsgcIds = Psgc::where('city_name_psgc', $userCityPsgc)
                 ->pluck('psgc_id');
 
-            if($cdcId == 'all_center'){
+            if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren = Child::with('nutritionalStatus')
-                ->where('is_funded', true)
-                ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
-                    $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
-                })
-                ->where('cycle_implementation_id', $cycleImplementation->id)
-                ->paginate(10);
+                    ->where('is_funded', true)
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
+                        $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
+                    })
+                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->paginate(10);
 
-                
+
                 $isNotFunded = $notFundedChildren = Child::with('nutritionalStatus')
                     ->where('is_funded', false)
-                    ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                         $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                     })
                     ->where('cycle_implementation_id', $cycleImplementation->id)
@@ -896,7 +896,7 @@ class ReportsController extends Controller
                 $isPwdChildren = $childrenWithDisabilities = Child::with('center')
                     ->where('is_funded', true)
                     ->where('is_person_with_disability', true)
-                    ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                         $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                     })
                     ->where('cycle_implementation_id', $cycleImplementation->id)
@@ -912,12 +912,12 @@ class ReportsController extends Controller
                     })
                     ->map(function ($items) {
                         return [
-                            'male' => $items->get(1, 0),   
-                            'female' => $items->get(2, 0), 
+                            'male' => $items->get(1, 0),
+                            'female' => $items->get(2, 0),
                         ];
                     });
 
-            
+
                 $countsPerCenter = Child::with('center')
                     ->where('is_funded', true)
                     ->get()
@@ -954,15 +954,15 @@ class ReportsController extends Controller
                             ],
                         ];
                     });
-            } else{
+            } else {
                 $isFunded = $fundedChildren = Child::with('nutritionalStatus')
-                ->where('is_funded', true)
-                ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
-                    $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
-                })
-                ->where('cycle_implementation_id', $cycleImplementation->id)
-                ->paginate(10);
-                
+                    ->where('is_funded', true)
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
+                        $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
+                    })
+                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->paginate(10);
+
                 $isNotFunded = $notFundedChildren = Child::with('nutritionalStatus')
                     ->where('is_funded', false)
                     ->where('child_development_center_id', $cdcId)
@@ -972,7 +972,7 @@ class ReportsController extends Controller
                 $isPwdChildren = $childrenWithDisabilities = Child::with('center')
                     ->where('is_funded', true)
                     ->where('is_person_with_disability', true)
-                    ->whereIn('child_development_center_id', function($query) use ($matchingPsgcIds) {
+                    ->whereIn('child_development_center_id', function ($query) use ($matchingPsgcIds) {
                         $query->select('id')->from('child_development_centers')->whereIn('psgc_id', $matchingPsgcIds);
                     })
                     ->where('cycle_implementation_id', $cycleImplementation->id)
@@ -988,12 +988,12 @@ class ReportsController extends Controller
                     })
                     ->map(function ($items) {
                         return [
-                            'male' => $items->get(1, 0),   
-                            'female' => $items->get(2, 0), 
+                            'male' => $items->get(1, 0),
+                            'female' => $items->get(2, 0),
                         ];
                     });
 
-            
+
                 $countsPerCenter = Child::with('center')
                     ->where('is_funded', true)
                     ->get()
@@ -1031,11 +1031,11 @@ class ReportsController extends Controller
                         ];
                     });
             }
-            
+
             $centers = ChildDevelopmentCenter::whereIn('psgc_id', $matchingPsgcIds)->get();
 
             return view('reports.index', compact(
-                'isFunded', 
+                'isFunded',
                 'isNotFunded',
                 'isPwdChildren',
                 'countsPerCenter',
@@ -1045,7 +1045,7 @@ class ReportsController extends Controller
             ));
 
         } else {
-            
+
             $cdc = ChildDevelopmentCenter::where('assigned_user_id', auth()->id())->first();
 
             if (!$cdc) {
@@ -1074,8 +1074,8 @@ class ReportsController extends Controller
                 })
                 ->map(function ($items) {
                     return [
-                        'male' => $items->get(1, 0), 
-                        'female' => $items->get(2, 0), 
+                        'male' => $items->get(1, 0),
+                        'female' => $items->get(2, 0),
                     ];
                 });
 
@@ -1120,7 +1120,7 @@ class ReportsController extends Controller
         $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
         return view('reports.index', compact(
-            'isFunded', 
+            'isFunded',
             'isNotFunded',
             'isPwdChildren',
             'countsPerCenter',
@@ -1130,84 +1130,6 @@ class ReportsController extends Controller
         ));
     }
 
-
-    // public function viewMasterlist()
-    // {
-    //     $isAdmin = auth()->user()->hasRole('admin');
-
-    //     // Retrieve the active cycle_implementation
-    //     $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-    //     if (!$cycleImplementation) {
-    //         return view('reports.index', [
-    //             'fundedChildren' => collect(), 
-    //         ]);
-    //     }
-
-    //     // Common query: Filter funded children and the active cycle_implementation_id
-    //     $childrenQuery = Child::with('nutritionalStatus')
-    //         ->where('is_funded', true) // Only funded children
-    //         ->where('cycle_implementation_id', $cycleImplementation->id); // Only for active cycle
-
-    //     if ($isAdmin) {
-    //         // Admin sees all funded children for the active cycle
-    //         $fundedChildren = $childrenQuery->paginate(10);
-    //     } else {
-    //         // Non-admin users are restricted to their assigned CDC
-    //         $cdc = ChildDevelopmentCenter::where('assigned_user_id', auth()->id())->first();
-
-    //         if (!$cdc) {
-    //             return view('reports.index', [
-    //                 'fundedChildren' => collect(), // Return an empty collection
-    //             ]);
-    //         }
-
-    //         // Restrict children to those in the user's CDC
-    //         $fundedChildren = $childrenQuery
-    //             ->where('child_development_center_id', $cdc->id)
-    //             ->paginate(10);
-    //     }
-
-    //     // Return the view with the funded children
-    //     return view('reports.index', compact('fundedChildren'));
-    // }
-
-    // public function viewChildrenWithDisabilities()
-    // {
-    //     $isAdmin = auth()->user()->hasRole('admin');
-
-    //     $childrenWithDisabilities = Child::where('is_person_with_disability', true)
-    //             ->with('center')
-    //             ->paginate(10);
-
-    //     if ($isAdmin) {
-            
-    //         $fundedChildrenwithDisabilities = $childrenWithDisabilities->paginate(10);
-    //     } else {
-            
-    //         $cdc = ChildDevelopmentCenter::where('assigned_user_id', auth()->id())->first();
-
-    //         if (!$cdc) {
-    //             return view('reports.index', [
-    //                 'fundedChildren' => collect(), // Return an empty collection
-    //             ]);
-    //         }
-
-            
-    //         $fundedChildrenwithDisabilities = $childrenWithDisabilities
-    //             ->where('is_person_with_disability', 'true')
-    //             ->paginate(10);
-    //     }
-
-    //     // Return the view with the funded children
-    //     return view('reports.index', compact('fundedChildrenwithDisabilities'));
-    // }
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //

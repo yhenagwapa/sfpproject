@@ -59,12 +59,12 @@ class ChildController extends Controller
             $matchingPsgcIds = Psgc::where('city_name_psgc', $userCityPsgc)
                 ->pluck('psgc_id');
 
-            $children = Child::whereHas('center', function($query) use ($matchingPsgcIds) {
-                    $query->whereIn('psgc_id', $matchingPsgcIds);  
-                })
-                ->with('center.psgc')  
-                ->get(); 
-                
+            $children = Child::whereHas('center', function ($query) use ($matchingPsgcIds) {
+                $query->whereIn('psgc_id', $matchingPsgcIds);
+            })
+                ->with('center.psgc')
+                ->get();
+
             $centers = ChildDevelopmentCenter::whereIn('psgc_id', $matchingPsgcIds)->get();
 
             $cdcId = $request->input('center_name', null);
@@ -73,31 +73,31 @@ class ChildController extends Controller
 
             // foreach($centers as $center){
 
-                foreach ($children as $child) {
+            foreach ($children as $child) {
 
-                    $maleChildren = Child::whereHas('sex', function ($query) {
-                        $query->where('name', 'Male');
-                    })
-                        ->whereIn('child_development_center_id', $centers->pluck('id'))
-                        ->where('is_funded', true)
-                        ->with('nutritionalStatus')
-                        ->paginate(5, ['*'], 'malePage');
-    
-                    $femaleChildren = Child::whereHas('sex', function ($query) {
-                        $query->where('name', 'Female');
-                    })
-                        ->whereIn('child_development_center_id', $centers->pluck('id'))
-                        ->where('is_funded', true)
-                        ->with('nutritionalStatus')
-                        ->paginate(5, ['*'], 'femalePage');
-                } 
+                $maleChildren = Child::whereHas('sex', function ($query) {
+                    $query->where('name', 'Male');
+                })
+                    ->whereIn('child_development_center_id', $centers->pluck('id'))
+                    ->where('is_funded', true)
+                    ->with('nutritionalStatus')
+                    ->paginate(5, ['*'], 'malePage');
+
+                $femaleChildren = Child::whereHas('sex', function ($query) {
+                    $query->where('name', 'Female');
+                })
+                    ->whereIn('child_development_center_id', $centers->pluck('id'))
+                    ->where('is_funded', true)
+                    ->with('nutritionalStatus')
+                    ->paginate(5, ['*'], 'femalePage');
+            }
             // }
 
             return view('child.index', compact('maleChildren', 'femaleChildren', 'centers', 'cdcId'));
 
         } else {
 
-            $assignedCdcId = auth()->user()->childDevelopmentCenter->id;
+            $assignedCdcId = optional(auth()->user()->childDevelopmentCenter)->id;
 
             $maleChildren = Child::where('child_development_center_id', $assignedCdcId)
                 ->whereHas('sex', function ($query) {
@@ -117,7 +117,7 @@ class ChildController extends Controller
             return view('child.index', compact('maleChildren', 'femaleChildren'));
         }
 
-        
+
     }
 
 
@@ -127,9 +127,9 @@ class ChildController extends Controller
         $search = $request->input('search');
 
         if ($search) {
-            
+
             $keywords = explode(" ", $search);
-            
+
             if (auth()->user()->hasRole('admin')) {
 
                 $centers = ChildDevelopmentCenter::all();
@@ -158,16 +158,16 @@ class ChildController extends Controller
                     })
                     ->paginate(5, ['*'], 'femalePage');
 
-                    if ($request->ajax()) {
-                       
-                        $maleChildrentable = view('child.partials.malechild-table', compact('maleChildren'))->render();
-                        $femaleChildrentable = view('child.partials.femalechild-table', compact('femaleChildren'))->render();
-                
-                        return response()->json([
-                            'maleChildrenTable' => $maleChildrentable,
-                            'femaleChildrenTable' => $femaleChildrentable,
-                        ]);
-                    }
+                if ($request->ajax()) {
+
+                    $maleChildrentable = view('child.partials.malechild-table', compact('maleChildren'))->render();
+                    $femaleChildrentable = view('child.partials.femalechild-table', compact('femaleChildren'))->render();
+
+                    return response()->json([
+                        'maleChildrenTable' => $maleChildrentable,
+                        'femaleChildrenTable' => $femaleChildrentable,
+                    ]);
+                }
 
                 return view('child.index', compact('maleChildren', 'femaleChildren', 'centers', 'cdcId'));
 
@@ -178,12 +178,12 @@ class ChildController extends Controller
                 $matchingPsgcIds = Psgc::where('city_name_psgc', $userCityPsgc)
                     ->pluck('psgc_id');
 
-                $children = Child::whereHas('center', function($query) use ($matchingPsgcIds) {
-                        $query->whereIn('psgc_id', $matchingPsgcIds);  
-                    })
-                    ->with('center.psgc')  
-                    ->get(); 
-                    
+                $children = Child::whereHas('center', function ($query) use ($matchingPsgcIds) {
+                    $query->whereIn('psgc_id', $matchingPsgcIds);
+                })
+                    ->with('center.psgc')
+                    ->get();
+
                 $centers = ChildDevelopmentCenter::whereIn('psgc_id', $matchingPsgcIds)->get();
 
                 $cdcId = $request->input('center_name', null);
@@ -192,39 +192,39 @@ class ChildController extends Controller
 
                 // foreach($centers as $center){
 
-                    foreach ($children as $child) {
+                foreach ($children as $child) {
 
-                        $maleChildren = Child::whereHas('sex', function ($query) {
-                            $query->where('name', 'Male');
+                    $maleChildren = Child::whereHas('sex', function ($query) {
+                        $query->where('name', 'Male');
+                    })
+                        ->whereIn('child_development_center_id', $centers->pluck('id'))
+                        ->where(function ($query) use ($keywords) {
+                            foreach ($keywords as $keyword) {
+                                $query->where('full_name', 'LIKE', "%{$keyword}%");
+                            }
                         })
-                            ->whereIn('child_development_center_id', $centers->pluck('id'))
-                            ->where(function ($query) use ($keywords) {
-                                foreach ($keywords as $keyword) {
-                                    $query->where('full_name', 'LIKE', "%{$keyword}%");
-                                }
-                            })
-                            ->where('is_funded', true)
-                            ->paginate(5, ['*'], 'malePage');
-        
-                        $femaleChildren = Child::whereHas('sex', function ($query) {
-                            $query->where('name', 'Female');
+                        ->where('is_funded', true)
+                        ->paginate(5, ['*'], 'malePage');
+
+                    $femaleChildren = Child::whereHas('sex', function ($query) {
+                        $query->where('name', 'Female');
+                    })
+                        ->whereIn('child_development_center_id', $centers->pluck('id'))
+                        ->where(function ($query) use ($keywords) {
+                            foreach ($keywords as $keyword) {
+                                $query->where('full_name', 'LIKE', "%{$keyword}%");
+                            }
                         })
-                            ->whereIn('child_development_center_id', $centers->pluck('id'))
-                            ->where(function ($query) use ($keywords) {
-                                foreach ($keywords as $keyword) {
-                                    $query->where('full_name', 'LIKE', "%{$keyword}%");
-                                }
-                            })
-                            ->where('is_funded', true)
-                            ->paginate(5, ['*'], 'femalePage');
-                    } 
+                        ->where('is_funded', true)
+                        ->paginate(5, ['*'], 'femalePage');
+                }
                 // }
 
                 if ($request->ajax()) {
-                       
+
                     $maleChildrentable = view('child.partials.malechild-table', compact('maleChildren'))->render();
                     $femaleChildrentable = view('child.partials.femalechild-table', compact('femaleChildren'))->render();
-            
+
                     return response()->json([
                         'maleChildrenTable' => $maleChildrentable,
                         'femaleChildrenTable' => $femaleChildrentable,
@@ -260,16 +260,16 @@ class ChildController extends Controller
                     })
                     ->paginate(5, ['*'], 'femalePage');
 
-                    if ($request->ajax()) {
-                       
-                        $maleChildrentable = view('child.partials.malechild-table', compact('maleChildren'))->render();
-                        $femaleChildrentable = view('child.partials.femalechild-table', compact('femaleChildren'))->render();
-                
-                        return response()->json([
-                            'maleChildrenTable' => $maleChildrentable,
-                            'femaleChildrenTable' => $femaleChildrentable,
-                        ]);
-                    }
+                if ($request->ajax()) {
+
+                    $maleChildrentable = view('child.partials.malechild-table', compact('maleChildren'))->render();
+                    $femaleChildrentable = view('child.partials.femalechild-table', compact('femaleChildren'))->render();
+
+                    return response()->json([
+                        'maleChildrenTable' => $maleChildrentable,
+                        'femaleChildrenTable' => $femaleChildrentable,
+                    ]);
+                }
 
                 return view('child.index', compact('maleChildren', 'femaleChildren'));
             }
@@ -455,61 +455,61 @@ class ChildController extends Controller
             $centers = ChildDevelopmentCenter::all();
             $children = Child::all();
 
-            if ($cdcId == 'all_center'){
+            if ($cdcId == 'all_center') {
                 $maleChildren = Child::whereHas('sex', function ($query) {
                     $query->where('name', 'Male');
                 })
                     ->where('is_funded', true)
                     ->paginate(5, ['*'], 'malePage');
-    
+
                 $femaleChildren = Child::whereHas('sex', function ($query) {
                     $query->where('name', 'Female');
                 })
                     ->where('is_funded', true)
                     ->paginate(5, ['*'], 'femalePage');
-            } else{
+            } else {
                 foreach ($children as $child) {
 
                     $maleChildren = Child::whereHas('sex', function ($query) {
                         $query->where('name', 'Male');
                     })
-                        ->where('child_development_center_id', $cdcId )
+                        ->where('child_development_center_id', $cdcId)
                         ->where('is_funded', true)
                         ->paginate(5, ['*'], 'malePage');
-        
+
                     $femaleChildren = Child::whereHas('sex', function ($query) {
                         $query->where('name', 'Female');
                     })
-                        ->where('child_development_center_id', $cdcId )
+                        ->where('child_development_center_id', $cdcId)
                         ->where('is_funded', true)
                         ->paginate(5, ['*'], 'femalePage');
-                } 
+                }
             }
-            
+
             return view('child.index', compact('maleChildren', 'femaleChildren', 'centers', 'cdcId'));
 
-        } else{
+        } else {
             $cdcId = $request->input('center_name');
 
             $userCityPsgc = auth()->user()->city_name_psgc;
 
             $matchingPsgcIds = Psgc::where('city_name_psgc', $userCityPsgc)
-                    ->pluck('psgc_id');
+                ->pluck('psgc_id');
 
-            $children = Child::whereHas('center', function($query) use ($matchingPsgcIds) {
-                        $query->whereIn('psgc_id', $matchingPsgcIds);  
-                    })
-                    ->with('center.psgc')  
-                    ->get(); 
-                    
+            $children = Child::whereHas('center', function ($query) use ($matchingPsgcIds) {
+                $query->whereIn('psgc_id', $matchingPsgcIds);
+            })
+                ->with('center.psgc')
+                ->get();
+
             $centers = ChildDevelopmentCenter::whereIn('psgc_id', $matchingPsgcIds)->get();
 
             $cdcId = $request->input('center_name', null);
 
-            $maleChildren = collect(); 
+            $maleChildren = collect();
             $femaleChildren = collect();
 
-            if($cdcId =='all_center'){
+            if ($cdcId == 'all_center') {
                 foreach ($children as $child) {
 
                     $maleChildren = Child::whereHas('sex', function ($query) {
@@ -518,35 +518,35 @@ class ChildController extends Controller
                         ->whereIn('child_development_center_id', $centers->pluck('id'))
                         ->where('is_funded', true)
                         ->paginate(5, ['*'], 'malePage');
-    
+
                     $femaleChildren = Child::whereHas('sex', function ($query) {
                         $query->where('name', 'Female');
                     })
                         ->whereIn('child_development_center_id', $centers->pluck('id'))
                         ->where('is_funded', true)
                         ->paginate(5, ['*'], 'femalePage');
-                } 
-            } else{
+                }
+            } else {
 
                 foreach ($children as $child) {
 
                     $maleChildren = Child::whereHas('sex', function ($query) {
                         $query->where('name', 'Male');
                     })
-                        ->where('child_development_center_id', $cdcId )
+                        ->where('child_development_center_id', $cdcId)
                         ->where('is_funded', true)
                         ->paginate(5, ['*'], 'malePage');
-        
+
                     $femaleChildren = Child::whereHas('sex', function ($query) {
                         $query->where('name', 'Female');
                     })
-                        ->where('child_development_center_id', $cdcId )
+                        ->where('child_development_center_id', $cdcId)
                         ->where('is_funded', true)
                         ->paginate(5, ['*'], 'femalePage');
-                } 
+                }
             }
 
-            return view('child.index', compact('maleChildren', 'femaleChildren', 'centers' ,'cdcId'));
+            return view('child.index', compact('maleChildren', 'femaleChildren', 'centers', 'cdcId'));
         }
     }
 

@@ -21,6 +21,12 @@ class DatabaseSeeder extends Seeder
             CenterSeeder::class,
             SexSeeder::class,
             ChildSeeder::class,
+            HfaBoysSeeder::class,
+            HfaGirlsSeeder::class,
+            WfaBoysSeeder::class,
+            WfaGirlsSeeder::class,
+            WfhBoysSeeder::class,
+            WfhGirlsSeeder::class
         ]);
     }
 }
