@@ -27,6 +27,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var alert1 = document.getElementById('success-alert');
@@ -62,6 +63,8 @@
                                     <div class='col-md-10 mt-3 text-gray-400 text-xs'>
                                         <hr>
                                     </div>
+
+                                    <input type="hidden" id="cycle_implementation_id" name="cycle_implementation_id" value="{{ $cycleImplementation->id}}">
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="firstname">First Name</label><label for="firstname"
@@ -370,11 +373,56 @@
 
                                     <input type="hidden" id="psgc_id" name="psgc_id" value="">
 
+                                    
+
+                                    <div class='col-md-1 mt-4 text-gray-400 text-xs'>Child Status</div>
+                                    <div class='col-md-11 mt-8 text-gray-400 text-xs'>
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-md-12 mt-3 text-sm">
+                                        <label for="is_funded">Is this child funded?<b class="text-red-600">*</b></label>
+                                    </div>
+
+                                    <div class="mt-2 text-sm">
+                                        <input type="radio" name="is_funded" id="is_funded_yes"
+                                            value="1" {{ old('is_funded', '1') == '1' ? 'checked' : '' }}>
+                                        <label for="is_funded_yes">Yes</label>
+                                    
+                                        <input type="radio" class="ml-3" name="is_funded" id="is_funded_no"
+                                            value="0"
+                                            {{ old('is_funded') == '0' ? 'checked' : '' }}>
+                                        <label for="is_funded_no">No</label>
+                                    </div>
+
                                     <div class="col-md-12 mt-4 text-right">
-                                        <button type="submit"
-                                            class="text-white bg-blue-600 rounded px-3 min-h-9">Submit</button>
+                                        <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
+                                            data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
                                         <button type="reset"
                                             class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
+                                    </div>
+
+
+                                    <div class="modal fade" id="verticalycentered" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-red-600">Confirmation</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to save these details?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit"
+                                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                                    <button type="button"
+                                                        class="text-white bg-gray-600 rounded px-3 min-h-9"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form><!-- End floating Labels Form -->
                             </div>

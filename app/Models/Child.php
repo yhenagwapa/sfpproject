@@ -13,6 +13,7 @@ class Child extends Model
     protected $table = 'children';
 
     protected $fillable = [
+        'cycle_implementation_id',
         'firstname',
         'middlename',
         'lastname',
@@ -32,9 +33,11 @@ class Child extends Model
         'is_lactose_intolerant', 
         'deworming_date', 
         'vitamin_a_date', 
+        'is_funded',
         'child_development_center_id', 
         'created_by_user_id', 
-        'updated_by_user_id'];
+        'updated_by_user_id'
+    ];
 
     public function nutritionalStatus()
     {

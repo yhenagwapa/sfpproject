@@ -22,6 +22,7 @@ class StoreChildRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'cycle_implementation_id' => ['required','exists:cycle_implementations,id'],
             'firstname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'middlename' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
@@ -43,6 +44,7 @@ class StoreChildRequest extends FormRequest
             'is_lactose_intolerant' => ['required', 'boolean'],
             'deworming_date' => ['nullable', 'date'],
             'vitamin_a_date' => ['nullable', 'date'],
+            'is_funded' => ['required', 'boolean'],
         ];
     }
     public function messages()

@@ -41,11 +41,11 @@
                 
                 @if ($fundedChild->nutritionalStatus)
                     @php
-                        $dob = \Carbon\Carbon::parse($child->date_of_birth);
-                        $entryActualDate = \Carbon\Carbon::parse($child->nutritionalStatus->entry_actual_date_of_weighing);
+                        $dob = \Carbon\Carbon::parse($fundedChild->date_of_birth);
+                        $entryActualDate = \Carbon\Carbon::parse($fundedChild->nutritionalStatus->entry_actual_date_of_weighing);
                         $entryAgeInYears = $entryActualDate->diffInYears($dob);
                         $entyrAgeInMonths = $entryActualDate->diffInMonths($dob) % 12;
-                        $exitActualDate = \Carbon\Carbon::parse($child->nutritionalStatus->exit_actual_date_of_weighing);
+                        $exitActualDate = \Carbon\Carbon::parse($fundedChild->nutritionalStatus->exit_actual_date_of_weighing);
                         $exitAgeInYears = $exitActualDate->diffInYears($dob);
                         $exitAgeInMonths = $exitActualDate->diffInMonths($dob) % 12;
                     @endphp

@@ -126,7 +126,7 @@
                             </div>
                         @endif
 
-                        @if (session('hasUponExitData'))
+                        @if ($hasUponEntryData && !session('exitDataSaved'))
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-title">
@@ -202,7 +202,7 @@
                             </div>
                         @endif
                     </div>
-                    <div class="col-lg-9">
+                    <div class="{{ (bool)$hasUponExitData ? 'col-lg-12' : 'col-lg-9' }}">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Nutritional Status</h5>

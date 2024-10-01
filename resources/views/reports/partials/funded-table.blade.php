@@ -70,7 +70,8 @@
                     <td>{{ $ageInYears }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_age }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_height_for_weight }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->entry_is_undernourish ? "Yes" : "No" }}</td>
                 @else
                     <td></td>
                     <td></td>
