@@ -4,7 +4,7 @@
             @csrf
             <label for="center_name">Filter per center:</label>
             <select class="form-control" name="funded_center_name" id="funded_center_name" onchange="this.form.submit()">
-                <option value="all_center" selected>All Child Development Center
+                <option value="all_center" {{ old('funded_center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>All Child Development Center
                 </option>
                 @foreach ($centers as $center)
                     <option value="{{ $center->id }}" {{ old('funded_center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
@@ -15,6 +15,7 @@
         </form>
     </div>
 @endif
+<a href="{{ url('/reports/print-funded', ['center_name' => request()->center_name]) }}" class="btn btn-primary" target="_blank">View PDF</a>
 
 <table id='funded-table' class="table datatable text-xs text-center" style="min-width: 1800px;">
     <thead>
@@ -62,17 +63,6 @@
                             $ageInMonths = $actualDate->diffInMonths($dob) % 12;
                         @endphp
 
-<<<<<<< HEAD
-                    <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
-                    <td>{{ $ageInMonths }}</td>
-                    <td>{{ $ageInYears }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_age }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_is_undernourish ? "Yes" : "No" }}</td>
-=======
                         <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>
                         <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td>
                         <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
@@ -82,7 +72,6 @@
                         <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
                         <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
                         <td>{{ $fundedChild->nutritionalStatus->entry_is_undernourish ? 'Yes' : 'No' }}</td>
->>>>>>> 56c8852bc4f366d53ba56162d12f4200802e842f
                 @else
                     <td></td>
                     <td></td>

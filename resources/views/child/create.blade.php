@@ -14,42 +14,12 @@
         </nav>
     </div><!-- End Page Title -->
 
-<<<<<<< HEAD
-        @if (session('success'))
-            <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var alert1 = document.getElementById('success-alert');
-                var alert2 = document.getElementById('danger-alert');
-                if (alert1) {
-                    // Automatically close the alert after 3 seconds (3000 milliseconds)
-                    setTimeout(function() {
-                        var bsAlert1 = new bootstrap.Alert(alert1);
-                        bsAlert1.close();
-                    }, 2000);
-                }
-                if (alert2) {
-                    // Automatically close the alert after 3 seconds (3000 milliseconds)
-                    setTimeout(function() {
-                        var bsAlert2 = new bootstrap.Alert(alert2);
-                        bsAlert2.close();
-                    }, 2000);
-                }
-            });
-        </script>
-=======
     @if (session('error'))
     <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
         {{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
->>>>>>> 56c8852bc4f366d53ba56162d12f4200802e842f
 
     @if (session('success'))
     <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
@@ -88,7 +58,6 @@
                             <form class="row" method="post" action="{{ route('child.store') }} ">
                                 @csrf
 
-<<<<<<< HEAD
                                     <input type="hidden" id="cycle_implementation_id" name="cycle_implementation_id" value="{{ $cycleImplementation->id}}">
 
                                     <div class="col-md-6 mt-3 text-sm">
@@ -177,12 +146,6 @@
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
-=======
-                                <div class='col-md-2 mt-2 text-gray-400 text-xs'>Personal Information</div>
-                                <div class='col-md-10 mt-3 text-gray-400 text-xs'>
-                                    <hr>
-                                </div>
->>>>>>> 56c8852bc4f366d53ba56162d12f4200802e842f
 
                                 <div class="col-md-6 mt-3 text-sm">
                                     <label for="firstname">First Name</label><label for="firstname"

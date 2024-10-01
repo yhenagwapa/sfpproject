@@ -1130,6 +1130,41 @@ class ReportsController extends Controller
         ));
     }
 
+    public function printFunded(Request $request)
+    {
+        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $cdcId = $request->input('funded_center_name', 'all_center');
+
+        // dd($cdcId);
+
+        $fundedChildren = Child::with('nutritionalStatus')
+            ->where('is_funded', true)
+            ->where('cycle_implementation_id', $cycleImplementation->id);
+
+
+        if ($cdcId) {
+            $fundedChildren->where('child_development_center_id', $cdcId);
+        }
+        
+        if (auth()->user()->hasRole('admin')) {
+            if ($cdcId == 'all_center') {
+                $isFunded = $fundedChildren->get();
+
+            } else {
+                $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->get();
+
+            }
+            $centers = ChildDevelopmentCenter::all()->keyBy('id');
+        } 
+
+        dd($isFunded);
+
+        $pdf = PDF::loadView('reports.sample', compact('cycleImplementation', 'isFunded', 'centers', 'cdcId'))->setPaper('folio', 'landscape');
+
+        return $pdf->stream('funded_children_report.pdf');
+    }
+
+
     public function create()
     {
         //
