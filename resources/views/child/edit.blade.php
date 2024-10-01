@@ -368,13 +368,16 @@
                                             @enderror
                                         </div>
 
-
-
                                         <div class="col-md-12 mt-4 text-right">
                                             <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
                                                 data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
+<<<<<<< HEAD
                                             <button type="reset"
                                                 class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
+=======
+                                            <a href="{{ route('child.index') }}"></a><button type="reset"
+                                                class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button></a>
+>>>>>>> 56c8852bc4f366d53ba56162d12f4200802e842f
                                         </div>
 
                                         <div class="modal fade" id="verticalycentered" tabindex="-1">
@@ -386,7 +389,11 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
+<<<<<<< HEAD
                                                         Are you sure you want to save these details?
+=======
+                                                        Are you sure you want to save these update?
+>>>>>>> 56c8852bc4f366d53ba56162d12f4200802e842f
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="submit"

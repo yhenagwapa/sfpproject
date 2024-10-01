@@ -1,4 +1,4 @@
-<table id='masterlist-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
+<table id='monitoring-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
     <thead class="border bg-gray-200">
         <tr>
             <th class="border border-white w-40" rowspan="2">Name of Child</th>
@@ -16,7 +16,7 @@
             <th class="border border-white" colspan="2">Age in month/year</th>
             <th class="border border-white" colspan="3">Nutritional Status</th>
             <th class="border border-white w-10" rowspan="2">Summary of Undernourished Children</th>
-            
+
         </tr>
         <tr>
             <th class="border border-white">Month</th>
@@ -31,13 +31,14 @@
             <th class="border border-white">Height for Age</th>
         </tr>
     </thead>
-    <tbody class="masterlist-table text-xs">
+    <tbody class="monitoring-table text-xs">
         @foreach ($isFunded as $fundedChild) 
             <tr>
                 <td>{{ $fundedChild->full_name }}</td>
                 <td>{{ $fundedChild->sex->name }}</td>
                 <td>{{ $fundedChild->date_of_birth }}</td>
 
+<<<<<<< HEAD
                 
                 @if ($fundedChild->nutritionalStatus)
                     @php
@@ -49,30 +50,51 @@
                         $exitAgeInYears = $exitActualDate->diffInYears($dob);
                         $exitAgeInMonths = $exitActualDate->diffInMonths($dob) % 12;
                     @endphp
+=======
+>>>>>>> 56c8852bc4f366d53ba56162d12f4200802e842f
 
-                    <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>  
-                    <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td> 
-                    <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
-                    <td>{{ $entyrAgeInMonths }}</td>
-                    <td>{{ $entryAgeInYears }}</td>
-                    <td></td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_age }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->exit_actual_date_of_weighing }}</td>  
-                    <td>{{ $fundedChild->nutritionalStatus->exit_weight }}</td> 
-                    <td>{{ $fundedChild->nutritionalStatus->exit_height }}</td>
-                    <td>{{ $exitAgeInMonths }}</td>
-                    <td>{{ $exitAgeInYears }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->exit_weight_for_age }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->exit_height_for_age }}</td>
-                    <td></td>
+                @if ($fundedChild->nutritionalStatus)
+                        @php
+                            $dob = \Carbon\Carbon::parse($fundedChild->date_of_birth);
+                            $entryActualDate = \Carbon\Carbon::parse($fundedChild->nutritionalStatus->entry_actual_date_of_weighing);
+                            $entryAgeInYears = $entryActualDate->diffInYears($dob);
+                            $entyrAgeInMonths = $entryActualDate->diffInMonths($dob) % 12;
+                            $exitActualDate = \Carbon\Carbon::parse($fundedChild->nutritionalStatus->exit_actual_date_of_weighing);
+                            $exitAgeInYears = $exitActualDate->diffInYears($dob);
+                            $exitAgeInMonths = $exitActualDate->diffInMonths($dob) % 12;
+                        @endphp
+
+                        <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
+                        <td>{{ $entyrAgeInMonths }}</td>
+                        <td>{{ $entryAgeInYears }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_age }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_is_undernourish ? 'Yes' : 'No' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->exit_actual_date_of_weighing }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->exit_weight }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->exit_height }}</td>
+                        <td>{{ $exitAgeInMonths }}</td>
+                        <td>{{ $exitAgeInYears }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->exit_weight_for_age }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->exit_height_for_age }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->exit_is_undernourish ? 'Yes' : 'No' }}</td>
                 @else
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                 @endif
             </tr>
-        
+
         @endforeach
         @if (count($isFunded) <= 0)
             <tr>

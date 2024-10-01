@@ -7,8 +7,7 @@
                 <option value="all_center" selected>All Child Development Center
                 </option>
                 @foreach ($centers as $center)
-                    <option value="{{ $center->id }}"
-                        {{ old('funded_center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                    <option value="{{ $center->id }}" {{ old('funded_center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
                         {{ $center->center_name }}
                     </option>
                 @endforeach
@@ -54,15 +53,16 @@
 
 
                 @if ($fundedChild->nutritionalStatus)
-                    @php
-                        $dob = \Carbon\Carbon::parse($fundedChild->date_of_birth);
-                        $actualDate = \Carbon\Carbon::parse(
-                            $fundedChild->nutritionalStatus->entry_actual_date_of_weighing,
-                        );
-                        $ageInYears = $actualDate->diffInYears($dob);
-                        $ageInMonths = $actualDate->diffInMonths($dob) % 12;
-                    @endphp
+                        @php
+                            $dob = \Carbon\Carbon::parse($fundedChild->date_of_birth);
+                            $actualDate = \Carbon\Carbon::parse(
+                                $fundedChild->nutritionalStatus->entry_actual_date_of_weighing,
+                            );
+                            $ageInYears = $actualDate->diffInYears($dob);
+                            $ageInMonths = $actualDate->diffInMonths($dob) % 12;
+                        @endphp
 
+<<<<<<< HEAD
                     <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
@@ -72,7 +72,19 @@
                     <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->entry_is_undernourish ? "Yes" : "No" }}</td>
+=======
+                        <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
+                        <td>{{ $ageInMonths }}</td>
+                        <td>{{ $ageInYears }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_age }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->entry_is_undernourish ? 'Yes' : 'No' }}</td>
+>>>>>>> 56c8852bc4f366d53ba56162d12f4200802e842f
                 @else
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -83,7 +95,6 @@
                     <td></td>
                 @endif
 
-                <td></td>
                 <td>{{ $fundedChild->deworming_date }}</td>
                 <td>{{ $fundedChild->vitamin_a_date }}</td>
                 <td>{{ $fundedChild->pantawid_details }}</td>

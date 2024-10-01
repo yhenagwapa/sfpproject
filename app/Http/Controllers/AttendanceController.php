@@ -12,7 +12,7 @@ class AttendanceController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:add-attendance|view-attendance', ['only' => ['index','store']]);
+        $this->middleware('permission:add-attendance|view-attendance', ['only' => ['index', 'store']]);
         $this->middleware('permission:view-attendance', ['only' => ['view']]);
         $this->middleware('permission:add-attendance', ['only' => ['store']]);
     }
@@ -32,7 +32,7 @@ class AttendanceController extends Controller
      */
     public function create(StoreAttendanceRequest $request, $id)
     {
-        
+
     }
 
     /**
@@ -40,24 +40,24 @@ class AttendanceController extends Controller
      */
     public function store(StoreAttendanceRequest $request, $child_id)
     {
-        $withmilk = $request->has('with_milk') ? 1 : 0;
+        $withmilk = $request->input('with_milk', '0');
         $attendanceCount = Attendance::where('child_id', $child_id)->count();
-    
+
         if ($attendanceCount >= 120) {
             return redirect()->back()->withErrors(['error' => 'Attendance limit of 120 reached for this child.']);
         }
-    
+
         $validatedData = $request->validated();
-    
+
         // Create the attendance record
         Attendance::create([
             'child_id' => $child_id,
-            'feeding_no' => $attendanceCount + 1, 
+            'feeding_no' => $attendanceCount + 1,
             'feeding_date' => $request->feeding_date,
             'with_milk' => $withmilk,
-            'created_by_user_id' => auth()->id(), 
+            'created_by_user_id' => auth()->id(),
         ]);
-    
+
         return redirect()->back()->with('success', 'Attendance added successfully.');
     }
 
@@ -66,7 +66,7 @@ class AttendanceController extends Controller
      */
     public function show($id)
     {
-        
+
     }
 
     /**

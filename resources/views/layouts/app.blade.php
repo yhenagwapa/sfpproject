@@ -41,10 +41,10 @@
 
 
     {{-- * Template Name: NiceAdmin
-        * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-        * Updated: Apr 20 2024 with Bootstrap v5.3.3
-        * Author: BootstrapMade.com
-        * License: https://bootstrapmade.com/license/ --}}
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Updated: Apr 20 2024 with Bootstrap v5.3.3
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/ --}}
 
 </head>
 
@@ -53,13 +53,19 @@
         <header id="header" class="header fixed-top d-flex align-items-right">
             <div class="d-flex justify-center">
                 <a href="https://fo11.dswd.gov.ph/" class="logo d-flex align-items-center">
-                    <img src="../img/dswd_logo.png" alt="dswd_logo">
+                    <img src="../img/DSWD Logo.png" alt="dswd_logo">
                 </a>
             </div>
 
             <div class="d-flex align-items-center justify-content-between">
+                <span class="logo d-flex align-items-center"><img src="../img/SFP-LOGO-2024.png" alt="sfp_logo"></span>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between">
                 <span class="header-title d-none d-lg-block">SFP ONSE</span>
-            </div><!-- End Search Bar -->
+            </div>
+
+            <!-- End Search Bar -->
 
             <!-- End Logo -->
 
@@ -69,11 +75,11 @@
                         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                             data-bs-toggle="dropdown">
                             @auth
-                                @php
-                                    $user = Auth::user();
-                                    $fullName = trim("{$user->firstname} {$user->middlename} {$user->lastname}");
-                                @endphp
-                                <span class="d-none d-md-block dropdown-toggle ps-2">{{ $fullName }}</span>
+                                                        @php
+                                                            $user = Auth::user();
+                                                            $fullName = trim("{$user->firstname} {$user->middlename} {$user->lastname}");
+                                                        @endphp
+                                                        <span class="d-none d-md-block dropdown-toggle ps-2">{{ $fullName }}</span>
                             @endauth
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -139,13 +145,14 @@
                         <span class="text-sm">Children</span>
                     </a>
                 </li><!-- End Child List Nav -->
-                
+
                 @canany(['create-cycle-implementation', 'edit-cycle-implementation', 'view-cycle-implementation'])
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('cycle.index') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="#899bbd" class="mr-2 size-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                             </svg>
                             <span class="text-sm">Cycle Implementation</span>
                         </a>
@@ -155,8 +162,8 @@
                 @canany(['create-child-development-center', 'edit-child-develpment-center'])
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('centers.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="#899bbd" class="mr-2 size-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                             </svg>
@@ -167,32 +174,32 @@
                 @endcanany
 
                 @if (auth()->user()->hasRole('admin'))
-                    <li class="nav-heading">Admin Tools</li>
+                        <li class="nav-heading">Admin Tools</li>
 
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="user-accounts.php">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="user-accounts.php">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="#899bbd" class="mr-2 size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
 
-                            <span class="text-sm">Accounts</span>
-                        </a>
-                    </li><!-- End Accounts Nav -->
+                                <span class="text-sm">Accounts</span>
+                            </a>
+                        </li><!-- End Accounts Nav -->
 
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="user-roles.php">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
-                            </svg>
-                            <span class="text-sm">Audit Logs</span>
-                        </a>
-                    </li><!-- End Audit Logs Page Nav -->
-            </ul>
-            @endif
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="user-roles.php">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="#899bbd" class="mr-2 size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
+                                </svg>
+                                <span class="text-sm">Audit Logs</span>
+                            </a>
+                        </li><!-- End Audit Logs Page Nav -->
+                    </ul>
+                @endif
 
         </aside><!-- End Sidebar-->
 
@@ -214,7 +221,8 @@
             </div>
         </footer><!-- End Footer -->
 
-        {{-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a> --}}
+        {{-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+                class="bi bi-arrow-up-short"></i></a> --}}
 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>

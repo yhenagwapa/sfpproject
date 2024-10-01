@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('children', function (Blueprint $table) {
-            $table->unsignedBigInteger('sex_id')->nullable(); // Ensure the type matches
+            $table->unsignedBigInteger('sex_id')->nullable()->after('date_of_birth');
             $table->foreign('sex_id')->references('id')->on('sexes');
         });
     }
