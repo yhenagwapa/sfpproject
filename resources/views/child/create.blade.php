@@ -58,97 +58,96 @@
                             <form class="row" method="post" action="{{ route('child.store') }} ">
                                 @csrf
 
-                                <div class='col-md-2 mt-2 text-gray-400 text-xs'>Personal Information</div>
-                                <div class='col-md-10 mt-3 text-gray-400 text-xs'>
-                                    <hr>
-                                </div>
+                                    <input type="hidden" id="cycle_implementation_id" name="cycle_implementation_id" value="{{ $cycleImplementation->id}}">
 
-                                <div class="col-md-6 mt-3 text-sm">
-                                    <label for="firstname">First Name</label><label for="firstname"
-                                        class="text-red-600">*</label>
-                                    <input type="text"
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="firstname" name='firstname' value="{{ old('firstname') }}" autofocus>
-                                    @error('firstname')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 mt-3 text-sm">
-                                    <label for="middlename">Middle Name</label>
-                                    <input type="text"
-                                        class="form-control invalid:border-red-500 rounded border-gray-300"
-                                        id="middlename" name='middlename' value="{{ old('middlename') }}">
-                                    @error('middlename')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="lastname">Last Name</label><label for="lastname"
-                                        class="text-red-600">*</label>
-                                    <input type="text"
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="lastname" name='lastname' value="{{ old('lastname') }}">
-                                    @error('lastname')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="extension_name">Extension Name</label>
-                                    <select
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="extension_name" name='extension_name'>
-                                        <option value="" disabled selected></option>
-                                        <option value="Jr" {{ old('extension_name') == 'jr' ? 'selected' : '' }}>Jr
-                                        </option>
-                                        <option value="Sr" {{ old('extension_name') == 'sr' ? 'selected' : '' }}>Sr
-                                        </option>
-                                        <option value="I" {{ old('extension_name') == 'i' ? 'selected' : '' }}>I</option>
-                                        <option value="II" {{ old('extension_name') == 'ii' ? 'selected' : '' }}>II
-                                        </option>
-                                        <option value="III" {{ old('extension_name') == 'iii' ? 'selected' : '' }}>III
-                                        </option>
-                                        <option value="IV" {{ old('extension_name') == 'iv' ? 'selected' : '' }}>IV
-                                        </option>
-                                        <option value="V" {{ old('extension_name') == 'v' ? 'selected' : '' }}>V</option>
-                                        <option value="VI" {{ old('extension_name') == 'vi' ? 'selected' : '' }}>VI
-                                        </option>
-                                        <option value="VII" {{ old('extension_name') == 'vii' ? 'selected' : '' }}>VII
-                                        </option>
-                                        <option value="VIII" {{ old('extension_name') == 'viii' ? 'selected' : '' }}>VIII
-                                        </option>
-                                        <option value="IX" {{ old('extension_name') == 'ix' ? 'selected' : '' }}>IX
-                                        </option>
-                                        <option value="X" {{ old('extension_name') == 'x' ? 'selected' : '' }}>X</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="date_of_birth">Date of Birth</label><label for="date_of_birth"
-                                        class="text-red-600">*</label>
-                                    <input type="date"
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="date_of_birth" name='date_of_birth' value="{{ old('date_of_birth') }}">
-                                    @error('date_of_birth')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="sex">Sex</label><label for="sex"
-                                        class="text-red-600">*</label>
-                                    <select
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="sex_id" name='sex_id'>
-                                        <option value="" disabled selected>Select sex</option>
-                                        @foreach ($sexOptions as $sex)
-                                        <option value="{{ $sex->id }}"
-                                            {{ $sex->id == old('sex_id', $sex->id) }}>
-                                            {{ $sex->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    @error('sex_id')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="firstname">First Name</label><label for="firstname"
+                                            class="text-red-600">*</label>
+                                        <input type="text"
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="firstname" name='firstname' value="{{ old('firstname') }}" autofocus>
+                                        @error('firstname')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="middlename">Middle Name</label>
+                                        <input type="text"
+                                            class="form-control invalid:border-red-500 rounded border-gray-300"
+                                            id="middlename" name='middlename' value="{{ old('middlename') }}">
+                                        @error('middlename')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="lastname">Last Name</label><label for="lastname"
+                                            class="text-red-600">*</label>
+                                        <input type="text"
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="lastname" name='lastname' value="{{ old('lastname') }}">
+                                        @error('lastname')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="extension_name">Extension Name</label>
+                                        <select
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="extension_name" name='extension_name'>
+                                            <option value="" disabled selected></option>
+                                            <option value="Jr" {{ old('extension_name') == 'jr' ? 'selected' : '' }}>Jr
+                                            </option>
+                                            <option value="Sr" {{ old('extension_name') == 'sr' ? 'selected' : '' }}>Sr
+                                            </option>
+                                            <option value="I" {{ old('extension_name') == 'i' ? 'selected' : '' }}>I</option>
+                                            <option value="II" {{ old('extension_name') == 'ii' ? 'selected' : '' }}>II
+                                            </option>
+                                            <option value="III" {{ old('extension_name') == 'iii' ? 'selected' : '' }}>III
+                                            </option>
+                                            <option value="IV" {{ old('extension_name') == 'iv' ? 'selected' : '' }}>IV
+                                            </option>
+                                            <option value="V" {{ old('extension_name') == 'v' ? 'selected' : '' }}>V</option>
+                                            <option value="VI" {{ old('extension_name') == 'vi' ? 'selected' : '' }}>VI
+                                            </option>
+                                            <option value="VII" {{ old('extension_name') == 'vii' ? 'selected' : '' }}>VII
+                                            </option>
+                                            <option value="VIII" {{ old('extension_name') == 'viii' ? 'selected' : '' }}>VIII
+                                            </option>
+                                            <option value="IX" {{ old('extension_name') == 'ix' ? 'selected' : '' }}>IX
+                                            </option>
+                                            <option value="X" {{ old('extension_name') == 'x' ? 'selected' : '' }}>X</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="date_of_birth">Date of Birth</label><label for="date_of_birth"
+                                            class="text-red-600">*</label>
+                                        <input type="date"
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="date_of_birth" name='date_of_birth' value="{{ old('date_of_birth') }}">
+                                        @error('date_of_birth')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="sex">Sex</label><label for="sex"
+                                            class="text-red-600">*</label>
+                                        <select
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="sex_id" name='sex_id'>
+                                            <option value="" disabled selected>Select sex</option>
+                                            @foreach ($sexOptions as $sex)
+                                                <option value="{{ $sex->id }}"
+                                                {{ $sex->id == old('sex_id', $sex->id) }}>
+                                                {{ $sex->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('sex_id')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                
 
                                 <div class="col-md-6 mt-2 text-sm">
                                     <label for="deworming_date">Deworming Date</label>
@@ -373,35 +372,59 @@
 
                                 <input type="hidden" id="psgc_id" name="psgc_id" value="">
 
-                                <div class="col-md-12 mt-4 text-right">
-                                    <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                        data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
-                                    <a href="{{ route('child.index') }}"></a><button type="reset"
-                                                class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button></a>
-                                </div>
+                                    
 
-                                <div class="modal fade" id="verticalycentered" tabindex="-1">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title text-red-600">Confirmation</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Are you sure you want to save these details?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit"
-                                                    class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                                <button type="button"
-                                                    class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                                    data-bs-dismiss="modal">Close</button>
+                                    <div class='col-md-1 mt-4 text-gray-400 text-xs'>Child Status</div>
+                                    <div class='col-md-11 mt-8 text-gray-400 text-xs'>
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-md-12 mt-3 text-sm">
+                                        <label for="is_funded">Is this child funded?<b class="text-red-600">*</b></label>
+                                    </div>
+
+                                    <div class="mt-2 text-sm">
+                                        <input type="radio" name="is_funded" id="is_funded_yes"
+                                            value="1" {{ old('is_funded', '1') == '1' ? 'checked' : '' }}>
+                                        <label for="is_funded_yes">Yes</label>
+                                    
+                                        <input type="radio" class="ml-3" name="is_funded" id="is_funded_no"
+                                            value="0"
+                                            {{ old('is_funded') == '0' ? 'checked' : '' }}>
+                                        <label for="is_funded_no">No</label>
+                                    </div>
+
+                                    <div class="col-md-12 mt-4 text-right">
+                                        <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
+                                            data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
+                                        <button type="reset"
+                                            class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
+                                    </div>
+
+
+                                    <div class="modal fade" id="verticalycentered" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-red-600">Confirmation</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to save these details?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit"
+                                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                                    <button type="button"
+                                                        class="text-white bg-gray-600 rounded px-3 min-h-9"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form><!-- End floating Labels Form -->
+                                </form><!-- End floating Labels Form -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -442,11 +465,11 @@
     {{-- city and barangay  --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // const locations = {
-            //     provinces: @json($provinces),
-            //     cities: @json($cities),
-            //     barangays: @json($barangays)
-            // };
+            const locations = {
+                provinces: @json($provinces),
+                cities: @json($cities),
+                barangays: @json($barangays)
+            };
 
             const provinceSelect = document.getElementById('province');
             const citySelect = document.getElementById('city');

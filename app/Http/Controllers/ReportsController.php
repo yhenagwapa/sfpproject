@@ -104,6 +104,80 @@ class ReportsController extends Controller
                     ];
                 });
 
+                $countsPerNutritionalStatus = Child::with('nutritionalStatus')
+                    ->where('is_funded', true)
+                    ->get()
+                    ->filter(function ($child) {
+                        $nutritionalStatus = $child->nutritionalStatus; 
+                        if ($nutritionalStatus) {
+                            $entryWeighingDate = Carbon::parse($nutritionalStatus->entry_weighing_date);
+                            $birthdate = Carbon::parse($child->birthdate);
+                            $ageInYears = $birthdate->diffInYears($entryWeighingDate); // Calculate age based on entry weighing date
+                            return in_array($ageInYears, [2, 3, 4, 5]);
+                        }
+                        return false; 
+                    })
+                    ->groupBy(function ($child) {
+                        $nutritionalStatus = $child->nutritionalStatus; 
+                        return $nutritionalStatus ? Carbon::parse($child->birthdate)->diffInYears(Carbon::parse($nutritionalStatus->entry_weighing_date)) : null;
+                    })
+                    ->map(function ($childrenByAge) {
+                        return [
+                            'weight_for_age_normal' => [
+                                'male' => $childrenByAge->where('entry_weight_for_age', 'Normal')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_age', 'Normal')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_age_underweight' => [
+                                'male' => $childrenByAge->where('entry_weight_for_age', 'Underweight')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_age', 'Underweight')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_age_severely_underweight' => [
+                                'male' => $childrenByAge->where('entry_weight_for_age', 'Severely Underweight')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_age', 'Severely Underweight')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_age_overweight' => [
+                                'male' => $childrenByAge->where('entry_weight_for_age', 'Overweight')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_age', 'Overweight')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_normal' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Normal')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Normal')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_wasted' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Wasted')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Wasted')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_severely_wasted' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Severely Wasted')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Severely Wasted')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_overweight' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Overweight')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Overweight')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_obese' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Obese')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Obese')->where('sex_id', 2)->count(),
+                            ],
+                            'height_for_age_normal' => [
+                                'male' => $childrenByAge->where('entry_height_for_age', 'Normal')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_height_for_age', 'Normal')->where('sex_id', 2)->count(),
+                            ],
+                            'height_for_age_stunted' => [
+                                'male' => $childrenByAge->where('entry_height_for_age', 'Stunted')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_height_for_age', 'Stunted')->where('sex_id', 2)->count(),
+                            ],
+                            'height_for_age_severely_stunted' => [
+                                'male' => $childrenByAge->where('entry_height_for_age', 'Severely Stunted')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_height_for_age', 'Severely Stunted')->where('sex_id', 2)->count(),
+                            ],
+                            'height_for_age_tall' => [
+                                'male' => $childrenByAge->where('entry_height_for_age', 'Tall')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_height_for_age', 'Tall')->where('sex_id', 2)->count(),
+                            ],
+                        ];
+                    });
+
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
             return view('reports.index', compact(
@@ -112,6 +186,7 @@ class ReportsController extends Controller
                 'isPwdChildren',
                 'countsPerCenter',
                 'countsPerCenterAndGender',
+                'countsPerNutritionalStatus',
                 'centers',
                 'cdcId'
             ));
@@ -285,6 +360,81 @@ class ReportsController extends Controller
                         ],
                     ];
                 });
+
+                $countsPerNutritionalStatus = Child::with('nutritionalStatus')
+                    ->where('is_funded', true)
+                    ->get()
+                    ->filter(function ($child) {
+                        $nutritionalStatus = $child->nutritionalStatus; 
+                        if ($nutritionalStatus) {
+                            $entryWeighingDate = Carbon::parse($nutritionalStatus->entry_weighing_date);
+                            $birthdate = Carbon::parse($child->birthdate);
+                            $ageInYears = $birthdate->diffInYears($entryWeighingDate); // Calculate age based on entry weighing date
+                            return in_array($ageInYears, [2, 3, 4, 5]);
+                        }
+                        return false; 
+                    })
+                    ->groupBy(function ($child) {
+                        $nutritionalStatus = $child->nutritionalStatus; 
+                        return $nutritionalStatus ? Carbon::parse($child->birthdate)->diffInYears(Carbon::parse($nutritionalStatus->entry_weighing_date)) : null;
+                    })
+                    ->map(function ($childrenByAge) {
+                        return [
+                            'weight_for_age_normal' => [
+                                'male' => $childrenByAge->where('entry_weight_for_age', 'Normal')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_age', 'Normal')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_age_underweight' => [
+                                'male' => $childrenByAge->where('entry_weight_for_age', 'Underweight')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_age', 'Underweight')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_age_severely_underweight' => [
+                                'male' => $childrenByAge->where('entry_weight_for_age', 'Severely Underweight')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_age', 'Severely Underweight')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_age_overweight' => [
+                                'male' => $childrenByAge->where('entry_weight_for_age', 'Overweight')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_age', 'Overweight')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_normal' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Normal')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Normal')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_wasted' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Wasted')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Wasted')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_severely_wasted' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Severely Wasted')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Severely Wasted')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_overweight' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Overweight')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Overweight')->where('sex_id', 2)->count(),
+                            ],
+                            'weight_for_height_obese' => [
+                                'male' => $childrenByAge->where('entry_weight_for_height', 'Obese')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_weight_for_height', 'Obese')->where('sex_id', 2)->count(),
+                            ],
+                            'height_for_age_normal' => [
+                                'male' => $childrenByAge->where('entry_height_for_age', 'Normal')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_height_for_age', 'Normal')->where('sex_id', 2)->count(),
+                            ],
+                            'height_for_age_stunted' => [
+                                'male' => $childrenByAge->where('entry_height_for_age', 'Stunted')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_height_for_age', 'Stunted')->where('sex_id', 2)->count(),
+                            ],
+                            'height_for_age_severely_stunted' => [
+                                'male' => $childrenByAge->where('entry_height_for_age', 'Severely Stunted')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_height_for_age', 'Severely Stunted')->where('sex_id', 2)->count(),
+                            ],
+                            'height_for_age_tall' => [
+                                'male' => $childrenByAge->where('entry_height_for_age', 'Tall')->where('sex_id', 1)->count(),
+                                'female' => $childrenByAge->where('entry_height_for_age', 'Tall')->where('sex_id', 2)->count(),
+                            ],
+                        ];
+                    });
+
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
             return view('reports.index', compact(
@@ -293,6 +443,7 @@ class ReportsController extends Controller
                 'isPwdChildren',
                 'countsPerCenter',
                 'countsPerCenterAndGender',
+                'countsPerNutritionalStatus',
                 'centers',
                 'cdcId'
             ));
@@ -1130,165 +1281,49 @@ class ReportsController extends Controller
         ));
     }
 
-    public function generatePDF(Request $request)
+    public function printFunded(Request $request)
     {
+        // Get the active cycle
         $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-        $cdcId = $request->input('center_name', null);
-
         if (!$cycleImplementation) {
-            return view('reports.index', [
-                'fundedChildren' => collect(),
-            ]);
+            return back()->with('error', 'No active cycle found');
         }
 
-        $fundedChildren = Child::with('nutritionalStatus')
+        // Get the center id from request or default to 'all_center'
+        $cdcId = $request->input('funded_center_name', 'all_center');
+
+        // Base query to fetch funded children
+        $fundedChildrenQuery = Child::with('nutritionalStatus')
             ->where('is_funded', true)
             ->where('cycle_implementation_id', $cycleImplementation->id);
 
-        $notFundedChildren = Child::with('nutritionalStatus')
-            ->where('is_funded', false)
-            ->where('cycle_implementation_id', $cycleImplementation->id);
+        // Filter by specific center if not 'all_center'
+        if ($cdcId !== 'all_center') {
+            $fundedChildrenQuery->where('child_development_center_id', $cdcId);
+        }
 
-        $childrenWithDisabilities = Child::with('center')
-            ->where('is_funded', true)
-            ->where('is_person_with_disability', true)
-            ->where('cycle_implementation_id', $cycleImplementation->id);
+        // Get the results
+        $isFunded = $fundedChildrenQuery->get();
 
-        
-            if (auth()->user()->hasRole('admin')) {
-                if ($cdcId) {
-                    $isFunded = $fundedChildren->paginate(10);
-                    $isNotFunded = $notFundedChildren->paginate(10);
-                    $isPwdChildren = $childrenWithDisabilities->paginate(10);
-
-
-                    $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
-                        ->where('is_funded', true)
-                        ->selectRaw('count(*) as total')
-                        ->groupBy('child_development_center_id', 'sex_id')
-                        ->get()
-                        ->mapToGroups(function ($item) {
-                            return [$item->child_development_center_id => [$item->sex_id => $item->total]];
-                        })
-                        ->map(function ($items) {
-                            return [
-                                'male' => $items->get(1, 0),
-                                'female' => $items->get(2, 0),
-                            ];
-                        });
-
-
-                    $countsPerCenter = Child::with('center')
-                        ->where('is_funded', true)
-                        ->get()
-                        ->groupBy('child_development_center_id')
-                        ->map(function ($childrenByCenter) {
-                            return [
-                                'indigenous_people' => [
-                                    'male' => $childrenByCenter->where('is_indigenous_people', true)->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('is_indigenous_people', true)->where('sex_id', 2)->count(),
-                                ],
-                                'pantawid' => [
-                                    'male' => $childrenByCenter->where('pantawid_details', '!=', '')->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('pantawid_details', '!=', '')->where('sex_id', 2)->count(),
-                                ],
-                                'pwd' => [
-                                    'male' => $childrenByCenter->where('person_with_disability_details', '!=', '')->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('person_with_disability_details', '!=', '')->where('sex_id', 2)->count(),
-                                ],
-                                'lactose_intolerant' => [
-                                    'male' => $childrenByCenter->where('is_lactose_intolerant', true)->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('is_lactose_intolerant', true)->where('sex_id', 2)->count(),
-                                ],
-                                'child_of_solo_parent' => [
-                                    'male' => $childrenByCenter->where('is_child_of_soloparent', true)->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('is_child_of_soloparent', true)->where('sex_id', 2)->count(),
-                                ],
-                                'dewormed' => [
-                                    'male' => $childrenByCenter->where('deworming_date', '!=', '')->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('deworming_date', '!=', '')->where('sex_id', 2)->count(),
-                                ],
-                                'vitamin_a' => [
-                                    'male' => $childrenByCenter->where('vitamin_a_date', '!=', '')->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('vitamin_a_date', '!=', '')->where('sex_id', 2)->count(),
-                                ],
-                            ];
-                        });
-                } else {
-                    $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->paginate(10);
-                    $isNotFunded = $notFundedChildren->paginate(10);
-                    $isPwdChildren = $childrenWithDisabilities->paginate(10);
-
-                    $countsPerCenterAndGender = Child::select('child_development_center_id', 'sex_id')
-                        ->where('is_funded', true)
-                        ->selectRaw('count(*) as total')
-                        ->groupBy('child_development_center_id', 'sex_id')
-                        ->get()
-                        ->mapToGroups(function ($item) {
-                            return [$item->child_development_center_id => [$item->sex_id => $item->total]];
-                        })
-                        ->map(function ($items) {
-                            return [
-                                'male' => $items->get(1, 0),
-                                'female' => $items->get(2, 0),
-                            ];
-                        });
-
-
-                    $countsPerCenter = Child::with('center')
-                        ->where('is_funded', true)
-                        ->get()
-                        ->groupBy('child_development_center_id')
-                        ->map(function ($childrenByCenter) {
-                            return [
-                                'indigenous_people' => [
-                                    'male' => $childrenByCenter->where('is_indigenous_people', true)->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('is_indigenous_people', true)->where('sex_id', 2)->count(),
-                                ],
-                                'pantawid' => [
-                                    'male' => $childrenByCenter->where('pantawid_details', '!=', '')->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('pantawid_details', '!=', '')->where('sex_id', 2)->count(),
-                                ],
-                                'pwd' => [
-                                    'male' => $childrenByCenter->where('person_with_disability_details', '!=', '')->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('person_with_disability_details', '!=', '')->where('sex_id', 2)->count(),
-                                ],
-                                'lactose_intolerant' => [
-                                    'male' => $childrenByCenter->where('is_lactose_intolerant', true)->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('is_lactose_intolerant', true)->where('sex_id', 2)->count(),
-                                ],
-                                'child_of_solo_parent' => [
-                                    'male' => $childrenByCenter->where('is_child_of_soloparent', true)->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('is_child_of_soloparent', true)->where('sex_id', 2)->count(),
-                                ],
-                                'dewormed' => [
-                                    'male' => $childrenByCenter->where('deworming_date', '!=', '')->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('deworming_date', '!=', '')->where('sex_id', 2)->count(),
-                                ],
-                                'vitamin_a' => [
-                                    'male' => $childrenByCenter->where('vitamin_a_date', '!=', '')->where('sex_id', 1)->count(),
-                                    'female' => $childrenByCenter->where('vitamin_a_date', '!=', '')->where('sex_id', 2)->count(),
-                                ],
-                            ];
-                        });
-                }
-            }
-
+        // Get the centers if the user has the 'admin' role
+        if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
+        } else {
+            $centers = [];
+        }
 
-            $data = [
-                'cycleImplementation' => $cycleImplementation,
-                'isFunded' => $isFunded,
-                'isNotFunded' => $isNotFunded,
-                'isPwdChildren' => $isPwdChildren,
-                'countsPerCenter' => $countsPerCenter,
-                'countsPerCenterAndGender' => $countsPerCenterAndGender,
-                'centers' => $centers,
-                'cdcId' => $cdcId
-            ];
+        // Debug the data fetched
+        // dd($isFunded);
 
-            $pdf = PDF::loadView('reports.sample', $data)->setPaper('folio','landscape');
+        // Load the PDF view
+        $pdf = PDF::loadView('reports.sample', compact('cycleImplementation', 'isFunded', 'centers', 'cdcId'))
+            ->setPaper('folio', 'landscape');
+
+        // Stream the PDF
+        return $pdf->stream('funded_children_report.pdf');
     }
+
+
 
     public function create()
     {

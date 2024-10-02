@@ -188,13 +188,14 @@ class NutritionalStatusController extends Controller
                     $entryWeightForHeight = 'Severely Wasted';
                 } elseif ((float) $getHeight->wasted_from <= (float) $request->entry_weight && (float) $getHeight->wasted_to >= (float) $request->entry_weight) {
                     $entryWeightForHeight = 'Wasted';
-                } elseif ((float) $getHeight->normal_from <= (float) $request->entry_weight && (float) $getHeight->normal_to >= (float) $request->entry_weight) {
+                } elseif ((float) $getHeight->normal_from <= (float)$request->entry_weight && (float) $getHeight->normal_to >= (float)$request->entry_weight) {
                     $entryWeightForHeight = 'Normal';
-                } elseif ((float) $getHeight->overweight_from <= (float) $request->entry_weight && (float) $getHeight->overweight_to >= (float) $request->entry_weight) {
+                } elseif ((float) $getHeight->overweight_from <= (float)$request->entry_weight && (float) $getHeight->overweight_to >= (float)$request->entry_weight) {
                     $entryWeightForHeight = 'Overweight';
                 } elseif ((float) $getHeight->obese <= (float) $request->entry_weight) {
                     $entryWeightForHeight = 'Obese';
                 }
+
             }
 
             if ($entryWeightForAge != 'Normal' || $entryHeightForAge != 'Normal' || $entryHeightForAge == 'Tall' || $entryWeightForHeight != 'Normal') {
@@ -293,9 +294,9 @@ class NutritionalStatusController extends Controller
                     $exitHeightForAge = 'Severely Stunted';
                 } elseif ((float) $getAge->stunted_from <= (float) $request->exit_height && (float) $getAge->stunted_to >= (float) $request->exit_height) {
                     $exitHeightForAge = 'Stunted';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exit_height && (float) $getAge->normal_to >= (float) $request->exit_height) {
-                    $exitWeightForAge = 'Normal';
-                } else {
+                } elseif ((float) $getAge->normal_from <= (float)$request->exit_height && (float) $getAge->normal_to >= (float)$request->exit_height) {
+                    $exitHeightForAge = 'Normal';
+                } elseif ((float) $getAge->severly_stunted <= (float)$request->exit_height) {
                     $exitWeightForAge = 'Tall';
                 }
             } else {
@@ -305,9 +306,9 @@ class NutritionalStatusController extends Controller
                     $exitHeightForAge = 'Severely Stunted';
                 } elseif ((float) $getAge->stunted_from <= (float) $request->exit_height && (float) $getAge->stunted_to >= (float) $request->exit_height) {
                     $exitHeightForAge = 'Stunted';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exit_height && (float) $getAge->normal_to >= (float) $request->exit_height) {
-                    $exitWeightForAge = 'Normal';
-                } else {
+                } elseif ((float) $getAge->normal_from <= (float)$request->exit_height && (float) $getAge->normal_to >= (float)$request->exit_height) {
+                    $exitHeightForAge = 'Normal';
+                } elseif ((float) $getAge->severly_stunted <= (float)$request->exit_height) {
                     $exitHeightForAge = 'Tall';
                 }
             }
@@ -324,7 +325,7 @@ class NutritionalStatusController extends Controller
                     $exitWeightForHeight = 'Normal';
                 } elseif ((float) $getHeight->overweight_from <= (float) $request->exit_weight && (float) $getHeight->overweight_to >= (float) $request->exit_weight) {
                     $exitWeightForHeight = 'Stunted';
-                } else {
+                } elseif ((float) $getHeight->obese <= (float)$request->exit_weight) {
                     $exitWeightForHeight = 'Obese';
                 }
             } else {
@@ -338,7 +339,7 @@ class NutritionalStatusController extends Controller
                     $exitWeightForAge = 'Normal';
                 } elseif ((float) $getHeight->overweight_from <= (float) $request->exit_weight && (float) $getHeight->overweight_to >= (float) $request->exit_weight) {
                     $exitWeightForHeight = 'Stunted';
-                } else {
+                } elseif ((float) $getHeight->obese <= (float)$request->exit_weight) {
                     $exitWeightForHeight = 'Obese';
                 }
             }

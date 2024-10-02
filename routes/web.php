@@ -82,6 +82,7 @@ require __DIR__.'/auth.php';
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::post('/reports/filter-funded-by-cdc', [ReportsController::class, 'filterFundedByCdc'])->name('reports.filterFundedByCdc');
     Route::post('/reports/filter-unfunded-by-cdc', [ReportsController::class, 'filterUnfundedByCdc'])->name('reports.filterUnfundedByCdc');
+    Route::get('/reports/print-funded', [ReportsController::class, 'printFunded'])->name('reports.printFunded');
 
     Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
     Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');

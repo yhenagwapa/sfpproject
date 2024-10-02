@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\Psgc;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
+use App\Models\CycleImplementation;
 
 class ChildController extends Controller
 {
@@ -282,7 +283,7 @@ class ChildController extends Controller
     public function create(Request $request)
     {
         $this->authorize('create-child');
-
+        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
         $centers = ChildDevelopmentCenter::all();
         $sexOptions = Sex::all();
 
@@ -301,11 +302,11 @@ class ChildController extends Controller
 
         // Check if city is selected
         if ($request->has('city_name_psgc') && !empty($request->input('city_name_psgc'))) {
-            $city_psgc = $request->input('city_name_psgc');
+            $city_psgc = $request->input('city_name_psgc'); 
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('child.create', compact('centers', 'sexOptions', 'provinces', 'cities', 'barangays'));
+        return view('child.create', compact('cycleImplementation','centers', 'sexOptions', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -314,10 +315,9 @@ class ChildController extends Controller
     public function store(StoreChildRequest $request)
     {
         $this->authorize('create-child');
-
+        
         $validatedData = $request->validated();
 
-        // Check if the child already exists
         $childExists = Child::where('firstname', $request->firstname)
             ->where('middlename', $request->middlename)
             ->where('lastname', $request->lastname)
@@ -348,9 +348,8 @@ class ChildController extends Controller
             return redirect()->back()->withErrors('You are not assigned to any Child Development Center.');
         }
 
-
-
         $child = Child::create([
+            'cycle_implementation_id' => $request->cycle_implementation_id,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
@@ -367,6 +366,9 @@ class ChildController extends Controller
             'is_indigenous_people' => $request->is_indigenous_people,
             'is_child_of_soloparent' => $request->is_child_of_soloparent,
             'is_lactose_intolerant' => $request->is_lactose_intolerant,
+            'deworming_date' => $request->deworming_date,
+            'vitamin_a_date' => $request->vitamin_a_date,
+            'is_funded' => $request->is_funded,
             'child_development_center_id' => $childDevelopmentCenter->id,
             'created_by_user_id' => auth()->id(),
         ]);

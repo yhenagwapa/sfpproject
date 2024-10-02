@@ -37,13 +37,13 @@
                         <div class="card-body">
                             <h5 class="card-title">Cycle Implementations</h5>
                             <div class="row">
-                                @can('add-cycle-implementation')
+                                @canany('create-cycle-implementation')
                                     <div class="col-6 mt-4 d-flex align-items-center">
                                         <a href="{{ route('cycle.create')}}"><button type="button"
                                             class="bg-blue-600 text-white rounded px-3 min-h-9"><i
                                             class="bi bi-plus-circle mr-2"></i>New Cycle Implementation</button></a>
                                     </div>
-                                @endcan
+                                @endcanany
                             </div>
                             @php
                                 $cycles = App\Models\CycleImplementation::all(); // or use a method to fetch the data

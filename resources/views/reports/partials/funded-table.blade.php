@@ -1,23 +1,24 @@
-@if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-    <div class="col-md-6 mt-4 text-sm">
-        <form action="{{ route('reports.filterFundedByCdc') }}" method="POST">
-            @csrf
-            <label for="center_name">Filter per center:</label>
-            <select class="form-control" name="funded_center_name" id="funded_center_name" onchange="this.form.submit()">
-                <option value="all_center" selected>All Child Development Center
-                </option>
-                @foreach ($centers as $center)
-                    <option value="{{ $center->id }}" {{ old('funded_center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
-                        {{ $center->center_name }}
+<div class="row">
+    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+        <div class="col-md-6 mt-4 text-sm">
+            <form action="{{ route('reports.filterFundedByCdc') }}" method="POST">
+                @csrf
+                <label for="center_name">Filter per center:</label>
+                <select class="form-control" name="funded_center_name" id="funded_center_name" onchange="this.form.submit()">
+                    <option value="all_center" {{ old('funded_center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>All Child Development Center
                     </option>
-                @endforeach
-            </select>
-        </form>
+                    @foreach ($centers as $center)
+                        <option value="{{ $center->id }}" {{ old('funded_center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                            {{ $center->center_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </form>
+        </div>
+    @endif
+    <div class="col-md-6 mt-11 text-sm">
+        <a href="{{ url('/reports/print-funded', ['center_name' => request()->center_name]) }}" class="text-white bg-blue-600 rounded px-3 min-h-9 align-items-right" target="_blank">Print</a>
     </div>
-@endif
-<div class="col-md-6 mt-4 text-sm">
-    <a href="#" class="btn btn-primary" target="_blank">View PDF</a>
-    <a href="#" class="btn btn-secondary" onclick="window.print()">Print PDF</a>
 </div>
 <table id='funded-table' class="table datatable text-xs text-center" style="min-width: 1800px;">
     <thead>

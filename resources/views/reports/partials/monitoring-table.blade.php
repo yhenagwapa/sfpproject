@@ -1,5 +1,5 @@
 <table id='monitoring-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
-    <thead class="border bg-gray-200">
+    <thead>
         <tr>
             <th class="border border-white w-40" rowspan="2">Name of Child</th>
             <th class="border border-white" rowspan="2">Sex</th>
@@ -37,7 +37,6 @@
                 <td>{{ $fundedChild->full_name }}</td>
                 <td>{{ $fundedChild->sex->name }}</td>
                 <td>{{ $fundedChild->date_of_birth }}</td>
-
 
                 @if ($fundedChild->nutritionalStatus)
                         @php

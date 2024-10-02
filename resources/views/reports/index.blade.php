@@ -10,7 +10,8 @@
 
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('child.index') }}">Reports</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Cycle Implementations</a></li>
+                    <li class="breadcrumb-item ">Reports</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -61,7 +62,7 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed active" href="#" data-target="funded">
+                                            <a class="report-link collapsed " href="#" data-target="funded">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -132,17 +133,31 @@
                                     @if (auth()->user()->hasRole('admin') ||
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
-                                        <li class="nav-item">
-                                            <a class="report-link collapsed" href="#" data-target="age-bracket">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24"
-                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                        
+                                            <a class="report-link collapsed active" class="report-link collapsed" href="#" data-target="entry-age-bracket">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" />
                                                     <circle cx="12" cy="12" r="9" />
                                                 </svg>
-                                                Age Bracket
+                                                Age Bracket Upon Entry
                                             </a>
-                                        </li>
+                                           
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        
+                                            <a class="report-link collapsed" class="report-link collapsed" href="#" data-target="exit-age-bracket">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Age Bracket After 120 Feeding Days
+                                            </a>
+                                           
                                     @endif
 
                                     @if (auth()->user()->hasRole('admin') ||
@@ -270,12 +285,25 @@
                                     @if (auth()->user()->hasRole('admin') ||
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
-                                        <div id="age-bracket-content">
+                                        <div id="entry-age-bracket-content">
                                             <div class="card-title">
-                                                <h5>Age Bracket</h5>
+                                                <h5>Age Bracket Upon Entry</h5>
                                             </div>
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                @include('reports.partials.age-bracket-table', ['centers' => $centers])
+                                                @include('reports.partials.entry-age-bracket-table', ['centers' => $centers])
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') ||
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
+                                        <div id="exit-age-bracket-content">
+                                            <div class="card-title">
+                                                <h5>Age Bracket After 120 Feeding Days</h5>
+                                            </div>
+                                            <div style="overflow-x: auto; max-width: 100%;">
+                                                @include('reports.partials.exit-age-bracket-table', ['centers' => $centers])
                                             </div>
                                         </div>
                                     @endif
@@ -367,7 +395,7 @@
                         reportLinks.forEach(l => l.classList.remove('active'));
 
                         // Add 'active' class to the clicked link
-                        this.classList.add('active');
+                        this.classList.add('');
                     });
                 });
             });

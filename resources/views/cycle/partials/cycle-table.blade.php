@@ -44,8 +44,8 @@
                                 </svg>
                                 </button>
                                 <div
-                                    class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-gray-800 text-white text-xs rounded px-2 py-1">
-                                    View
+                                    class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-gray-800 text-white text-xs rounded px-3 py-1">
+                                    View Reports
                                 </div>
                             </a>
                         @endcan
