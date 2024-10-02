@@ -62,7 +62,7 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed " href="#" data-target="funded">
+                                            <a class="report-link collapsed active" href="#" data-target="funded">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -134,7 +134,7 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         
-                                            <a class="report-link collapsed active" class="report-link collapsed" href="#" data-target="entry-age-bracket">
+                                            <a class="report-link collapsed " class="report-link collapsed" href="#" data-target="entry-age-bracket">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" />
@@ -176,7 +176,7 @@
                                         </li>
                                     @endif
 
-                                    @if (auth()->user()->hasRole('admin') ||
+                                    {{-- @if (auth()->user()->hasRole('admin') ||
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
@@ -190,7 +190,7 @@
                                                 Feeding Attendance
                                             </a>
                                         </li>
-                                    @endif
+                                    @endif --}}
 
                                     @if (auth()->user()->hasRole('admin') ||
                                             auth()->user()->hasRole('lgu focal') ||
@@ -321,7 +321,7 @@
                                         </div>
                                     @endif
 
-                                    @if (auth()->user()->hasRole('admin') ||
+                                    {{-- @if (auth()->user()->hasRole('admin') ||
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <div id="attendance-content">
@@ -332,7 +332,7 @@
                                                 @include('reports.partials.attendance-table', ['centers' => $centers])
                                             </div>
                                         </div>
-                                    @endif
+                                    @endif --}}
 
                                     @if (auth()->user()->hasRole('admin') ||
                                             auth()->user()->hasRole('lgu focal') ||

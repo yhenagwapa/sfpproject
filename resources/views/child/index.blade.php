@@ -34,11 +34,11 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="col-md-6 mt-4 d-flex align-items-center">
-                                {{-- @can(['create-child']) --}}
+                                @can(['create-child'])
                                 <a href="{{ route('child.create') }}"><button type="button"
                                         class="bg-blue-600 text-white rounded px-3 min-h-9"><i
                                             class="bi bi-plus-circle"></i>Add Child Profile</button></a>
-                                {{-- @endcan --}}
+                                @endcan
                             </div>
                             {{-- <div class="col-md-6 mt-4 d-flex align-items-center">
                                     <form id="searchForm" method="GET" action="{{ route('child.search') }}">
