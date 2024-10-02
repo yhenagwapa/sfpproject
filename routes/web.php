@@ -13,6 +13,7 @@ use App\Http\Controllers\ChildDevelopmentCenterController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\PDFController;
 
 
 /*
@@ -94,5 +95,7 @@ require __DIR__.'/auth.php';
     Route::post('/cycle/store', [CycleImplementationController::class, 'store'])->name(name: 'cycle.store');
     Route::get('/cycle/{id}/edit', [CycleImplementationController::class, 'edit'])->name(name: 'cycle.edit');
     Route::put('/cycle/{cycle}/update', [CycleImplementationController::class, 'update'])->name(name: 'cycle.update');
+
+    // Route::get('/generate-pdf', [ReportsController::class, 'generatePDF'])->name('generate.pdf');
     
 // });

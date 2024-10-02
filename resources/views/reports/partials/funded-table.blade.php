@@ -15,7 +15,10 @@
         </form>
     </div>
 @endif
-
+<div class="col-md-6 mt-4 text-sm">
+    <a href="#" class="btn btn-primary" target="_blank">View PDF</a>
+    <a href="#" class="btn btn-secondary" onclick="window.print()">Print PDF</a>
+</div>
 <table id='funded-table' class="table datatable text-xs text-center" style="min-width: 1800px;">
     <thead>
         <tr>
@@ -103,3 +106,35 @@
         @endif
     </tbody>
 </table>
+<style>
+    @media print {
+        /* Hide everything except the table */
+        body * {
+            visibility: hidden;
+        }
+        
+        /* Show only the funded table and make it full width */
+        #funded-table, #funded-table * {
+            visibility: visible;
+        }
+        
+        /* Ensure the table takes the full width */
+        #funded-table {
+            width: 100%;
+        }
+
+        /* Optionally hide buttons and form elements */
+        form, .btn {
+            display: none;
+        }
+        
+        /* Styling for the table during print */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+    }
+</style>
