@@ -228,9 +228,12 @@
                                                     'isFunded' => $isFunded,
                                                 ])
                                             </div>
-                                            <div class="mt-3">
-                                                {{ $isFunded->links() }}
-                                            </div>
+                                            {{-- <div class="mt-3">
+                                                @foreach ($isFunded as $fundedChildren)
+                                                    <!-- Display pagination links for each center -->
+                                                    {{ $fundedChildren->links() }}
+                                                @endforeach
+                                            </div> --}}
                                         </div>
                                     @endif
 
@@ -370,17 +373,14 @@
                 });
 
                 function showContent(target) {
-                    // Hide all content sections
                     document.querySelectorAll('#report-content > div').forEach(div => div.style.display = 'none');
 
-                    // Show the selected content
                     const selectedContent = document.getElementById(`${target}-content`);
                     if (selectedContent) {
                         selectedContent.style.display = 'block';
                     }
                 }
 
-                // Show "masterlist" content by default
                 showContent('funded');
             });
         </script>
@@ -391,10 +391,8 @@
 
                 reportLinks.forEach(link => {
                     link.addEventListener('click', function() {
-                        // Remove 'active' class from all links
                         reportLinks.forEach(l => l.classList.remove('active'));
 
-                        // Add 'active' class to the clicked link
                         this.classList.add('');
                     });
                 });

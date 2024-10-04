@@ -98,7 +98,7 @@ class ChildController extends Controller
 
         } else {
 
-            $assignedCdcId = optional(auth()->user()->childDevelopmentCenter)->id;
+            $assignedCdcId = optional(auth()->user()->worker)->id;
 
             $maleChildren = Child::where('child_development_center_id', $assignedCdcId)
                 ->whereHas('sex', function ($query) {

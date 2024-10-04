@@ -1,4 +1,4 @@
-@if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+{{-- @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
     <div class="col-md-6 mt-4 text-sm">
         <form action="{{ route('reports.filterUnfundedByCdc') }}" method="POST">
             @csrf
@@ -59,4 +59,4 @@
             </tr>
         @endif
     </tbody>
-</table>
+</table> --}}

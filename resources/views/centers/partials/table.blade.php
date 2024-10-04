@@ -5,7 +5,9 @@
             <th><b>Child Development Centers</b></th>
             <th>Child Development Worker</th>
             <th>Address</th>
-            <th>Action</th>
+            @can(['edit-child-development-center'])
+                <th>Action</th>
+            @endcan
         </tr>
     </thead>
     <tbody class="centers-table">

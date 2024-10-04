@@ -1,4 +1,4 @@
-<table id='undernourished-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
+{{-- <table id='undernourished-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
     <thead class="border bg-gray-200">
         <tr>
             <th class="border border-white" rowspan="3">Name of Child Development Center</th>
@@ -84,4 +84,4 @@
             </tr>
         @endif
     </tbody>
-</table>
+</table> --}}

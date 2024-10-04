@@ -110,9 +110,14 @@ class User extends Authenticatable
         return "{$this->firstname} {$this->middlename} {$this->lastname} {$this->extension_name}";
     }
 
-    public function childDevelopmentCenter()
+    public function worker()
     {
-        return $this->hasOne(ChildDevelopmentCenter::class, 'assigned_user_id');
+        return $this->hasOne(ChildDevelopmentCenter::class, 'assigned_worker_user_id');
+    }
+
+    public function focal()
+    {
+        return $this->belongsTo(ChildDevelopmentCenter::class, 'assigned_focal_user_id');
     }
 
 

@@ -43,14 +43,13 @@
                 $totalUWMale += $countsPerNutritionalStatus[$age]['weight_for_age_underweight']['male'] ?? 0;
                 $totalUWFemale += $countsPerNutritionalStatus[$age]['weight_for_age_underweight']['female'] ?? 0;
                 $totalSUWMale += $countsPerNutritionalStatus[$age]['weight_for_age_severely_underweight']['male'] ?? 0;
-                $totalSUWFemale +=
-                    $countsPerNutritionalStatus[$age]['weight_for_age_severely_underweight']['female'] ?? 0;
+                $totalSUWFemale += $countsPerNutritionalStatus[$age]['weight_for_age_severely_underweight']['female'] ?? 0;
                 $totalOWMale += $countsPerNutritionalStatus[$age]['weight_for_age_overweight']['male'] ?? 0;
                 $totalOWFemale += $countsPerNutritionalStatus[$age]['weight_for_age_overweight']['female'] ?? 0;
             }
         @endphp
         <tr>
-            <td>Normal (N)</td>
+            <td class="text-left">Normal (N)</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_age_normal']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_age_normal']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['weight_for_age_normal']['male'] ?? 0 }}</td>
@@ -64,7 +63,7 @@
         </tr>
 
         <tr>
-            <td>Underweight (UW)</td>
+            <td class="text-left">Underweight (UW)</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_age_underweight']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_age_underweight']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['weight_for_age_underweight']['male'] ?? 0 }}</td>
@@ -78,7 +77,7 @@
         </tr>
 
         <tr>
-            <td>Severely Underweight (SUW)</td>
+            <td class="text-left">Severely Underweight (SUW)</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_age_severely_underweight']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_age_severely_underweight']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['weight_for_age_severely_underweight']['male'] ?? 0 }}</td>
@@ -92,7 +91,7 @@
         </tr>
 
         <tr>
-            <td>Overweight (OW)</td>
+            <td class="text-left">Overweight (OW)</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_age_overweight']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_age_overweight']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['weight_for_age_overweight']['male'] ?? 0 }}</td>
@@ -161,7 +160,7 @@
             }
         @endphp
         <tr>
-            <td>Normal (N)</td>
+            <td class="text-left">Normal (N)</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_normal']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_normal']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['weight_for_height_normal']['male'] ?? 0 }}</td>
@@ -175,7 +174,7 @@
         </tr>
 
         <tr>
-            <td>Wasted (W)</td>
+            <td class="text-left">Wasted (W)</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_wasted']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_wasted']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['weight_for_height_wasted']['male'] ?? 0 }}</td>
@@ -189,7 +188,7 @@
         </tr>
 
         <tr>
-            <td>Severely Wasted (SW)</td>
+            <td class="text-left">Severely Wasted (SW)</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_severely_wasted']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_severely_wasted']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['weight_for_height_severely_wasted']['male'] ?? 0 }}</td>
@@ -203,7 +202,7 @@
         </tr>
 
         <tr>
-            <td>Overweight (OW)</td>
+            <td class="text-left">Overweight (OW)</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_overweight']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_overweight']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['weight_for_height_overweight']['male'] ?? 0 }}</td>
@@ -216,7 +215,7 @@
             <td>{{ $totalOWFemale }}</td>
         </tr>
         <tr>
-            <td>Obese (Ob)</td>
+            <td class="text-left">Obese (Ob)</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_obese']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['weight_for_height_obese']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['weight_for_height_obese']['male'] ?? 0 }}</td>
@@ -280,7 +279,7 @@
             }
         @endphp
         <tr>
-            <td>Normal (N)</td>
+            <td class="text-left">Normal (N)</td>
             <td>{{ $countsPerNutritionalStatus[2]['height_for_age_normal']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['height_for_age_normal']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['height_for_age_normal']['male'] ?? 0 }}</td>
@@ -294,7 +293,7 @@
         </tr>
 
         <tr>
-            <td>Stunted (S)</td>
+            <td class="text-left">Stunted (S)</td>
             <td>{{ $countsPerNutritionalStatus[2]['height_for_age_stunted']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['height_for_age_stunted']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['height_for_age_stunted']['male'] ?? 0 }}</td>
@@ -308,7 +307,7 @@
         </tr>
 
         <tr>
-            <td>Severely Stunted (SS)</td>
+            <td class="text-left">Severely Stunted (SS)</td>
             <td>{{ $countsPerNutritionalStatus[2]['height_for_age_severely_stunted']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['height_for_age_severely_stunted']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['height_for_age_severely_stunted']['male'] ?? 0 }}</td>
@@ -322,7 +321,7 @@
         </tr>
 
         <tr>
-            <td>Tall (T)</td>
+            <td class="text-left">Tall (T)</td>
             <td>{{ $countsPerNutritionalStatus[2]['height_for_age_tall']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['height_for_age_tall']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['height_for_age_tall']['male'] ?? 0 }}</td>
@@ -404,7 +403,7 @@
             }
         @endphp
         <tr>
-            <td>Summary of Undernourished Children</td>
+            <td class="text-left">Summary of Undernourished Children</td>
             <td>{{ $countsPerNutritionalStatus[2]['entry_is_undernourish']['male'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[2]['entry_is_undernourish']['female'] ?? 0 }}</td>
             <td>{{ $countsPerNutritionalStatus[3]['entry_is_undernourish']['male'] ?? 0 }}</td>
@@ -418,7 +417,7 @@
         </tr>
 
         <tr>
-            <td>Deworming</td>
+            <td class="text-left">Deworming</td>
             <td>{{ $countsPerCenter[2]['dewormed']['male'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[2]['dewormed']['female'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[3]['dewormed']['male'] ?? 0 }}</td>
@@ -432,7 +431,7 @@
         </tr>
 
         <tr>
-            <td>Vitamin A Supplementation</td>
+            <td class="text-left">Vitamin A Supplementation</td>
             <td>{{ $countsPerCenter[2]['vitamin_a']['male'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[2]['vitamin_a']['female'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[3]['vitamin_a']['male'] ?? 0 }}</td>
@@ -446,7 +445,7 @@
         </tr>
 
         <tr>
-            <td>4Ps Member</td>
+            <td class="text-left">4Ps Member</td>
             <td>{{ $countsPerCenter[2]['pantawid']['male'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[2]['pantawid']['female'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[3]['pantawid']['male'] ?? 0 }}</td>
@@ -460,7 +459,7 @@
         </tr>
 
         <tr>
-            <td>IP Member</td>
+            <td class="text-left">IP Member</td>
             <td>{{ $countsPerCenter[2]['indigenous_people']['male'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[2]['indigenous_people']['female'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[3]['indigenous_people']['male'] ?? 0 }}</td>
@@ -474,7 +473,7 @@
         </tr>
 
         <tr>
-            <td>PWD</td>
+            <td class="text-left">PWD</td>
             <td>{{ $countsPerCenter[2]['pwd']['male'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[2]['pwd']['female'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[3]['pwd']['male'] ?? 0 }}</td>
@@ -488,7 +487,7 @@
         </tr>
 
         <tr>
-            <td>Child of Solo Parent</td>
+            <td class="text-left">Child of Solo Parent</td>
             <td>{{ $countsPerCenter[2]['child_of_solo_parent']['male'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[2]['child_of_solo_parent']['female'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[3]['child_of_solo_parent']['male'] ?? 0 }}</td>
@@ -502,7 +501,7 @@
         </tr>
 
         <tr>
-            <td>Lactose Intolerant</td>
+            <td class="text-left">Lactose Intolerant</td>
             <td>{{ $countsPerCenter[2]['lactose_intolerant']['male'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[2]['lactose_intolerant']['female'] ?? 0 }}</td>
             <td>{{ $countsPerCenter[3]['lactose_intolerant']['male'] ?? 0 }}</td>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('address');
             $table->unsignedBigInteger('psgc_id')->nullable(); 
             $table->integer('zip_code');
-            $table->foreignId('assigned_user_id')->constrained('users')->nullable();
+            $table->foreignId('assigned_worker_user_id')->constrained('users')->nullable();
             $table->foreignId('created_by_user_id')->constrained('users')->nullable();
             $table->timestamps();
         });

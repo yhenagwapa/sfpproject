@@ -15,13 +15,19 @@ class ChildDevelopmentCenter extends Model
         'psgc_id',
         'address',
         'zip_code',
-        'assigned_user_id',
+        'assigned_focal_user_id',
+        'assigned_worker_user_id',
         'created_by_user_id',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'assigned_user_id');
+        return $this->belongsTo(User::class, 'assigned_worker_user_id');
+    }
+
+    public function focal()
+    {
+        return $this->belongsTo(User::class, 'assigned_focal_user_id');
     }
 
     public function psgc()

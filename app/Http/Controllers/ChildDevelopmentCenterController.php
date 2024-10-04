@@ -18,8 +18,8 @@ class ChildDevelopmentCenterController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:create-child-development-center', ['only' => ['index','create', 'store']]);
-        $this->middleware('permission:edit-child-development-center', ['only' => ['index', 'edit', 'update']]);options: 
+        $this->middleware('permission:create-child-development-center', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit-child-development-center', ['only' => ['edit', 'update']]);options: 
     }
 
     public function index()
@@ -92,7 +92,8 @@ class ChildDevelopmentCenterController extends Controller
             'psgc_id' => $psgc_id,
             'address' => $request->address,
             'zip_code' => $request->zip_code,
-            'assigned_user_id' => $request->assigned_user_id,
+            'assigned_focal_user_id' => auth()->id(),
+            'assigned_worker_user_id' => $request->assigned_worker_user_id,
             'created_by_user_id' => auth()->id(),
         ]);
 
