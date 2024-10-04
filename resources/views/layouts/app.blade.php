@@ -75,11 +75,11 @@
                         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                             data-bs-toggle="dropdown">
                             @auth
-                                                        @php
-                                                            $user = Auth::user();
-                                                            $fullName = trim("{$user->firstname} {$user->middlename} {$user->lastname}");
-                                                        @endphp
-                                                        <span class="d-none d-md-block dropdown-toggle ps-2">{{ $fullName }}</span>
+                                @php
+                                    $user = Auth::user();
+                                    $fullName = trim("{$user->firstname} {$user->middlename} {$user->lastname}");
+                                @endphp
+                                <span class="d-none d-md-block dropdown-toggle ps-2">{{ $fullName }}</span>
                             @endauth
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -146,25 +146,25 @@
                     </a>
                 </li><!-- End Child List Nav -->
 
-                
 
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="{{ route('centers.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="#899bbd" class="mr-2 size-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                            </svg>
 
-                            <span class="text-sm">Child Development Center</span>
-                        </a>
-                    </li><!-- End CDC Page Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ route('centers.index') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg>
 
-                    @canany(['create-cycle-implementation', 'edit-cycle-implementation', 'view-cycle-implementation'])
+                        <span class="text-sm">Child Development Center</span>
+                    </a>
+                </li><!-- End CDC Page Nav -->
+
+                @canany(['create-cycle-implementation', 'edit-cycle-implementation', 'view-cycle-implementation'])
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('cycle.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="#899bbd" class="mr-2 size-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                             </svg>
@@ -175,125 +175,128 @@
 
                 <li class="nav-item">
                     <a class="nav-link collapsed">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                         </svg>
                         <span class="text-sm">Reports</span>
                         <span class="ms-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                             </svg>
                         </span>
-                      
+
                     </a>
                     <ul id="forms-nav" class="nav-content collapsed " data-bs-parent="#sidebar-nav">
-                      <li>
-                        <a href="forms-elements.html">
-                            <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <circle cx="12" cy="12" r="9" />
-                            </svg>
-                            <span>Masterlist</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="forms-layouts.html">
-                            <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <circle cx="12" cy="12" r="9" />
-                            </svg>
-                            <span>Malnourish</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="forms-elements.html">
-                            <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <circle cx="12" cy="12" r="9" />
-                            </svg>
-                            <span>Persons with Disability</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="forms-layouts.html">
-                            <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <circle cx="12" cy="12" r="9" />
-                            </svg>
-                            <span>Undernourish</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="forms-elements.html">
-                            <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <circle cx="12" cy="12" r="9" />
-                            </svg>
-                            <span>Nutritional Status</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="forms-elements.html">
-                            <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <circle cx="12" cy="12" r="9" />
-                            </svg>
-                            <span>Monitoring</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="forms-layouts.html">
-                            <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <circle cx="12" cy="12" r="9" />
-                            </svg>
-                            <span>Unfunded Children</span>
-                        </a>
-                      </li>
+                        <li>
+                            <a href="forms-elements.html">
+                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <circle cx="12" cy="12" r="9" />
+                                </svg>
+                                <span>Masterlist</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-layouts.html">
+                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <circle cx="12" cy="12" r="9" />
+                                </svg>
+                                <span>Malnourish</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-elements.html">
+                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <circle cx="12" cy="12" r="9" />
+                                </svg>
+                                <span>Persons with Disability</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-layouts.html">
+                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <circle cx="12" cy="12" r="9" />
+                                </svg>
+                                <span>Undernourish</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-elements.html">
+                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <circle cx="12" cy="12" r="9" />
+                                </svg>
+                                <span>Nutritional Status</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-elements.html">
+                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <circle cx="12" cy="12" r="9" />
+                                </svg>
+                                <span>Monitoring</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="forms-layouts.html">
+                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <circle cx="12" cy="12" r="9" />
+                                </svg>
+                                <span>Unfunded Children</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
                 @if (auth()->user()->hasRole('admin'))
-                        <li class="nav-heading">Admin Tools</li>
+                    <li class="nav-heading">Admin Tools</li>
 
-                        <li class="nav-item">
-                            <a class="nav-link collapsed" href="user-accounts.php">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="#899bbd" class="mr-2 size-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                </svg>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="user-accounts.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
 
-                                <span class="text-sm">Accounts</span>
-                            </a>
-                        </li><!-- End Accounts Nav -->
+                            <span class="text-sm">Accounts</span>
+                        </a>
+                    </li><!-- End Accounts Nav -->
 
-                        <li class="nav-item">
-                            <a class="nav-link collapsed" href="user-roles.php">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="#899bbd" class="mr-2 size-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
-                                </svg>
-                                <span class="text-sm">Audit Logs</span>
-                            </a>
-                        </li><!-- End Audit Logs Page Nav -->
-                    </ul>
-                @endif
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="user-roles.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
+                            </svg>
+                            <span class="text-sm">Audit Logs</span>
+                        </a>
+                    </li><!-- End Audit Logs Page Nav -->
+            </ul>
+            @endif
 
         </aside><!-- End Sidebar-->
 
