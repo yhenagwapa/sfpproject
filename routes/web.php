@@ -71,19 +71,13 @@ require __DIR__.'/auth.php';
 
     Route::post('/child/filter-by-cdc', [ChildController::class, 'filterByCdc'])->name('child.filterByCdc');
 
-
     Route::get('/attendance/index/{child}', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/store/{child}', [AttendanceController::class, 'store'])->name('attendance.store');
 
     Route::get('nutritionalstatus/{id}', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
     Route::post('nutritionalstatus/store', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
     Route::put('nutritionalstatus/store', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
-
-    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-    Route::post('/reports/filter-funded-by-cdc', [ReportsController::class, 'filterFundedByCdc'])->name('reports.filterFundedByCdc');
-    Route::post('/reports/filter-unfunded-by-cdc', [ReportsController::class, 'filterUnfundedByCdc'])->name('reports.filterUnfundedByCdc');
-    Route::get('/reports/print-funded', [ReportsController::class, 'printFunded'])->name('reports.printFunded');
-
+    
     Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
     Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');
     Route::post('/centers/store', [ChildDevelopmentCenterController::class, 'store'])->name(name: 'centers.store');
@@ -97,6 +91,12 @@ require __DIR__.'/auth.php';
     Route::get('/cycle/{id}/edit', [CycleImplementationController::class, 'edit'])->name(name: 'cycle.edit');
     Route::put('/cycle/{cycle}/update', [CycleImplementationController::class, 'update'])->name(name: 'cycle.update');
 
-    // Route::get('/generate-pdf', [ReportsController::class, 'generatePDF'])->name('generate.pdf');
-    
-// });
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::get('/reports/malnourish', [ReportsController::class, 'malnourish'])->name('reports.malnourish');
+    Route::get('/reports/disabilities', [ReportsController::class, 'disabilities'])->name('reports.disabilities');
+    Route::get('/reports/monitoring', [ReportsController::class, 'monitoring'])->name('reports.monitoring');
+    Route::get('/reports/unfunded', [ReportsController::class, 'unfunded'])->name('reports.unfunded');
+    Route::post('/reports/filter-funded-by-cdc', [ReportsController::class, 'filterFundedByCdc'])->name('reports.filterFundedByCdc');
+    Route::post('/reports/filter-unfunded-by-cdc', [ReportsController::class, 'filterUnfundedByCdc'])->name('reports.filterUnfundedByCdc');
+    Route::get('/reports/print-funded', [ReportsController::class, 'printFunded'])->name('reports.printFunded');
+

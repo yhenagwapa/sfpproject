@@ -62,7 +62,7 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed active" href="{{ route('reports.index')}}">
+                                            <a class="report-link collapsed" href="{{ route('reports.index')}}">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -76,7 +76,7 @@
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="{{ route('reports.malnourish')}}">
+                                            <a class="report-link collapsed active" href="{{ route('reports.malnourish')}}">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -239,19 +239,17 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <div id="funded-content">
-                                                <h5 class="card-title">Masterlist of Funded Beneficiaries</h5>
+                                                <h5 class="card-title">Malnourished Children</h5>
                                             
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                @include('reports.partials.funded-table', [
+                                                @include('reports.partials.malnourished-table', [
                                                     'isFunded' => $isFunded,
                                                 ])
                                             </div>
-                                            {{-- <div class="mt-3">
-                                                @foreach ($isFunded as $fundedChildren)
-                                                    <!-- Display pagination links for each center -->
-                                                    {{ $fundedChildren->links() }}
-                                                @endforeach
-                                            </div> --}}
+                                            <div class="mt-3">
+                                                
+                                                    {{ $isFunded->links() }}
+                                            </div>
                                         </div>
                                     @endif
                                 </div>
@@ -262,43 +260,5 @@
                 </div>
             </section>
         </div>
-        {{-- <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const reportLinks = document.querySelectorAll('.report-link');
-
-                reportLinks.forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const target = this.getAttribute('data-target');
-                        showContent(target);
-                    });
-                });
-
-                function showContent(target) {
-                    document.querySelectorAll('#report-content > div').forEach(div => div.style.display = 'none');
-
-                    const selectedContent = document.getElementById(`${target}-content`);
-                    if (selectedContent) {
-                        selectedContent.style.display = 'block';
-                    }
-                }
-
-                showContent('funded');
-            });
-        </script>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const reportLinks = document.querySelectorAll('.report-link');
-
-                reportLinks.forEach(link => {
-                    link.addEventListener('click', function() {
-                        reportLinks.forEach(l => l.classList.remove('active'));
-
-                        this.classList.add('');
-                    });
-                });
-            });
-        </script> --}}
 
     </main><!-- End #main -->

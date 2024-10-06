@@ -24,7 +24,7 @@ class ChildDevelopmentCenterController extends Controller
 
     public function index()
     {
-        $centers = ChildDevelopmentCenter::with(['user', 'psgc'])->get();
+        $centers = ChildDevelopmentCenter::with(['user', 'focal', 'psgc'])->get();
 
         return view('centers.index', compact('centers'));
     }

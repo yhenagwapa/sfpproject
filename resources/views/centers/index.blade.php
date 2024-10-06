@@ -35,6 +35,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
+                            <h5 class='card-title'>Child Development Centers and Supervised Neighborhood Play</h5>
                             <div class="row">
                                 <div class="col-6 mt-4 d-flex align-items-center">
                                     @can(['create-child-development-center'])

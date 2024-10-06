@@ -4,6 +4,7 @@
         <tr>
             <th><b>Child Development Centers</b></th>
             <th>Child Development Worker</th>
+            <th>LGU Focal</th>
             <th>Address</th>
             @can(['edit-child-development-center'])
                 <th>Action</th>
@@ -15,7 +16,8 @@
             <tr>
                 <td>{{ $center->center_name }}</td>
                 <td>{{ $center->user->full_name }}</td>
-                <td>{{ $center->getFullAddress() }}</td>
+                <td>{{ $center->focal->full_name }}</td>
+                <td class="text-xs">{{ $center->getFullAddress() }}</td>
                 <td>
                     <div class="flex space-x-2">
                         @can(['edit-child-development-center'])

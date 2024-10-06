@@ -1,4 +1,4 @@
-{{-- <table id='malnourished-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
+<table id='malnourished-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
     <thead>
         <tr>
             <th class="border border-white w-40" rowspan="2">Name of Child</th>
@@ -33,7 +33,7 @@
     <tbody class="malnourished-table text-xs">
         @foreach ($isFunded as $fundedChild)
             <tr>
-                <td>{{ $fundedChild->firstname }} {{ $fundedChild->middlename ? $fundedChild->middlename . ' ' : '' }}{{ $fundedChild->lastname }}<</td>
+                <td>{{ $fundedChild->full_name }}</td>
                 <td>{{ $fundedChild->sex->name }}</td>
                 <td>{{ $fundedChild->date_of_birth }}</td>
 
@@ -83,4 +83,4 @@
             </tr>
         @endif
     </tbody>
-</table> --}}
+</table>

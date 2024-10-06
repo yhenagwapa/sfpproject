@@ -156,7 +156,7 @@
                                 d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                         </svg>
 
-                        <span class="text-sm">Child Development Center</span>
+                        <span class="text-sm">Centers</span>
                     </a>
                 </li><!-- End CDC Page Nav -->
 
@@ -173,7 +173,7 @@
                     </li><!-- End Cycle Nav -->
                 @endcanany
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link collapsed">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
@@ -268,7 +268,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
                 @if (auth()->user()->hasRole('admin'))
                     <li class="nav-heading">Admin Tools</li>
@@ -295,8 +295,9 @@
                             <span class="text-sm">Audit Logs</span>
                         </a>
                     </li><!-- End Audit Logs Page Nav -->
+                @endif
             </ul>
-            @endif
+            
 
         </aside><!-- End Sidebar-->
 
