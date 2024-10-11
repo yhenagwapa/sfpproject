@@ -76,7 +76,7 @@
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed " href="{{ route('reports.malnourish')}}">
+                                            <a class="report-link collapsed" href="{{ route('reports.malnourish')}}">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -90,7 +90,7 @@
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed active" href="{{ route('reports.disabilities')}}">
+                                            <a class="report-link collapsed" href="{{ route('reports.disabilities')}}">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -122,6 +122,7 @@
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                                             </svg>
+                                                              
                                                         Upon Entry
                                                         </a>
                                                     </li>
@@ -212,7 +213,7 @@
                                                         </li>
                                                     
                                                         <li>
-                                                            <a class="report-link collapsed" href="{{ route('reports.weight-for-height-after-120')}}">
+                                                            <a class="report-link collapsed active" href="{{ route('reports.weight-for-height-after-120')}}">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                                                 </svg>
@@ -270,7 +271,7 @@
                                                 Age Bracket
                                             </a>
                                             <ul id="forms-nav" class="report-content collapsed">
-                                            
+                                                
                                                     <li>
                                                         <a class="report-link collapsed" href="{{ route('reports.age-bracket-upon-entry')}}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -288,8 +289,10 @@
                                                             After 120 Feedings
                                                         </a>
                                                     </li>
-                                                
+                                                @endif
                                             </ul>
+                                    
+                                            
                                         </li>
                                     @endif
 
@@ -297,7 +300,7 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="{{ route('reports.monitoring')}}" >
+                                            <a class="report-link collapsed" href="{{ route('reports.monitoring')}}">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24"
                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -349,19 +352,21 @@
                             <div class="card-body">
                                 <div id="report-content">
                                     @if (auth()->user()->hasRole('admin') ||
-                                            auth()->user()->hasRole('lgu focal'))
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
                                         <div id="funded-content">
-                                                <h5 class="card-title">Persons with Disability</h5>
-                                            
+                                            <h5 class="card-title">CONSOLIDATED NUTRITIONAL STATUS REPORT</h5>
+                                            <h6 class="card-subtitle">Weight for Height<br>After 120 Feeding Days</h6>
+
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                @include('reports.partials.disability-table', [
-                                                    'isPwdChildren' => $isPwdChildren,
-                                                ])
+                                                @include('reports.partials.weight-for-height-after-120-table')
                                             </div>
-                                            <div class="mt-3">
-                                                
-                                                    {{ $isPwdChildren->links() }}
-                                            </div>
+                                            {{-- <div class="mt-3">
+                                                @foreach ($isFunded as $fundedChildren)
+                                                    <!-- Display pagination links for each center -->
+                                                    {{ $fundedChildren->links() }}
+                                                @endforeach
+                                            </div> --}}
                                         </div>
                                     @endif
                                 </div>
@@ -372,5 +377,43 @@
                 </div>
             </section>
         </div>
+        {{-- <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const reportLinks = document.querySelectorAll('.report-link');
+
+                reportLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const target = this.getAttribute('data-target');
+                        showContent(target);
+                    });
+                });
+
+                function showContent(target) {
+                    document.querySelectorAll('#report-content > div').forEach(div => div.style.display = 'none');
+
+                    const selectedContent = document.getElementById(`${target}-content`);
+                    if (selectedContent) {
+                        selectedContent.style.display = 'block';
+                    }
+                }
+
+                showContent('funded');
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const reportLinks = document.querySelectorAll('.report-link');
+
+                reportLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        reportLinks.forEach(l => l.classList.remove('active'));
+
+                        this.classList.add('');
+                    });
+                });
+            });
+        </script> --}}
 
     </main><!-- End #main -->

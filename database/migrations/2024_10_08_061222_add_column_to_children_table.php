@@ -12,12 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('children', function (Blueprint $table) {
-            $table->unsignedBigInteger('cycle_implementation_id')->nullable()->after('id');
-
-            $table->foreign('cycle_implementation_id')
+            $table->unsignedBigInteger('milk_feeding_id')->nullable()->after('cycle_implementation_id');
+            $table->foreign('milk_feeding_id')
                   ->references('id')
-                  ->on('cycle_implementations')
-                  ->onDelete('set null'); 
+                  ->on('milk_feedings');
         });
     }
 
@@ -27,8 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('children', function (Blueprint $table) {
-            $table->dropForeign(['cycle_implementation_id']);
-            $table->dropColumn('cycle_implementation_id');
+            $table->dropForeign(['milk_feeding_id']);
+            $table->dropColumn('milk_feeding_id');
         });
     }
 };

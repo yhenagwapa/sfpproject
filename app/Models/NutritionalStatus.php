@@ -10,30 +10,26 @@ class NutritionalStatus extends Model
     use HasFactory;
 
     protected $fillable = [
+        'cycle_implementation_id',
+        'milk_feeding_id',
         'child_id',
-        'entry_weight',
-        'entry_height',
-        'entry_actual_date_of_weighing',
-        'entry_weight_for_age',
-        'entry_weight_for_height',
-        'entry_height_for_age',
-        'entry_is_malnourish',
-        'entry_is_undernourish',
-        'exit_weight',
-        'exit_height',
-        'exit_actual_date_of_weighing',
-        'exit_weight_for_age',
-        'exit_weight_for_height',
-        'exit_height_for_age',
-        'exit_is_malnourish',
-        'exit_is_undernourish',
+        'weight',
+        'height',
+        'weighing_date',
+        'age_in_months',
+        'age_in_years',
+        'weight_for_age',
+        'weight_for_height',
+        'height_for_age',
+        'is_malnourish',
+        'is_undernourish',
         'updated_by_user_id',
         'created_by_user_id'
     ];
 
     protected $casts = [
-        'entry_is_malnourish' => 'boolean',
-        'entry_is_undernourish' => 'boolean',
+        'is_malnourish' => 'boolean',
+        'is_undernourish' => 'boolean',
     ];
     
 

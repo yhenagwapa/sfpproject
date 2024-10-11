@@ -24,9 +24,17 @@
                 <td>{{ $femaleChild->full_name }}</td>
                 <td>{{ $femaleChild->sex->name }}</td>
                 <td>{{ $femaleChild->date_of_birth }}</td>
-                <td>{{ optional($femaleChild->nutritionalStatus)->entry_weight_for_age }}</td>
-                <td>{{ optional($femaleChild->nutritionalStatus)->entry_weight_for_height }}</td>
-                <td>{{ optional($femaleChild->nutritionalStatus)->entry_height_for_age }}</td>
+                @if ($femaleChild->nutritionalStatus)
+                    @if ($femaleChild->nutritionalStatus->first() === null)
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    @else
+                        <td>{{ $femaleChild->nutritionalStatus->first() ? $femaleChild->nutritionalStatus->first()->weight_for_age : 'N/A' }}</td>
+                        <td>{{ $femaleChild->nutritionalStatus->first() ? $femaleChild->nutritionalStatus->first()->weight_for_height : 'N/A' }}</td>
+                        <td>{{ $femaleChild->nutritionalStatus->first() ? $femaleChild->nutritionalStatus->first()->height_for_age : 'N/A' }}</td>
+                    @endif
+                @endif
                 @if (!auth()->user()->hasRole('lgu focal'))
                     <td>
                         <div class="flex space-x-2">

@@ -76,7 +76,7 @@
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed " href="{{ route('reports.malnourish')}}">
+                                            <a class="report-link collapsed" href="{{ route('reports.malnourish')}}">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -90,7 +90,7 @@
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed active" href="{{ route('reports.disabilities')}}">
+                                            <a class="report-link collapsed" href="{{ route('reports.disabilities')}}">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -118,7 +118,7 @@
                                                         auth()->user()->hasRole('lgu focal') ||
                                                         auth()->user()->hasRole('child development worker'))
                                                     <li>
-                                                        <a class="report-link collapsed" href="{{ route('reports.undernourished-upon-entry')}}">
+                                                        <a class="report-link collapsed active" href="{{ route('reports.undernourished-upon-entry')}}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                                             </svg>
@@ -270,7 +270,7 @@
                                                 Age Bracket
                                             </a>
                                             <ul id="forms-nav" class="report-content collapsed">
-                                            
+                                               
                                                     <li>
                                                         <a class="report-link collapsed" href="{{ route('reports.age-bracket-upon-entry')}}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -279,7 +279,9 @@
                                                         Upon Entry
                                                         </a>
                                                     </li>
-                                                
+                                                @endif
+
+                                               
                                                     <li>
                                                         <a class="report-link collapsed" href="{{ route('reports.age-bracket-after-120')}}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -297,7 +299,7 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="{{ route('reports.monitoring')}}" >
+                                            <a class="report-link collapsed" href="{{ route('reports.monitoring')}}">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24"
                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -349,18 +351,19 @@
                             <div class="card-body">
                                 <div id="report-content">
                                     @if (auth()->user()->hasRole('admin') ||
-                                            auth()->user()->hasRole('lgu focal'))
+                                            auth()->user()->hasRole('lgu focal') ||
+                                            auth()->user()->hasRole('child development worker'))
                                         <div id="funded-content">
-                                                <h5 class="card-title">Persons with Disability</h5>
+                                                <h5 class="card-title">Summary of Undernourished Children, Ethnicity, 4Ps, Deworming and Vitamin A</h5>
+                                                <h6 class="card-subtitle">Upon Entry</h6>
                                             
                                             <div style="overflow-x: auto; max-width: 100%;">
-                                                @include('reports.partials.disability-table', [
-                                                    'isPwdChildren' => $isPwdChildren,
+                                                @include('reports.partials.undernourished-upon-entry-table', [
+                                                    'centers' => $centers,
                                                 ])
                                             </div>
                                             <div class="mt-3">
-                                                
-                                                    {{ $isPwdChildren->links() }}
+                                                {{ $centers->links() }}
                                             </div>
                                         </div>
                                     @endif

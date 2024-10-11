@@ -13,7 +13,7 @@
             <th>Malnourish</th>
             <th>Undernourish</th>
         </tr>
-        
+
     </thead>
     <tbody class="text-base">
         @if (!$hasUponEntryData)
@@ -23,20 +23,18 @@
                 </td>
             </tr>
         @else
-            @foreach ($results as $result)
-                <tr>
-                    <td>{{ $result->entry_actual_date_of_weighing }}</td>
-                    <td>{{ $result->entry_weight }}</td>
-                    <td>{{ $result->entry_height }}</td>
-                    <td>{{ $entryAgeInMonths }}</td>
-                    <td>{{ $entryAgeInYears }}</td>
-                    <td class="{{ $result->entry_weight_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->entry_weight_for_age }}</td>
-                    <td class="{{ $result->entry_weight_for_height !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->entry_weight_for_height }}</td>
-                    <td class="{{ $result->entry_height_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->entry_height_for_age }}</td>
-                    <td class="{{ $result->entry_is_malnourish ? 'text-red-500' : '' }}">{{ $result->entry_is_malnourish ? 'Yes' : 'No' }}</td>
-                    <td class="{{ $result->entry_is_undernourish ? 'text-red-500' : '' }}">{{ $result->entry_is_undernourish ? 'Yes' : 'No' }}</td>
-                </tr>
-            @endforeach
+            <tr>
+                <td>{{ $entryDetails->weighing_date }}</td>
+                <td>{{ $entryDetails->weight }}</td>
+                <td>{{ $entryDetails->height }}</td>
+                <td>{{ $entryDetails->age_in_months }}</td>
+                <td>{{ $entryDetails->age_in_years }}</td>
+                <td class="{{ $entryDetails->weight_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $entryDetails->weight_for_age }}</td>
+                <td class="{{ $entryDetails->weight_for_height !== 'Normal' ? 'text-red-500' : '' }}">{{ $entryDetails->weight_for_height }}</td>
+                <td class="{{ $entryDetails->height_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $entryDetails->height_for_age }}</td>
+                <td class="{{ $entryDetails->is_malnourish ? 'text-red-500' : '' }}">{{ $entryDetails->is_malnourish ? 'Yes' : 'No' }}</td>
+                <td class="{{ $entryDetails->is_undernourish ? 'text-red-500' : '' }}">{{ $entryDetails->is_undernourish ? 'Yes' : 'No' }}</td>
+            </tr>
         @endif
     </tbody>
 </table>
@@ -65,20 +63,16 @@
                 </td>
             </tr>
         @else
-            @foreach ($results as $result)
-                <tr>
-                    <td>{{ $result->exit_actual_date_of_weighing }}</td>
-                    <td>{{ $result->exit_weight }}</td>
-                    <td>{{ $result->exit_height }}</td>
-                    <td>{{ $exitAgeInMonths }}</td>
-                    <td>{{ $exitAgeInYears }}</td>
-                    <td class="{{ $result->exit_weight_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->exit_weight_for_age }}</td>
-                    <td class="{{ $result->exit_weight_for_height !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->exit_weight_for_height }}</td>
-                    <td class="{{ $result->exit_height_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $result->exit_height_for_age }}</td>
-                    <td class="{{ $result->exit_is_malnourish ? 'text-red-500' : '' }}">{{ $result->exit_is_malnourish ? 'Yes' : 'No' }}</td>
-                    <td class="{{ $result->exit_is_undernourish ? 'text-red-500' : '' }}">{{ $result->exit_is_undernourish ? 'Yes' : 'No' }}</td>
-                </tr>
-            @endforeach
+            <td>{{ $exitDetails->weighing_date }}</td>
+            <td>{{ $exitDetails->weight }}</td>
+            <td>{{ $exitDetails->height }}</td>
+            <td>{{ $exitDetails->age_in_months }}</td>
+            <td>{{ $exitDetails->age_in_years }}</td>
+            <td class="{{ $exitDetails->weight_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $exitDetails->weight_for_age }}</td>
+            <td class="{{ $exitDetails->weight_for_height !== 'Normal' ? 'text-red-500' : '' }}">{{ $exitDetails->weight_for_height }}</td>
+            <td class="{{ $exitDetails->height_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $exitDetails->height_for_age }}</td>
+            <td class="{{ $exitDetails->is_malnourish ? 'text-red-500' : '' }}">{{ $exitDetails->is_malnourish ? 'Yes' : 'No' }}</td>
+            <td class="{{ $exitDetails->is_undernourish ? 'text-red-500' : '' }}">{{ $exitDetails->is_undernourish ? 'Yes' : 'No' }}</td>
         @endif
     </tbody>
 </table>

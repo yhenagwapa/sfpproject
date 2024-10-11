@@ -95,8 +95,22 @@ require __DIR__.'/auth.php';
     Route::get('/reports/malnourish', [ReportsController::class, 'malnourish'])->name('reports.malnourish');
     Route::get('/reports/disabilities', [ReportsController::class, 'disabilities'])->name('reports.disabilities');
     Route::get('/reports/monitoring', [ReportsController::class, 'monitoring'])->name('reports.monitoring');
+    Route::get('/reports/undernourished-upon-entry', [ReportsController::class, 'undernourishedUponEntry'])->name('reports.undernourished-upon-entry');
+    Route::get('/reports/undernourished-after-120', [ReportsController::class, 'undernourishedAfter120'])->name('reports.undernourished-after-120');
+    Route::get('/reports/age-bracket-upon-entry', [ReportsController::class, 'entryAgeBracket'])->name('reports.age-bracket-upon-entry');
+    Route::get('/reports/age-bracket-after-120', [ReportsController::class, 'after120AgeBracket'])->name('reports.age-bracket-after-120');
+    Route::get('/reports/weight-for-age-upon-entry', [ReportsController::class, 'weightForAgeUponEntry'])->name('reports.weight-for-age-upon-entry');
+    Route::get('/reports/weight-for-age-after-120', [ReportsController::class, 'weightForAgeAfter120'])->name('reports.weight-for-age-after-120');
+    Route::get('/reports/weight-for-height-upon-entry', [ReportsController::class, 'weightForHeightUponEntry'])->name('reports.weight-for-height-upon-entry');
+    Route::get('/reports/weight-for-height-after-120', [ReportsController::class, 'weightForHeightAfter120'])->name('reports.weight-for-height-after-120');
+    Route::get('/reports/height-for-age-upon-entry', [ReportsController::class, 'heightForAgeUponEntry'])->name('reports.height-for-age-upon-entry');
+    Route::get('/reports/height-for-age-after-120', [ReportsController::class, 'heightForAgeAfter120'])->name('reports.height-for-age-after-120');
     Route::get('/reports/unfunded', [ReportsController::class, 'unfunded'])->name('reports.unfunded');
-    Route::post('/reports/filter-funded-by-cdc', [ReportsController::class, 'filterFundedByCdc'])->name('reports.filterFundedByCdc');
-    Route::post('/reports/filter-unfunded-by-cdc', [ReportsController::class, 'filterUnfundedByCdc'])->name('reports.filterUnfundedByCdc');
+
+    Route::post('/reports/filter-masterlist', [ReportsController::class, 'filterMasterlist'])->name('reports.filter-masterlist');
+    Route::post('/reports/filter-unfunded', [ReportsController::class, 'filterUnfunded'])->name('reports.filter-unfunded');
+    Route::post('/reports/filter-monitoring', [ReportsController::class, 'filterMonitoring'])->name('reports.filter-monitoring');
+    Route::post('/reports/filter-upon-entry-age-bracket', [ReportsController::class, 'filterEntryAgeBracket'])->name('reports.filter-upon-entry-age-bracket');
+
     Route::get('/reports/print-funded', [ReportsController::class, 'printFunded'])->name('reports.printFunded');
 

@@ -1,21 +1,19 @@
 <div class="row">
-    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-        <div class="col-md-6 mt-4 text-sm">
-            <form action="{{ route('reports.filterFundedByCdc') }}" method="POST">
-                @csrf
-                <label for="center_name">Filter per center:</label>
-                <select class="form-control" name="funded_center_name" id="funded_center_name" onchange="this.form.submit()">
-                    <option value="all_center" {{ old('funded_center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>All Child Development Center
+    <div class="col-md-6 mt-4 text-sm">
+        <form action="{{ route('reports.filter-masterlist') }}" method="POST">
+            @csrf
+            <label for="center_name">Filter per center:</label>
+            <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
+                <option value="all_center" {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>All Child Development Center
+                </option>
+                @foreach ($centers as $center)
+                    <option value="{{ $center->id }}" {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                        {{ $center->center_name }}
                     </option>
-                    @foreach ($centers as $center)
-                        <option value="{{ $center->id }}" {{ old('funded_center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
-                            {{ $center->center_name }}
-                        </option>
-                    @endforeach
-                </select>
-            </form>
-        </div>
-    @endif
+                @endforeach
+            </select>
+        </form>
+    </div>
     <div class="col-md-6 mt-11 text-sm">
         <a href="{{ url('/reports/print-funded', ['center_name' => request()->center_name]) }}" class="text-white bg-blue-600 rounded px-3 min-h-9 align-items-right" target="_blank">Print</a>
     </div>
@@ -55,43 +53,26 @@
                 <td>{{ $fundedChild->sex->name }}</td>
                 <td>{{ $fundedChild->date_of_birth }}</td>
 
-
-                @if ($fundedChild->nutritionalStatus)
-                        @php
-                            $dob = \Carbon\Carbon::parse($fundedChild->date_of_birth);
-                            $actualDate = \Carbon\Carbon::parse(
-                                $fundedChild->nutritionalStatus->entry_actual_date_of_weighing,
-                            );
-                            $ageInYears = $actualDate->diffInYears($dob);
-                            $ageInMonths = $actualDate->diffInMonths($dob) % 12;
-                        @endphp
-
-                        <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
-                        <td>{{ $ageInMonths }}</td>
-                        <td>{{ $ageInYears }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_age }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_is_undernourish ? 'Yes' : 'No' }}</td>
-                @else
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                @endif
-
+                <td>{{ optional($fundedChild->nutritionalStatus->first())->weighing_date }}</td>
+                <td>{{ optional($fundedChild->nutritionalStatus->first())->weight }}</td>
+                <td>{{ optional($fundedChild->nutritionalStatus->first())->height }}</td>
+                <td>{{ optional($fundedChild->nutritionalStatus->first())->age_in_months }}</td>
+                <td>{{ optional($fundedChild->nutritionalStatus->first())->age_in_years }}</td>
+                <td>{{ optional($fundedChild->nutritionalStatus->first())->weight_for_age }}</td>
+                <td>{{ optional($fundedChild->nutritionalStatus->first())->weight_for_height }}</td>
+                <td>{{ optional($fundedChild->nutritionalStatus->first())->height_for_age }}</td>
+                <td>
+                    @if ($fundedChild->nutritionalStatus->isNotEmpty() && $fundedChild->nutritionalStatus->first()->is_undernourish)
+                        Yes
+                    @elseif ($fundedChild->nutritionalStatus->isNotEmpty())
+                        No
+                    @endif
+                </td>
                 <td>{{ $fundedChild->deworming_date }}</td>
                 <td>{{ $fundedChild->vitamin_a_date }}</td>
-                <td>{{ $fundedChild->pantawid_details }}</td>
+                <td>{{ $fundedChild->pantawid_details ?  $fundedChild->pantawid_details : 'No'}}</td>
                 <td>{{ $fundedChild->is_indigenous_people ? 'Yes' : 'No' }}</td>
-                <td>{{ $fundedChild->person_with_disability_details }}</td>
+                <td>{{ $fundedChild->person_with_disability_details ? $fundedChild->person_with_disability_details : 'No'}}</td>
                 <td>{{ $fundedChild->is_child_of_soloparent ? 'Yes' : 'No' }}</td>
                 <td>{{ $fundedChild->is_lactose_intolerant ? 'Yes' : 'No' }}</td>
             </tr>

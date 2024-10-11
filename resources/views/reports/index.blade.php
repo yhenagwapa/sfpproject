@@ -53,7 +53,7 @@
         <div class="wrapper">
             <section class="section">
                 <div class="row">
-                    <div class="col-lg-2">
+                    <div class="col-md-2">
                         <div class="card">
                             <div class="report-card-body mt-4 mb-2 text-sm">
 
@@ -104,7 +104,7 @@
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="#" data-target="ns-consolidated">
+                                            <a class="report-link-main collapsed" href="#">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -113,31 +113,12 @@
                                                 </svg>
                                                 Undernourish
                                             </a>
-                                        
-                                    
-                                            
-                                        </li>
-                                    @endif
-
-                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-                                        <li class="nav-item">
-                                            <a class="report-link collapsed" href="#" data-target="ns-consolidated">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Nutritional Status
-                                            </a>
-                                    
-                                              
                                             <ul id="forms-nav" class="report-content collapsed">
                                                 @if (auth()->user()->hasRole('admin') ||
                                                         auth()->user()->hasRole('lgu focal') ||
                                                         auth()->user()->hasRole('child development worker'))
                                                     <li>
-                                                        <a href="#" data-target="entry-age-bracket">
+                                                        <a class="report-link collapsed" href="{{ route('reports.undernourished-upon-entry')}}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                                             </svg>
@@ -151,7 +132,7 @@
                                                         auth()->user()->hasRole('lgu focal') ||
                                                         auth()->user()->hasRole('child development worker'))
                                                     <li>
-                                                        <a href="#" data-target="exit-age-bracket">
+                                                        <a class="report-link collapsed" href="{{ route('reports.undernourished-after-120')}}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                                             </svg>
@@ -165,7 +146,122 @@
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="#" data-target="ns-consolidated">
+                                            <a class="report-link-main collapsed" href="#" data-target="ns-consolidated">
+                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                    stroke-width="2" stroke="currentColor" fill="none"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                                    <circle cx="12" cy="12" r="9" />
+                                                </svg>
+                                                Nutritional Status
+                                            </a>
+                                    
+                                              
+                                            <ul id="forms-nav" class="report-content collapsed">
+                                                <li class="nav-item">
+                                                    <a class="report-link-main collapsed" href="#" data-target="ns-consolidated">
+                                                        <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="2" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" />
+                                                            <circle cx="12" cy="12" r="9" />
+                                                        </svg>
+                                                        Weight for Age
+                                                    </a>
+                                                    <ul id="forms-nav" class="report-subcontent collapsed">
+                                                        <li>
+                                                            <a class="report-link collapsed" href="{{ route('reports.weight-for-age-upon-entry')}}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                </svg>
+                                                                
+                                                            Upon Entry
+                                                            </a>
+                                                        </li>
+                                                    
+                                                        <li>
+                                                            <a class="report-link collapsed">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                </svg>
+                                                                After 120 Feedings
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul id="forms-nav" class="report-content collapsed">
+                                                <li class="nav-item">
+                                                    <a class="report-link-main collapsed" href="#" data-target="ns-consolidated">
+                                                        <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="2" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" />
+                                                            <circle cx="12" cy="12" r="9" />
+                                                        </svg>
+                                                        Weight for Height
+                                                    </a>
+                                                    <ul id="forms-nav" class="report-subcontent collapsed">
+                                                        <li>
+                                                            <a class="report-link collapsed">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                </svg>
+                                                                
+                                                            Upon Entry
+                                                            </a>
+                                                        </li>
+                                                    
+                                                        <li>
+                                                            <a class="report-link collapsed">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                </svg>
+                                                                After 120 Feedings
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul id="forms-nav" class="report-content collapsed">
+                                                <li class="nav-item">
+                                                    <a class="report-link-main collapsed" href="#" data-target="ns-consolidated">
+                                                        <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="2" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" />
+                                                            <circle cx="12" cy="12" r="9" />
+                                                        </svg>
+                                                        Height for Age
+                                                    </a>
+                                                    <ul id="forms-nav" class="report-subcontent collapsed">
+                                                        <li>
+                                                            <a class="report-link collapsed">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                </svg>
+                                                                
+                                                            Upon Entry
+                                                            </a>
+                                                        </li>
+                                                    
+                                                        <li>
+                                                            <a class="report-link collapsed">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                </svg>
+                                                                After 120 Feedings
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    @endif
+
+                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('child development worker'))
+                                        <li class="nav-item">
+                                            <a class="report-link-main collapsed" href="#">
                                                 <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" fill="none"
                                                     stroke-linecap="round" stroke-linejoin="round">
@@ -174,8 +270,27 @@
                                                 </svg>
                                                 Age Bracket
                                             </a>
-                                        
-                                    
+                                            <ul id="forms-nav" class="report-content collapsed">
+                                                
+                                                    <li>
+                                                        <a class="report-link collapsed" href="{{ route('reports.age-bracket-upon-entry')}}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                            </svg>
+                                                        Upon Entry
+                                                        </a>
+                                                    </li>
+                                               
+                                                    <li>
+                                                        <a class="report-link collapsed" href="{{ route('reports.age-bracket-after-120')}}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                            </svg>
+                                                            After 120 Feedings
+                                                        </a>
+                                                    </li>
+                                                
+                                            </ul>
                                             
                                         </li>
                                     @endif
@@ -231,7 +346,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-10">
+                    <div class="col-md-10">
                         <div class="card">
                             <div class="card-body">
                                 <div id="report-content">

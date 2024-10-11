@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th class="border border-white w-40" rowspan="2">Name of Child</th>
+            <th class="border border-white w-40" rowspan="2">Name of Child Development Center</th>
             <th class="border border-white" rowspan="2">Sex</th>
             <th class="border border-white w-24" rowspan="2">Date of Birth</th>
             <th class="border border-white w-24" rowspan="2">Actual Date of Weighing</th>
@@ -34,43 +35,50 @@
         @foreach ($isFunded as $fundedChild)
             <tr>
                 <td>{{ $fundedChild->full_name }}</td>
+                <td>{{ $fundedChild->center->center_name }}</td>
                 <td>{{ $fundedChild->sex->name }}</td>
                 <td>{{ $fundedChild->date_of_birth }}</td>
 
-                @if ($fundedChild->nutritionalStatus)
-                        @php
-                            $birthDate = \Carbon\Carbon::parse($fundedChild->date_of_birth);
-                            $entryWeighingDate = \Carbon\Carbon::parse(
-                                $fundedChild->nutritionalStatus->entry_actual_date_of_weighing,
-                            );
-                            $entryAgeInYears = $entryWeighingDate->diffInYears($birthDate);
-                            $entryAgeInMonths = $entryWeighingDate->diffInMonths($birthDate) % 12;
-
-                            $exitWeighingDate = \Carbon\Carbon::parse(
-                                $fundedChild->nutritionalStatus->exit_actual_date_of_weighing,
-                            );
-                            $exitAgeInYears = $exitWeighingDate->diffInYears($birthDate);
-                            $exitAgeInMonths = $exitWeighingDate->diffInMonths($birthDate) % 12;
-                        @endphp
-
-                        <td>{{ $fundedChild->nutritionalStatus->entry_actual_date_of_weighing }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_weight }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_height }}</td>
-                        <td>{{ $entryAgeInMonths }}</td>
-                        <td>{{ $entryAgeInYears }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_age }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_weight_for_height }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->entry_height_for_age }}</td>
-
-                        <td>{{ $fundedChild->nutritionalStatus->exit_actual_date_of_weighing }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->exit_weight }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->exit_height }}</td>
-                        <td>{{ $exitAgeInMonths }}</td>
-                        <td>{{ $exitAgeInYears }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->exit_weight_for_age }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->exit_weight_for_height }}</td>
-                        <td>{{ $fundedChild->nutritionalStatus->exit_height_for_age }}</td>
-                @endif
+                @if ($fundedChild->nutritionalStatus->first() === null)
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    @else
+                        <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weighing_date : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_months : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_years : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight_for_age : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight_for_height : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height_for_age : 'N/A' }}</td>
+                    @endif
+                    @if (isset($fundedChild->nutritionalStatus[1]))
+                        <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weighing_date : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->height : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->age_in_months : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->age_in_years : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight_for_age : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight_for_height : 'N/A' }}</td>
+                        <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->height_for_age : 'N/A' }}</td>
+                    @else
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    @endif
             </tr>
         @endforeach
         @if (count($isFunded) <= 0)

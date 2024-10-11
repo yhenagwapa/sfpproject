@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class Child extends Model
 {
@@ -41,7 +42,7 @@ class Child extends Model
 
     public function nutritionalStatus()
     {
-        return $this->hasOne(NutritionalStatus::class);
+        return $this->hasMany(NutritionalStatus::class);
     }
 
     public function sex()
@@ -65,6 +66,14 @@ class Child extends Model
     public function cycleImplementation()
     {
         return $this->belongsTo(CycleImplementation::class);
+    }
+
+    public function getAgeAtWeighingAttribute()
+    {
+        if ($this->dob && $this->nutritionalStatus->entry_actual_date_of_weighing) {
+            return Carbon::parse($this->date_of_birth)->diffInYears(Carbon::parse($this->nutritionalStatus->entry_actual_date_of_weighing));
+        }
+        return null; 
     }
 
     

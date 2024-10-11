@@ -1,10 +1,13 @@
-<table id='ns-consolidated-table' class="table datatable mt-3 text-xs text-center">
+<table id='undernourished-upon-entry-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
     <thead class="border bg-gray-200">
         <tr>
-            <th class="border border-white" rowspan="3">NS table here</th>
-            
+            <th class="border border-white" rowspan="3">Name of Child Development Center</th>
+            <th class="border border-white" rowspan="3">Name of Child Development Worker</th>
+            <th class="border border-white" colspan="8">Summary of Undernourished Children</th>
+            <th class="border border-white" colspan="10">Beneficiaries Profile</th>
+            <th class="border border-white" colspan="4">Deworming & Vitamin A Record</th>
         </tr>
-        {{-- <tr>
+        <tr>
             <th class="border border-white w-20" colspan="2">2 y/o</th>
             <th class="border border-white w-20" colspan="2">3 y/o</th>
             <th class="border border-white w-20" colspan="2">4 y/o</th>
@@ -40,24 +43,22 @@
             <th class="border border-white">Female</th>
             <th class="border border-white">Male</th>
             <th class="border border-white">Female</th>
-        </tr> --}}
-    </thead>
-    <tbody class="ns-consolidated-table text-xs">
-        <tr>
-            
         </tr>
-        {{-- @foreach ($centers as $center)
+    </thead>
+    <tbody class="undernourished-upon-entry-table text-xs">
+        @foreach ($centers as $center)
             <tr>
                 <td>{{ $center->center_name }}</td>
                 <td>{{ $center->user->full_name }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['3_years_old']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['3_years_old']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['4_years_old']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['4_years_old']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['female'] ?? 0 }}</td>
+                
                 <td>{{ $countsPerCenter[$center->id]['indigenous_people']['male'] ?? 0 }}</td>
                 <td>{{ $countsPerCenter[$center->id]['indigenous_people']['female'] ?? 0 }}</td>
                 <td>{{ $countsPerCenter[$center->id]['pantawid']['male'] ?? 0 }}</td>
@@ -82,7 +83,6 @@
                     @endif
                 </td>
             </tr>
-        @endif --}}
-        
+        @endif
     </tbody>
 </table>

@@ -1,14 +1,14 @@
 @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
     <div class="col-md-6 mt-4 text-sm">
-        <form action="{{ route('reports.filterUnfundedByCdc') }}" method="POST">
+        <form action="{{ route('reports.filter-unfunded') }}" method="POST">
             @csrf
             <label for="center_name">Filter per center:</label>
-            <select class="form-control" name="unfunded_center_name" id="unfunded_center_name" onchange="this.form.submit()">
+            <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
                 <option value="all_center" selected>All Child Development Center
                 </option>
                 @foreach ($centers as $center)
                     <option value="{{ $center->id }}"
-                        {{ old('unfunded_center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                        {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
                         {{ $center->center_name }}
                     </option>
                 @endforeach
@@ -42,9 +42,9 @@
 
                 <td>{{ $unfundedChild->deworming_date }}</td>
                 <td>{{ $unfundedChild->vitamin_a_date }}</td>
-                <td>{{ $unfundedChild->pantawid_details }}</td>
+                <td>{{ $unfundedChild->pantawid_details ? $unfundedChild->pantawid_details : 'No' }}</td>
                 <td>{{ $unfundedChild->is_indigenous_people ? 'Yes' : 'No' }}</td>
-                <td>{{ $unfundedChild->person_with_disability_details }}</td>
+                <td>{{ $unfundedChild->person_with_disability_details ? $unfundedChild->person_with_disability_details : 'No' }}</td>
                 <td>{{ $unfundedChild->is_child_of_soloparent ? 'Yes' : 'No' }}</td>
                 <td>{{ $unfundedChild->is_lactose_intolerant ? 'Yes' : 'No' }}</td>
             </tr>

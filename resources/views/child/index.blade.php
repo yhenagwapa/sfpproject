@@ -49,7 +49,7 @@
                                             class="text-white bg-blue-600 rounded px-3 min-h-9">Search</button>
                                     </form>
                                 </div> --}}
-                            @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                            
                                 <div class="col-md-6 mt-4 text-sm">
                                     <form action="{{ route('child.filterByCdc') }}" method="POST">
                                         @csrf
@@ -67,7 +67,7 @@
                                         </select>
                                     </form>
                                 </div>
-                            @endif
+                           
 
                             <h1 class="card-title mt-3 mb-0">Male Children<h1>
                                     <div class="col-md-12" id="maleChildren-table">

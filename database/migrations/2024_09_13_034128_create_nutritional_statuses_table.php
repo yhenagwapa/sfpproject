@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('nutritional_statuses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('child_id'); 
-            $table->decimal('entry_weight', 8, 2); // use decimal for more precise control over weight
-            $table->decimal('entry_height', 8, 2); // use decimal for height as well
-            $table->date('entry_actual_date_of_weighing');
-            $table->string('entry_weight_for_age')->nullable(); // nullable if not required
-            $table->string('entry_weight_for_height')->nullable();
-            $table->string('entry_height_for_age')->nullable();
-            $table->decimal('exit_weight', 8, 2)->nullable(); // use decimal for more precise control over weight
-            $table->decimal('exit_height', 8, 2)->nullable(); // use decimal for height as well
-            $table->date('exit_actual_date_of_weighing')->nullable();
-            $table->string('exit_weight_for_age')->nullable(); // nullable if not required
-            $table->string('exit_weight_for_height')->nullable();
-            $table->string('exit_height_for_age')->nullable();
+            $table->foreignId('cycle_implementation_id')->constrained('cycle_implementations')->nullable();
+            $table->foreignId('milk_feeding_id')->constrained('milk_feedings')->nullable();
+            $table->foreignId('child_id')->constrained('children')->nullable(); 
+            $table->decimal('weight', 8, 2);
+            $table->decimal('height', 8, 2);
+            $table->date('weighing_date');
+            $table->integer('age_in_months');
+            $table->integer('age_in_years');
+            $table->string('weight_for_age')->nullable();
+            $table->string('weight_for_height')->nullable();
+            $table->string('height_for_age')->nullable();
+            $table->boolean('is_malnourish');
+            $table->boolean('is_undernourish');
             $table->unsignedBigInteger('created_by_user_id');
             $table->unsignedBigInteger('updated_by_user_id'); 
             $table->timestamps();

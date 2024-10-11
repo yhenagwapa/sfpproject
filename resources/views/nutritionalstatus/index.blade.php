@@ -63,32 +63,32 @@
                                         @csrf
                                         <input type="hidden" name="child_id" value="{{ $child->id }}">
                                         <div class="col-md-12 mt-2 text-sm">
-                                            <label for="entry_weight">Weight<b class="text-red-600">*</b></label>
+                                            <label for="weight">Weight<b class="text-red-600">*</b></label>
                                             <input type="text"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="entry_weight" name='entry_weight' value="{{ old('entry_weight') }}">
-                                            @error('entry_weight')
+                                                id="weight" name='weight' value="{{ old('weight') }}">
+                                            @error('weight')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="col-md-12 mt-2 text-sm">
-                                            <label for="entry_height">Height<b class="text-red-600">*</b></label>
+                                            <label for="height">Height<b class="text-red-600">*</b></label>
                                             <input type="text"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="entry_height" name='entry_height' value="{{ old('entry_height') }}">
-                                            @error('entry_height')
+                                                id="height" name='height' value="{{ old('height') }}">
+                                            @error('height')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
 
                                         <div class="col-md-12 mt-2 text-sm">
-                                            <label for="entry_actual_date_of_weighing">Actual date of weighing<b
+                                            <label for="weighing_date">Actual date of weighing<b
                                                     class="text-red-600">*</b></label>
                                             <input type="date"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="entry_actual_date_of_weighing" name='entry_actual_date_of_weighing'
-                                                value="{{ old('entry_actual_date_of_weighing') }}">
-                                            @error('entry_actual_date_of_weighing')
+                                                id="weighing_date" name='weighing_date'
+                                                value="{{ old('weighing_date') }}">
+                                            @error('weighing_date')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
@@ -140,32 +140,32 @@
                                         @method('PUT')
                                         <input type="hidden" name="child_id" value="{{ $child->id }}">
                                         <div class="col-md-12 mt-2 text-sm">
-                                            <label for="exit_weight">Weight<b class="text-red-600">*</b></label>
+                                            <label for="weight">Weight<b class="text-red-600">*</b></label>
                                             <input type="text"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="exit_weight" name='exit_weight' value="{{ old('exit_weight') }}">
-                                            @error('exit_weight')
+                                                id="weight" name='weight' value="{{ old('weight') }}">
+                                            @error('weight')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="col-md-12 mt-2 text-sm">
-                                            <label for="exit_height">Height<b class="text-red-600">*</b></label>
+                                            <label for="height">Height<b class="text-red-600">*</b></label>
                                             <input type="text"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="exit_height" name='exit_height' value="{{ old('exit_height') }}">
-                                            @error('exit_height')
+                                                id="height" name='height' value="{{ old('height') }}">
+                                            @error('height')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
 
                                         <div class="col-md-12 mt-2 text-sm">
-                                            <label for="actual_date_of_weighing">Actual date of weighing<b
+                                            <label for="weighing_date">Actual date of weighing<b
                                                     class="text-red-600">*</b></label>
                                             <input type="date"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="exit_actual_date_of_weighing" name='exit_actual_date_of_weighing'
-                                                value="{{ old('exit_actual_date_of_weighing') }}">
-                                            @error('exit_actual_date_of_weighing')
+                                                id="weighing_date" name='weighing_date'
+                                                value="{{ old('weighing_date') }}">
+                                            @error('weighing_date')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>

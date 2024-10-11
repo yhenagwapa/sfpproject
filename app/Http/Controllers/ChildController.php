@@ -41,38 +41,43 @@ class ChildController extends Controller
                 $query->where('name', 'Male');
             })
                 ->where('is_funded', true)
-                ->with('nutritionalStatus')
+                ->select('children.*')
+                ->join('nutritional_statuses', 'children.id', '=', 'nutritional_statuses.child_id')
+                ->groupBy('children.id') 
+                ->orderBy('nutritional_statuses.created_at') 
+                ->with(['nutritionalStatus' => function ($query) {
+                    $query->orderBy('created_at')->limit(1); 
+                }])
                 ->paginate(5, ['*'], 'malePage');
 
             $femaleChildren = Child::whereHas('sex', function ($query) {
                 $query->where('name', 'Female');
             })
                 ->where('is_funded', true)
-                ->with('nutritionalStatus')
+                ->select('children.*') 
+                ->join('nutritional_statuses', 'children.id', '=', 'nutritional_statuses.child_id')
+                ->groupBy('children.id') 
+                ->orderBy('nutritional_statuses.created_at') 
+                ->with(['nutritionalStatus' => function ($query) {
+                    $query->orderBy('created_at')->limit(1); 
+                }])
                 ->paginate(5, ['*'], 'femalePage');
 
             return view('child.index', compact('maleChildren', 'femaleChildren', 'centers', 'cdcId'));
 
         } elseif (auth()->user()->hasRole('lgu focal')) {
 
-            $userCityPsgc = auth()->user()->city_name_psgc;
-
-            $matchingPsgcIds = Psgc::where('city_name_psgc', $userCityPsgc)
-                ->pluck('psgc_id');
-
-            $children = Child::whereHas('center', function ($query) use ($matchingPsgcIds) {
-                $query->whereIn('psgc_id', $matchingPsgcIds);
-            })
-                ->with('center.psgc')
+            $focalID = auth()->id();
+            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
+            $centerIds = $centers->pluck('id');
+            
+            $children = Child::whereHas('center', function ($query) use ($centerIds) {
+                $query->whereIn('child_development_center_id', $centerIds);
+                })
+                ->where('is_funded', true)
                 ->get();
 
-            $centers = ChildDevelopmentCenter::whereIn('psgc_id', $matchingPsgcIds)->get();
-
             $cdcId = $request->input('center_name', null);
-
-            // dd($children);
-
-            // foreach($centers as $center){
 
             foreach ($children as $child) {
 
@@ -82,7 +87,7 @@ class ChildController extends Controller
                     ->whereIn('child_development_center_id', $centers->pluck('id'))
                     ->where('is_funded', true)
                     ->with('nutritionalStatus')
-                    ->paginate(5, ['*'], 'malePage');
+                    ->paginate(5);
 
                 $femaleChildren = Child::whereHas('sex', function ($query) {
                     $query->where('name', 'Female');
@@ -90,7 +95,7 @@ class ChildController extends Controller
                     ->whereIn('child_development_center_id', $centers->pluck('id'))
                     ->where('is_funded', true)
                     ->with('nutritionalStatus')
-                    ->paginate(5, ['*'], 'femalePage');
+                    ->paginate(5);
             }
             // }
 
@@ -98,31 +103,40 @@ class ChildController extends Controller
 
         } else {
 
-            $assignedCdcId = optional(auth()->user()->worker)->id;
-
-            $maleChildren = Child::where('child_development_center_id', $assignedCdcId)
-                ->whereHas('sex', function ($query) {
-                    $query->where('name', 'Male');
+            $workerID = auth()->id();
+            $centers = ChildDevelopmentCenter::where('assigned_worker_user_id', $workerID)->get();
+            $centerIds = $centers->pluck('id');
+            
+            $children = Child::whereHas('center', function ($query) use ($centerIds) {
+                $query->whereIn('child_development_center_id', $centerIds);
                 })
                 ->where('is_funded', true)
-                ->with('nutritionalStatus')
-                ->paginate(5, ['*'], 'malePage');
+                ->get();
 
-            $femaleChildren = Child::where('child_development_center_id', $assignedCdcId)
-                ->whereHas('sex', function ($query) {
+            $cdcId = $request->input('center_name', null);
+
+            foreach ($children as $child) {
+
+                $maleChildren = Child::whereHas('sex', function ($query) {
+                    $query->where('name', 'Male');
+                })
+                    ->whereIn('child_development_center_id', $centers->pluck('id'))
+                    ->where('is_funded', true)
+                    ->with('nutritionalStatus')
+                    ->paginate(5);
+
+                $femaleChildren = Child::whereHas('sex', function ($query) {
                     $query->where('name', 'Female');
-                })->where('is_funded', true)
-                ->with('nutritionalStatus')
-                ->paginate(5, ['*'], 'femalePage');
+                })
+                    ->whereIn('child_development_center_id', $centers->pluck('id'))
+                    ->where('is_funded', true)
+                    ->with('nutritionalStatus')
+                    ->paginate(5);
+            }
 
-            return view('child.index', compact('maleChildren', 'femaleChildren'));
+            return view('child.index', compact('maleChildren', 'femaleChildren', 'centers', 'cdcId'));
         }
-
-
     }
-
-
-
     public function search(Request $request)
     {
         $search = $request->input('search');
@@ -289,18 +303,16 @@ class ChildController extends Controller
 
         $psgc = new Psgc();
 
-        // Fetch all provinces for the form
         $provinces = $psgc->getProvinces();
-        $cities = $psgc->allCities();      // Fetch all cities once
-        $barangays = $psgc->allBarangays(); // Fetch all barangays once
+        $cities = $psgc->allCities();      
+        $barangays = $psgc->allBarangays(); 
 
         if ($request->has('province_psgc') && !empty($request->input('province_psgc'))) {
             $province_psgc = $request->input('province_psgc');
-            // Fetch cities for the selected province
+            
             $cities = $psgc->allCities()->get($province_psgc, collect([]));
         }
 
-        // Check if city is selected
         if ($request->has('city_name_psgc') && !empty($request->input('city_name_psgc'))) {
             $city_psgc = $request->input('city_name_psgc'); 
             $barangays = $psgc->getBarangays($city_psgc);
@@ -344,7 +356,6 @@ class ChildController extends Controller
         $childDevelopmentCenter = ChildDevelopmentCenter::where('assigned_user_id', auth()->id())->first();
 
         if (!$childDevelopmentCenter) {
-            // Handle the case where the user is not assigned to any Child Development Center
             return redirect()->back()->withErrors('You are not assigned to any Child Development Center.');
         }
 
@@ -394,10 +405,8 @@ class ChildController extends Controller
         $cities = $psgc->getCities($psgcRecord->province_psgc);
         $barangays = $psgc->getBarangays($psgcRecord->city_name_psgc);
 
-        $getallcities = $psgc->allCities();      // Fetch all cities once
+        $getallcities = $psgc->allCities();     
         $getallbarangays = $psgc->allBarangays();
-
-        // dd($provinces);
 
         $sexOptions = Sex::all();
 

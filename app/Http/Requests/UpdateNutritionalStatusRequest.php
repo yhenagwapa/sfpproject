@@ -23,19 +23,19 @@ class UpdateNutritionalStatusRequest extends FormRequest
     {
         return [
             'child_id' => ['required', 'exists:children,id'],
-            'exit_weight' => ['required', 'numeric'],
-            'exit_height' => ['required', 'numeric'],
-            'exit_actual_date_of_weighing' => ['required', 'date'],
+            'weight' => ['required', 'numeric'],
+            'height' => ['required', 'numeric'],
+            'weighing_date' => ['required', 'date'],
         ];
     }
     public function messages()
     {
         return [
-            'exit_weight.required' => 'Please fill in weight.',
-            'exit_weight.numeric' => 'Invalid entry',
-            'exit_height.required' => 'Please fill in weight.',
-            'exit_height.numeric' => 'Invalid entry',
-            'exit_actual_date_of_weighing.required' => 'Please fill in actual date of weighing',
+            'weight.required' => 'Please fill in weight.',
+            'weight.numeric' => 'Invalid entry',
+            'height.required' => 'Please fill in weight.',
+            'height.numeric' => 'Invalid entry',
+            'weighing_date.required' => 'Please fill in actual date of weighing',
         ];
     }
 }
