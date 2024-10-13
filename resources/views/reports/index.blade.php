@@ -62,15 +62,18 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed active" href="{{ route('reports.index')}}">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Masterlist
-                                            </a>
+                                            <form action="{{ route('reports.index') }}" method="POST">
+                                                @csrf
+                                                <a class="report-link collapsed active" href="#" onclick="document.getElementById('reportForm').submit(); return false;">
+                                                    <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                        stroke-width="2" stroke="currentColor" fill="none"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                                        <circle cx="12" cy="12" r="9" />
+                                                    </svg>
+                                                    Masterlist
+                                                </a>
+                                            </form>
                                         </li>
                                     @endif
 

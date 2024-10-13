@@ -91,7 +91,7 @@ require __DIR__.'/auth.php';
     Route::get('/cycle/{id}/edit', [CycleImplementationController::class, 'edit'])->name(name: 'cycle.edit');
     Route::put('/cycle/{cycle}/update', [CycleImplementationController::class, 'update'])->name(name: 'cycle.update');
 
-    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::get('/reports/malnourish', [ReportsController::class, 'malnourish'])->name('reports.malnourish');
     Route::get('/reports/disabilities', [ReportsController::class, 'disabilities'])->name('reports.disabilities');
     Route::get('/reports/monitoring', [ReportsController::class, 'monitoring'])->name('reports.monitoring');
