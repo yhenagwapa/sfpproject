@@ -22,7 +22,6 @@ class UpdateChildRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cycle_implementation_id' => ['required','exists:cycle_implementations,id'],
             'firstname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'middlename' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
@@ -43,7 +42,6 @@ class UpdateChildRequest extends FormRequest
             'is_lactose_intolerant' => ['required', 'boolean'],
             'deworming_date' => ['nullable', 'date'],
             'vitamin_a_date' => ['nullable', 'date'],
-            'is_funded' => ['required', 'boolean'],
         ];
     }
 
@@ -66,7 +64,6 @@ class UpdateChildRequest extends FormRequest
             'zip_code.digits' => 'Invalid entry.',
             'pantawid_details.required_if' => 'Please specify.',
             'person_with_disability_.required_if' => 'Please fill in this field.',
-
         ];
     }
 }

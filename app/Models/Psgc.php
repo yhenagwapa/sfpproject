@@ -115,4 +115,26 @@ public function getBarangays($city_psgc)
         return Psgc::where('psgc_id', $psgc_id)->first();
     }
 
+
+    public function getByProvinces()
+    {
+        return self::where('region_psgc', '110000000')
+        ->distinct()->pluck('province_name', 'province_psgc');
+    }
+
+    public static function getCitiesByProvince($province_psgc)
+    {
+        return self::where('province_psgc', $province_psgc)
+                    ->whereNotNull('city_name_psgc')
+                    ->pluck('city_name', 'city_name_psgc');
+    }
+    
+    public static function getBarangaysByCity($city_psgc)
+    {
+        return self::where('city_name_psgc', $city_psgc)
+                    ->whereNotNull('brgy_psgc')
+                    ->pluck('brgy_name', 'brgy_psgc');
+    }
+
+
 }

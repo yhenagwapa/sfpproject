@@ -38,7 +38,13 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/register', [ProfileController::class, 'index'])->name('register');
+// Route::get('/register', [ProfileController::class, 'index'])->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -48,7 +54,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-// Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     
    
     Route::resources([
@@ -58,18 +64,6 @@ require __DIR__.'/auth.php';
     ]);
 
     Route::get('/child/search', [ChildController::class, 'search'])->name('child.search');
-
-    // In your routes/web.php
-    // Route::get('/location-data', [ChildController::class, 'getLocationData'])->name('location.data');
-
-
-    // Route::get('/provinces/{region_psgc}', [ChildController::class, 'getProvinces'])->name('get.provinces');
-    // Route::get('/cities/{province_psgc}', [ChildController::class, 'getCities'])->name('get.cities');
-    // Route::get('/barangays/{city_psgc}', [ChildController::class, 'getBarangays'])->name('get.barangays');
-    // Route::get('/psgc/{region_psgc}/{province_psgc}/{city_name_psgc}/{brgy_psgc}', [ChildController::class, 'getPsgcId'])->name('get.psgc_id');
-    // Route::get('/location/{psgc_id}', [ChildController::class, 'getLocationData'])->name('location.get');
-
-    Route::post('/child/filter-by-cdc', [ChildController::class, 'filterByCdc'])->name('child.filterByCdc');
 
     Route::get('/attendance/index/{child}', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/store/{child}', [AttendanceController::class, 'store'])->name('attendance.store');
@@ -92,25 +86,21 @@ require __DIR__.'/auth.php';
     Route::put('/cycle/{cycle}/update', [CycleImplementationController::class, 'update'])->name(name: 'cycle.update');
 
     Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
-    Route::get('/reports/malnourish', [ReportsController::class, 'malnourish'])->name('reports.malnourish');
-    Route::get('/reports/disabilities', [ReportsController::class, 'disabilities'])->name('reports.disabilities');
-    Route::get('/reports/monitoring', [ReportsController::class, 'monitoring'])->name('reports.monitoring');
-    Route::get('/reports/undernourished-upon-entry', [ReportsController::class, 'undernourishedUponEntry'])->name('reports.undernourished-upon-entry');
-    Route::get('/reports/undernourished-after-120', [ReportsController::class, 'undernourishedAfter120'])->name('reports.undernourished-after-120');
-    Route::get('/reports/age-bracket-upon-entry', [ReportsController::class, 'entryAgeBracket'])->name('reports.age-bracket-upon-entry');
-    Route::get('/reports/age-bracket-after-120', [ReportsController::class, 'after120AgeBracket'])->name('reports.age-bracket-after-120');
-    Route::get('/reports/weight-for-age-upon-entry', [ReportsController::class, 'weightForAgeUponEntry'])->name('reports.weight-for-age-upon-entry');
-    Route::get('/reports/weight-for-age-after-120', [ReportsController::class, 'weightForAgeAfter120'])->name('reports.weight-for-age-after-120');
-    Route::get('/reports/weight-for-height-upon-entry', [ReportsController::class, 'weightForHeightUponEntry'])->name('reports.weight-for-height-upon-entry');
-    Route::get('/reports/weight-for-height-after-120', [ReportsController::class, 'weightForHeightAfter120'])->name('reports.weight-for-height-after-120');
-    Route::get('/reports/height-for-age-upon-entry', [ReportsController::class, 'heightForAgeUponEntry'])->name('reports.height-for-age-upon-entry');
-    Route::get('/reports/height-for-age-after-120', [ReportsController::class, 'heightForAgeAfter120'])->name('reports.height-for-age-after-120');
-    Route::get('/reports/unfunded', [ReportsController::class, 'unfunded'])->name('reports.unfunded');
+    Route::post('/reports/malnourish', [ReportsController::class, 'malnourish'])->name('reports.malnourish');
+    Route::post('/reports/disabilities', [ReportsController::class, 'disabilities'])->name('reports.disabilities');
+    Route::post('/reports/monitoring', [ReportsController::class, 'monitoring'])->name('reports.monitoring');
+    Route::post('/reports/undernourished-upon-entry', [ReportsController::class, 'undernourishedUponEntry'])->name('reports.undernourished-upon-entry');
+    Route::post('/reports/undernourished-after-120', [ReportsController::class, 'undernourishedAfter120'])->name('reports.undernourished-after-120');
+    Route::post('/reports/age-bracket-upon-entry', [ReportsController::class, 'entryAgeBracket'])->name('reports.age-bracket-upon-entry');
+    Route::post('/reports/age-bracket-after-120', [ReportsController::class, 'after120AgeBracket'])->name('reports.age-bracket-after-120');
+    Route::post('/reports/weight-for-age-upon-entry', [ReportsController::class, 'weightForAgeUponEntry'])->name('reports.weight-for-age-upon-entry');
+    Route::post('/reports/weight-for-age-after-120', [ReportsController::class, 'weightForAgeAfter120'])->name('reports.weight-for-age-after-120');
+    Route::post('/reports/weight-for-height-upon-entry', [ReportsController::class, 'weightForHeightUponEntry'])->name('reports.weight-for-height-upon-entry');
+    Route::post('/reports/weight-for-height-after-120', [ReportsController::class, 'weightForHeightAfter120'])->name('reports.weight-for-height-after-120');
+    Route::post('/reports/height-for-age-upon-entry', [ReportsController::class, 'heightForAgeUponEntry'])->name('reports.height-for-age-upon-entry');
+    Route::post('/reports/height-for-age-after-120', [ReportsController::class, 'heightForAgeAfter120'])->name('reports.height-for-age-after-120');
+    Route::post('/reports/unfunded', [ReportsController::class, 'unfunded'])->name('reports.unfunded');
 
-    Route::post('/reports/filter-masterlist', [ReportsController::class, 'filterMasterlist'])->name('reports.filter-masterlist');
-    Route::post('/reports/filter-unfunded', [ReportsController::class, 'filterUnfunded'])->name('reports.filter-unfunded');
-    Route::post('/reports/filter-monitoring', [ReportsController::class, 'filterMonitoring'])->name('reports.filter-monitoring');
-    Route::post('/reports/filter-upon-entry-age-bracket', [ReportsController::class, 'filterEntryAgeBracket'])->name('reports.filter-upon-entry-age-bracket');
-
-    Route::get('/reports/print-funded', [ReportsController::class, 'printFunded'])->name('reports.printFunded');
+    Route::get('/reports/print/masterlist', [ReportsController::class, 'printMasterlist'])->name('reports.print.masterlist');
+});
 

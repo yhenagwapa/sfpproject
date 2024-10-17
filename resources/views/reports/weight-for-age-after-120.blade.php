@@ -56,49 +56,57 @@
                     <div class="col-lg-2">
                         <div class="card">
                             <div class="report-card-body mt-4 mb-2 text-sm">
-
                                 <ul class="report-side-nav" id="report-side-nav">
                                     @if (auth()->user()->hasRole('admin') ||
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="{{ route('reports.index')}}">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Masterlist
-                                            </a>
+                                            <form id="masterlistForm" action="{{ route('reports.index') }}" method="POST">
+                                                @csrf
+                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('masterlistForm').submit(); return false;">
+                                                    <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                        stroke-width="2" stroke="currentColor" fill="none"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                                        <circle cx="12" cy="12" r="9" />
+                                                    </svg>
+                                                    Masterlist
+                                                </a>
+                                            </form>
                                         </li>
                                     @endif
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="{{ route('reports.malnourish')}}">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Malnourished
-                                            </a>
+                                            <form id="malnourishedForm" action="{{ route('reports.malnourish')}}" method="POST">
+                                                @csrf
+                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('malnourishedForm').submit(); return false;">
+                                                    <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                        stroke-width="2" stroke="currentColor" fill="none"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                                        <circle cx="12" cy="12" r="9" />
+                                                    </svg>
+                                                    Malnourished
+                                                </a>
+                                            </form>
                                         </li>
                                     @endif
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="{{ route('reports.disabilities')}}">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Persons with Disability
-                                            </a>
+                                            <form id="disabilitiesForm" action="{{ route('reports.disabilities')}}" method="POST">
+                                                @csrf
+                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('disabilitiesForm').submit(); return false;">
+                                                    <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                        stroke-width="2" stroke="currentColor" fill="none"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                                        <circle cx="12" cy="12" r="9" />
+                                                    </svg>
+                                                    Persons with Disability
+                                                </a>
+                                            </form>
                                         </li>
                                     @endif
 
@@ -114,32 +122,28 @@
                                                 Undernourish
                                             </a>
                                             <ul id="forms-nav" class="report-content collapsed">
-                                                @if (auth()->user()->hasRole('admin') ||
-                                                        auth()->user()->hasRole('lgu focal') ||
-                                                        auth()->user()->hasRole('child development worker'))
-                                                    <li>
-                                                        <a class="report-link collapsed" href="{{ route('reports.undernourished-upon-entry')}}">
+                                                <li class="nav-item">
+                                                    <form id="undernourishedUponEntryForm" action="{{ route('reports.undernourished-upon-entry')}}" method="POST">
+                                                        @csrf
+                                                        <a class="report-link collapsed" href="#" onclick="document.getElementById('undernourishedUponEntryForm').submit(); return false;">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                                             </svg>
-                                                              
-                                                        Upon Entry
+                                                            Upon Entry
                                                         </a>
-                                                    </li>
-                                                @endif
-
-                                                @if (auth()->user()->hasRole('admin') ||
-                                                        auth()->user()->hasRole('lgu focal') ||
-                                                        auth()->user()->hasRole('child development worker'))
-                                                    <li>
-                                                        <a class="report-link collapsed" href="{{ route('reports.undernourished-after-120')}}">
+                                                    </form>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <form id="undernourishedAfter120Form" action="{{ route('reports.undernourished-after-120')}}" method="POST">
+                                                        @csrf
+                                                        <a class="report-link collapsed" href="#" onclick="document.getElementById('undernourishedAfter120Form').submit(); return false;">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                                             </svg>
                                                             After 120 Feedings
                                                         </a>
-                                                    </li>
-                                                @endif
+                                                    </form>
+                                                </li>
                                             </ul>
                                         </li>
                                     @endif
@@ -170,22 +174,27 @@
                                                     </a>
                                                     <ul id="forms-nav" class="report-subcontent collapsed">
                                                         <li>
-                                                            <a class="report-link collapsed" href="{{ route('reports.weight-for-age-upon-entry')}}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                </svg>
-                                                                
-                                                            Upon Entry
-                                                            </a>
+                                                            <form id="WFAUponEntryForm" action="{{ route('reports.weight-for-age-upon-entry')}}" method="POST">
+                                                                @csrf
+                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('WFAUponEntryForm').submit(); return false;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                    </svg>
+                                                                    Upon Entry
+                                                                </a>
+                                                            </form>
                                                         </li>
                                                     
                                                         <li>
-                                                            <a class="report-link collapsed active" href="{{ route('reports.weight-for-age-after-120')}}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                </svg>
-                                                                After 120 Feedings
-                                                            </a>
+                                                            <form id="WFAAfter120Form" action="{{ route('reports.weight-for-age-after-120')}}" method="POST">
+                                                                @csrf
+                                                                <a class="report-link collapsed active" href="#" onclick="document.getElementById('WFAAfter120Form').submit(); return false;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                    </svg>
+                                                                    After 120 Feedings
+                                                                </a>
+                                                            </form>
                                                         </li>
                                                     </ul>
                                                 </li>
@@ -203,22 +212,27 @@
                                                     </a>
                                                     <ul id="forms-nav" class="report-subcontent collapsed">
                                                         <li>
-                                                            <a class="report-link collapsed" href="{{ route('reports.weight-for-height-upon-entry')}}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                </svg>
-                                                                
-                                                            Upon Entry
-                                                            </a>
+                                                            <form id="WFHUponEntryForm" action="{{ route('reports.weight-for-height-upon-entry')}}" method="POST">
+                                                                @csrf
+                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('WFHUponEntryForm').submit(); return false;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                    </svg>
+                                                                Upon Entry
+                                                                </a>
+                                                            </form>
                                                         </li>
                                                     
                                                         <li>
-                                                            <a class="report-link collapsed" href="{{ route('reports.weight-for-height-after-120')}}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                </svg>
-                                                                After 120 Feedings
-                                                            </a>
+                                                            <form id="WFHAfter120Form" action="{{ route('reports.weight-for-height-after-120')}}" method="POST">
+                                                                @csrf
+                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('WFHAfter120Form').submit(); return false;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                    </svg>
+                                                                    After 120 Feedings
+                                                                </a>
+                                                            </form>
                                                         </li>
                                                     </ul>
                                                 </li>
@@ -236,22 +250,27 @@
                                                     </a>
                                                     <ul id="forms-nav" class="report-subcontent collapsed">
                                                         <li>
-                                                            <a class="report-link collapsed" href="{{ route('reports.height-for-age-upon-entry')}}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                </svg>
-                                                                
-                                                            Upon Entry
-                                                            </a>
+                                                            <form id="HFAUponEntryForm" action="{{ route('reports.height-for-age-upon-entry')}}" method="POST">
+                                                                @csrf
+                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('HFAUponEntryForm').submit(); return false;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                    </svg>
+                                                                    Upon Entry
+                                                                </a>
+                                                            </form>
                                                         </li>
                                                     
                                                         <li>
-                                                            <a class="report-link collapsed" href="{{ route('reports.height-for-age-after-120')}}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                </svg>
-                                                                After 120 Feedings
-                                                            </a>
+                                                            <form id="HFAAfter120Form" action="{{ route('reports.height-for-age-after-120')}}" method="POST">
+                                                                @csrf
+                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('HFAAfter120Form').submit(); return false;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                    </svg>
+                                                                    After 120 Feedings
+                                                                </a>
+                                                            </form>
                                                         </li>
                                                     </ul>
                                                 </li>
@@ -271,28 +290,30 @@
                                                 Age Bracket
                                             </a>
                                             <ul id="forms-nav" class="report-content collapsed">
-                                                
                                                     <li>
-                                                        <a class="report-link collapsed" href="{{ route('reports.age-bracket-upon-entry')}}">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                            </svg>
-                                                        Upon Entry
-                                                        </a>
+                                                        <form id="AgeBracketUponEntryForm" action="{{ route('reports.age-bracket-upon-entry')}}" method="POST">
+                                                            @csrf
+                                                            <a class="report-link collapsed" href="#" onclick="document.getElementById('AgeBracketUponEntryForm').submit(); return false;">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                </svg>
+                                                                Upon Entry
+                                                            </a>
+                                                        </form>
                                                     </li>
                                                 
                                                     <li>
-                                                        <a class="report-link collapsed" href="{{ route('reports.age-bracket-after-120')}}">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                            </svg>
-                                                            After 120 Feedings
-                                                        </a>
+                                                        <form id="AgeBracketAfter120Form" action="{{ route('reports.age-bracket-after-120')}}" method="POST">
+                                                            @csrf
+                                                            <a class="report-link collapsed" href="#" onclick="document.getElementById('AgeBracketAfter120Form').submit(); return false;">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                                                </svg>
+                                                                After 120 Feedings
+                                                            </a>
+                                                        </form>
                                                     </li>
-                                                
                                             </ul>
-                                    
-                                            
                                         </li>
                                     @endif
 
@@ -300,47 +321,37 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="{{ route('reports.monitoring')}}">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24"
-                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Monitoring
-                                            </a>
+                                            <form id="monitoringForm" action="{{ route('reports.monitoring')}}" method="POST">
+                                                @csrf
+                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('monitoringForm').submit(); return false;">
+                                                    <svg class="h-2 w-2 mr-2" width="24" height="24"
+                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                                        <circle cx="12" cy="12" r="9" />
+                                                    </svg>
+                                                    Monitoring
+                                                </a>
+                                            </form>
                                         </li>
                                     @endif
-
-                                    {{-- @if (auth()->user()->hasRole('admin') ||
-                                            auth()->user()->hasRole('lgu focal') ||
-                                            auth()->user()->hasRole('child development worker'))
-                                        <li class="nav-item">
-                                            <a class="report-link collapsed" href="#" data-target="attendance">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24"
-                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Feeding Attendance
-                                            </a>
-                                        </li>
-                                    @endif --}}
 
                                     @if (auth()->user()->hasRole('admin') ||
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <a class="report-link collapsed" href="{{ route('reports.unfunded')}}">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24"
-                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Unfunded Children
-                                            </a>
+                                            <form id="unfundedForm" action="{{ route('reports.unfunded')}}" method="POST">
+                                                @csrf
+                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('unfundedForm').submit(); return false;">
+                                                    <svg class="h-2 w-2 mr-2" width="24" height="24"
+                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                                        <circle cx="12" cy="12" r="9" />
+                                                    </svg>
+                                                    Unfunded Children
+                                                </a>
+                                            </form>
                                         </li>
                                     @endif
                                 </ul>

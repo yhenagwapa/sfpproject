@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Psgc;
 
 class UserController extends Controller
 {
@@ -27,11 +28,13 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index()
     {
-        return view('users.index', [
-            'users' => User::latest('id')->paginate(3)
-        ]);
+        $allUsers = User::all()->keyBy('id');
+        $users = $allUsers->paginate(25);
+
+
+        return view('users.index', compact('users'));
     }
 
     /**

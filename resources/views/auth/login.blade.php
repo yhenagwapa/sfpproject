@@ -56,7 +56,24 @@
                     <h5 class="card-title text-center pt-0 pb-0 fs-1 mt-4">SFP ONSE</h5>
                   </div>
 
-
+                  @if (session('success'))
+                    <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  @endif
+                  
+                  <script>
+                      document.addEventListener('DOMContentLoaded', function() {
+                          var alert = document.getElementById('success-alert');
+                          if (alert) {
+                              setTimeout(function() {
+                                  var bsAlert = new bootstrap.Alert(alert);
+                                  bsAlert.close();
+                              } 5000);
+                          }
+                      });
+                  </script>
 
                   <form class="row g-3" method="POST" action="{{ route('login') }}">
                     @csrf
@@ -66,8 +83,8 @@
                         <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
                           id="email" :value="__('Email')" required>
                         @error('email')
-              <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+                          <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                       </div>
                     </div>
 

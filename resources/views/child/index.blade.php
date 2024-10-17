@@ -50,56 +50,39 @@
                                     </form>
                                 </div> --}}
                             
-                                <div class="col-md-6 mt-4 text-sm">
-                                    <form action="{{ route('child.filterByCdc') }}" method="POST">
-                                        @csrf
-                                        <label for="center_name">Filter Children:</label>
-                                        <select class="form-control" name="center_name" id="center_name"
-                                            onchange="this.form.submit()">
-                                            <option value="all_center" selected>Select a Child Development Center
+                            <div class="col-md-6 mt-4 text-sm">
+                                <form action="{{ route('child.index') }}" method="GET">
+                                    @csrf
+                                    <label for="center_name">Filter Children:</label>
+                                    <select class="form-control" name="center_name" id="center_name"
+                                        onchange="this.form.submit()">
+                                        <option value="all_center" selected>Select a Child Development Center
+                                        </option>
+                                        @foreach ($centers as $center)
+                                            <option value="{{ $center->id }}"
+                                                {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                                                {{ $center->center_name }}
                                             </option>
-                                            @foreach ($centers as $center)
-                                                <option value="{{ $center->id }}"
-                                                    {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
-                                                    {{ $center->center_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </form>
-                                </div>
-                           
+                                        @endforeach
+                                    </select>
+                                </form>
+                            </div>
+                        
 
-                            <h1 class="card-title mt-3 mb-0">Male Children<h1>
-                                    <div class="col-md-12" id="maleChildren-table">
-                                        @include('child.partials.malechild-table', [
-                                            'maleChildren' => $maleChildren,
-                                        ])
-                                    </div>
-                                    <div class="mt-3">
-                                        {{ $maleChildren->links() }}
-                                    </div>
+                            <!-- Male Children Table -->
+                            <h1 class="card-title mt-3 mb-0">Children</h1>
+                            @include('child.partials.children-table', [
+                                'maleChildren' => $maleChildren,
+                                'femaleChildren' => $femaleChildren
+                            ])
+
+                                
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h1 class="card-title mt-3 mb-0">Female Children<h1>
-                                    <div class="col-md-12" id="femaleChildren-table">
-                                        @include('child.partials.femalechild-table', [
-                                            'femaleChildren' => $femaleChildren,
-                                        ])
-                                    </div>
-                                    <div class="mt-3">
-                                        {{ $femaleChildren->links() }}
-                                    </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
 
         </section>
     </div>

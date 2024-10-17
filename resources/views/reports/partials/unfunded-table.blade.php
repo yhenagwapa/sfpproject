@@ -1,6 +1,6 @@
 @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
     <div class="col-md-6 mt-4 text-sm">
-        <form action="{{ route('reports.filter-unfunded') }}" method="POST">
+        <form action="{{ route('reports.unfunded') }}" method="POST">
             @csrf
             <label for="center_name">Filter per center:</label>
             <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
@@ -51,7 +51,7 @@
         @endforeach
         @if (count($isNotFunded) <= 0)
             <tr>
-                <td class="text-center" colspan="6">
+                <td class="text-center text-red-600" colspan="10">
                     @if (empty($search))
                         No Data found
                     @endif

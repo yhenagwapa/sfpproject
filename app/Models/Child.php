@@ -15,6 +15,7 @@ class Child extends Model
 
     protected $fillable = [
         'cycle_implementation_id',
+        'milk_feeding_id',
         'firstname',
         'middlename',
         'lastname',

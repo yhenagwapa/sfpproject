@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-6 mt-4 text-sm">
-        <form action="{{ route('reports.filter-upon-entry-age-bracket') }}" method="POST">
+        <form action="{{ route('reports.age-bracket-upon-entry') }}" method="POST">
             @csrf
             <label for="center_name">Filter per center:</label>
             <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">

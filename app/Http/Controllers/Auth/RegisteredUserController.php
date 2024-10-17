@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
+use App\Http\Requests\StoreUserRequest;
 
 class RegisteredUserController extends Controller
 {
@@ -23,13 +24,14 @@ class RegisteredUserController extends Controller
     public function create(): View
     {
         $roles = Role::all();
-        $lgus = Psgc::where('region_psgc', '110000000')
-                    ->orderBy('city_name')
-                    ->distinct('city_name_psgc')
-                    ->get(['city_name_psgc', 'city_name', 'province_psgc']);
+        $psgc = new Psgc();
+
+        $provinces = $psgc->getProvinces();
+        $cities = $psgc->allCities();      
+        $barangays = $psgc->allBarangays(); 
 
 
-        return view('auth.register', compact('roles', 'lgus'));
+        return view('auth.register', compact('roles', 'provinces', 'cities', 'barangays'));
     }
     
     /**
@@ -37,24 +39,30 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        $request->validated();
+
+        $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
+            ->where('city_name_psgc', $request->input('city_name_psgc'))
+            ->where('brgy_psgc', $request->input('brgy_psgc'))
+            ->first();
 
         $user = User::create([
-            'name' => $request->name,
+            'firstname' => $request->firstname,
+            'middlename' => $request->middlename,
+            'lastname' => $request->lastname,
+            'extension_name' => $request->extension_name,
+            'contact_no' => $request->contact_no,
+            'psgc_id' => $psgc->psgc_id,
+            'address' => $request->address,
+            'zip_code' => $request->zip_code,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        $user->assignRole('child development worker');
 
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+        return redirect('login')->with('success', 'Registration successful. Kindly inform the admin to activate your account.');
     }
 }

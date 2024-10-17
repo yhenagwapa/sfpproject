@@ -44,18 +44,16 @@
 </head>
 
 <body class="font-sans antialiased">
-    
-
-    <div class="container">
-        <main id="main" class="main">
+    <div class="container flex justify-center items-center">
+        <main id="register-main" class="register-main">
             <div class="pagetitle">
-
                 <nav style="--bs-breadcrumb-divider: '>';">
                     <ol class="breadcrumb mb-3 p-0">
                         <li class="breadcrumb-item italic"><a href="{{ route('login') }}">Go back to Login</a></li>
                     </ol>
                 </nav>
             </div>
+
             <div class="wrapper">
                 <section class="section">
                     <div class="row">
@@ -63,14 +61,18 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Register</h5>
-                                    <form class="row" method="post" action="">
-                                        <div class="flex flex-wrap -mx-3">
+
+                                    
+
+                                    <form class="row" method="post" action="{{ route('register') }}">
+                                        @csrf
+                                        <div class="flex flex-wrap">
                                             <div class='w-full md:w-2/12 px-3 mt-2 text-gray-400 text-xs'>Personal Information</div>
                                             <div class='w-full md:w-10/12 px-3 mt-3 text-gray-400 text-xs'>
                                                 <hr>
                                             </div>
                                         </div>
-                                        <div class="flex flex-wrap -mx-3">
+                                        <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
                                                 <label for="firstname">First Name</label><label for="firstname"
                                                     class="text-red-600">*</label>
@@ -91,7 +93,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="flex flex-wrap -mx-3">
+                                        <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-2 text-sm">
                                                 <label for="lastname">Last Name</label><label for="lastname"
                                                     class="text-red-600">*</label>
@@ -133,94 +135,128 @@
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-wrap -mx-3">
+                                        <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <label for="contact">Contact Number<b class="text-red-600">*</b></label>
+                                                <label for="contact_no">Contact Number<b class="text-red-600">*</b></label>
                                                 <input type="text"
                                                     class="form-control rounded border-gray-300"
-                                                    id="contact" name='contact' value="{{ old('contact') }}" autofocus>
-                                                @error('contact')
+                                                    id="contact_no" name='contact_no' value="{{ old('contact_no') }}" maxlength="11" >
+                                                @error('contact_no')
                                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
                                         
-                                        <div class="flex flex-wrap -mx-3">
-                                            <div class='w-full md:w-1/12 px-3 mt-4 text-gray-400 text-xs'>Address</div>
-                                            <div class='w-full md:w-11/12 px-3 mt-8 text-gray-400 text-xs'>
+                                        <div class="flex flex-wrap">
+                                            <div class='w-full md:w-2/12 px-3 mt-4 text-gray-400 text-xs'>Address</div>
+                                            <div class='w-full md:w-10/12 px-3 mt-8 text-gray-400 text-xs'>
                                                 <hr>
                                             </div>
                                         </div>
 
-                                        
-
-                                        <div class="flex flex-wrap -mx-3">
+                                        <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <label for="region">Region<b class="text-red-600">*</b></label>
-                                                <select class="form-control rounded border-gray-300 w-full" id="region">
-                                                    <option value="110000000">Region XI</option>
+                                                <label for="region">Region</label><label for="region"
+                                                    class="text-red-600">*</label>
+                                                <select
+                                                    class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                                    id="region" disabled>
+                                                    <option value="110000000" selected>Region XI</option>
                                                 </select>
                                             </div>
 
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <label for="province">Province<b class="text-red-600">*</b></label>
-                                                <div class="">
-                                                    <select class="form-control rounded border-gray-300 w-full" id="province">
-                                                        
-                                                    </select>
-                                                </div>
+                                                <label for="province">Province</label><label for="province"
+                                                    class="text-red-600">*</label>
+                                                <select class="form-control" id="province" name="province_psgc">
+                                                    <option value="" selected>Select Province</option>
+                                                    @foreach ($provinces as $psgc => $name)
+                                                    <option value="{{ $psgc }}"
+                                                        {{ old('province_psgc') == $psgc ? 'selected' : '' }}>
+                                                        {{ $name }}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('province_psgc')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
-                                        <div class="flex flex-wrap -mx-3">
+                                        <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <label for="citymuni">City/Municipality<b class="text-red-600">*</b></label>
-                                                <select class="form-control rounded border-gray-300 w-full" id="citymuni">
-                                                    <option value=""></option>
+                                                <label for="city">City/Municipality</label><label for="city"
+                                                    class="text-red-600">*</label>
+                                                <select class="form-control" id="city" name="city_name_psgc">
+                                                    <option value="" selected>Select City/Municipality</option>
+                                                    @foreach ($cities as $psgc => $name)
+                                                    <option value="{{ $psgc }}"
+                                                        {{ old('city_name_psgc') == $psgc ? 'selected' : '' }}>
+                                                        {{ $name }}
+                                                    </option>
+                                                    @endforeach
                                                 </select>
+                                                @error('city_name_psgc')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <label for="barangay">Barangay<b class="text-red-600">*</b></label>
-                                                <div class="">
-                                                    <select class="form-control rounded border-gray-300 w-full" id="barangay">
-                                                        <option value=""></option>
-                                                    </select>
-                                                </div>
+                                                <label for="barangay">Barangay</label><label for="barangay"
+                                                    class="text-red-600">*</label>
+                                                <select class="form-control" id="barangay" name="brgy_psgc">
+                                                    <option value="" selected>Select Barangay</option>
+                                                    @foreach ($barangays as $psgc => $name)
+                                                    <option value="{{ $psgc }}"
+                                                        {{ old('brgy_psgc') == $psgc ? 'selected' : '' }}>
+                                                        {{ $name }}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('brgy_psgc')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-wrap -mx-3">
+                                        <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
                                                 <label for="address">Address<b class="text-red-600">*</b></label>
                                                 <input name="address" type="text" class="form-control rounded border-gray-300 w-full" id="address" value="{{ old('address') }}">
+                                                @error('address')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                        
 
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
                                                 <label for="zip_code">Zip Code<b class="text-red-600">*</b></label>
-                                                <div class="">
-                                                    <input name="zip_code" type="text" class="form-control rounded border-gray-300 w-full" id="zip_code" value="{{ old('zip_code') }}">
-                                                </div>
+                                                <input name="zip_code" type="text" class="form-control rounded border-gray-300 w-full" id="zip_code" value="{{ old('zip_code') }}" maxlength="4">
+                                                @error('zip_code')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-wrap -mx-3">
+                                        <div class="flex flex-wrap">
                                             <div class='w-full md:w-2/12 px-3 mt-4 text-gray-400 text-xs'>Account Information</div>
                                             <div class='w-full md:w-10/12 px-3 mt-8 text-gray-400 text-xs'>
                                                 <hr>
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-wrap -mx-3">
+                                        <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
                                                 <label for="email">Email<b class="text-red-600">*</b></label>
-                                                <input name="email" type="email" class="form-control rounded border-gray-300 w-full" id="email" value="{{ old('email')}}">
+                                                <input name="email" type="text" class="form-control rounded border-gray-300 w-full" id="email" value="{{ old('email')}}">
+                                                @error('email')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         
 
-                                            <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
+                                            {{-- <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
                                                 <label for="role_id">Role<b class="text-red-600">*</b></label>
-                                                <select class="form-control rounded border-gray-300 w-full" id="role_id">
+                                                <select class="form-control rounded border-gray-300 w-full" id="role_id" name="role_id">
                                                     <option value="" disabled selected>Select role</option>
                                                     @foreach ($roles as $role)
                                                         <option value="{{ $role->id }}" {{ old('role_id') == $role->id}}>
@@ -228,29 +264,30 @@
                                                         </option>    
                                                     @endforeach
                                                 </select>
-                                            </div>
+                                                @error('role_id')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
+                                            </div> --}}
                                         </div>
 
-                                        <div class="flex flex-wrap -mx-3">
+                                        <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
                                                 <label for="password">Password<b class="text-red-600">*</b></label>
                                                 <input name="password" type="password" class="form-control rounded border-gray-300 w-full" id="password" value="{{ old('password') }}">
+                                                @error('password')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
                                             </div>
-
-                                            <div class="w-full md:w-1/2 px-3 mt-3 text-sm" id="assigned-lgu-container" style="display: none;">
-                                                <label for="city_name_psgc">Assigned LGU<b class="text-red-600">*</b></label>
-                                                <select class="form-control rounded border-gray-300 w-full" id="role_id">
-                                                    <option value="" disabled selected>Select assigned LGU</option>
-                                                    @foreach ($lgus as $lgu)
-                                                        <option value="{{ $lgu->city_name_psgc }}" {{ old('city_name_psgc') == $lgu->city_name_psgc}}>
-                                                            {{ $lgu->city_name }}
-                                                        </option>    
-                                                    @endforeach
-                                                </select>
+                                            <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
+                                                <label for="password_confirmation">Confirm Password<b class="text-red-600">*</b></label>
+                                                <input name="password_confirmation" type="password" class="form-control rounded border-gray-300 w-full" id="password_confirmation" value="{{ old('password_confirmation') }}">
+                                                @error('password')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-wrap justify-end -mx-3 w-full md:w-full">
+                                        <div class="flex flex-wrap justify-end w-full md:w-full">
                                             <div class="mt-4">
                                                 <button type="submit"
                                                     class="text-white bg-blue-600 rounded px-3 min-h-9">Register</button>
@@ -266,41 +303,70 @@
                 </section>
             </div>
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const roleDropdown = document.getElementById('role_id');
-                    const assignedLguContainer = document.getElementById('assigned-lgu-container');
-
-                    roleDropdown.addEventListener('change', function () {
-                        const selectedRoleId = roleDropdown.value;
-
-                        // Assuming 'lgu focal' has a specific role ID, e.g., 3
-                        const lguFocalRoleId = '3'; // Change this to the actual ID of the "lgu focal" role
-
-                        if (selectedRoleId === lguFocalRoleId) {
-                            assignedLguContainer.style.display = 'block';
+                document.addEventListener('DOMContentLoaded', function() {
+                    const locations = {
+                        provinces: @json($provinces),
+                        cities: @json($cities),
+                        barangays: @json($barangays)
+                    };
+        
+                    const provinceSelect = document.getElementById('province');
+                    const citySelect = document.getElementById('city');
+                    const barangaySelect = document.getElementById('barangay');
+        
+                    function filterCities() {
+                        const provincePsgc = provinceSelect.value;
+        
+                        citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+        
+                        if (provincePsgc) {
+                            citySelect.style.display = 'block';
+                            if (locations.cities[provincePsgc]) {
+                                locations.cities[provincePsgc].forEach(city => {
+                                    const option = document.createElement('option');
+                                    option.value = city.psgc;
+                                    option.text = city.name;
+                                    citySelect.appendChild(option);
+                                });
+                            }
                         } else {
-                            assignedLguContainer.style.display = 'none';
+                            citySelect.style.display = 'disabled';
                         }
-                    });
 
-                    // Trigger the change event on page load to handle previously selected role
-                    roleDropdown.dispatchEvent(new Event('change'));
+                        citySelect.value = '';
+                        barangaySelect.value = '';
+                        barangaySelect.style.display = 'disabled';
+                    }
+        
+                    function filterBarangays() {
+                        const cityPsgc = citySelect.value;
+        
+                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+        
+                        if (cityPsgc) {
+                            barangaySelect.style.display = 'block'; 
+                            if (locations.barangays[cityPsgc]) {
+                                locations.barangays[cityPsgc].forEach(barangay => {
+                                    const option = document.createElement('option');
+                                    option.value = barangay.psgc;
+                                    option.text = barangay.name;
+                                    barangaySelect.appendChild(option);
+                                });
+                            }
+                        } else {
+                            barangaySelect.style.display = 'disabled';
+                        }
+                    }
+        
+                    provinceSelect.addEventListener('change', filterCities);
+                    citySelect.addEventListener('change', filterBarangays);
                 });
             </script>
             
+            
         </main>
-        <footer id="footer" class="footer">
-            <div class="copyright">
-                &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-            </div>
-            <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-            </div>
-        </footer><!-- End Footer -->
+        
 
         {{-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a> --}}
 
@@ -309,6 +375,18 @@
 
         @vite(['resources/js/app.js'])
     </div>
+    <footer id="register-footer" class="register-footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </footer><!-- End Footer -->
 </body>
 
 </html>

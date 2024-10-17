@@ -852,6 +852,12 @@
   # Reports
   --------------------------------------------------------------*/
 
+  #masterlistForm, #malnourishedForm, #disabilitiesForm, #undernourishedUponEntryForm, #undernourishedAfter120Form, 
+  #WFAUponEntryForm, #WFAAfter120Form, #WFHUponEntryForm, #WFHAfter120Form, #HFAUponEntryForm, #HFAAfter120Form,
+  #AgeBracketUponEntryForm, #AgeBracketAfter120Form, #monitoringForm, #unfundedForm {
+    margin: 0 0 0 0;
+  }
+
   .report-side-nav .report-link {
     display: flex;
     align-items: center;
@@ -876,12 +882,10 @@
   .report-side-nav .report-link:hover {
     color: #4154f1;
     background: #f6f9ff;
-    border-bottom:2px solid #4154f1;
   }
   
   .report-side-nav .report-link.active {
     color: #4154f1;
-    background: #f6f9ff;
     border-bottom:2px solid #4154f1;
   }
 
@@ -1248,4 +1252,37 @@
     text-align: center;
     font-size: 13px;
     color: #012970;
+  }
+
+  .register-footer {
+    padding: 20px 0;
+    font-size: 14px;
+    transition: all 0.3s;
+    border-top: 1px solid #cddfff;
+  }
+  
+  .register-footer .copyright {
+    text-align: center;
+    color: #012970;
+  }
+  
+  .register-footer .credits {
+    padding-top: 5px;
+    text-align: center;
+    font-size: 13px;
+    color: #012970;
+  }
+
+  #register-main {
+    margin-top: 60px;
+    padding: 50px 150px 15px 150px;
+    transition: all 0.3s;
+  }
+
+  @media (min-width: 800px) {
+  
+    #register-main,
+    #register-footer {
+      margin: auto;
+    }
   }

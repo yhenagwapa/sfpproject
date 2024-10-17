@@ -59,20 +59,20 @@
                 <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['male'] ?? 0 }}</td>
                 <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['female'] ?? 0 }}</td>
                 
-                <td>{{ $countsPerCenter[$center->id]['indigenous_people']['male'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['indigenous_people']['female'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['pantawid']['male'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['pantawid']['female'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['pwd']['male'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['pwd']['female'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['lactose_intolerant']['male'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['lactose_intolerant']['female'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['child_of_solo_parent']['male'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['child_of_solo_parent']['female'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['dewormed']['male'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['dewormed']['female'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['vitamin_a']['male'] ?? 0 }}</td>
-                <td>{{ $countsPerCenter[$center->id]['vitamin_a ']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['indigenous_people']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['indigenous_people']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['pantawid']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['pantawid']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['pwd']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['pwd']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['lactose_intolerant']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['lactose_intolerant']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['child_of_solo_parent']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['child_of_solo_parent']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['dewormed']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['dewormed']['female'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a']['male'] ?? 0 }}</td>
+                <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a ']['female'] ?? 0 }}</td>
             </tr>
         @endforeach
         @if (count($centers) <= 0)

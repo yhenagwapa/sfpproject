@@ -147,6 +147,7 @@
                                                 id="vitamin_a" name='vitamin_a'
                                                 value="{{ old('vitamin_a', $child->vitamin_a) }}">
                                         </div>
+
                                         <div class="col-md-4 mt-4">
                                             <label for="is_pantawid">Pantawid Member:<b class="text-red-600">*</b></label>
                                         </div>
@@ -162,7 +163,7 @@
                                         </div>
                                         <div class="col-md-6 mt-4 additional-details">
                                             <select class="form-control rounded border-gray-300" id="pantawid_details"
-                                                name="pantawid_details" required>
+                                                    name="pantawid_details" {{ old('pantawid_details', $child->pantawid_details) == null ? 'disabled' : '' }}>
                                                 <option value="" disabled selected>---</option>
                                                 @foreach ($pantawidDetails as $value => $label)
                                                     <option value="{{ $value }}"
@@ -171,6 +172,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+
                                             @error('pantawid_details')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
@@ -268,10 +270,13 @@
 
 
 
-                                        <div class="col-md-6 mt-2 text-sm">
-                                            <label for="region">Region<b class="text-red-600">*</b></label>
-                                            <select class="form-control rounded border-gray-300" id="region">
-                                                <option value="0">Region XI</option>
+                                        <div class="col-md-6 mt-3 text-sm">
+                                            <label for="region">Region</label><label for="region"
+                                                class="text-red-600">*</label>
+                                            <select
+                                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                                id="region" disabled>
+                                                <option value="110000000" selected>Region XI</option>
                                             </select>
                                         </div>
 
@@ -282,7 +287,7 @@
                                                 <option value="" selected>Select Province</option>
                                                 @foreach ($provinces as $psgc => $name)
                                                     <option value="{{ $psgc }}"
-                                                        {{ old('province_psgc', $psgcRecord->province_psgc) == $psgc ? 'selected' : '' }}>
+                                                        {{ $psgc == old('province_psgc', $psgcRecord->province_psgc) ? 'selected' : '' }}>
                                                         {{ $name }}</option>
                                                 @endforeach
                                             </select>
@@ -296,7 +301,7 @@
                                             <select class="form-control rounded border-gray-300" id="city" name="city_name_psgc" onchange="filterBarangays()">
                                                 <option value="" selected>Select City/Municipality</option>
                                                 @foreach ($cities as $psgc => $name)
-                                                    <option value="{{ $psgc }}" {{ old('city_name_psgc', $psgcRecord->city_name_psgc) == $psgc ? 'selected' : '' }}>
+                                                    <option value="{{ $psgc }}" {{ $psgc == old('city_name_psgc', $psgcRecord->city_name_psgc) ? 'selected' : '' }}>
                                                         {{ $name }}
                                                     </option>
                                                 @endforeach
@@ -311,7 +316,7 @@
                                             <select class="form-control rounded border-gray-300" id="barangay" name="brgy_psgc">
                                                 <option value="" selected>Select Barangay</option>
                                                 @foreach ($barangays as $psgc => $name)
-                                                    <option value="{{ $psgc }}" {{ old('brgy_psgc', $psgcRecord->brgy_psgc) == $psgc ? 'selected' : '' }}>
+                                                    <option value="{{ $psgc }}" {{ $psgc == old('brgy_psgc', $psgcRecord->brgy_psgc) ? 'selected' : '' }}>
                                                         {{ $name }}
                                                     </option>
                                                 @endforeach
@@ -426,7 +431,7 @@
                     });
 
                 }
-                // Apply the function to each set of radio buttons and additional details
+
                 toggleAdditionalDetails('is_pantawid', 'pantawid_details');
                 toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
 
@@ -437,66 +442,63 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const locations = {
-                    provinces: @json($provinces),
-                    cities: @json($cities),
-                    barangays: @json($barangays)
+                    provinces: @json($provinceChange),
+                    cities: @json($cityChange),
+                    barangays: @json($barangayChange)
                 };
-        
+    
                 const provinceSelect = document.getElementById('province');
                 const citySelect = document.getElementById('city');
                 const barangaySelect = document.getElementById('barangay');
-        
+    
                 function filterCities() {
                     const provincePsgc = provinceSelect.value;
-        
-                    // Clear existing options
-                    citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
-                    barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-        
+                    
+    
                     if (provincePsgc) {
-                        citySelect.style.display = 'block'; // Show the city dropdown
+                        citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+                        citySelect.style.display = 'block'; 
+
                         if (locations.cities[provincePsgc]) {
                             locations.cities[provincePsgc].forEach(city => {
                                 const option = document.createElement('option');
-                                option.value = city.city_name_psgc;
-                                option.text = city.city_name;
+                                option.value = city.psgc;
+                                option.text = city.name;
                                 citySelect.appendChild(option);
                             });
                         }
                     } else {
-                        citySelect.style.display = 'disabled'; // Hide the city dropdown if no province is selected
+                        citySelect.style.display = 'disabled'; 
                     }
-        
-                    // Reset city and barangay selects
+    
                     citySelect.value = '';
                     barangaySelect.value = '';
-                    barangaySelect.style.display = 'disabled'; // Hide barangay dropdown by default
+                    barangaySelect.style.display = 'disabled';
                 }
-        
+
                 function filterBarangays() {
                     const cityPsgc = citySelect.value;
-        
-                    // Clear existing options
+    
                     barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-        
+    
                     if (cityPsgc) {
-                        barangaySelect.style.display = 'block'; // Show the barangay dropdown
+                        barangaySelect.style.display = 'block'; 
                         if (locations.barangays[cityPsgc]) {
                             locations.barangays[cityPsgc].forEach(barangay => {
                                 const option = document.createElement('option');
-                                option.value = barangay.brgy_psgc;
-                                option.text = barangay.brgy_name;
+                                option.value = barangay.psgc;
+                                option.text = barangay.name;
                                 barangaySelect.appendChild(option);
                             });
                         }
                     } else {
-                        barangaySelect.style.display = 'disabled'; // Hide the barangay dropdown if no city is selected
+                        barangaySelect.style.display = 'disabled'; 
                     }
                 }
-        
-                // Initialize visibility based on current selection
-                filterCities();
-                filterBarangays();
+    
+                provinceSelect.addEventListener('change', filterCities);
+                citySelect.addEventListener('change', filterBarangays);
             });
         </script>
     </main><!-- End #main -->
