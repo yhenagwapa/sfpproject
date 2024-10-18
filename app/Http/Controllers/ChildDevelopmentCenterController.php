@@ -24,7 +24,14 @@ class ChildDevelopmentCenterController extends Controller
 
     public function index()
     {
-        $centers = ChildDevelopmentCenter::with(['user', 'focal', 'psgc'])->get();
+        if(auth()->user()->hasRole('admin')){
+            $centers = ChildDevelopmentCenter::with(['user', 'focal', 'psgc'])->get();
+
+        } elseif(auth()->user()->hasRole('lgu focal')){
+            $focalID = auth()->id();
+            $centers = ChildDevelopmentCenter::with(['user', 'focal', 'psgc'])
+                ->where('assigned_focal_user_id', $focalID)->get();
+        }
 
         return view('centers.index', compact('centers'));
     }

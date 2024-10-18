@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\psgc;
+use App\Models\Psgc;
 use Illuminate\Database\Seeder;
 use League\Csv\Reader;
 

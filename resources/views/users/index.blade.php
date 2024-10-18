@@ -2,71 +2,74 @@
 
 @section('content')
 
-<div class="card">
-    <div class="card-header">Manage Users</div>
-    <div class="card-body">
-        
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                <th scope="col">S#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Roles</th>
-                <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($users as $user)
-                <tr>
-                    <th scope="row">{{ $loop->iteration }}</th>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>
-                        @forelse ($user->getRoleNames() as $role)
-                            <span class="badge bg-primary">{{ $role }}</span>
-                        @empty
-                        @endforelse
-                    </td>
-                    <td>
-                        <form action="{{ route('users.destroy', $user->id) }}" method="post">
-                            @csrf
-                            @method('DELETE')
+<main id="main" class="main">
 
-                            <a href="{{ route('users.show', $user->id) }}" class="btn btn-warning btn-sm"><i class="bi bi-eye"></i> Show</a>
+    <div class="pagetitle">
 
-                            @if (in_array('Super Admin', $user->getRoleNames()->toArray() ?? []) )
-                                @if (Auth::user()->hasRole('Super Admin'))
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
-                                @endif
-                            @else
-                                @can('edit-user')
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>   
-                                @endcan
+        <nav style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb mb-3 p-0">
+                <li class="breadcrumb-item active">Accounts</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-                                @can('delete-user')
-                                    @if (Auth::user()->id!=$user->id)
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Do you want to delete this user?');"><i class="bi bi-trash"></i> Delete</button>
-                                    @endif
-                                @endcan
-                            @endif
-
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                    <td colspan="5">
-                        <span class="text-danger">
-                            <strong>No User Found!</strong>
-                        </span>
-                    </td>
-                @endforelse
-            </tbody>
-        </table>
-
-        {{ $users->links() }}
-
+    @if (session('error'))
+    <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-</div>
-    
-@endsection
+    @endif
+
+    @if (session('success'))
+    <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var alert1 = document.getElementById('success-alert');
+            var alert2 = document.getElementById('danger-alert');
+            if (alert1) {
+                // Automatically close the alert after 3 seconds (3000 milliseconds)
+                setTimeout(function() {
+                    var bsAlert1 = new bootstrap.Alert(alert1);
+                    bsAlert1.close();
+                }, 2000);
+            }
+            if (alert2) {
+                // Automatically close the alert after 3 seconds (3000 milliseconds)
+                setTimeout(function() {
+                    var bsAlert2 = new bootstrap.Alert(alert2);
+                    bsAlert2.close();
+                }, 2000);
+            }
+        });
+    </script>
+
+    <div class="wrapper">
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="users-content">
+                                <h5 class="card-title">Users</h5>
+                                <div style="overflow-x: auto; max-width: 100%;">
+                                    @include('users.partials.users-table', [
+                                        'users' => $users,
+                                ])
+                                </div>
+                                <div class="mt-3">
+                                    @foreach ($users as $user)
+                                        {{ $users->links() }}
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->

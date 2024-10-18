@@ -55,6 +55,31 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Milk Feeding Implementation</h5>
+                            {{-- <div class="row">
+                                @canany('create-cycle-implementation')
+                                    <div class="col-6 mt-4 d-flex align-items-center">
+                                        <a href="{{ route('cycle.create')}}"><button type="button"
+                                            class="bg-blue-600 text-white rounded px-3 min-h-9"><i
+                                            class="bi bi-plus-circle mr-2"></i>New Milk Feeding</button></a>
+                                    </div>
+                                @endcanany
+                            </div> --}}
+                            {{-- @php
+                                $cycles = App\Models\MilkFeed::all(); // or use a method to fetch the data
+                            @endphp
+                            <div class="col-md-12" id="centers-table">
+                                @include('cycle.partials.cycle-table', ['cycles' => $cycles])
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </section>
     </div>
