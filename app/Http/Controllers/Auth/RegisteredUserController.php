@@ -58,7 +58,7 @@ class RegisteredUserController extends Controller
             'address' => $request->address,
             'zip_code' => $request->zip_code,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
         ]);
 
         $user->assignRole('child development worker');

@@ -1,40 +1,4 @@
-<div class="row">
-    <div class="col-md-6 mt-4 text-sm">
-        <form action="{{ route('reports.index') }}" method="POST" id="filterForm">
-            @csrf
-            <label for="center_name">Filter per center:</label>
-            <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
-                <option value="all_center" {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>
-                    All Child Development Center
-                </option>
-                @foreach ($centers as $center)
-                    <option value="{{ $center->id }}" {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
-                        {{ $center->center_name }}
-                    </option>
-                @endforeach
-            </select>
-        </form>
-    </div>
-    <div class="col-md-6 mt-11 text-sm">
-        <a href="#" class="text-white bg-blue-600 rounded px-3 min-h-9 align-items-right" target="_blank" id="printButton">Print</a>
-    </div>
-</div>
 
-<script>
-    document.getElementById('center_name').addEventListener('change', function() {
-        let selectedCenterId = this.value;
-        let printButton = document.getElementById('printButton');
-        
-        printButton.href = '/reports/print/masterlist?center_name=' + selectedCenterId;
-    });
-
-    window.onload = function() {
-        let selectedCenterId = document.getElementById('center_name').value;
-        let printButton = document.getElementById('printButton');
-        
-        printButton.href = '/reports/print/masterlist?center_name=' + selectedCenterId;
-    };
-</script>
 
 <table id='funded-table' class="table datatable text-xs text-center" style="min-width: 1800px;">
     <thead>

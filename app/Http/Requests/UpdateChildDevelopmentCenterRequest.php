@@ -23,7 +23,7 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
     {
         return [
             'center_name' => ['required', 'string', 'max:255'],
-            'assigned_user_id' => ['required', 'exists:users,id'],
+            'assigned_worker_user_id' => ['required', 'exists:users,id'],
             'province_psgc' => ['required'],
             'city_name_psgc' => ['required'],
             'brgy_psgc' => ['required'],
@@ -36,8 +36,8 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
         return [
             'center_name.required' => 'Please fill in the name of the child development center.',
             'center_name.string' => 'Invalid entry for center name.',
-            'assigned_user_id.required' => 'Please select an assigned worker.',
-            'assigned_user_id.exists' => 'Selected worker does not exist.',
+            'assigned_worker_user_id.required' => 'Please select an assigned worker.',
+            'assigned_worker_user_id.exists' => 'Selected worker does not exist.',
             'province_psgc.required' => 'Please select a province.',
             'city_name_psgc.required' => 'Please select a city.',
             'brgy_psgc.required' => 'Please select a barangay.',

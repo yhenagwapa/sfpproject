@@ -45,9 +45,6 @@
                                     @endcan
                                 </div>
                             </div>
-                            @php
-                                $centers = App\Models\ChildDevelopmentCenter::all(); // or use a method to fetch the data
-                            @endphp
                             <div class="col-md-12" id="centers-table">
                                 @include('centers.partials.table', ['centers' => $centers])
                             </div>

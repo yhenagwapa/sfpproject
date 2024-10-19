@@ -9,6 +9,9 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Validation\Rules;
 use App\Models\Psgc;
 
 class UserController extends Controller
@@ -30,10 +33,38 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(25);
+        $roles = Role::all();
+        $authUser = auth()->user();
 
+        if($authUser->hasRole('admin')){
+            $users = User::paginate(25);
+            
+        } elseif($authUser->hasRole('lgu focal')){
+            $authFocalCenters = auth()->user()->focal->pluck('id')->toArray();
 
-        return view('users.index', compact('users'));
+            if (!empty($authFocalCenters)) {
+                $users = User::whereHas('focal', function ($query) use ($authFocalCenters) {
+                    $query->whereIn('id', $authFocalCenters);
+                    })
+                    ->orWhereHas('worker', function ($query) use ($authFocalCenters) {
+                        $query->whereIn('id', $authFocalCenters);
+                    })->paginate(25);
+            }
+        }
+
+        $users = $users->sortByDesc(function ($user) use ($authUser) {
+            return $user->id === $authUser->id ? 1 : 0;
+        });
+
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 25; // Items per page
+        $currentPageItems = $users->slice(($currentPage - 1) * $perPage, $perPage)->all();
+
+        $users = new LengthAwarePaginator($currentPageItems, $users->count(), $perPage, $currentPage, [
+            'path' => LengthAwarePaginator::resolveCurrentPath(),
+        ]);
+
+        return view('users.index', compact('users', 'roles'));
     }
 
     /**
@@ -111,12 +142,50 @@ class UserController extends Controller
                 ->withSuccess('User is updated successfully.');
     }
 
+    public function updateStatus(Request $request, User $user)
+    {
+        $request->validate([
+            'status' => 'required|string|in:inactive,active,deactivated',
+        ]);
+    
+        $user->update([
+            'status' => $request->status,
+        ]);
+
+        return redirect()->back()
+                ->withSuccess('User status updated successfully.');
+    }
+
+    public function updateRole(Request $request, User $user)
+    {
+        $request->validate([
+            'role_id' => 'required|exists:roles,id',
+        ]);
+    
+        $role = Role::find($request->role_id);
+
+        if ($role) {
+            $user->syncRoles([$role->name]);
+        }
+
+        return redirect()->back()
+                ->withSuccess('User role updated successfully.');
+    }
+
+    public function resetPassword(User $user)
+    {
+        $user->password = bcrypt('Sfp@12345');
+        $user->save();
+
+        return redirect()->back()
+                ->withSuccess('Password reset successfully.');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(User $user): RedirectResponse
     {
-        // About if user is Super Admin or User ID belongs to Auth User
         if ($user->hasRole('admin') || $user->id == auth()->user()->id)
         {
             abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');

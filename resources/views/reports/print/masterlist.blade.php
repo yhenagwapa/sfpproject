@@ -80,19 +80,24 @@
     </div>
 
     <div class="header-section">
-        <table class="table">
-            <tr>
-                <td>
-                    <p>Province: ___________________</p>
-                    <p>Child Development Center: ___________________</p>
-                </td>
-                <td>
-                    <p>City / Municipality: ___________________</p>
-                    <p>Barangay: ___________________</p>
-                </td>
-            </tr>
-        </table>
+        @if($selectedCenter)
+            <table class="table">
+                <tr>
+                    <td>
+                        <p>Province: <u>{{ $selectedCenter->psgc->province_name }}</u></p>
+                        <p>Child Development Center: <u>{{ $selectedCenter->center_name }}</u></p>
+                    </td>
+                    <td>
+                        <p>City / Municipality: <u>{{ $selectedCenter->psgc->city_name }}</u></p>
+                        <p>Barangay: <u>{{ $selectedCenter->psgc->brgy_name }}</u></p>
+                    </td>
+                </tr>
+            </table>
+        @else
+            <p>No center selected.</p>
+        @endif
     </div>
+    
     <table id='funded-table' class="table datatable funded-table w-full">
         <thead>
             <tr>

@@ -23,6 +23,7 @@ class ReportsController extends Controller
     {
         $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
+        $selectedCenter = null;
 
         if (!$cycleImplementation) {
             return view('reports.index', [
@@ -39,6 +40,7 @@ class ReportsController extends Controller
                 $isFunded = $fundedChildren->paginate(10);
             } else {
                 $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->paginate(10);
+                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
             
@@ -50,7 +52,8 @@ class ReportsController extends Controller
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereIn('child_development_center_id', $centerIds)->paginate(10);
             } else {
-                $isFunded = $fundedChildren->whereIn('child_development_center_id', $cdcId)->paginate(10);
+                $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->paginate(10);
+                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
         } else {
@@ -63,11 +66,12 @@ class ReportsController extends Controller
                 $isFunded = $fundedChildren->whereIn('child_development_center_id', $centerIds)->paginate(10);
             } else {
                 $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->paginate(10);
+                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
         }
 
-        return view('reports.index', compact('isFunded', 'centers', 'cdcId'));
+        return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter'));
     }
     public function malnourish(Request $request)
     {
@@ -3621,6 +3625,7 @@ class ReportsController extends Controller
     {
         $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
+        $selectedCenter = null;
 
         if (!$cycleImplementation) {
             return view('reports.index', [
@@ -3633,40 +3638,115 @@ class ReportsController extends Controller
             ->where('cycle_implementation_id', $cycleImplementation->id);
 
         if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::all()->keyBy('id');
+            $centers = ChildDevelopmentCenter::with('psgc')->all()->keyBy('id');
 
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->get();
             } else {
                 $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->get();
+                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
             
         } elseif (auth()->user()->hasRole('lgu focal')) {
             $focalID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
-            $centerIds = $centers->pluck('id');
-
-            if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereIn('child_development_center_id', $centerIds)->get();
-            } else {
-                $isFunded = $fundedChildren->whereIn('child_development_center_id', $cdcId)->get();
-            }
-
-        } else {
-
-            $workerID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_worker_user_id', $workerID)->get();
+            $centers = ChildDevelopmentCenter::with('psgc')->where('assigned_focal_user_id', $focalID)->get();
             $centerIds = $centers->pluck('id');
 
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereIn('child_development_center_id', $centerIds)->get();
             } else {
                 $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->get();
+                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
+            }
+
+        } else {
+
+            $workerID = auth()->id();
+            $centers = ChildDevelopmentCenter::with('psgc')->where('assigned_worker_user_id', $workerID)->get();
+            $centerIds = $centers->pluck('id');
+
+            if ($cdcId == 'all_center') {
+                $isFunded = $fundedChildren->whereIn('child_development_center_id', $centerIds)->get();
+            } else {
+                $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->get();
+                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
         }
 
-        $pdf = PDF::loadView('reports.print.masterlist', compact('cycleImplementation', 'isFunded', 'centers', 'cdcId'))
+        $pdf = PDF::loadView('reports.print.masterlist', compact('cycleImplementation', 'isFunded', 'centers', 'cdcId', 'selectedCenter'))
+            ->setPaper('folio', 'landscape')
+            ->setOptions([
+                'margin-top' => 0.5,
+                'margin-right' => 1,
+                'margin-bottom' => 0.5,
+                'margin-left' => 1
+            ]);
+
+        return $pdf->stream($cycleImplementation->cycle_name . ' Masterlist.pdf');
+    }
+
+    public function printMalnourish(Request $request)
+    {
+        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $cdcId = $request->input('center_name', 'all_center');
+
+        if (!$cycleImplementation) {
+            return view('reports.malnourish', [
+                'fundedChildren' => collect(),
+            ]);
+        }
+
+        $fundedChildren = Child::with('nutritionalStatus', 'sex', 'center')
+            ->where('is_funded', true)
+            ->where('cycle_implementation_id', $cycleImplementation->id)
+            ->get();
+
+        $childrenWithNutritionalStatus = [];
+
+        foreach ($fundedChildren as $child) {
+            $nutritionalStatuses = $child->nutritionalStatus;
+
+            if ($nutritionalStatuses && $nutritionalStatuses->count() > 0) {
+                $entry = $nutritionalStatuses->first();
+                $exit = $nutritionalStatuses->count() > 1 ? $nutritionalStatuses[1] : null;
+
+            } else {
+                $entry = null;
+                $exit = null;
+            }
+
+            $childrenWithNutritionalStatus[] = [
+                'child' => $child,
+                'entry' => $entry,
+                'exit' => $exit,
+            ];
+        }
+
+        if (auth()->user()->hasRole('admin')) {
+            $isFunded = Child::with('nutritionalStatus', 'sex')
+                ->where('is_funded', true)
+                ->where('cycle_implementation_id', $cycleImplementation->id)
+                ->orderBy('child_development_center_id')
+                ->paginate(10);
+
+            $centers = ChildDevelopmentCenter::all()->keyBy('id');
+
+
+        } elseif (auth()->user()->hasRole('lgu focal')) {
+            $focalID = auth()->id();
+            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
+            $centerIds = $centers->pluck('id');
+
+            $isFunded = Child::with('nutritionalStatus', 'sex')
+                ->where('is_funded', true)
+                ->where('cycle_implementation_id', $cycleImplementation->id)
+                ->whereIn('child_development_center_id', $centerIds)
+                ->orderBy('child_development_center_id')
+                ->paginate(10);
+        }
+
+        $pdf = PDF::loadView('reports.print.malnourished', compact('cycleImplementation', 'isFunded', 'centers', 'cdcId', 'selectedCenter'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,

@@ -174,8 +174,8 @@
                     </li><!-- End Cycle Nav -->
                 @endcanany
 
-                @if (auth()->user()->hasRole('admin'))
-                    <li class="nav-heading">Admin Tools</li>
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                    <li class="nav-heading">Tools</li>
 
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('users.index') }}">
@@ -188,7 +188,8 @@
                             <span class="text-sm">Accounts</span>
                         </a>
                     </li><!-- End Accounts Nav -->
-
+                @endif
+                @if (auth()->user()->hasRole('admin'))
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="user-roles.php">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

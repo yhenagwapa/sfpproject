@@ -79,16 +79,16 @@
                                 <div class="col-md-6 mt-3 text-sm">
                                     <label for="assigned_user_id">Child Development Worker<b
                                             class='text-red-600'>*</b></label>
-                                    <select class="form-control rounded border-gray-300" id="assigned_user_id"
-                                        name="assigned_user_id">
+                                    <select class="form-control rounded border-gray-300" id="assigned_worker_user_id"
+                                        name="assigned_worker_user_id">
                                         <option value="" selected>Select Worker</option>
                                         @foreach ($users as $user)
-                                            <option value="{{ $user->id }}" {{ old('assigned_user_id', $center->assigned_user_id) == $user->id ? 'selected' : '' }}>
-                                                {{ $user->full_name }} <!-- Display full name of the user -->
+                                            <option value="{{ $user->id }}" {{ old('assigned_worker_user_id', $center->assigned_worker_user_id) == $user->id ? 'selected' : '' }}>
+                                                {{ $user->full_name }} 
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('assigned_user_id')
+                                    @error('assigned_worker_user_id')
                                         <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
                                 </div>

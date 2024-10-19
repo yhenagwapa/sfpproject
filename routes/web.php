@@ -64,6 +64,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/child/search', [ChildController::class, 'search'])->name('child.search');
 
+    Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
+    Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
+    Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+
+
     Route::get('/attendance/index/{child}', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/store/{child}', [AttendanceController::class, 'store'])->name('attendance.store');
 

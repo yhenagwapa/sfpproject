@@ -161,10 +161,10 @@ class ChildDevelopmentCenterController extends Controller
     public function update(UpdateChildDevelopmentCenterRequest $request, ChildDevelopmentCenter $center)
     {
         $validatedData = $request->validated();
-
-        // dd($validatedData);
         
-        $center->update($validatedData);
+        $center->update(array_merge($validatedData, [
+            'updated_by_user_id' => auth()->id(),
+        ]));
 
         return redirect()->route('centers.index')->with('success', 'Child development center record updated successfully.');
     }

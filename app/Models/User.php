@@ -31,6 +31,7 @@ class User extends Authenticatable
         'psgc_id',
         'email',
         'password',
+        'status',
     ];
 
     /**
@@ -112,12 +113,17 @@ class User extends Authenticatable
 
     public function worker()
     {
-        return $this->hasOne(ChildDevelopmentCenter::class, 'assigned_worker_user_id');
+        return $this->hasMany(ChildDevelopmentCenter::class, 'assigned_worker_user_id');
     }
 
     public function focal()
     {
-        return $this->belongsTo(ChildDevelopmentCenter::class, 'assigned_focal_user_id');
+        return $this->hasMany(ChildDevelopmentCenter::class, 'assigned_focal_user_id');
+    }
+
+    public function center()
+    {
+        return $this->belongsTo(ChildDevelopmentCenter::class);
     }
 
 
