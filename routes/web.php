@@ -105,20 +105,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/reports/height-for-age-after-120', [ReportsController::class, 'heightForAgeAfter120'])->name('reports.height-for-age-after-120');
     Route::post('/reports/unfunded', [ReportsController::class, 'unfunded'])->name('reports.unfunded');
 
-    Route::get('/reports/print/masterlist', [ReportsController::class, 'printMasterlist'])->name('reports.print.masterlist');
-    Route::get('/reports/print/malnourished', [ReportsController::class, 'printMalnourish'])->name('reports.print.malnourished');
-    Route::get('/reports/print/disabilities', [ReportsController::class, 'printDisabilities'])->name('reports.print.disabilities');
-    Route::get('/reports/print/undernourished-upon-entry', [ReportsController::class, 'printUndernourishedUponEntry'])->name('reports.print.undernourished-upon-entry');
-    Route::get('/reports/print/undernourished-after-120', [ReportsController::class, 'printUndernourishedAfter120'])->name('reports.print.undernourished-after-120');
-    Route::get('/reports/print/weight-for-age-upon-entry', [ReportsController::class, 'printWeightForAgeUponEntry'])->name('reports.print.weight-for-age-upon-entry');
-    Route::get('/reports/print/weight-for-age-after-120', [ReportsController::class, 'printWeightForAgeAfter120'])->name('reports.print.weight-for-age-after-120');
-    Route::get('/reports/print/weight-for-height-upon-entry', [ReportsController::class, 'printWeightForHeightUponEntry'])->name('reports.print.weight-for-height-upon-entry');
-    Route::get('/reports/print/weight-for-height-after-120', [ReportsController::class, 'printWeightForHeightAfter120'])->name('reports.print.weight-for-height-after-120');
-    Route::get('/reports/print/height-for-age-upon-entry', [ReportsController::class, 'printHeightForAgeUponEntry'])->name('reports.print.height-for-age-upon-entry');
-    Route::get('/reports/print/height-for-age-after-120', [ReportsController::class, 'printHeightForAgeAfter120'])->name('reports.print.height-for-age-after-120');
-    Route::get('/reports/print/age-bracket-upon-entry', [ReportsController::class, 'printAgeBracketUponEntry'])->name('reports.print.age-bracket-upon-entry');
-    Route::get('/reports/print/age-bracket-after-120', [ReportsController::class, 'printAgeBracketAfter120'])->name('reports.print.age-bracket-after-120');
-    Route::get('/reports/print/monitoring', [ReportsController::class, 'printMonitoring'])->name('reports.print.monitoring');
-    Route::get('/reports/print/unfunded', [ReportsController::class, 'printUnfunded'])->name('reports.print.unfunded');
+    Route::get('/reports/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
+    Route::get('/reports/print/malnourished', [PDFController::class, 'printMalnourish'])->name('reports.print.malnourished');
+    Route::get('/reports/print/disabilities', [PDFController::class, 'printDisabilities'])->name('reports.print.disabilities');
+    Route::get('/reports/print/undernourished-upon-entry', [PDFController::class, 'printUndernourishedUponEntry'])->name('reports.print.undernourished-upon-entry');
+    Route::get('/reports/print/undernourished-after-120', [PDFController::class, 'printUndernourishedAfter120'])->name('reports.print.undernourished-after-120');
+    Route::get('/reports/print/weight-for-age-upon-entry', [PDFController::class, 'printWeightForAgeUponEntry'])->name('reports.print.weight-for-age-upon-entry');
+    Route::get('/reports/print/weight-for-age-after-120', [PDFController::class, 'printWeightForAgeAfter120'])->name('reports.print.weight-for-age-after-120');
+    Route::get('/reports/print/weight-for-height-upon-entry', [PDFController::class, 'printWeightForHeightUponEntry'])->name('reports.print.weight-for-height-upon-entry');
+    Route::get('/reports/print/weight-for-height-after-120', [PDFController::class, 'printWeightForHeightAfter120'])->name('reports.print.weight-for-height-after-120');
+    Route::get('/reports/print/height-for-age-upon-entry', [PDFController::class, 'printHeightForAgeUponEntry'])->name('reports.print.height-for-age-upon-entry');
+    Route::get('/reports/print/height-for-age-after-120', [PDFController::class, 'printHeightForAgeAfter120'])->name('reports.print.height-for-age-after-120');
+    Route::get('/reports/print/age-bracket-upon-entry', [PDFController::class, 'printAgeBracketUponEntry'])->name('reports.print.age-bracket-upon-entry');
+    Route::get('/reports/print/age-bracket-after-120', [PDFController::class, 'printAgeBracketAfter120'])->name('reports.print.age-bracket-after-120');
+    Route::get('/reports/print/monitoring', [PDFController::class, 'printMonitoring'])->name('reports.print.monitoring');
+    Route::get('/reports/print/unfunded', [PDFController::class, 'printUnfunded'])->name('reports.print.unfunded');
 });
 
