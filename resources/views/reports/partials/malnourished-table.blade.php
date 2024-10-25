@@ -48,7 +48,6 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     @else
                         <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weighing_date : 'N/A' }}</td>
                         <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight : 'N/A' }}</td>
@@ -69,7 +68,6 @@
                         <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight_for_height : 'N/A' }}</td>
                         <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->height_for_age : 'N/A' }}</td>
                     @else
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

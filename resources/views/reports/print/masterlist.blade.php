@@ -94,7 +94,7 @@
                 </tr>
             </table>
         @else
-            <p>No center selected.</p>
+            <p>Child Development Center: <u>All Child Development Centers</u></p>
         @endif
     </div>
     

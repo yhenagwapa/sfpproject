@@ -32,7 +32,7 @@ class ChildDevelopmentCenter extends Model
 
     public function psgc()
     {
-        return $this->belongsTo(PSGC::class, 'psgc_id', 'psgc_id');
+        return $this->belongsTo(Psgc::class, 'psgc_id', 'psgc_id');
     }
 
     public function children()

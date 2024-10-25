@@ -51,7 +51,7 @@
 
                   <div class="pt-1 pb-2">
                     <a href="https://fo11.dswd.gov.ph" class="d-flex align-items-center w-auto mt-3">
-                      <img src="{{ asset('../img/DSWD Logo.png') }}" alt="" style="width: 370px;" class="ml-1">
+                      <img src="{{ asset('../img/DSWD_Logo.png') }}" alt="" style="width: 370px;" class="ml-1">
                     </a>
                     <h5 class="card-title text-center pt-0 pb-0 fs-1 mt-4">SFP ONSE</h5>
                   </div>

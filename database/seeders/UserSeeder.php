@@ -14,51 +14,64 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::create([
-            'firstname' => 'admin',
-            'lastname' => 'admin',
-            'contact_no' => '123',
-            'address' => 'Suazo St.',
-            'zip_code' => '8000',
-            'password' => Hash::make('dswd12345'),
-            'email' => 'admin@admin.com',
-            
-        ]);
-        $admin->assignRole('admin');
-
-        $cdw = User::create([
-            'firstname' => 'child',
-            'middlename' => 'development',
-            'lastname' => 'worker',
-            'contact_no' => '12345678901',
-            'address' => 'Suazo St.',
-            'zip_code' => '8000',
-            'password' => Hash::make('dswd12345'),
-            'email' => 'cdw@cdw.com',
-        ]);
-        $cdw->assignRole('child development worker');
-
-        $lguFocal = User::create([
-            'firstname' => 'lgu',
-            'lastname' => 'focal',
-            'contact_no' => '123',
-            'address' => 'Suazo St.',
-            'zip_code' => '8000',
-            'password' => Hash::make('dswd12345'),
-            'email' => 'focal@focal.com',
-            
-        ]);
-        $lguFocal->assignRole('lgu focal');
-
-        $test = User::create([
-            'firstname' => 'test',
-            'lastname' => 'test',
-            'contact_no' => '12345678901',
-            'address' => 'Suazo St.',
-            'zip_code' => '8000',
-            'password' => Hash::make('dswd12345'),
-            'email' => 'test@test.com',
-        ]);
-        $test->assignRole('child development worker');
+        if (!User::where('email', 'admin@admin.com')->exists()) {
+            $admin = User::create([
+                'firstname' => 'admin',
+                'lastname' => 'admin',
+                'contact_no' => '123',
+                'address' => 'Suazo St.',
+                'zip_code' => '8000',
+                'password' => Hash::make('dswd12345'),
+                'email' => 'admin@admin.com',
+                'status' => 'active',
+            ]);
+            $admin->assignRole('admin');
+        }
+    
+        // Check if 'child development worker' user already exists
+        if (!User::where('email', 'cdw@cdw.com')->exists()) {
+            $cdw = User::create([
+                'firstname' => 'child',
+                'middlename' => 'development',
+                'lastname' => 'worker',
+                'contact_no' => '12345678901',
+                'address' => 'Suazo St.',
+                'zip_code' => '8000',
+                'password' => Hash::make('dswd12345'),
+                'email' => 'cdw@cdw.com',
+                'status' => 'active',
+            ]);
+            $cdw->assignRole('child development worker');
+        }
+    
+        // Check if 'lgu focal' user already exists
+        if (!User::where('email', 'focal@focal.com')->exists()) {
+            $lguFocal = User::create([
+                'firstname' => 'lgu',
+                'lastname' => 'focal',
+                'contact_no' => '123',
+                'address' => 'Suazo St.',
+                'zip_code' => '8000',
+                'password' => Hash::make('dswd12345'),
+                'email' => 'focal@focal.com',
+                'status' => 'active',
+            ]);
+            $lguFocal->assignRole('lgu focal');
+        }
+    
+        // Check if 'test' user already exists
+        if (!User::where('email', 'test@test.com')->exists()) {
+            $test = User::create([
+                'firstname' => 'test',
+                'lastname' => 'test',
+                'contact_no' => '12345678901',
+                'address' => 'Suazo St.',
+                'zip_code' => '8000',
+                'password' => Hash::make('dswd12345'),
+                'email' => 'test@test.com',
+                'status' => 'active',
+            ]);
+            $test->assignRole('child development worker');
+        }
     }
 }

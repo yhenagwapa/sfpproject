@@ -35,7 +35,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -53,7 +52,7 @@
         <header id="header" class="header fixed-top d-flex align-items-right">
             <div class="d-flex justify-center">
                 <a href="https://fo11.dswd.gov.ph/" class="logo d-flex align-items-center">
-                    <img src="../img/DSWD Logo.png" alt="dswd_logo">
+                    <img src="../img/DSWD_Logo.png" alt="dswd_logo">
                 </a>
             </div>
 
@@ -161,7 +160,7 @@
                     </li><!-- End CDC Page Nav -->
                 @endif
 
-                @canany(['create-cycle-implementation', 'edit-cycle-implementation', 'view-cycle-implementation'])
+                @canany(['add-cycle-implementation', 'edit-cycle-implementation', 'view-cycle-implementation'])
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('cycle.index') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

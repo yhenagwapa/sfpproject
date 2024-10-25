@@ -10,13 +10,13 @@ class RoleSeeder extends Seeder
 {
     public function run()
     {
-        $admin = Role::create(['name' => 'admin',
+        $admin = Role::firstOrCreate(['name' => 'admin',
                             'guard_name' => 'web']);
 
-        $cdw = Role::create(['name' => 'child development worker',
+        $cdw = Role::firstOrCreate(['name' => 'child development worker',
                             'guard_name' => 'web']);
         
-        $lguFocal= Role::create(['name' => 'lgu focal',
+        $lguFocal= Role::firstOrCreate(['name' => 'lgu focal',
                             'guard_name' => 'web']);
 
         $admin->givePermissionTo([

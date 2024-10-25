@@ -1,23 +1,3 @@
-<div class="row">
-    <div class="col-md-6 mt-4 text-sm">
-        <form action="{{ route('reports.age-bracket-after-120') }}" method="POST">
-            @csrf
-            <label for="center_name">Filter per center:</label>
-            <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
-                <option value="all_center" {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>All Child Development Center
-                </option>
-                @foreach ($centers as $center)
-                    <option value="{{ $center->id }}" {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
-                        {{ $center->center_name }}
-                    </option>
-                @endforeach
-            </select>
-        </form>
-    </div>
-    <div class="col-md-6 mt-11 text-sm">
-        <a href="{{ url('/reports/print-funded', ['center_name' => request()->center_name]) }}" class="text-white bg-blue-600 rounded px-3 min-h-9 align-items-right" target="_blank">Print</a>
-    </div>
-</div>
 <table id='weight-for-age-table' class="table datatable mt-3 text-xs text-center">
     <thead class="border bg-gray-200">
         <tr>
@@ -396,130 +376,130 @@
             foreach ([2, 3, 4, 5] as $age) {
                 $totalUndernourishMale += $exitCountsPerNutritionalStatus[$age]['entry_is_undernourish']['male'] ?? 0;
                 $totalUndernourishFemale += $exitCountsPerNutritionalStatus[$age]['entry_is_undernourish']['female'] ?? 0;
-                $totalDewormedMale += $exitCountsPerCenter[$age]['dewormed']['male'] ?? 0;
-                $totalDewormedFemale += $exitCountsPerCenter[$age]['dewormed']['female'] ?? 0;
-                $totalVitAMale += $exitCountsPerCenter[$age]['vitamin_a']['male'] ?? 0;
-                $totalVitAFemale += $exitCountsPerCenter[$age]['vitamin_a']['female'] ?? 0;
-                $totalPantawidMale += $exitCountsPerCenter[$age]['pantawid']['male'] ?? 0;
-                $totalPantawidFemale += $exitCountsPerCenter[$age]['pantawid']['female'] ?? 0;
-                $totalIPMale += $exitCountsPerCenter[$age]['indigenous_people']['female'] ?? 0;
-                $totalIPFemale += $exitCountsPerCenter[$age]['indigenous_people']['male'] ?? 0;
-                $totalPWDMale += $exitCountsPerCenter[$age]['pwd']['female'] ?? 0;
-                $totalPWDFemale += $exitCountsPerCenter[$age]['pwd']['male'] ?? 0;
-                $totalSoloParentMale += $exitCountsPerCenter[$age]['child_of_solo_parent']['female'] ?? 0;
-                $totalSoloParentFemale += $exitCountsPerCenter[$age]['child_of_solo_parent']['male'] ?? 0;
-                $totalLactoseIntolerantMale += $exitCountsPerCenter[$age]['lactose_intolerant']['female'] ?? 0;
-                $totalLactoseIntolerantFemale += $exitCountsPerCenter[$age]['lactose_intolerant']['male'] ?? 0;
+                $totalDewormedMale += $exitCountsPerNutritionalStatus[$age]['dewormed']['male'] ?? 0;
+                $totalDewormedFemale += $exitCountsPerNutritionalStatus[$age]['dewormed']['female'] ?? 0;
+                $totalVitAMale += $exitCountsPerNutritionalStatus[$age]['vitamin_a']['male'] ?? 0;
+                $totalVitAFemale += $exitCountsPerNutritionalStatus[$age]['vitamin_a']['female'] ?? 0;
+                $totalPantawidMale += $exitCountsPerNutritionalStatus[$age]['pantawid']['male'] ?? 0;
+                $totalPantawidFemale += $exitCountsPerNutritionalStatus[$age]['pantawid']['female'] ?? 0;
+                $totalIPMale += $exitCountsPerNutritionalStatus[$age]['indigenous_people']['female'] ?? 0;
+                $totalIPFemale += $exitCountsPerNutritionalStatus[$age]['indigenous_people']['male'] ?? 0;
+                $totalPWDMale += $exitCountsPerNutritionalStatus[$age]['pwd']['female'] ?? 0;
+                $totalPWDFemale += $exitCountsPerNutritionalStatus[$age]['pwd']['male'] ?? 0;
+                $totalSoloParentMale += $exitCountsPerNutritionalStatus[$age]['child_of_solo_parent']['female'] ?? 0;
+                $totalSoloParentFemale += $exitCountsPerNutritionalStatus[$age]['child_of_solo_parent']['male'] ?? 0;
+                $totalLactoseIntolerantMale += $exitCountsPerNutritionalStatus[$age]['lactose_intolerant']['female'] ?? 0;
+                $totalLactoseIntolerantFemale += $exitCountsPerNutritionalStatus[$age]['lactose_intolerant']['male'] ?? 0;
             }
         @endphp
         <tr>
             <td class="text-left">Summary of Undernourished Children</td>
-            <td>{{ $exitCountsPerNutritionalStatus[2]['entry_is_undernourish']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerNutritionalStatus[2]['entry_is_undernourish']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerNutritionalStatus[3]['entry_is_undernourish']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerNutritionalStatus[3]['entry_is_undernourish']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerNutritionalStatus[4]['entry_is_undernourish']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerNutritionalStatus[4]['entry_is_undernourish']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerNutritionalStatus[5]['entry_is_undernourish']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerNutritionalStatus[5]['entry_is_undernourish']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['is_undernourish']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['is_undernourish']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['is_undernourish']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['is_undernourish']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['is_undernourish']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['is_undernourish']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['is_undernourish']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['is_undernourish']['female'] ?? 0 }}</td>
             <td>{{ $totalUndernourishMale }}</td>
             <td>{{ $totalUndernourishFemale }}</td>
         </tr>
 
         <tr>
             <td class="text-left">Deworming</td>
-            <td>{{ $exitCountsPerCenter[2]['dewormed']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[2]['dewormed']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['dewormed']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['dewormed']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['dewormed']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['dewormed']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['dewormed']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['dewormed']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['dewormed']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['dewormed']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['dewormed']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['dewormed']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['dewormed']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['dewormed']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['dewormed']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['dewormed']['female'] ?? 0 }}</td>
             <td>{{ $totalDewormedMale }}</td>
             <td>{{ $totalDewormedFemale }}</td>
         </tr>
 
         <tr>
             <td class="text-left">Vitamin A Supplementation</td>
-            <td>{{ $exitCountsPerCenter[2]['vitamin_a']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[2]['vitamin_a']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['vitamin_a']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['vitamin_a']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['vitamin_a']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['vitamin_a']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['vitamin_a']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['vitamin_a']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['vitamin_a']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['vitamin_a']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['vitamin_a']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['vitamin_a']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['vitamin_a']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['vitamin_a']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['vitamin_a']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['vitamin_a']['female'] ?? 0 }}</td>
             <td>{{ $totalVitAMale }}</td>
             <td>{{ $totalVitAFemale }}</td>
         </tr>
 
         <tr>
             <td class="text-left">4Ps Member</td>
-            <td>{{ $exitCountsPerCenter[2]['pantawid']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[2]['pantawid']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['pantawid']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['pantawid']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['pantawid']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['pantawid']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['pantawid']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['pantawid']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['pantawid']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['pantawid']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['pantawid']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['pantawid']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['pantawid']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['pantawid']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['pantawid']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['pantawid']['female'] ?? 0 }}</td>
             <td>{{ $totalPantawidMale }}</td>
             <td>{{ $totalPantawidFemale }}</td>
         </tr>
 
         <tr>
             <td class="text-left">IP Member</td>
-            <td>{{ $exitCountsPerCenter[2]['indigenous_people']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[2]['indigenous_people']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['indigenous_people']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['indigenous_people']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['indigenous_people']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['indigenous_people']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['indigenous_people']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['indigenous_people']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['indigenous_people']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['indigenous_people']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['indigenous_people']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['indigenous_people']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['indigenous_people']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['indigenous_people']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['indigenous_people']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['indigenous_people']['female'] ?? 0 }}</td>
             <td>{{ $totalIPMale }}</td>
             <td>{{ $totalIPFemale }}</td>
         </tr>
 
         <tr>
             <td class="text-left">PWD</td>
-            <td>{{ $exitCountsPerCenter[2]['pwd']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[2]['pwd']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['pwd']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['pwd']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['pwd']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['pwd']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['pwd']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['pwd']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['pwd']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['pwd']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['pwd']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['pwd']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['pwd']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['pwd']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['pwd']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['pwd']['female'] ?? 0 }}</td>
             <td>{{ $totalPWDMale }}</td>
             <td>{{ $totalPWDFemale }}</td>
         </tr>
 
         <tr>
             <td class="text-left">Child of Solo Parent</td>
-            <td>{{ $exitCountsPerCenter[2]['child_of_solo_parent']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[2]['child_of_solo_parent']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['child_of_solo_parent']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['child_of_solo_parent']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['child_of_solo_parent']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['child_of_solo_parent']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['child_of_solo_parent']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['child_of_solo_parent']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['child_of_solo_parent']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['child_of_solo_parent']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['child_of_solo_parent']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['child_of_solo_parent']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['child_of_solo_parent']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['child_of_solo_parent']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['child_of_solo_parent']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['child_of_solo_parent']['female'] ?? 0 }}</td>
             <td>{{ $totalSoloParentMale }}</td>
             <td>{{ $totalSoloParentFemale }}</td>
         </tr>
 
         <tr>
             <td class="text-left">Lactose Intolerant</td>
-            <td>{{ $exitCountsPerCenter[2]['lactose_intolerant']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[2]['lactose_intolerant']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['lactose_intolerant']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[3]['lactose_intolerant']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['lactose_intolerant']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[4]['lactose_intolerant']['female'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['lactose_intolerant']['male'] ?? 0 }}</td>
-            <td>{{ $exitCountsPerCenter[5]['lactose_intolerant']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['lactose_intolerant']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[2]['lactose_intolerant']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['lactose_intolerant']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[3]['lactose_intolerant']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['lactose_intolerant']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[4]['lactose_intolerant']['female'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['lactose_intolerant']['male'] ?? 0 }}</td>
+            <td>{{ $exitCountsPerNutritionalStatus[5]['lactose_intolerant']['female'] ?? 0 }}</td>
             <td>{{ $totalLactoseIntolerantMale }}</td>
             <td>{{ $totalLactoseIntolerantFemale }}</td>
         </tr>

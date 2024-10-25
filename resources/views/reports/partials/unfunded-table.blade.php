@@ -1,22 +1,3 @@
-@if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-    <div class="col-md-6 mt-4 text-sm">
-        <form action="{{ route('reports.unfunded') }}" method="POST">
-            @csrf
-            <label for="center_name">Filter per center:</label>
-            <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
-                <option value="all_center" selected>All Child Development Center
-                </option>
-                @foreach ($centers as $center)
-                    <option value="{{ $center->id }}"
-                        {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
-                        {{ $center->center_name }}
-                    </option>
-                @endforeach
-            </select>
-        </form>
-    </div>
-@endif
-
 <table id='unfunded-table' class="table datatable text-xs text-center">
     <thead>
         <tr>
@@ -33,7 +14,7 @@
         </tr>
         
     </thead>
-    <tbody class="unfunded-table">
+    <tbody class="unfunded-table text-xs">
         @foreach ($isNotFunded as $unfundedChild)
             <tr>
                 <td>{{ $unfundedChild->full_name }}</td>

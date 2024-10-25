@@ -1,23 +1,3 @@
-<div class="row">
-    <div class="col-md-6 mt-4 text-sm">
-        <form action="{{ route('reports.monitoring') }}" method="POST">
-            @csrf
-            <label for="center_name">Filter per center:</label>
-            <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
-                <option value="all_center" {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>All Child Development Center
-                </option>
-                @foreach ($centers as $center)
-                    <option value="{{ $center->id }}" {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
-                        {{ $center->center_name }}
-                    </option>
-                @endforeach
-            </select>
-        </form>
-    </div>
-    <div class="col-md-6 mt-11 text-sm">
-        <a href="{{ url('/reports/print-funded', ['center_name' => request()->center_name]) }}" class="text-white bg-blue-600 rounded px-3 min-h-9 align-items-right" target="_blank">Print</a>
-    </div>
-</div>
 <table id='monitoring-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
     <thead>
         <tr>

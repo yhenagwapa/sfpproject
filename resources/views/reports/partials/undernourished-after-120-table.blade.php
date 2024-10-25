@@ -1,11 +1,11 @@
 <table id='undernourished-after-120-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
-    <thead class="border bg-gray-200">
+    <thead>
         <tr>
-            <th class="border border-white" rowspan="3">Name of Child Development Center</th>
-            <th class="border border-white" rowspan="3">Name of Child Development Worker</th>
-            <th class="border border-white" colspan="8">Summary of Undernourished Children</th>
-            <th class="border border-white" colspan="10">Beneficiaries Profile</th>
-            <th class="border border-white" colspan="4">Deworming & Vitamin A Record</th>
+            <th rowspan="3">Name of Child Development Center</th>
+            <th rowspan="3">Name of Child Development Worker</th>
+            <th colspan="8">Summary of Undernourished Children</th>
+            <th colspan="10">Beneficiaries Profile</th>
+            <th colspan="4">Deworming & Vitamin A Record</th>
         </tr>
         <tr>
             <th class="border border-white w-20" colspan="2">2 y/o</th>
@@ -21,28 +21,28 @@
             <th class="border border-white w-24" colspan="2">No. of Children with Vit. A Supp.</th>
         </tr>
         <tr>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
-            <th class="border border-white">Male</th>
-            <th class="border border-white">Female</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
         </tr>
     </thead>
     <tbody class="undernourished-after-120-table text-xs">
