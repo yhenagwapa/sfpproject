@@ -32,7 +32,6 @@ class UpdateChildRequest extends FormRequest
             'psgc_id' => ['required', 'exists:psgcs,psgc_id'],
             'address' => ['required', 'string'],
             'zip_code' => ['required', 'digits:4'],
-            'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
             'is_pantawid' => ['required', 'boolean'],
             'pantawid_details' => ['nullable','required_if:is_pantawid,1'],
             'is_person_with_disability' => ['required', 'boolean'],
@@ -42,6 +41,10 @@ class UpdateChildRequest extends FormRequest
             'is_lactose_intolerant' => ['required', 'boolean'],
             'deworming_date' => ['nullable', 'date'],
             'vitamin_a_date' => ['nullable', 'date'],
+            'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
+            'cycle_implementation_id' => ['nullable', 'exists:cycle_implementations,id'],
+            'milk_feeding_id' => ['nullable', 'exists:milk_feedings,id'],
+            'is_funded' => ['nullable', 'boolean'],
         ];
     }
 
@@ -55,15 +58,18 @@ class UpdateChildRequest extends FormRequest
             'lastname.regex' => 'Invalid entry.',
             'date_of_birth.required' => 'Please fill in this field.',
             'sex_id.required' => 'Please fill in this field.',
-            'child_development_center_id.required' => 'Please select a child development center.',
+
             'province.required' => 'Please select a province.',
             'city.required' => 'Please select a city.',
             'barangay.required' => 'Please select a barangay.',
             'address.required' => 'Please fill in this field.',
             'zip_code.required' => 'Please fill in this field.',
             'zip_code.digits' => 'Invalid entry.',
+
             'pantawid_details.required_if' => 'Please specify.',
             'person_with_disability_.required_if' => 'Please fill in this field.',
+
+            'child_development_center_id.required' => 'Please select a CDC or SNP.'
         ];
     }
 }

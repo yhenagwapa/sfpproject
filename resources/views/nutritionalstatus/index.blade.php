@@ -58,7 +58,7 @@
                                     <h5 class='col-md-12'>Upon entry details</h5>
                                 </div>
 
-                                @canany(['nutrition-status-entry'])
+                                @can(['create-nutritional-status'])
                                     <form method="post" action="{{ route('nutritionalstatus.storeUponEntryDetails') }}">
                                         @csrf
                                         <input type="hidden" name="child_id" value="{{ $child->id }}">
@@ -122,7 +122,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                @endcanany
+                                @endcan
                             </div>
                         </div>
                     @endif
@@ -134,7 +134,7 @@
                                     <h5 class='col-md-12'>After 120 Feedings</h5>
                                 </div>
 
-                                @canany(['nutrition-status-exit'])
+                                @can(['create-nutritional-status'])
                                     <form method="post" action="{{ route('nutritionalstatus.storeExitDetails')}}">
                                         @csrf
                                         @method('PUT')
@@ -199,7 +199,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                @endcanany
+                                @endcan
                             </div>
                         </div>
                     @endif

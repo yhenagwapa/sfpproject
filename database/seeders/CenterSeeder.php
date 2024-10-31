@@ -18,9 +18,9 @@ class CenterSeeder extends Seeder
             'address' => '123 abc !@#',
             'psgc_id' => '211',
             'zip_code' => '8000',
-            'assigned_focal_user_id' => '4',
-            'assigned_worker_user_id' => '3',
-            'created_by_user_id' => '4',
+            'assigned_focal_user_id' => '3',
+            'assigned_worker_user_id' => '4',
+            'created_by_user_id' => '3',
         ]);
 
         $center2 = ChildDevelopmentCenter::create([
@@ -28,9 +28,9 @@ class CenterSeeder extends Seeder
             'address' => '123 abc !@#',
             'psgc_id' => '536',
             'zip_code' => '8000',
-            'assigned_focal_user_id' => '4',
-            'assigned_worker_user_id' => '5',
-            'created_by_user_id' => '4',
+            'assigned_focal_user_id' => '5',
+            'assigned_worker_user_id' => '4',
+            'created_by_user_id' => '5',
         ]);
     }
 }

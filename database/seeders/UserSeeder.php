@@ -73,5 +73,20 @@ class UserSeeder extends Seeder
             ]);
             $test->assignRole('child development worker');
         }
+
+        // Check if 'test' user already exists
+        if (!User::where('email', 'focal2@test.com')->exists()) {
+            $test = User::create([
+                'firstname' => 'focal 2',
+                'lastname' => 'test',
+                'contact_no' => '12345678901',
+                'address' => 'Suazo St.',
+                'zip_code' => '8000',
+                'password' => Hash::make('dswd12345'),
+                'email' => 'focal2@test.com',
+                'status' => 'active',
+            ]);
+            $test->assignRole('lgu focal');
+        }
     }
 }

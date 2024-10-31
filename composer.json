@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "league/csv": "^9.16",
         "livewire/livewire": "*",
+        "spatie/laravel-activitylog": "^4.9",
         "spatie/laravel-permission": "^6.9"
     },
     "require-dev": {

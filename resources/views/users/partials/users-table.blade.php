@@ -10,7 +10,7 @@
             @endif
         </tr>
     </thead>
-    <tbody>
+    <tbody class="users-table">
         @forelse ($users as $user)
             <tr>
                 <td class="text-left">{{ $user->full_name }}</td>

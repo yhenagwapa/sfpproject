@@ -33,6 +33,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
+                            <h5 class="card-title">Children</h5>
                             <div class="col-md-6 mt-4 d-flex align-items-center">
                                 @can(['create-child'])
                                 <a href="{{ route('child.create') }}"><button type="button"
@@ -40,15 +41,6 @@
                                             class="bi bi-plus-circle"></i>Add Child Profile</button></a>
                                 @endcan
                             </div>
-                            {{-- <div class="col-md-6 mt-4 d-flex align-items-center">
-                                    <form id="searchForm" method="GET" action="{{ route('child.search') }}">
-                                        <input type="search" name="search" id='search'
-                                            class="form-control me-2 rounded" placeholder="Search"
-                                            value="{{ request()->input('search') }}">
-                                        <button type="submit"
-                                            class="text-white bg-blue-600 rounded px-3 min-h-9">Search</button>
-                                    </form>
-                                </div> --}}
                             
                             <div class="col-md-6 mt-4 text-sm">
                                 <form action="{{ route('child.index') }}" method="GET">
@@ -67,10 +59,7 @@
                                     </select>
                                 </form>
                             </div>
-                        
-
-                            <!-- Male Children Table -->
-                            <h1 class="card-title mt-3 mb-0">Children</h1>
+                            
                             @include('child.partials.children-table', [
                                 'maleChildren' => $maleChildren,
                                 'femaleChildren' => $femaleChildren

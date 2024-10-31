@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
@@ -75,6 +76,9 @@ Route::middleware('auth')->group(function () {
     Route::get('nutritionalstatus/{id}', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
     Route::post('nutritionalstatus/store', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
     Route::put('nutritionalstatus/store', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
+    Route::get('nutritionalstatus/{id}/edit', [NutritionalStatusController::class, 'edit'])->name('nutritionalstatus.edit');
+    Route::put('nutritionalstatus/{id}/edit-upon-entry', [NutritionalStatusController::class, 'updateUponEntryDetails'])->name('nutritionalstatus.updateUponEntryDetails');
+    Route::put('nutritionalstatus/{id}/edit-after-120', [NutritionalStatusController::class, 'updateAfter120Details'])->name('nutritionalstatus.updateAfter120Details');
     
     Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
     Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');
@@ -120,5 +124,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/print/age-bracket-after-120', [PDFController::class, 'printAgeBracketAfter120'])->name('reports.print.age-bracket-after-120');
     Route::get('/reports/print/monitoring', [PDFController::class, 'printMonitoring'])->name('reports.print.monitoring');
     Route::get('/reports/print/unfunded', [PDFController::class, 'printUnfunded'])->name('reports.print.unfunded');
+
+    Route::get('/activitylogs', [ActivityLogController::class, 'index'])->name('activitylogs.index');
 });
 

@@ -11,7 +11,7 @@ class StoreNutritionalStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->can('nutrition-status-entry');
+        return auth()->user()->can('create-nutritional-status');
     }
 
     /**

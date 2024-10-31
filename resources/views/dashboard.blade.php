@@ -124,185 +124,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="container">
-                            <div class="col-12">
-                                <div class="card info-card chart-card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Nutritional Status</h5>
-                                        <span>
-                                            <canvas id="barChart1" class="max-h-400 max-w-full"></canvas>
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", () => {
-                                                    new Chart(document.querySelector('#barChart1'), {
-                                                        type: 'bar',
-                                                        data: {
-                                                            labels: ['Upon Entry', 'After 120 Feedings'],
-                                                            datasets: [{
-                                                                label: 'Weight for Age',
-                                                                data: [50, 100],
-                                                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                                                borderColor: 'rgb(255, 99, 132)',
-                                                                borderWidth: 1
-                                                            },
-                                                            {
-                                                                label: 'Weight for Height',
-                                                                data: [150, 200],
-                                                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                                                borderColor: 'rgb(54, 162, 235)',
-                                                                borderWidth: 1
-                                                            },
-                                                            {
-                                                                label: 'Height for Age',
-                                                                data: [250, 300],
-                                                                backgroundColor: 'rgba(255, 205, 86, 0.2)',
-                                                                borderColor: 'rgb(255, 205, 86)',
-                                                                borderWidth: 1
-                                                            }]
-                                                        },
-                                                        options: {
-                                                            scales: {
-                                                                y: {
-                                                                    beginAtZero: true
-                                                                }
-                                                            }
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-                                        </span>
-                                        {{-- <span>
-                                            <canvas id="barChart4" style="max-height: 200px;"></canvas>
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", () => {
-                                                    new Chart(document.querySelector('#barChart2'), {
-                                                        type: 'bar',
-                                                        data: {
-                                                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                                                            datasets: [{
-                                                                label: 'Bar Chart',
-                                                                data: [65, 59, 80, 81, 56, 55, 40],
-                                                                backgroundColor: [
-                                                                    'rgba(255, 99, 132, 0.2)',
-                                                                    'rgba(255, 159, 64, 0.2)',
-                                                                    'rgba(255, 205, 86, 0.2)',
-                                                                    'rgba(75, 192, 192, 0.2)',
-                                                                    'rgba(54, 162, 235, 0.2)',
-                                                                    'rgba(153, 102, 255, 0.2)',
-                                                                    'rgba(201, 203, 207, 0.2)'
-                                                                ],
-                                                                borderColor: [
-                                                                    'rgb(255, 99, 132)',
-                                                                    'rgb(255, 159, 64)',
-                                                                    'rgb(255, 205, 86)',
-                                                                    'rgb(75, 192, 192)',
-                                                                    'rgb(54, 162, 235)',
-                                                                    'rgb(153, 102, 255)',
-                                                                    'rgb(201, 203, 207)'
-                                                                ],
-                                                                borderWidth: 1
-                                                            }]
-                                                        },
-                                                        options: {
-                                                            scales: {
-                                                                y: {
-                                                                    beginAtZero: true
-                                                                }
-                                                            }
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-                                        </span>
-                                        <span>
-                                            <canvas id="barChart3" style="max-height: 200px;"></canvas>
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", () => {
-                                                    new Chart(document.querySelector('#barChart3'), {
-                                                        type: 'bar',
-                                                        data: {
-                                                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                                                            datasets: [{
-                                                                label: 'Bar Chart',
-                                                                data: [65, 59, 80, 81, 56, 55, 40],
-                                                                backgroundColor: [
-                                                                    'rgba(255, 99, 132, 0.2)',
-                                                                    'rgba(255, 159, 64, 0.2)',
-                                                                    'rgba(255, 205, 86, 0.2)',
-                                                                    'rgba(75, 192, 192, 0.2)',
-                                                                    'rgba(54, 162, 235, 0.2)',
-                                                                    'rgba(153, 102, 255, 0.2)',
-                                                                    'rgba(201, 203, 207, 0.2)'
-                                                                ],
-                                                                borderColor: [
-                                                                    'rgb(255, 99, 132)',
-                                                                    'rgb(255, 159, 64)',
-                                                                    'rgb(255, 205, 86)',
-                                                                    'rgb(75, 192, 192)',
-                                                                    'rgb(54, 162, 235)',
-                                                                    'rgb(153, 102, 255)',
-                                                                    'rgb(201, 203, 207)'
-                                                                ],
-                                                                borderWidth: 1
-                                                            }]
-                                                        },
-                                                        options: {
-                                                            scales: {
-                                                                y: {
-                                                                    beginAtZero: true
-                                                                }
-                                                            }
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-                                        </span>
-                                        <span>
-                                            <canvas id="barChart4" style="max-height: 200px;"></canvas>
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", () => {
-                                                    new Chart(document.querySelector('#barChart4'), {
-                                                        type: 'bar',
-                                                        data: {
-                                                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                                                            datasets: [{
-                                                                label: 'Bar Chart',
-                                                                data: [65, 59, 80, 81, 56, 55, 40],
-                                                                backgroundColor: [
-                                                                    'rgba(255, 99, 132, 0.2)',
-                                                                    'rgba(255, 159, 64, 0.2)',
-                                                                    'rgba(255, 205, 86, 0.2)',
-                                                                    'rgba(75, 192, 192, 0.2)',
-                                                                    'rgba(54, 162, 235, 0.2)',
-                                                                    'rgba(153, 102, 255, 0.2)',
-                                                                    'rgba(201, 203, 207, 0.2)'
-                                                                ],
-                                                                borderColor: [
-                                                                    'rgb(255, 99, 132)',
-                                                                    'rgb(255, 159, 64)',
-                                                                    'rgb(255, 205, 86)',
-                                                                    'rgb(75, 192, 192)',
-                                                                    'rgb(54, 162, 235)',
-                                                                    'rgb(153, 102, 255)',
-                                                                    'rgb(201, 203, 207)'
-                                                                ],
-                                                                borderWidth: 1
-                                                            }]
-                                                        },
-                                                        options: {
-                                                            scales: {
-                                                                y: {
-                                                                    beginAtZero: true
-                                                                }
-                                                            }
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-                                        </span> --}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="col-12">
                             <div class="card info-card province-card">
@@ -357,6 +178,193 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            <div class="col-12">
+                                <div class="card info-card chart-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Nutritional Status <br><i>(Weight for Age)</i></h5>
+                                        <span>
+                                            <canvas id="barChart1" class="max-h-200 max-w-full"></canvas>
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", () => {
+                                                    new Chart(document.querySelector('#barChart1'), {
+                                                        type: 'bar',
+                                                        data: {
+                                                            labels: ['Upon Entry', 'After 120 Feedings'],
+                                                            datasets: [
+                                                                    {
+                                                                    label: 'Severely Underweight',
+                                                                    data: [50, 100],
+                                                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                                                    borderColor: 'rgb(255, 99, 132)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Underweight',
+                                                                    data: [150, 200],
+                                                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                                                    borderColor: 'rgb(54, 162, 235)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Normal',
+                                                                    data: [250, 300],
+                                                                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                                                                    borderColor: 'rgb(255, 205, 86)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Overweight',
+                                                                    data: [250, 300],
+                                                                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                                                                    borderColor: 'rgb(255, 205, 86)',
+                                                                    borderWidth: 1
+                                                                }
+                                                            ]
+                                                        },
+                                                        options: {
+                                                            scales: {
+                                                                y: {
+                                                                    beginAtZero: true
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            <div class="col-12">
+                                <div class="card info-card chart-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Nutritional Status <br><i>(Weight for Height)</i></h5>
+                                        <span>
+                                            <canvas id="barChart2" class="max-h-200 max-w-full"></canvas>
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", () => {
+                                                    new Chart(document.querySelector('#barChart2'), {
+                                                        type: 'bar',
+                                                        data: {
+                                                            labels: ['Upon Entry', 'After 120 Feedings'],
+                                                            datasets: [
+                                                                    {
+                                                                    label: 'Severely Wasted',
+                                                                    data: [50, 100],
+                                                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                                                    borderColor: 'rgb(255, 99, 132)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Wasted',
+                                                                    data: [150, 200],
+                                                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                                                    borderColor: 'rgb(54, 162, 235)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Normal',
+                                                                    data: [250, 300],
+                                                                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                                                                    borderColor: 'rgb(255, 205, 86)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Overweight',
+                                                                    data: [250, 300],
+                                                                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                                                                    borderColor: 'rgb(255, 205, 86)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Obese',
+                                                                    data: [250, 300],
+                                                                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                                                                    borderColor: 'rgb(255, 205, 86)',
+                                                                    borderWidth: 1
+                                                                }
+                                                            ]
+                                                        },
+                                                        options: {
+                                                            scales: {
+                                                                y: {
+                                                                    beginAtZero: true
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            <div class="col-12">
+                                <div class="card info-card chart-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Nutritional Status <br><i>(Height for Age)</i></h5>
+                                        <span>
+                                            <canvas id="barChart3" class="max-h-200 max-w-full"></canvas>
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", () => {
+                                                    new Chart(document.querySelector('#barChart3'), {
+                                                        type: 'bar',
+                                                        data: {
+                                                            labels: ['Upon Entry', 'After 120 Feedings'],
+                                                            datasets: [
+                                                                    {
+                                                                    label: 'Severely Stunted',
+                                                                    data: [50, 100],
+                                                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                                                    borderColor: 'rgb(255, 99, 132)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Stunted',
+                                                                    data: [150, 200],
+                                                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                                                    borderColor: 'rgb(54, 162, 235)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Normal',
+                                                                    data: [250, 300],
+                                                                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                                                                    borderColor: 'rgb(255, 205, 86)',
+                                                                    borderWidth: 1
+                                                                },
+                                                                {
+                                                                    label: 'Tall',
+                                                                    data: [250, 300],
+                                                                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                                                                    borderColor: 'rgb(255, 205, 86)',
+                                                                    borderWidth: 1
+                                                                }
+                                                            ]
+                                                        },
+                                                        options: {
+                                                            scales: {
+                                                                y: {
+                                                                    beginAtZero: true
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+                                        </span>
                                     </div>
                                 </div>
                             </div>

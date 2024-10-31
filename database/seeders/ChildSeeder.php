@@ -28,7 +28,7 @@ class ChildSeeder extends Seeder
             'is_child_of_soloparent' => true,
             'is_lactose_intolerant' => false,
             'is_funded' => true,
-            'child_development_center_id' => '3',
+            'child_development_center_id' => '1',
             'sex_id' => '1',
             'created_by_user_id' => '3'
         ]);
@@ -49,7 +49,7 @@ class ChildSeeder extends Seeder
             'is_child_of_soloparent' => true,
             'is_lactose_intolerant' => false,
             'is_funded' => false,
-            'child_development_center_id' => '4',
+            'child_development_center_id' => '1',
             'sex_id' => '2',
             'created_by_user_id' => '5'
         ]);
@@ -68,7 +68,7 @@ class ChildSeeder extends Seeder
             'is_child_of_soloparent' => true,
             'is_lactose_intolerant' => false,
             'is_funded' => true,
-            'child_development_center_id' => '3',
+            'child_development_center_id' => '1',
             'sex_id' => '1',
             'created_by_user_id' => '3'
         ]);
@@ -88,7 +88,7 @@ class ChildSeeder extends Seeder
             'is_child_of_soloparent' => true,
             'is_lactose_intolerant' => false,
             'is_funded' => false,
-            'child_development_center_id' => '4',
+            'child_development_center_id' => '2',
             'sex_id' => '1',
             'created_by_user_id' => '5'
         ]);
@@ -110,7 +110,7 @@ class ChildSeeder extends Seeder
             'deworming_date' => '2023/03/01',
             'vitamin_a_date' => '2023/03/01',
             'is_funded' => true,
-            'child_development_center_id' => '3',
+            'child_development_center_id' => '1',
             'sex_id' => '2',
             'created_by_user_id' => '3'
         ]);
@@ -132,7 +132,7 @@ class ChildSeeder extends Seeder
             'deworming_date' => '2023/04/01',
             'vitamin_a_date' => '2023/04/01',
             'is_funded' => true,
-            'child_development_center_id' => '4',
+            'child_development_center_id' => '2',
             'sex_id' => '1',
             'created_by_user_id' => '5'
         ]);

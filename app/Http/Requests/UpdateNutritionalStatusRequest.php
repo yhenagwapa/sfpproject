@@ -11,7 +11,7 @@ class UpdateNutritionalStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->can('nutrition-status-exit');
+        return auth()->user()->can('edit-nutritional-status');
     }
 
     /**

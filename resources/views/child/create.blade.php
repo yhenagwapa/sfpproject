@@ -58,8 +58,6 @@
                             <form class="row" method="post" action="{{ route('child.store') }} ">
                                 @csrf
 
-                                    <input type="hidden" id="cycle_implementation_id" name="cycle_implementation_id" value="{{ $cycleImplementation->id}}">
-
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="firstname">First Name</label><label for="firstname"
                                             class="text-red-600">*</label>
@@ -302,7 +300,7 @@
                                         <option value="" selected>Select Province</option>
                                         @foreach ($provinces as $psgc => $name)
                                         <option value="{{ $psgc }}"
-                                            {{ request('province_psgc') == $psgc ? 'selected' : '' }}>
+                                            {{ old('province_psgc') == $psgc ? 'selected' : '' }}>
                                             {{ $name }}
                                         </option>
                                         @endforeach
@@ -320,7 +318,7 @@
                                         <option value="" selected>Select City/Municipality</option>
                                         @foreach ($cities as $psgc => $name)
                                         <option value="{{ $psgc }}"
-                                            {{ request('city_name_psgc') == $psgc ? 'selected' : '' }}>
+                                            {{ old('city_name_psgc') == $psgc ? 'selected' : '' }}>
                                             {{ $name }}
                                         </option>
                                         @endforeach
@@ -337,7 +335,7 @@
                                         <option value="" selected>Select Barangay</option>
                                         @foreach ($barangays as $psgc => $name)
                                         <option value="{{ $psgc }}"
-                                            {{ request('brgy_psgc') == $psgc ? 'selected' : '' }}>
+                                            {{ old('brgy_psgc') == $psgc ? 'selected' : '' }}>
                                             {{ $name }}
                                         </option>
                                         @endforeach
@@ -366,7 +364,7 @@
                                         id="zip_code" name='zip_code' value="{{ old('zip_code') }}"
                                         maxlength="4">
                                     @error('zip_code')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
                                 </div>
 
@@ -374,25 +372,69 @@
 
                                     
 
-                                    <div class='col-md-1 mt-4 text-gray-400 text-xs'>Child Status</div>
-                                    <div class='col-md-11 mt-8 text-gray-400 text-xs'>
+                                    <div class='col-md-3 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised Neighborhood Play</div>
+                                    <div class='col-md-9 mt-8 text-gray-400 text-xs'>
                                         <hr>
                                     </div>
 
-                                    <div class="col-md-12 mt-3 text-sm">
-                                        <label for="is_funded">Is this child funded?<b class="text-red-600">*</b></label>
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="child_development_center_id">CDC or SNP</label><b
+                                            class="text-red-600">*</b>
+                                            <select class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300" id="child_development_center_id" name='child_development_center_id'>
+                                                <option value="" disabled selected>Select CDC or SNP</option>
+                                                @foreach ($centers as $center)
+                                                    <option value="{{ $center->id }}"
+                                                        {{ $center->id == old('child_development_center_id') ? 'selected' : '' }}>
+                                                        {{ $center->center_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @error('child_development_center_id')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
-                                    <div class="mt-2 text-sm">
-                                        <input type="radio" name="is_funded" id="is_funded_yes"
-                                            value="1" {{ old('is_funded', '1') == '1' ? 'checked' : '' }}>
-                                        <label for="is_funded_yes">Yes</label>
-                                    
-                                        <input type="radio" class="ml-3" name="is_funded" id="is_funded_no"
-                                            value="0"
-                                            {{ old('is_funded') == '0' ? 'checked' : '' }}>
-                                        <label for="is_funded_no">No</label>
+                                    <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
+                                        <input type="text"
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            name="spaceonly">
                                     </div>
+
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="cycle_implementation_id">Cycle Implementation</label>
+                                        <select
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="cycle_implementation_id" name='cycle_implementation_id' onchange="setFundingStatus()">
+                                            @if ($cycleImplementation)
+                                                <option value="" selected>Not Applicable</option>
+                                                <option value="{{ $cycleImplementation->id }}"
+                                                    {{ $cycleImplementation->id == old('cycle_implementation_id') ? 'selected' : '' }}>
+                                                    {{ $cycleImplementation->cycle_name }}
+                                                </option>
+                                            @else
+                                                <option value="" disabled selected>No active cycle implementation</option>
+                                            @endif
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="milk_feeding_id">Milk Feeding</label>
+                                        <select
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="milk_feeding_id" name='milk_feeding_id'>
+                                            @if ($milkFeeding)
+                                                <option value="" selected>Not Applicable</option>
+                                                <option value="{{ $milkFeeding->id }}"
+                                                    {{ $milkFeeding->id == old('milk_feeding_id') ? 'selected' : '' }}>
+                                                    {{ $milkFeeding->name }}
+                                                </option>
+                                            @else
+                                                <option value="" disabled selected>No active cycle implementation</option>
+                                            @endif
+                                        </select>
+                                    </div>
+
+                                    <input type="hidden" id="is_funded" name="is_funded" value="">
 
                                     <div class="col-md-12 mt-4 text-right">
                                         <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
@@ -400,7 +442,6 @@
                                         <button type="reset"
                                             class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
                                     </div>
-
 
                                     <div class="modal fade" id="verticalycentered" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -411,14 +452,17 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Are you sure you want to save these details?
+                                                    @if ($cycleImplementation)
+                                                        Are you sure you want to save these details?
+                                                    @else
+                                                        No active cycle implementation.
+                                                    @endif
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit"
-                                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                                    <button type="button"
-                                                        class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                                        data-bs-dismiss="modal">Close</button>
+                                                    @if ($cycleImplementation)
+                                                        <button type="submit" class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                                    @endif
+                                                    <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -436,7 +480,6 @@
     <!-- {{-- pantawid and pwd additional details --}} -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Function to toggle additional details based on radio button selection
             function toggleAdditionalDetails(radioName, additionalDetailsId) {
                 const radios = document.getElementsByName(radioName);
                 const additionalDetailsSelect = document.getElementById(additionalDetailsId);
@@ -454,7 +497,7 @@
                 });
 
             }
-            // Apply the function to each set of radio buttons and additional details
+
             toggleAdditionalDetails('is_pantawid', 'pantawid_details');
             toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
 
@@ -474,16 +517,14 @@
             const citySelect = document.getElementById('city');
             const barangaySelect = document.getElementById('barangay');
 
-            // Function to filter cities based on selected province
             function filterCities() {
                 const provincePsgc = provinceSelect.value;
 
-                // Clear existing options
                 citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
                 barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
 
                 if (provincePsgc) {
-                    citySelect.style.display = 'block'; // Show the city dropdown
+                    citySelect.style.display = 'block';
                     if (locations.cities[provincePsgc]) {
                         locations.cities[provincePsgc].forEach(city => {
                             const option = document.createElement('option');
@@ -493,24 +534,21 @@
                         });
                     }
                 } else {
-                    citySelect.style.display = 'disabled'; // Hide the city dropdown if no province is selected
+                    citySelect.style.display = 'disabled';
                 }
 
-                // Reset city and barangay selects
                 citySelect.value = '';
                 barangaySelect.value = '';
-                barangaySelect.style.display = 'disabled'; // Hide barangay dropdown by default
+                barangaySelect.style.display = 'disabled';
             }
 
-            // Function to filter barangays based on selected city
             function filterBarangays() {
                 const cityPsgc = citySelect.value;
 
-                // Clear existing options
                 barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
 
                 if (cityPsgc) {
-                    barangaySelect.style.display = 'block'; // Show the barangay dropdown
+                    barangaySelect.style.display = 'block';
                     if (locations.barangays[cityPsgc]) {
                         locations.barangays[cityPsgc].forEach(barangay => {
                             const option = document.createElement('option');
@@ -520,17 +558,26 @@
                         });
                     }
                 } else {
-                    barangaySelect.style.display = 'disabled'; // Hide the barangay dropdown if no city is selected
+                    barangaySelect.style.display = 'disabled';
                 }
             }
 
-            // Attach event listeners
             provinceSelect.addEventListener('change', filterCities);
             citySelect.addEventListener('change', filterBarangays);
 
-            // Initialize visibility based on current selection
             filterCities();
             filterBarangays();
         });
+    </script>
+
+    <script>
+        function setFundingStatus() {
+            const selectElement = document.getElementById('cycle_implementation_id');
+            const isFundedInput = document.getElementById('is_funded');
+
+            isFundedInput.value = selectElement.value ? 1 : 0;
+        }
+
+        document.addEventListener('DOMContentLoaded', setFundingStatus);
     </script>
 </main><!-- End #main -->

@@ -22,7 +22,6 @@ class StoreChildRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cycle_implementation_id' => ['required','exists:cycle_implementations,id'],
             'firstname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'middlename' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
@@ -44,7 +43,10 @@ class StoreChildRequest extends FormRequest
             'is_lactose_intolerant' => ['required', 'boolean'],
             'deworming_date' => ['nullable', 'date'],
             'vitamin_a_date' => ['nullable', 'date'],
-            'is_funded' => ['required', 'boolean'],
+            'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
+            'cycle_implementation_id' => ['nullable', 'exists:cycle_implementations,id'],
+            'milk_feeding_id' => ['nullable', 'exists:milk_feedings,id'],
+            'is_funded' => ['nullable', 'boolean'],
         ];
     }
     public function messages()
@@ -56,7 +58,7 @@ class StoreChildRequest extends FormRequest
             'lastname.required' => 'Please fill in last name.',
             'lastname.regex' => 'Invalid entry.',
             'date_of_birth.required' => 'Please select date of birth.',
-            'sex.required' => 'Please select sex.',
+            'sex_id.required' => 'Please select sex.',
 
             'province_psgc.required' => 'Please select a province.',
             'city_name_psgc.required' => 'Please select a city.',
@@ -67,6 +69,8 @@ class StoreChildRequest extends FormRequest
             
             'pantawid_details.required_if' => 'Please specify pantawid details.',
             'person_with_disability_details.required_if' => 'Please fill in disability details.',
+
+            'child_development_center_id.required' => 'Please select a CDC or SNP.'
         ];
     }
 

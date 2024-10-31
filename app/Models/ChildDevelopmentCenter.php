@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ChildDevelopmentCenter extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
     
     
     protected $fillable = [
@@ -18,7 +20,12 @@ class ChildDevelopmentCenter extends Model
         'assigned_focal_user_id',
         'assigned_worker_user_id',
         'created_by_user_id',
+        'updated_by_user_id',
     ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logAll();
+    }
 
     public function user()
     {

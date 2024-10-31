@@ -108,7 +108,7 @@
                                                 <option value="" disabled selected></option>
                                                 @foreach ($extNameOptions as $value1 => $label1)
                                                     <option value="{{ $value1 }}"
-                                                        {{ old('extname', $child->extension_name) == $value1 ? 'selected' : '' }}>
+                                                        {{ old('extension_name', $child->extension_name) == $value1 ? 'selected' : '' }}>
                                                         {{ $label1 }}
                                                     </option>
                                                 @endforeach
@@ -349,37 +349,77 @@
                                             @enderror
                                         </div>
 
-                                        <div class='col-md-3 mt-4 text-gray-400 text-xs'>Child Development Center</div>
+                                        <div class='col-md-3 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised Neighborhood Play</div>
                                         <div class='col-md-9 mt-8 text-gray-400 text-xs'>
                                             <hr>
                                         </div>
 
-                                        <div class="col-md-12 mt-2">
-                                            <label for="child_development_center_id">Child Development
-                                                Center</label><label for="child_development_center_id"
-                                                class="text-red-600">*</label>
-                                            <select class="form-control rounded border-gray-300"
-                                                id="child_development_center_id" name="child_development_center_id">
-                                                <option value="">Select a center</option>
-                                                @foreach ($centers as $center)
-                                                    <option value="{{ $center->id }}"
-                                                        {{ $center->id == old('child_development_center_id', $child->child_development_center_id) ? 'selected' : '' }}>
-                                                        {{ $center->center_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-md-6 mt-3 text-sm">
+                                            <label for="child_development_center_id">CDC or SNP</label><b
+                                                class="text-red-600">*</b>
+                                                <select class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300" id="child_development_center_id" name='child_development_center_id'>
+                                                    <option value="" disabled selected>Select CDC or SNP</option>
+                                                    @foreach ($centers as $center)
+                                                        <option value="{{ $center->id }}"
+                                                            {{ $center->id == old('child_development_center_id', $child->child_development_center_id) ? 'selected' : '' }}>
+                                                            {{ $center->center_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                             @error('child_development_center_id')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
-
+    
+                                        <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
+                                            <input type="text"
+                                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                                name="spaceonly">
+                                        </div>
+    
+                                        <div class="col-md-6 mt-3 text-sm">
+                                            <label for="cycle_implementation_id">Cycle Implementation</label>
+                                            <select
+                                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                                id="cycle_implementation_id" name='cycle_implementation_id' onchange="setFundingStatus()">
+                                                @if ($cycleImplementation)
+                                                    <option value="">Not Applicable</option>
+                                                    <option value="{{ $cycleImplementation->id }}"
+                                                        {{ $cycleImplementation->id == old('cycle_implementation_id', $child->cycle_implementation_id) ? 'selected' : '' }}>
+                                                        {{ $cycleImplementation->cycle_name }}
+                                                    </option>
+                                                @else
+                                                    <option value="" disabled selected>No active cycle implementation</option>
+                                                @endif
+                                            </select>
+                                        </div>
+    
+                                        <div class="col-md-6 mt-3 text-sm">
+                                            <label for="milk_feeding_id">Milk Feeding</label>
+                                            <select
+                                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                                id="milk_feeding_id" name='milk_feeding_id'>
+                                                @if ($milkFeeding)
+                                                    <option value="">Not Applicable</option>
+                                                    <option value="{{ $milkFeeding->id }}"
+                                                        {{ $milkFeeding->id == old('milk_feeding_id', $child->milk_feeding_id) ? 'selected' : '' }}>
+                                                        {{ $milkFeeding->name }}
+                                                    </option>
+                                                @else
+                                                    <option value="" disabled selected>No active cycle implementation</option>
+                                                @endif
+                                            </select>
+                                        </div>
+    
+                                        <input type="hidden" id="is_funded" name="is_funded" value="">
+    
                                         <div class="col-md-12 mt-4 text-right">
                                             <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
                                                 data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
                                             <button type="reset"
                                                 class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
                                         </div>
-
+    
                                         <div class="modal fade" id="verticalycentered" tabindex="-1">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
@@ -389,14 +429,17 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Are you sure you want to save these details?
+                                                        @if ($cycleImplementation)
+                                                            Are you sure you want to save these details?
+                                                        @else
+                                                            No active cycle implementation.
+                                                        @endif
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit"
-                                                            class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                                        <button type="button"
-                                                            class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                                            data-bs-dismiss="modal">Close</button>
+                                                        @if ($cycleImplementation)
+                                                            <button type="submit" class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                                        @endif
+                                                        <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Close</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -500,5 +543,15 @@
                 provinceSelect.addEventListener('change', filterCities);
                 citySelect.addEventListener('change', filterBarangays);
             });
+        </script>
+        <script>
+            function setFundingStatus() {
+                const selectElement = document.getElementById('cycle_implementation_id');
+                const isFundedInput = document.getElementById('is_funded');
+    
+                isFundedInput.value = selectElement.value ? 1 : 0;
+            }
+    
+            document.addEventListener('DOMContentLoaded', setFundingStatus);
         </script>
     </main><!-- End #main -->

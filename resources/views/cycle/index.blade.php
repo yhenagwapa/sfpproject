@@ -45,11 +45,9 @@
                                     </div>
                                 @endcanany
                             </div>
-                            @php
-                                $cycles = App\Models\CycleImplementation::all(); // or use a method to fetch the data
-                            @endphp
+                            
                             <div class="col-md-12" id="centers-table">
-                                @include('cycle.partials.cycle-table', ['cycles' => $cycles])
+                                @include('cycle.partials.cycle-table', ['allCycles' => $allCycles])
                             </div>
                         </div>
                     </div>

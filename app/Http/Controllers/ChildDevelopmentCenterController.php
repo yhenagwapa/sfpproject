@@ -44,27 +44,26 @@ class ChildDevelopmentCenterController extends Controller
         $this->authorize('create-child-development-center');
 
         $centers = ChildDevelopmentCenter::all();
-        $users = User::role('child development worker')->get();
+        $workers = User::role('child development worker')->get();
+        $focals = User::role('lgu focal')->get();
         $psgc = new Psgc();
 
-        // Fetch all provinces for the form
         $provinces = $psgc->getProvinces();
-        $cities = $psgc->allCities();      // Fetch all cities once
-        $barangays = $psgc->allBarangays(); // Fetch all barangays once
+        $cities = $psgc->allCities();
+        $barangays = $psgc->allBarangays();
 
         if ($request->has('province_psgc') && !empty($request->input('province_psgc'))) {
             $province_psgc = $request->input('province_psgc');
-            // Fetch cities for the selected province
+            
             $cities = $psgc->allCities()->get($province_psgc, collect([]));
         }
     
-        // Check if city is selected
         if ($request->has('city_name_psgc') && !empty($request->input('city_name_psgc'))) {
             $city_psgc = $request->input('city_name_psgc');
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('centers.create', compact('centers', 'users', 'provinces', 'cities', 'barangays'));
+        return view('centers.create', compact('centers', 'workers', 'focals', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -124,7 +123,8 @@ class ChildDevelopmentCenterController extends Controller
         $this->authorize('edit-child-development-center');
 
         $center = ChildDevelopmentCenter::findOrFail($id); 
-        $users = User::role('child development worker')->get();
+        $workers = User::role('child development worker')->get();
+        $focals = User::role('lgu focal')->get();
         $psgc = new Psgc();
 
         $psgcRecord = Psgc::find($center->psgc_id);
@@ -145,7 +145,8 @@ class ChildDevelopmentCenterController extends Controller
 
         return view('centers.edit', [
             'center' => $center,
-            'users' => $users,
+            'focals' => $focals,
+            'workers' => $workers,
             'psgcRecord' => $psgcRecord,
             'provinces' => $provinces,
             'cities' => $cities,

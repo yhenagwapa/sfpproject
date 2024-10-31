@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Child extends Model
-{
-    use HasFactory;
+{ 
+    use HasFactory, LogsActivity;
 
     protected $table = 'children';
 
@@ -40,6 +42,11 @@ class Child extends Model
         'created_by_user_id', 
         'updated_by_user_id'
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logAll();
+    }
 
     public function nutritionalStatus()
     {

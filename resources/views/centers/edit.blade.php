@@ -65,26 +65,42 @@
                                     <hr>
                                 </div>
 
-                                <div class="col-md-6 mt-3 text-sm">
+                                <div class="col-md-12 mt-3 text-sm">
                                     <label for="center_name">Center Name<b class="text-red-600">*</b></label>
                                     <input type="text" class="form-control rounded border-gray-300" id="center_name"
                                         name="center_name" value="{{ old('center_name', $center->center_name) }}"
                                         autofocus>
-
                                     @error('center_name')
                                         <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-6 mt-3 text-sm">
-                                    <label for="assigned_user_id">Child Development Worker<b
+                                    <label for="assigned_user_id">Assigned LGU Focal<b
+                                            class='text-red-600'>*</b></label>
+                                    <select class="form-control rounded border-gray-300" id="assigned_focal_user_id"
+                                        name="assigned_focal_user_id">
+                                        <option value="" selected>Select LGU Focal</option>
+                                        @foreach ($focals as $focal)
+                                            <option value="{{ $focal->id }}" {{ old('assigned_focal_user_id', $center->assigned_focal_user_id) == $focal->id ? 'selected' : '' }}>
+                                                {{ $focal->full_name }} 
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('assigned_focal_user_id')
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mt-3 text-sm">
+                                    <label for="assigned_user_id">Assigned Child Development Worker<b
                                             class='text-red-600'>*</b></label>
                                     <select class="form-control rounded border-gray-300" id="assigned_worker_user_id"
                                         name="assigned_worker_user_id">
                                         <option value="" selected>Select Worker</option>
-                                        @foreach ($users as $user)
-                                            <option value="{{ $user->id }}" {{ old('assigned_worker_user_id', $center->assigned_worker_user_id) == $user->id ? 'selected' : '' }}>
-                                                {{ $user->full_name }} 
+                                        @foreach ($workers as $worker)
+                                            <option value="{{ $worker->id }}" {{ old('assigned_worker_worker_id', $center->assigned_worker_user_id) == $worker->id ? 'selected' : '' }}>
+                                                {{ $worker->full_name }} 
                                             </option>
                                         @endforeach
                                     </select>
@@ -254,12 +270,11 @@
             console.log('city psgc preselected', citySelect.value);
             console.log('brgy psgc preselected', barangaySelect.value);
 
-            // Function to filter cities based on selected province
             function filterCities() {
                 let provincePsgc = provinceSelect.value;
 
                 if (provincePsgc && locations.cities[provincePsgc]) {
-                    // Populate cities
+                    
                     Object.entries(locations.cities[provincePsgc]).forEach(([psgc, name]) => {
                         const option = document.createElement('option');
                         option.value = psgc;
@@ -272,12 +287,11 @@
                 }
             }
 
-            // Function to filter barangays based on selected city
             function filterBarangays() {
                 let cityPsgc = citySelect.value;
 
                 if (cityPsgc && locations.barangays[cityPsgc]) {
-                    // Populate barangays
+                    
                     Object.entries(locations.barangays[cityPsgc]).forEach(([psgc, name]) => {
                         const option = document.createElement('option');
                         option.value = psgc;
@@ -285,7 +299,7 @@
                         barangaySelect.appendChild(option);
                     });
 
-                    // Set selected value
+                    
                     barangaySelect.value = '{{ old('brgy_psgc', $psgcRecord->brgy_psgc) }}';
                 }
             }
@@ -309,12 +323,11 @@
             function filterCitiesWhenProvinceChanged() {
                 const newProvincePsgc = newProvinceSelect.value;
 
-                // Clear existing options
                 citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
                 barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
 
                 if (newProvincePsgc) {
-                    newCitySelect.style.display = 'block'; // Show the city dropdown
+                    newCitySelect.style.display = 'block';
                     if (locations.changedCities[newProvincePsgc]) {
                         locations.changedCities[newProvincePsgc].forEach(city => {
                             const option = document.createElement('option');
@@ -324,17 +337,15 @@
                         });
                     }
                 }
-                // Reset city and barangay selects
+                
                 newCitySelect.value = '';
                 newBarangaySelect.value = '';
 
             }
 
-            // Function to filter barangays based on selected city
             function filterBarangaysWhenCitiesChanged() {
                 const newCityPsgc = newCitySelect.value;
 
-                // Clear existing options
                 newBarangaySelect.innerHTML = '<option value="">Select Barangay</option>';
 
                 if (newCityPsgc) {

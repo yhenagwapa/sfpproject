@@ -14,6 +14,7 @@ use App\Models\Psgc;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use App\Models\CycleImplementation;
+use App\Models\MilkFeeding;
 
 class ChildController extends Controller
 {
@@ -301,7 +302,11 @@ class ChildController extends Controller
     {
         $this->authorize('create-child');
         $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-        $centers = ChildDevelopmentCenter::all();
+        $milkFeeding = MilkFeeding::where('status', 'active')->first();
+        
+        $workerID = auth()->id();
+        $centers = ChildDevelopmentCenter::where('assigned_worker_user_id', $workerID)->get();
+
         $sexOptions = Sex::all();
 
         $psgc = new Psgc();
@@ -321,7 +326,7 @@ class ChildController extends Controller
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('child.create', compact('cycleImplementation','centers', 'sexOptions', 'provinces', 'cities', 'barangays'));
+        return view('child.create', compact('cycleImplementation', 'milkFeeding', 'centers', 'sexOptions', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -358,14 +363,9 @@ class ChildController extends Controller
             return redirect()->back()->withErrors(['msg' => 'Location not found']);
         }
 
-        $childDevelopmentCenter = ChildDevelopmentCenter::where('assigned_worker_user_id', auth()->id())->first();
-
-        if (!$childDevelopmentCenter) {
-            return redirect()->back()->withErrors('You are not assigned to any Child Development Center.');
-        }
-
         $child = Child::create([
             'cycle_implementation_id' => $request->cycle_implementation_id,
+            'milk_feeding_id' => $request->milk_feeding_id,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
@@ -385,7 +385,7 @@ class ChildController extends Controller
             'deworming_date' => $request->deworming_date,
             'vitamin_a_date' => $request->vitamin_a_date,
             'is_funded' => $request->is_funded,
-            'child_development_center_id' => $childDevelopmentCenter->id,
+            'child_development_center_id' => $request->child_development_center_id,
             'created_by_user_id' => auth()->id(),
         ]);
 
@@ -398,6 +398,9 @@ class ChildController extends Controller
     public function show(Request $request, $id)
     {
         $this->authorize('edit-child');
+
+        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $milkFeeding = MilkFeeding::where('status', 'active')->first();
 
         $child = Child::findOrFail($id);
         $centers = ChildDevelopmentCenter::all();
@@ -445,7 +448,7 @@ class ChildController extends Controller
             'mcct' => 'MCCT'
         ];
 
-        return view('child.edit', compact('child', 'centers', 'sexOptions', 'extNameOptions', 'pantawidDetails', 'psgcRecord', 'provinces', 'cities', 'barangays', 'provinceChange', 'cityChange', 'barangayChange'));
+        return view('child.edit', compact('child', 'cycleImplementation', 'milkFeeding', 'centers', 'sexOptions', 'extNameOptions', 'pantawidDetails', 'psgcRecord', 'provinces', 'cities', 'barangays', 'provinceChange', 'cityChange', 'barangayChange'));
     }
 
     /**
@@ -460,41 +463,45 @@ class ChildController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UpdateChildRequest $request, Child $child)
-{
-    $validatedData = $request->validated();
-    $validatedData['extension_name'] = $validatedData['extension_name'] ?? '';
-    $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+    {
+        $validatedData = $request->validated();
+        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
 
-    $existingChild = Child::where('firstname', $validatedData['firstname'])
-        ->where('middlename', $validatedData['middlename'])
-        ->where('lastname', $validatedData['lastname'])
-        ->where('extension_name', $validatedData['extension_name'])
-        ->where('date_of_birth', $validatedData['date_of_birth'])
-        ->where('cycle_implementation_id', $cycleImplementation->id)
-        ->where('id', '!=', $child->id)
-        ->first();
+        $query = Child::where('firstname', $validatedData['firstname'])
+            ->where('middlename', $validatedData['middlename'])
+            ->where('lastname', $validatedData['lastname'])
+            ->where('date_of_birth', $validatedData['date_of_birth'])
+            ->where('cycle_implementation_id', $cycleImplementation->id)
+            ->where('id', '!=', $child->id);
 
-    if ($existingChild) {
-        return redirect()->back()->withErrors([
-            'error' => 'A child with the same name and date of birth already exists in this cycle.',
-        ])->withInput();
+        if (isset($validatedData['extension_name'])) {
+            $query->where('extension_name', $validatedData['extension_name']);
+        }
+
+        $existingChild = $query->first();
+
+
+        if ($existingChild) {
+            return redirect()->back()->withErrors([
+                'error' => 'A child with the same name and date of birth already exists in this cycle.',
+            ])->withInput();
+        }
+
+        $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
+                ->where('city_name_psgc', $request->input('city_name_psgc'))
+                ->where('brgy_psgc', $request->input('brgy_psgc'))
+                ->first();
+
+        if ($psgc) {
+            $validatedData['psgc_id'] = $psgc->psgc_id;
+        } else {
+            return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
+        }
+
+        $child->update($validatedData);
+
+        return redirect()->route('child.index')->with('success', 'Child record updated successfully.');
     }
-
-    $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
-            ->where('city_name_psgc', $request->input('city_name_psgc'))
-            ->where('brgy_psgc', $request->input('brgy_psgc'))
-            ->first();
-
-    if ($psgc) {
-        $validatedData['psgc_id'] = $psgc->psgc_id;
-    } else {
-        return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
-    }
-
-    $child->update($validatedData);
-
-    return redirect()->route('child.index')->with('success', 'Child record updated successfully.');
-}
 
 
     
