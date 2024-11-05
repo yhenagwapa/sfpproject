@@ -2,13 +2,81 @@
 
 @section('content')
 
-    <main id="main" class="main">
+<main id="main" class="main">
 
-        @if (session('success'))
-            <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <!-- Success Alert -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" id="success-alert" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alert = document.getElementById('success-alert');
+            if (alert) {
+                setTimeout(() => {
+                    new bootstrap.Alert(alert).close();
+                }, 2000);
+            }
+        });
+    </script>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-3 p-0">
+            <li class="breadcrumb-item active"><a href="#">Implementations</a></li>
+        </ol>
+    </nav>
+
+    <!-- Content Wrapper -->
+    <div class="wrapper">
+        <section class="section">
+            <div class="row">
+                <!-- Cycle Implementations Card -->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Cycle Implementations</h5>
+                            <div class="row">
+                                @can('add-cycle-implementation')
+                                    <div class="col-6 mb-5 d-flex align-items-center">
+                                        <a href="{{ route('cycle.create') }}" class="btn btn-primary">
+                                            <i class="bi bi-plus-circle me-2"></i>New Cycle Implementation
+                                        </a>
+                                    </div>
+                                @endcan
+                            </div>
+                            <div id="centers-table">
+                                @include('cycle.partials.cycle-table', ['allCycles' => $allCycles])
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Milk Feeding Card -->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Milk Feeding</h5>
+                            <div class="row">
+                                @can('add-cycle-implementation')
+                                    <div class="col-6 mb-5 d-flex align-items-center">
+                                        <a href="#" class="btn btn-primary">
+                                            <i class="bi bi-plus-circle me-2"></i>New Milk Feeding
+                                        </a>
+                                    </div>
+                                @endcan
+                            </div>
+                            <div id="centers-table">
+                                <!-- Placeholder for milk feeding table -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+<<<<<<< HEAD
         @endif
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -81,9 +149,13 @@
         </div>
 
 
+=======
+>>>>>>> 7534738cb0d8735f1935fc3b890fff69e9cc2677
         </section>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        @vite(['resources/js/app.js'])
+    </div>
 
-    </main><!-- End #main -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/js/app.js'])
+
+</main>
+@endsection

@@ -4,9 +4,9 @@
 
 @section('content')
 
-    <main id="main" class="main">
+<main id="main" class="main">
 
-        <div class="pagetitle">
+    <div class="pagetitle">
 
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
@@ -16,7 +16,7 @@
             </nav>
         </div><!-- End Page Title -->
 
-
+    
         @if (session('error'))
             <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
                 {{ session('error') }}
@@ -50,11 +50,11 @@
                 }
             });
         </script>
-        <div class="wrapper">
-            <section class="section">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="card">
+    <div class="wrapper">
+        <section class="section">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="card">
                             <div class="report-card-body mt-4 mb-2 text-sm">
                                 <ul class="report-side-nav" id="report-side-nav">
                                     @if (auth()->user()->hasRole('admin') ||
@@ -356,11 +356,13 @@
                                     @endif
                                 </ul>
                             </div>
-                        </div>
                     </div>
-                    <div class="col-md-10">
-                        <div class="card">
-                            <div class="card-body">
+                </div>
+
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-body">
+                            
                                 <div id="report-content">
                                     @if (auth()->user()->hasRole('admin') ||
                                             auth()->user()->hasRole('lgu focal') ||
@@ -427,14 +429,14 @@
                                         </div>
                                     @endif
                                 </div>
-                            </div>
                         </div>
                     </div>
-
                 </div>
-            </section>
-        </div>
-        {{-- <script>
+
+            </div>
+        </section>
+    </div>
+	 {{-- <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const reportLinks = document.querySelectorAll('.report-link');
 
@@ -472,5 +474,5 @@
                 });
             });
         </script> --}}
-
-    </main><!-- End #main -->
+</main>
+@endsection

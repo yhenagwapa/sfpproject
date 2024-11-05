@@ -3,58 +3,53 @@
 @section('title', 'SFP Onse')
 
 @section('content')
+<main id="main" class="main">
 
-    <main id="main" class="main">
+    <!-- Page Title -->
+    <div class="pagetitle">
+        <nav style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb mb-3 p-0">
+                <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Cycle Implementations</a></li>
+                <li class="breadcrumb-item">Reports</li>
+            </ol>
+        </nav>
+    </div>
 
-        <div class="pagetitle">
+    <!-- Alerts -->
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" id="danger-alert" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-            <nav style="--bs-breadcrumb-divider: '>';">
-                <ol class="breadcrumb mb-3 p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Cycle Implementations</a></li>
-                    <li class="breadcrumb-item ">Reports</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" id="success-alert" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if (session('success'))
-            <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var alert1 = document.getElementById('success-alert');
-                var alert2 = document.getElementById('danger-alert');
-                if (alert1) {
-                    // Automatically close the alert after 3 seconds (3000 milliseconds)
-                    setTimeout(function() {
-                        var bsAlert1 = new bootstrap.Alert(alert1);
-                        bsAlert1.close();
-                    }, 2000);
-                }
-                if (alert2) {
-                    // Automatically close the alert after 3 seconds (3000 milliseconds)
-                    setTimeout(function() {
-                        var bsAlert2 = new bootstrap.Alert(alert2);
-                        bsAlert2.close();
-                    }, 2000);
+    <!-- Alert Auto-Close Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alertIds = ['success-alert', 'danger-alert'];
+            alertIds.forEach(alertId => {
+                const alertElement = document.getElementById(alertId);
+                if (alertElement) {
+                    setTimeout(() => new bootstrap.Alert(alertElement).close(), 2000);
                 }
             });
-        </script>
-        <div class="wrapper">
-            <section class="section">
-                <div class="row">
-                    <div class="col-lg-2">
-                        <div class="card">
+        });
+    </script>
+
+    <div class="wrapper">
+        <section class="section">
+            <div class="row">
+                
+                <!-- Sidebar Navigation -->
+                <div class="col-lg-2">
+                    <div class="card">
                             <div class="report-card-body mt-4 mb-2 text-sm">
                                 <ul class="report-side-nav" id="report-side-nav">
                                     @if (auth()->user()->hasRole('admin') ||
@@ -356,8 +351,8 @@
                                     @endif
                                 </ul>
                             </div>
-                        </div>
                     </div>
+                </div>
                     <div class="col-lg-10">
                         <div class="card">
                             <div class="card-body">
@@ -427,47 +422,9 @@
                             </div>
                         </div>
                     </div>
+            </div>
+        </section>
+    </div>
 
-                </div>
-            </section>
-        </div>
-        {{-- <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const reportLinks = document.querySelectorAll('.report-link');
-
-                reportLinks.forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const target = this.getAttribute('data-target');
-                        showContent(target);
-                    });
-                });
-
-                function showContent(target) {
-                    document.querySelectorAll('#report-content > div').forEach(div => div.style.display = 'none');
-
-                    const selectedContent = document.getElementById(`${target}-content`);
-                    if (selectedContent) {
-                        selectedContent.style.display = 'block';
-                    }
-                }
-
-                showContent('funded');
-            });
-        </script>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const reportLinks = document.querySelectorAll('.report-link');
-
-                reportLinks.forEach(link => {
-                    link.addEventListener('click', function() {
-                        reportLinks.forEach(l => l.classList.remove('active'));
-
-                        this.classList.add('');
-                    });
-                });
-            });
-        </script> --}}
-
-    </main><!-- End #main -->
+</main>
+@endsection

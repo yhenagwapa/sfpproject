@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
     ]);
 
     Route::get('/child/search', [ChildController::class, 'search'])->name('child.search');
+    Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');
 
     Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');

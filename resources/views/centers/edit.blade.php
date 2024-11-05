@@ -4,6 +4,7 @@
 
 <main id="main" class="main">
 
+    <!-- Page Title -->
     <div class="pagetitle">
 
         <nav style="--bs-breadcrumb-divider: '>';">
@@ -27,7 +28,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    <script>
+
+     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var alert1 = document.getElementById('success-alert');
             var alert2 = document.getElementById('danger-alert');
@@ -48,6 +50,7 @@
         });
     </script>
 
+    <!-- Center Details Form -->
     <div class="wrapper">
         <section class="section">
             <div class="row">
@@ -243,12 +246,13 @@
                                 </div>
                         </div>
                         </form><!-- End floating Labels Form -->
+                        </div>
                     </div>
                 </div>
             </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        </section>
+    <!-- Location Scripts -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -367,14 +371,6 @@
         });
     </script>
 
+</main>
 
-
-
-
-
-
-
-    </section>
-
-    </div>
-</main><!-- End #main -->
+@endsection
