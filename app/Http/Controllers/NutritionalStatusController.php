@@ -26,7 +26,7 @@ class NutritionalStatusController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('permission:create-nutritional-status', ['only' => ['index', 'storeUponEntryDetails', 'storeExitDetails']]);
-        $this->middleware('permission:edit-nutritional-status', ['only' => ['index', 'edit', 'updateUponEntryDetails', 'updateAfter120Details' ]]);
+        $this->middleware('permission:edit-nutritional-status', ['only' => ['edit', 'updateUponEntryDetails', 'updateAfter120Details' ]]);
     }
 
     public function index($id)
@@ -91,7 +91,7 @@ class NutritionalStatusController extends Controller
         $childSex = $child->sex->id;
 
         $cycleID = $child->cycle_implementation_id;
-        $childMilkFeeding = $child->milk_feeding_id;
+        $childMilkFeeding = $child->milk_feeding_id ? $child->milk_feeding_id : null;
         $childBirthDate = Carbon::parse($child->date_of_birth);
 
         $entryWeighingDate = Carbon::parse($request->weighing_date);
@@ -213,6 +213,7 @@ class NutritionalStatusController extends Controller
             'is_malnourish' => $entryIsMalnourished,
             'is_undernourish' => $entryIsUndernourished,
             'created_by_user_id' => auth()->id(),
+            'updated_by_user_id' => auth()->id(),
         ]);
 
         return redirect()->route('nutritionalstatus.index', ['id' => $request->child_id])->with('success', 'Upon entry details saved successfully.');

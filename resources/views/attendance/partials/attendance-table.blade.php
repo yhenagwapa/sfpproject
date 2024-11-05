@@ -1,4 +1,4 @@
-<table id="attendance-table" class="table datatable mt-3">
+<table id="attendance-table" class="table mt-3">
     <thead>
         <tr>
             <th scope="col">Feeding No.</th>

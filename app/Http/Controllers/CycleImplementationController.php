@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CycleImplementation;
+use App\Models\MilkFeeding;
 use App\Http\Requests\StoreCycleImplementationRequest;
 use App\Http\Requests\UpdateCycleImplementationRequest;
 use App\Enums\CycleStatus;
@@ -19,8 +20,9 @@ class CycleImplementationController extends Controller
     public function index()
     {
         $allCycles = CycleImplementation::all();
+        $milkFeedings = MilkFeeding::all();
         
-        return view('cycle.index', compact('allCycles'));
+        return view('cycle.index', compact('allCycles', 'milkFeedings'));
     }
 
     /**

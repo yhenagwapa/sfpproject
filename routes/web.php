@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\MilkFeedingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
@@ -92,6 +93,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/cycle/store', [CycleImplementationController::class, 'store'])->name(name: 'cycle.store');
     Route::get('/cycle/{id}/edit', [CycleImplementationController::class, 'edit'])->name(name: 'cycle.edit');
     Route::put('/cycle/{cycle}/update', [CycleImplementationController::class, 'update'])->name(name: 'cycle.update');
+
+
+    Route::get('/milkfeedings/create', [MilkFeedingController::class, 'create'])->name(name: 'milkfeedings.create');
+    Route::post('/milkfeedings/store', [MilkFeedingController::class, 'store'])->name(name: 'milkfeedings.store');
+    Route::get('/milkfeedings/{id}/edit', [MilkFeedingController::class, 'edit'])->name(name: 'milkfeedings.edit');
+    Route::put('/milkfeedings/{milkfeeding}/update', [MilkFeedingController::class, 'update'])->name(name: 'milkfeedings.update');
 
     Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::post('/reports/malnourish', [ReportsController::class, 'malnourish'])->name('reports.malnourish');

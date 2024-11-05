@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('nutritional_statuses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cycle_implementation_id')->constrained('cycle_implementations')->nullable();
-            $table->foreignId('milk_feeding_id')->constrained('milk_feedings')->nullable();
-            $table->foreignId('child_id')->constrained('children')->nullable(); 
+            $table->foreignId('cycle_implementation_id')->nullable()->constrained('cycle_implementations');
+            $table->foreignId('milk_feeding_id')->nullable()->constrained('milk_feedings');
+            $table->foreignId('child_id')->nullable()->constrained('children'); 
             $table->decimal('weight', 8, 2);
             $table->decimal('height', 8, 2);
             $table->date('weighing_date');

@@ -46,7 +46,7 @@
                                     @endcanany
                                 </div>
 
-                                <div class="col-md-12" id="centers-table">
+                                <div class="col-md-12" id="cycle-table">
                                     @include('cycle.partials.cycle-table', ['allCycles' => $allCycles])
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                                 <div class="row">
                                     @canany('add-cycle-implementation')
                                         <div class="col-6 mb-5 d-flex align-items-center">
-                                            <a href="">
+                                            <a href="{{ route('milkfeedings.create') }}">
                                                 <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9">
                                                     <i class="bi bi-plus-circle mr-2"></i>
                                                     New Milk Feeding
@@ -71,8 +71,8 @@
                                     @endcanany
                                 </div>
 
-                                <div class="col-md-12" id="centers-table">
-                                    {{-- @include('cycle.partials.cycle-table', ['allCycles' => $allCycles]) --}}
+                                <div class="col-md-12" id="milk-feeding-table">
+                                    @include('milkfeedings.partials.milk-feeding-table', ['milkFeedings' => $milkFeedings])
                                 </div>
                             </div>
                         </div>

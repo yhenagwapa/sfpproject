@@ -1,5 +1,5 @@
 <h5 class="card-title">Upon Entry</h5>
-<table class="table datatable table-auto mt-3 text-sm text-center w-full">
+<table id="ns-table" class="table t-3 text-sm text-center w-full">
     <thead>
         <tr>
             <th>Actual Date of Weighing</th>
@@ -40,7 +40,7 @@
 </table>
 <div></div>
 <h5 class="card-title">After 120 Feeding Days</h5>
-<table class="table datatable table-auto mt-3 text-sm text-center w-full">
+<table class="table mt-3 text-sm text-center w-full">
     <thead>
         <tr>
             <th>Actual Date of Weighing</th>

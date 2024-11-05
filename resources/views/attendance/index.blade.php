@@ -75,7 +75,7 @@
                                         @enderror
                                     </div>
 
-                                    <!-- With Milk Checkbox -->
+                                    {{-- <!-- With Milk Checkbox -->
                                     <div class="col-md-4 mt-2 text-sm">
                                         <label class="form-check-label" for="with_milk">
                                             With milk?
@@ -88,10 +88,10 @@
                                     <div class="col-md-2 mt-2 text-sm">
                                         <input type="radio" name="with_milk" id="with_milk_no" value="0" {{ old('with_milk', '0') == '0' ? 'checked' : '' }}>
                                         <label for="with_milk_no">No</label>
-                                    </div>
+                                    </div> --}}
 
                                     <!-- Save Button -->
-                                    <div class="col-md-12 mt-4 text-right">
+                                    <div class="col-md-12 text-right">
                                         <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
                                             data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
                                         <button type="reset"

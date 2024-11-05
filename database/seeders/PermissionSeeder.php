@@ -69,7 +69,6 @@ class PermissionSeeder extends Seeder
             'create-child',
             'add-attendance',
             'create-nutritional-status',
-            'edit-nutritional-status',
             'view-report',
             'print-report',
             'register',
