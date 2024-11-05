@@ -54,7 +54,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class='card-title'>Activity Logs</h5>
-                            <div class="col-md-12" id="activitylogs-table">
+                            <div class="col-md-12" id="activitylogs">
                                 @include('activitylogs.partials.activitylogs-table', ['groupedActivities' => $groupedActivities])
                             </div>
                         </div>

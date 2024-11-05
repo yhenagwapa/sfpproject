@@ -52,18 +52,6 @@ class UserController extends Controller
             }
         }
 
-        $users = $users->sortByDesc(function ($user) use ($authUser) {
-            return $user->id === $authUser->id ? 1 : 0;
-        });
-
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $perPage = 25; // Items per page
-        $currentPageItems = $users->slice(($currentPage - 1) * $perPage, $perPage)->all();
-
-        $users = new LengthAwarePaginator($currentPageItems, $users->count(), $perPage, $currentPage, [
-            'path' => LengthAwarePaginator::resolveCurrentPath(),
-        ]);
-
         return view('users.index', compact('users', 'roles'));
     }
 

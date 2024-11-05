@@ -55,15 +55,9 @@
                         <div class="card-body">
                             <div id="users-content">
                                 <h5 class="card-title">Users</h5>
-                                <div style="overflow-x: auto; max-width: 100%;">
                                     @include('users.partials.users-table', [
                                         'users' => $users,
                                 ])
-                                </div>
-                                <div class="mt-3">
-                                    @foreach ($users as $user)
-                                        {{ $users->links() }}
-                                    @endforeach
                                 </div>
                             </div>
                         </div>

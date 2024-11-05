@@ -130,7 +130,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Provinces</h5>
                                     <div class="datatable-container">
-                                        <table class="table table-borderless datatable datatable-table">
+                                        <table class="table table-borderless">
                                             <thead>
                                                 <tr>
                                                     <th scope="col" data-sortable="true"
@@ -378,7 +378,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Beneficiaries Profile</h5>
                             <div class="datatable-container">
-                                <table class="table table-borderless datatable datatable-table">
+                                <table class="table table-borderless ">
 
                                     <tbody>
                                         <tr data-index="0">

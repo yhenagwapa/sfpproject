@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MilkFeeding;
 use Illuminate\Http\Request;
 
 class MilkFeedingController extends Controller
@@ -11,7 +12,9 @@ class MilkFeedingController extends Controller
      */
     public function index()
     {
-        //
+        $milkFeedings = MilkFeeding::all();
+        
+        return view('cycle.index', compact('milkFeedings'));
     }
 
     /**

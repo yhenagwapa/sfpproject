@@ -212,34 +212,33 @@
     // main.js
 
 $(document).ready(function() {
-      // Initialize DataTables for each table with the 'datatable' class
       $('.datatable').DataTable({
-          // Define page length options
-          lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "All"]],
-          // Define column configurations
+          pageLength: 10,
+          lengthChange: false,
           columnDefs: [
               {
-                  // Set sort sequence for column 2
-                  targets: 1, // 0-based index
+                  targets: 2, 
                   orderSequence: ["desc", "asc"]
               },
+          ]
+      });
+
+      if ($.fn.DataTable.isDataTable('#activitylogs-table')) {
+          $('#activitylogs-table').DataTable().destroy();
+      }
+
+      $('#activitylogs-table').DataTable({
+          pageLength: 10,
+          lengthChange: false,
+          order: [[1, 'desc']],
+          columnDefs: [
               {
-                  // Set sort sequence for column 3
-                  targets: 2,
-                  orderSequence: ["desc"]
+                  targets: 2, 
+                  orderSequence: ["desc", "asc"]
               },
-              {
-                  // Add custom cell and header classes for column 4
-                  targets: 3,
-                  createdCell: function(td) {
-                      $(td).addClass('green');
-                  },
-                  className: "red"
-              }
           ]
       });
   });
-
   
     /**
      * Autoresize echart charts
