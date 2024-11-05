@@ -2,88 +2,85 @@
 
 @section('content')
 
-    <main id="main" class="main">
+<main id="main" class="main">
 
-        @if (session('success'))
-            <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <!-- Success Alert -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" id="success-alert" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alert = document.getElementById('success-alert');
+            if (alert) {
+                setTimeout(() => {
+                    new bootstrap.Alert(alert).close();
+                }, 2000);
+            }
+        });
+    </script>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-3 p-0">
+            <li class="breadcrumb-item active"><a href="#">Implementations</a></li>
+        </ol>
+    </nav>
+
+    <!-- Content Wrapper -->
+    <div class="wrapper">
+        <section class="section">
+            <div class="row">
+                <!-- Cycle Implementations Card -->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Cycle Implementations</h5>
+                            <div class="row">
+                                @can('add-cycle-implementation')
+                                    <div class="col-6 mb-5 d-flex align-items-center">
+                                        <a href="{{ route('cycle.create') }}" class="btn btn-primary">
+                                            <i class="bi bi-plus-circle me-2"></i>New Cycle Implementation
+                                        </a>
+                                    </div>
+                                @endcan
+                            </div>
+                            <div id="centers-table">
+                                @include('cycle.partials.cycle-table', ['allCycles' => $allCycles])
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Milk Feeding Card -->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Milk Feeding</h5>
+                            <div class="row">
+                                @can('add-cycle-implementation')
+                                    <div class="col-6 mb-5 d-flex align-items-center">
+                                        <a href="#" class="btn btn-primary">
+                                            <i class="bi bi-plus-circle me-2"></i>New Milk Feeding
+                                        </a>
+                                    </div>
+                                @endcan
+                            </div>
+                            <div id="centers-table">
+                                <!-- Placeholder for milk feeding table -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        @endif
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var alert = document.getElementById('success-alert');
-                if (alert) {
-                    // Automatically close the alert after 3 seconds (3000 milliseconds)
-                    setTimeout(function() {
-                        var bsAlert = new bootstrap.Alert(alert);
-                        bsAlert.close();
-                    }, 2000);
-                }
-            });
-        </script>
-
-        <nav style="--bs-breadcrumb-divider: '>';">
-            <ol class="breadcrumb mb-3 p-0">
-                <li class="breadcrumb-item active"><a href="#">Implementations</a></li>
-            </ol>
-        </nav>
-
-        <div class="wrapper">
-            <section class="section">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Cycle Implementations</h5>
-                                <div class="row">
-                                    @canany('add-cycle-implementation')
-                                        <div class="col-6 mb-5 d-flex align-items-center">
-                                            <a href="{{ route('cycle.create') }}"><button type="button"
-                                                    class="bg-blue-600 text-white rounded px-3 min-h-9"><i
-                                                        class="bi bi-plus-circle mr-2"></i>New Cycle Implementation</button></a>
-                                        </div>
-                                    @endcanany
-                                </div>
-
-                                <div class="col-md-12" id="centers-table">
-                                    @include('cycle.partials.cycle-table', ['allCycles' => $allCycles])
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Milk Feeding</h5>
-                                <div class="row">
-                                    @canany('add-cycle-implementation')
-                                        <div class="col-6 mb-5 d-flex align-items-center">
-                                            <a href="">
-                                                <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9">
-                                                    <i class="bi bi-plus-circle mr-2"></i>
-                                                    New Milk Feeding
-                                                </button>
-                                            </a>
-                                        </div>
-                                    @endcanany
-                                </div>
-
-                                <div class="col-md-12" id="centers-table">
-                                    {{-- @include('cycle.partials.cycle-table', ['allCycles' => $allCycles]) --}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
-
-
         </section>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        @vite(['resources/js/app.js'])
+    </div>
 
-    </main><!-- End #main -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/js/app.js'])
+
+</main>
+@endsection

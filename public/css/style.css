@@ -52,7 +52,7 @@
   --------------------------------------------------------------*/
   #main {
     margin-top: 60px;
-    padding: 20px 15px;
+    padding: 20px 5px;
     transition: all 0.3s;
   }
   
@@ -61,7 +61,6 @@
       padding: 20px;
     }
   }
-  
   .main .search-bar {
     min-width: 360px;
     padding: 0 20px;
@@ -672,7 +671,8 @@
   
     #main,
     #footer {
-      margin-left: 200px;
+      margin-left: 100px;
+      margin-right: -100px; /* Adjust as needed */
     }
   }
   

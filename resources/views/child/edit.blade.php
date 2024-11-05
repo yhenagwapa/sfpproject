@@ -4,20 +4,17 @@
 
 @section('content')
 
-    <main id="main" class="main">
+<main id="main" class="main">
+    <div class="pagetitle">
+        <nav style="--bs-breadcrumb-divider: '>'; ">
+            <ol class="breadcrumb mb-3 p-0">
+                <li class="breadcrumb-item"><a href="{{ route('child.index') }}">Children</a></li>
+                <li class="breadcrumb-item active">{{ $child->full_name }}</li>
+            </ol>
+        </nav>
+    </div>
 
-        <div class="pagetitle">
-
-            <nav style="--bs-breadcrumb-divider: '>';">
-                <ol class="breadcrumb mb-3 p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('child.index') }}">Children</a></li>
-                    <li class="breadcrumb-item active">{{ $child->full_name }}</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
-
-
-        @if (session('error'))
+   @if (session('error'))
             <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
                 {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -50,21 +47,17 @@
                 }
             });
         </script>
-        
-        <div class="wrapper">
-            <section class="section">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-title">
-                                    <h5 class='col-md-6'>{{ $child->full_name }}</h5>
-                                </div>
 
-                                <!-- Personal info -->
-                                <div class="tab-pane fade show active" id="personalinfo" role="tabpanel"
-                                    aria-labelledby="personalinfo-tab">
-                                    <form class="row" method="post" action="{{ route('child.update', $child->id) }}">
+    <div class="wrapper">
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class='card-title'>{{ $child->full_name }}</h5>
+
+                            <!-- Personal Information Form -->
+                            <form class="row" method="post" action="{{ route('child.update', $child->id) }}">
                                         @csrf
                                         @method('patch')
 
@@ -445,14 +438,13 @@
                                             </div>
                                         </div>
                                     </form><!-- End floating Labels Form -->
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>              
-            </section>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                </div>
+            </div>              
+        </section>
+    </div>
+	 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         {{-- pantawid and pwd additional details --}}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -554,4 +546,5 @@
     
             document.addEventListener('DOMContentLoaded', setFundingStatus);
         </script>
-    </main><!-- End #main -->
+</main>
+@endsection

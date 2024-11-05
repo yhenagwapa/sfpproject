@@ -3,58 +3,53 @@
 @section('title', 'SFP Onse')
 
 @section('content')
+<main id="main" class="main">
 
-    <main id="main" class="main">
+    <!-- Page Title -->
+    <div class="pagetitle">
+        <nav style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb mb-3 p-0">
+                <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Cycle Implementations</a></li>
+                <li class="breadcrumb-item">Reports</li>
+            </ol>
+        </nav>
+    </div>
 
-        <div class="pagetitle">
+    <!-- Alerts -->
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" id="danger-alert" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-            <nav style="--bs-breadcrumb-divider: '>';">
-                <ol class="breadcrumb mb-3 p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Cycle Implementations</a></li>
-                    <li class="breadcrumb-item ">Reports</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" id="success-alert" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if (session('success'))
-            <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var alert1 = document.getElementById('success-alert');
-                var alert2 = document.getElementById('danger-alert');
-                if (alert1) {
-                    // Automatically close the alert after 3 seconds (3000 milliseconds)
-                    setTimeout(function() {
-                        var bsAlert1 = new bootstrap.Alert(alert1);
-                        bsAlert1.close();
-                    }, 2000);
-                }
-                if (alert2) {
-                    // Automatically close the alert after 3 seconds (3000 milliseconds)
-                    setTimeout(function() {
-                        var bsAlert2 = new bootstrap.Alert(alert2);
-                        bsAlert2.close();
-                    }, 2000);
+    <!-- Alert Auto-Close Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alertIds = ['success-alert', 'danger-alert'];
+            alertIds.forEach(alertId => {
+                const alertElement = document.getElementById(alertId);
+                if (alertElement) {
+                    setTimeout(() => new bootstrap.Alert(alertElement).close(), 2000);
                 }
             });
-        </script>
-        <div class="wrapper">
-            <section class="section">
-                <div class="row">
-                    <div class="col-lg-2">
-                        <div class="card">
+        });
+    </script>
+
+    <div class="wrapper">
+        <section class="section">
+            <div class="row">
+                
+                <!-- Sidebar Navigation -->
+                <div class="col-lg-2">
+                    <div class="card">
                             <div class="report-card-body mt-4 mb-2 text-sm">
                                 <ul class="report-side-nav" id="report-side-nav">
                                     @if (auth()->user()->hasRole('admin') ||
@@ -356,48 +351,61 @@
                                     @endif
                                 </ul>
                             </div>
-                        </div>
                     </div>
-                    <div class="col-lg-10">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="report-content">
-                                    @if (auth()->user()->hasRole('admin') ||
-                                            auth()->user()->hasRole('lgu focal') ||
-                                            auth()->user()->hasRole('child development worker'))
-                                        <div id="funded-content">
-                                                <h5 class="card-title">Malnourished Children</h5>
+                </div>
 
-                                                <div class="row">
-                                                    <div class="col-md-6 mt-2">
-                                                        <a href="{{ url('/reports/print/malnourished') }}" target="_blank" id="printButton">
-                                                            <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9 flex items-center">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="size-5 mr-2">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-                                                                </svg>
-                                                                <span>Print</span>
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            
-                                            <div style="overflow-x: auto; max-width: 100%;">
-                                                @include('reports.partials.malnourished-table', [
-                                                    'isFunded' => $isFunded,
-                                                ])
-                                            </div>
-                                            <div class="mt-3">
-                                                    {{ $isFunded->links() }}
-                                            </div>
-                                        </div>
-                                    @endif
+                <!-- Main Content Area -->
+                <div class="col-lg-10">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Malnourished Children</h5>
+
+                            <!-- Filter and Print Options -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <form action="{{ route('reports.monitoring') }}" method="POST">
+                                        @csrf
+                                        <label for="center_name">Filter by Center:</label>
+                                        <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
+                                            <option value="all_center" {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>All Child Development Centers</option>
+                                            @foreach ($centers as $center)
+                                                <option value="{{ $center->id }}" {{ old('center_name', $cdcId) == $center->id ? 'selected' : '' }}>
+                                                    {{ $center->center_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
                                 </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <a href="{{ url('/reports/print/malnourished') }}" target="_blank" id="printButton">
+                                        <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9 flex items-center">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 size-5">
+                                                <path d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                            </svg>
+                                            Print
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Table Content -->
+                            <div style="overflow-x: auto;">
+                                @include('reports.partials.malnourished-table', ['isFunded' => $isFunded])
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="mt-3">
+                                {{ $isFunded->links() }}
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
+    </div>
 
-    </main><!-- End #main -->
+</main>
+@endsection
