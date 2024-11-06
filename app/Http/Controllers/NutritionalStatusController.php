@@ -196,8 +196,6 @@ class NutritionalStatusController extends Controller
             $entryIsUndernourished = false;
         }
 
-
-
         $entryNutritionalStatus = NutritionalStatus::create([
             'cycle_implementation_id' => $cycleID,
             'milk_feeding_id' => $childMilkFeeding,

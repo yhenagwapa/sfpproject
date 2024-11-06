@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SFP Onse')
-
 @section('content')
-<main id="main" class="main">
 
     <!-- Page Title -->
     <div class="pagetitle">
@@ -379,7 +376,7 @@
                                                     </div>
                                                 </div>
                                             
-                                            <div style="overflow-x: auto; max-width: 100%;">
+                                            <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
                                                 @include('reports.partials.undernourished-upon-entry-table', [
                                                     'centers' => $centers,
                                                 ])
@@ -396,6 +393,4 @@
             </div>
         </section>
     </div>
-
-</main>
 @endsection

@@ -2,7 +2,6 @@
 
 @section('content')
 
-    <main id="main" class="main">
 
         <div class="pagetitle">
 
@@ -318,4 +317,4 @@
         </section>
 
         </div>
-    </main><!-- End #main -->
+@endsection

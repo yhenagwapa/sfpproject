@@ -2,7 +2,6 @@
 
 @section('content')
 
-<main id="main" class="main">
 
     <div class="pagetitle">
 
@@ -130,7 +129,7 @@
                             <div class="card-title">
                                 <h5 class='col-md-6'>{{ $child->full_name }}</h5>
                             </div>
-                            <div class="col-md-12" id="attendance-table">
+                            <div class="col-md-12 table-responsive" id="attendance-table">
                                 @include('attendance.partials.attendance-table', ['attendances' => $attendances])
                             </div>
                             <div class="mt-3">
@@ -143,4 +142,4 @@
             </div>
         </section>
     </div>
-</main>
+@endsection

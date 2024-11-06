@@ -2,8 +2,6 @@
 
 @section('content')
 
-<main id="main" class="main">
-
     <!-- Page Title -->
     <div class="pagetitle">
 
@@ -264,8 +262,6 @@
                 changedBrgys: @json($changedBrgys)
             };
 
-            console.log(locations);
-
             const provinceSelect = document.getElementById('province');
             const citySelect = document.getElementById('city');
             const barangaySelect = document.getElementById('barangay');
@@ -366,7 +362,5 @@
 
         });
     </script>
-
-</main>
 
 @endsection

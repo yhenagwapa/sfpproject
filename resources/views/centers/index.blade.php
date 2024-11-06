@@ -2,7 +2,14 @@
 
 @section('content')
 
-<main id="main" class="main">
+    <!-- Breadcrumb -->
+    <div class="pagetitle">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-3 p-0">
+                <li class="breadcrumb-item active"><a href="#">Child Development Centers</a></li>
+            </ol>
+        </nav>
+    </div>
 
     <!-- Success Alert -->
     @if (session('success'))
@@ -21,12 +28,7 @@
         });
     </script>
 
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mb-3 p-0">
-            <li class="breadcrumb-item active"><a href="#">Child Development Centers</a></li>
-        </ol>
-    </nav>
+    
 
     <div class="wrapper">
         <section class="section">
@@ -61,7 +63,5 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
-
-</main>
 
 @endsection

@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SFP Onse')
-
 @section('content')
-<main id="main" class="main">
 
     <!-- Page Title -->
     <div class="pagetitle">
@@ -392,7 +389,7 @@
                             </div>
 
                             <!-- Table Content -->
-                            <div style="overflow-x: auto;">
+                            <div class="table-responsive" style="overflow-x: auto;">
                                 @include('reports.partials.malnourished-table', ['isFunded' => $isFunded])
                             </div>
 
@@ -406,6 +403,4 @@
             </div>
         </section>
     </div>
-
-</main>
 @endsection

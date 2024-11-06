@@ -1,10 +1,8 @@
 @extends('layouts.app')
+
 @section('content')
 
-    <main id="main" class="main">
-
         <div class="pagetitle">
-
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('child.index') }}">Children</a></li>
@@ -215,7 +213,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Nutritional Status</h5>
-                                @include('nutritionalstatus.partials.ns-table')
+                                <div class="table-responsive">
+                                    @include('nutritionalstatus.partials.ns-table')
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -223,4 +223,4 @@
             </section>
         </div>
         @vite(['resources/js/app.js'])
-    </main><!-- End #main -->
+@endsection

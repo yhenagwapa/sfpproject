@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<main id="main" class="main">
+
 
     <!-- Page Title -->
     <div class="pagetitle">
@@ -46,7 +46,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Activity Logs</h5>
-                            <div id="activitylogs">
+                            <div id="activitylogs" class="table-responsive">
                                 @include('activitylogs.partials.activitylogs-table', ['groupedActivities' => $groupedActivities])
                             </div>
                         </div>
@@ -56,5 +56,5 @@
         </section>
     </div>
 
-</main>
+
 @endsection

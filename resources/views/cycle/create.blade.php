@@ -2,13 +2,11 @@
 
 @section('content')
 
-    <main id="main" class="main">
-
         <div class="pagetitle">
 
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Cycle Implemetations</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Implemetations</a></li>
                     <li class="breadcrumb-item active">Cycle Implementation Details</li>
                 </ol>
             </nav>
@@ -151,4 +149,4 @@
                 </div>
             </section>
         </div>
-    </main><!-- End #main -->
+@endsection

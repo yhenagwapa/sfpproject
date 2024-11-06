@@ -2,13 +2,11 @@
 
 @section('content')
 
-<main id="main" class="main">
-
     <!-- Page Title -->
     <div class="pagetitle">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-3 p-0">
-                <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Cycle Implementations</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Implementations</a></li>
                 <li class="breadcrumb-item active">{{ $cycle->cycle_name }}</li>
             </ol>
         </nav>
@@ -144,7 +142,5 @@
             </div>
         </section>
     </div>
-
-</main>
 
 @endsection

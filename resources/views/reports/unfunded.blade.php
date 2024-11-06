@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SFP Onse')
-
 @section('content')
-<main id="main" class="main">
 
     <!-- Page Title -->
     <div class="pagetitle">
@@ -409,7 +406,7 @@
                                                     };
                                                 </script>
                                             
-                                            <div style="overflow-x: auto; max-width: 100%;">
+                                            <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
                                                 @include('reports.partials.unfunded-table', [
                                                     'isNotFunded' => $isNotFunded,
                                                 ])
@@ -427,6 +424,4 @@
             </div>
         </section>
     </div>
-
-</main>
 @endsection

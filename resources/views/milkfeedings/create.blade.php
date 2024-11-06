@@ -2,8 +2,6 @@
 
 @section('content')
 
-    <main id="main" class="main">
-
         <div class="pagetitle">
 
             <nav style="--bs-breadcrumb-divider: '>';">
@@ -151,4 +149,4 @@
                 </div>
             </section>
         </div>
-    </main><!-- End #main -->
+@endsection

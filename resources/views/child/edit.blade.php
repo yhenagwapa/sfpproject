@@ -1,10 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'SFP Onse')
-
 @section('content')
 
-<main id="main" class="main">
     <div class="pagetitle">
         <nav style="--bs-breadcrumb-divider: '>'; ">
             <ol class="breadcrumb mb-3 p-0">
@@ -546,5 +543,4 @@
     
             document.addEventListener('DOMContentLoaded', setFundingStatus);
         </script>
-</main>
 @endsection

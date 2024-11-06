@@ -14,7 +14,7 @@ class CycleImplementationController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('permission:view-cycle-implementation', ['only' => ['view']]);
-        $this->middleware('permission:create-cycle-implementation', ['only' => ['create','store']]);
+        $this->middleware('permission:add-cycle-implementation', ['only' => ['create','store']]);
         $this->middleware('permission:edit-cycle-implementation', ['only' => ['edit','update']]);
     }
     public function index()

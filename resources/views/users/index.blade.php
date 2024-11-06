@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<main id="main" class="main">
 
     <!-- Page Title -->
     <div class="pagetitle">
@@ -44,7 +43,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div id="users-content">
+                            <div class="table-responsive" id="users-content">
                                 <h5 class="card-title">Users</h5>
                                 @include('users.partials.users-table', ['users' => $users])
                             </div>
@@ -54,6 +53,4 @@
             </div>
         </section>
     </div>
-
-</main>
 @endsection

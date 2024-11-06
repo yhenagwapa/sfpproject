@@ -1,10 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SFP Onse')
-
 @section('content')
-
-<main id="main" class="main">
 
     <div class="pagetitle">
 
@@ -415,7 +411,7 @@
                                                     };
                                                 </script>
                                             
-                                            <div style="overflow-x: auto; max-width: 100%;">
+                                            <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
                                                 @include('reports.partials.funded-table', [
                                                     'isFunded' => $isFunded,
                                                 ])
@@ -436,43 +432,4 @@
             </div>
         </section>
     </div>
-	 {{-- <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const reportLinks = document.querySelectorAll('.report-link');
-
-                reportLinks.forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const target = this.getAttribute('data-target');
-                        showContent(target);
-                    });
-                });
-
-                function showContent(target) {
-                    document.querySelectorAll('#report-content > div').forEach(div => div.style.display = 'none');
-
-                    const selectedContent = document.getElementById(`${target}-content`);
-                    if (selectedContent) {
-                        selectedContent.style.display = 'block';
-                    }
-                }
-
-                showContent('funded');
-            });
-        </script>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const reportLinks = document.querySelectorAll('.report-link');
-
-                reportLinks.forEach(link => {
-                    link.addEventListener('click', function() {
-                        reportLinks.forEach(l => l.classList.remove('active'));
-
-                        this.classList.add('');
-                    });
-                });
-            });
-        </script> --}}
-</main>
 @endsection

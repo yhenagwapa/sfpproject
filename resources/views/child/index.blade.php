@@ -2,7 +2,13 @@
 
 @section('content') <!-- Begin section -->
 
-<main id="main" class="main">
+    <div class="pagetitle">
+        <nav style="--bs-breadcrumb-divider: '>'; margin-bottom: 1rem;">
+            <ol class="breadcrumb p-0">
+                <li class="breadcrumb-item active"><a href="#">Children</a></li>
+            </ol>
+        </nav>
+    </div>
 
     @if (session('success'))
         <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
@@ -23,11 +29,7 @@
         });
     </script>
 
-    <nav style="--bs-breadcrumb-divider: '>'; margin-bottom: 1rem;">
-        <ol class="breadcrumb p-0">
-            <li class="breadcrumb-item active"><a href="#">Children</a></li>
-        </ol>
-    </nav>
+    
 
     <div class="wrapper">
         <section class="section">
@@ -63,11 +65,12 @@
                                     </form>
                                 </div>
                             
-
-                            @include('child.partials.children-table', [
-                                'maleChildren' => $maleChildren,
-                                'femaleChildren' => $femaleChildren
-                            ])
+                            <div class="table-responsive">
+                                @include('child.partials.children-table', [
+                                    'maleChildren' => $maleChildren,
+                                    'femaleChildren' => $femaleChildren
+                                ])
+                            </div>
 
                         </div>
                     </div>
@@ -77,7 +80,5 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-</main><!-- End #main -->
 
 @endsection <!-- End section -->

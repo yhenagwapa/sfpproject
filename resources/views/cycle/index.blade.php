@@ -2,7 +2,14 @@
 
 @section('content')
 
-<main id="main" class="main">
+    <div class="pagetitle">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-3 p-0">
+                <li class="breadcrumb-item active"><a href="#">Implementations</a></li>
+            </ol>
+        </nav>
+    </div>
+
 
     <!-- Success Alert -->
     @if (session('success'))
@@ -23,12 +30,7 @@
         });
     </script>
 
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mb-3 p-0">
-            <li class="breadcrumb-item active"><a href="#">Implementations</a></li>
-        </ol>
-    </nav>
+    
 
     <!-- Content Wrapper -->
     <div class="wrapper">
@@ -48,7 +50,7 @@
                                     </div>
                                 @endcan
                             </div>
-                            <div id="centers-table">
+                            <div class="table-responsive" id="centers-table">
                                 @include('cycle.partials.cycle-table', ['allCycles' => $allCycles])
                             </div>
                         </div>
@@ -63,13 +65,13 @@
                             <div class="row">
                                 @can('add-cycle-implementation')
                                     <div class="col-6 mb-5 d-flex align-items-center">
-                                        <a href="#" class="btn btn-primary">
+                                        <a href="{{ route('milkfeedings.create')}}" class="btn btn-primary">
                                             <i class="bi bi-plus-circle me-2"></i>New Milk Feeding
                                         </a>
                                     </div>
                                 @endcan
                             </div>
-                            <div class="col-md-12" id="milk-feeding-table">
+                            <div class="table-responsive" id="milk-feeding-table">
                                 @include('milkfeedings.partials.milk-feeding-table', ['milkFeedings' => $milkFeedings])
                             </div>
                         </div>
@@ -81,6 +83,4 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     @vite(['resources/js/app.js'])
-
-</main>
 @endsection

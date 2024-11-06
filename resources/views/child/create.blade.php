@@ -2,7 +2,6 @@
 
 @section('content')
 
-<main id="main" class="main">
 
     <div class="pagetitle">
 
@@ -580,4 +579,4 @@
 
         document.addEventListener('DOMContentLoaded', setFundingStatus);
     </script>
-</main><!-- End #main -->
+@endsection

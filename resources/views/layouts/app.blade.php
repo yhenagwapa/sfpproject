@@ -1,49 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{{-- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>SFP Onse</title>
-
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-
-    <link href="../img/dswd.png" rel="icon">
-
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.1.8/datatables.min.css" rel="stylesheet">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.1.8/datatables.min.js"></script>
-    
-
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="{{ asset('js/main.js') }}"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-
-   
-
-</head> --}}
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,7 +16,7 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="../img/dswd.png" rel="icon">
+    <link href="{{ asset('img/dswd.png') }}" rel="icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Nunito:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -86,16 +43,16 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="container">
+    
         <header id="header" class="header fixed-top d-flex align-items-right">
             <div class="d-flex justify-center">
                 <a href="https://fo11.dswd.gov.ph/" class="logo d-flex align-items-center">
-                    <img src="../img/DSWD_Logo.png" alt="dswd_logo">
+                    <img src="{{ asset('img/DSWD_Logo.png') }}" alt="dswd_logo">
                 </a>
             </div>
 
             <div class="d-flex align-items-center justify-content-between">
-                <span class="logo d-flex align-items-center"><img src="../img/SFP-LOGO-2024.png" alt="sfp_logo"></span>
+                <span class="logo d-flex align-items-center"><img src="{{ asset('img/SFP-LOGO-2024.png') }}" alt="sfp_logo"></span>
             </div>
 
             <div class="d-flex align-items-center justify-content-between">
@@ -243,7 +200,7 @@
 
         </aside><!-- End Sidebar-->
 
-        <main class="container">
+        <main id="main" class="main">
             @yield('content')
         </main>
 
@@ -286,7 +243,7 @@
         <script src="{{ asset('js/main.js') }}"></script>
 
         @vite(['resources/js/app.js'])
-    </div>
+    
 </body>
 
 </html>

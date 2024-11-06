@@ -1,13 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <main id="main" class="main">
-        <!-- Breadcrumb Navigation -->
-        <nav style="--bs-breadcrumb-divider: '>'; margin-bottom: 1rem;">
-            <ol class="breadcrumb p-0">
-                <li class="breadcrumb-item active"><a href="#">Dashboard</a></li>
-            </ol>
-        </nav>
+
+        <div class="page-title">
+            <nav style="--bs-breadcrumb-divider: '>'; margin-bottom: 1rem;">
+                <ol class="breadcrumb p-0">
+                    <li class="breadcrumb-item active"><a href="#">Dashboard</a></li>
+                </ol>
+            </nav>
+        </div>
 
         <div class="wrapper">
             <section class="section">
@@ -191,6 +192,4 @@
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         @vite(['resources/js/app.js'])
-
-    </main>
 @endsection
