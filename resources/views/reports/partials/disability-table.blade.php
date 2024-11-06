@@ -1,4 +1,4 @@
-<table id='disability-table' class="table datatable mt-3 text-xs text-center">
+<table id='disability-table' class="table mt-3 text-xs text-center">
     <thead>
         <tr>
             <th class="border border-white">Name of Child</th>

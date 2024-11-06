@@ -222,5 +222,5 @@
                 </div>
             </section>
         </div>
-        {{-- @vite(['resources/js/app.js']) --}}
+        @vite(['resources/js/app.js'])
     </main><!-- End #main -->

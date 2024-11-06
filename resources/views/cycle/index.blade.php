@@ -69,92 +69,17 @@
                                     </div>
                                 @endcan
                             </div>
-                            <div id="centers-table">
-                                <!-- Placeholder for milk feeding table -->
+                            <div class="col-md-12" id="milk-feeding-table">
+                                @include('milkfeedings.partials.milk-feeding-table', ['milkFeedings' => $milkFeedings])
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
-        @endif
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var alert = document.getElementById('success-alert');
-                if (alert) {
-                    // Automatically close the alert after 3 seconds (3000 milliseconds)
-                    setTimeout(function() {
-                        var bsAlert = new bootstrap.Alert(alert);
-                        bsAlert.close();
-                    }, 2000);
-                }
-            });
-        </script>
-
-        <nav style="--bs-breadcrumb-divider: '>';">
-            <ol class="breadcrumb mb-3 p-0">
-                <li class="breadcrumb-item active"><a href="#">Implementations</a></li>
-            </ol>
-        </nav>
-
-        <div class="wrapper">
-            <section class="section">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Cycle Implementations</h5>
-                                <div class="row">
-                                    @canany('add-cycle-implementation')
-                                        <div class="col-6 mb-5 d-flex align-items-center">
-                                            <a href="{{ route('cycle.create') }}"><button type="button"
-                                                    class="bg-blue-600 text-white rounded px-3 min-h-9"><i
-                                                        class="bi bi-plus-circle mr-2"></i>New Cycle Implementation</button></a>
-                                        </div>
-                                    @endcanany
-                                </div>
-
-                                <div class="col-md-12" id="cycle-table">
-                                    @include('cycle.partials.cycle-table', ['allCycles' => $allCycles])
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Milk Feeding</h5>
-                                <div class="row">
-                                    @canany('add-cycle-implementation')
-                                        <div class="col-6 mb-5 d-flex align-items-center">
-                                            <a href="{{ route('milkfeedings.create') }}">
-                                                <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9">
-                                                    <i class="bi bi-plus-circle mr-2"></i>
-                                                    New Milk Feeding
-                                                </button>
-                                            </a>
-                                        </div>
-                                    @endcanany
-                                </div>
-
-                                <div class="col-md-12" id="milk-feeding-table">
-                                    @include('milkfeedings.partials.milk-feeding-table', ['milkFeedings' => $milkFeedings])
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
-
-
-=======
->>>>>>> 7534738cb0d8735f1935fc3b890fff69e9cc2677
         </section>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     @vite(['resources/js/app.js'])
 
 </main>

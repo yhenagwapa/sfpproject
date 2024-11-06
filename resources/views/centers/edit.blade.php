@@ -270,10 +270,6 @@
             const citySelect = document.getElementById('city');
             const barangaySelect = document.getElementById('barangay');
 
-            console.log('province psgc preselected', provinceSelect.value);
-            console.log('city psgc preselected', citySelect.value);
-            console.log('brgy psgc preselected', barangaySelect.value);
-
             function filterCities() {
                 let provincePsgc = provinceSelect.value;
 

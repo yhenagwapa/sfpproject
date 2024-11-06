@@ -1,195 +1,196 @@
 @extends('layouts.app')
 
 @section('content')
+    <main id="main" class="main">
+        <!-- Breadcrumb Navigation -->
+        <nav style="--bs-breadcrumb-divider: '>'; margin-bottom: 1rem;">
+            <ol class="breadcrumb p-0">
+                <li class="breadcrumb-item active"><a href="#">Dashboard</a></li>
+            </ol>
+        </nav>
 
-<main id="main" class="main">
-    <!-- Breadcrumb Navigation -->
-    <nav style="--bs-breadcrumb-divider: '>'; margin-bottom: 1rem;">
-        <ol class="breadcrumb p-0">
-            <li class="breadcrumb-item active"><a href="#">Dashboard</a></li>
-        </ol>
-    </nav>
+        <div class="wrapper">
+            <section class="section">
+                <div class="row">
 
-    <div class="wrapper">
-        <section class="section dashboard">
-            <div class="row">
-                <!-- Statistics Cards -->
-                <div class="col-lg-8">
-                    <div class="row">
-                        <!-- Children Card -->
-                        <div class="col-xxl-4 col-md-6">
-                            <div class="card info-card children-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Children <span>| 1,244</span></h5>
-                                    <div class="d-flex align-items-center mt-3">
-                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <ul>
-                                                <li>Male: 622</li>
-                                                <li>Female: 622</li>
-                                            </ul>
-                                        </div>
+                    <!-- Children Card -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Children <span>| 1,244</span></h5>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <ul>
+                                            <li>Male: 622</li>
+                                            <li>Female: 622</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Malnourished Card -->
-                        <div class="col-xxl-4 col-md-6">
-                            <div class="card info-card malnourish-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Malnourished <span>| 1,244</span></h5>
-                                    <div class="d-flex align-items-center mt-3">
-                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <ul>
-                                                <li>Upon Entry: 0</li>
-                                                <li>After 120 Feedings: 0</li>
-                                            </ul>
-                                        </div>
+                    <!-- Malnourished Card -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Malnourished <span>| 1,244</span></h5>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <ul>
+                                            <li>Upon Entry: 0</li>
+                                            <li>After 120 Feedings: 0</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Undernourished Card -->
-                        <div class="col-xxl-4 col-md-6">
-                            <div class="card info-card undernourish-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Undernourished <span>| 1,244</span></h5>
-                                    <div class="d-flex align-items-center mt-3">
-                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <ul>
-                                                <li>Upon Entry: 0</li>
-                                                <li>After 120 Feedings: 0</li>
-                                            </ul>
-                                        </div>
+                    <!-- Undernourished Card -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Undernourished <span>| 1,244</span></h5>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <ul>
+                                            <li>Upon Entry: 0</li>
+                                            <li>After 120 Feedings: 0</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Province Table -->
-                        <div class="col-12">
-                            <div class="card info-card province-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Provinces</h5>
-                                    <div class="datatable-container">
-                                        <table class="table table-borderless">
-                                            <thead>
-                                                <tr>
-                                                    <th>Province</th>
-                                                    <th>Target</th>
-                                                    <th>Served</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach(['Davao City', 'Davao del Norte', 'Davao del Sur', 'Davao de Oro', 'Davao Occidental', 'Davao Oriental'] as $province)
-                                                    <tr>
-                                                        <td><a href="#">{{ $province }}</a></td>
-                                                        <td>1500</td>
-                                                        <td><a href="#" class="text-primary">1400</a></td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    
 
-                        <!-- Nutritional Status Charts -->
-                        <div class="container">
-                            @foreach(['Weight for Age', 'Weight for Height', 'Height for Age'] as $type)
-                                <div class="col-12">
-                                    <div class="card info-card chart-card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Nutritional Status <br><i>({{ $type }})</i></h5>
-                                            <canvas id="barChart{{ $loop->index + 1 }}" class="max-h-200 max-w-full"></canvas>
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", () => {
-                                                    new Chart(document.querySelector('#barChart{{ $loop->index + 1 }}'), {
-                                                        type: 'bar',
-                                                        data: {
-                                                            labels: ['Upon Entry', 'After 120 Feedings'],
-                                                            datasets: [
-                                                                { 
-    label: 'Severely Underweight', 
-    data: [50, 100], 
-    backgroundColor: 'rgba(0, 38, 77, 0.8)',  // Dark Blue (reflecting the main icon color)
-    borderColor: 'rgb(0, 38, 77)', 
-    borderWidth: 1 
-},
-{ 
-    label: 'Underweight', 
-    data: [150, 200], 
-    backgroundColor: 'rgba(0, 102, 204, 0.8)',  // Medium Blue (another color matching the icon)
-    borderColor: 'rgb(0, 102, 204)', 
-    borderWidth: 1 
-},
-{ 
-    label: 'Normal', 
-    data: [250, 300], 
-    backgroundColor: 'rgba(255, 187, 51, 0.8)',  // Yellow-Orange (from the children figure in the icon)
-    borderColor: 'rgb(255, 187, 51)', 
-    borderWidth: 1 
-},
-{ 
-    label: 'Overweight', 
-    data: [250, 300], 
-    backgroundColor: 'rgba(102, 102, 153, 0.8)',  // Light Purple-Gray (to add subtle variation)
-    borderColor: 'rgb(102, 102, 153)', 
-    borderWidth: 1 
-}
+                    <!-- Nutritional Status Charts -->
+                    <div class="container">
+                        @foreach (['Weight for Age', 'Weight for Height', 'Height for Age'] as $type)
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Nutritional Status <br><i>({{ $type }})</i></h5>
+                                        <canvas id="barChart{{ $loop->index + 1 }}" class="max-h-200 max-w-full"></canvas>
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", () => {
+                                                new Chart(document.querySelector('#barChart{{ $loop->index + 1 }}'), {
+                                                    type: 'bar',
+                                                    data: {
+                                                        labels: ['Upon Entry', 'After 120 Feedings'],
+                                                        datasets: [{
+                                                                label: 'Severely Underweight',
+                                                                data: [50, 100],
+                                                                backgroundColor: 'rgba(0, 38, 77, 0.8)', // Dark Blue (reflecting the main icon color)
+                                                                borderColor: 'rgb(0, 38, 77)',
+                                                                borderWidth: 1
+                                                            },
+                                                            {
+                                                                label: 'Underweight',
+                                                                data: [150, 200],
+                                                                backgroundColor: 'rgba(0, 102, 204, 0.8)', // Medium Blue (another color matching the icon)
+                                                                borderColor: 'rgb(0, 102, 204)',
+                                                                borderWidth: 1
+                                                            },
+                                                            {
+                                                                label: 'Normal',
+                                                                data: [250, 300],
+                                                                backgroundColor: 'rgba(255, 187, 51, 0.8)', // Yellow-Orange (from the children figure in the icon)
+                                                                borderColor: 'rgb(255, 187, 51)',
+                                                                borderWidth: 1
+                                                            },
+                                                            {
+                                                                label: 'Overweight',
+                                                                data: [250, 300],
+                                                                backgroundColor: 'rgba(102, 102, 153, 0.8)', // Light Purple-Gray (to add subtle variation)
+                                                                borderColor: 'rgb(102, 102, 153)',
+                                                                borderWidth: 1
+                                                            }
 
-                                                            ]
-                                                        },
-                                                        options: { scales: { y: { beginAtZero: true } } }
-                                                    });
+                                                        ]
+                                                    },
+                                                    options: {
+                                                        scales: {
+                                                            y: {
+                                                                beginAtZero: true
+                                                            }
+                                                        }
+                                                    }
                                                 });
-                                            </script>
-                                        </div>
+                                            });
+                                        </script>
                                     </div>
                                 </div>
-                            @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+
+
+
+                    <!-- Beneficiaries Profile Table -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Beneficiaries Profile</h5>
+                                <div class="datatable-container">
+                                    <table class="table table-borderless">
+                                        <tbody>
+                                            @foreach ([['category' => 'Pantawid Member', 'count' => 1500, 'male' => 750, 'female' => 750], ['category' => 'Persons with Disability', 'count' => 1500, 'male' => 750, 'female' => 750], ['category' => 'Indigenous People', 'count' => 1500, 'male' => 750, 'female' => 750], ['category' => 'Child of Solo Parent', 'count' => 1500, 'male' => 750, 'female' => 750], ['category' => 'Lactose Intolerant', 'count' => 1500, 'male' => 750, 'female' => 750]] as $beneficiary)
+                                                <tr>
+                                                    <td><a href="#">{{ $beneficiary['category'] }}</a></td>
+                                                    <td>{{ $beneficiary['count'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-xs text-gray-400">&nbsp;&nbsp;&nbsp;Male</td>
+                                                    <td class="text-xs text-gray-400">{{ $beneficiary['male'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-xs text-gray-400">&nbsp;&nbsp;&nbsp;Female</td>
+                                                    <td class="text-xs text-gray-400">{{ $beneficiary['female'] }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Beneficiaries Profile Table -->
-                <div class="col-lg-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Beneficiaries Profile</h5>
-                            <div class="datatable-container">
-                                <table class="table table-borderless">
-                                    <tbody>
-                                        @foreach([
-                                            ['category' => 'Pantawid Member', 'count' => 1500, 'male' => 750, 'female' => 750],
-                                            ['category' => 'Persons with Disability', 'count' => 1500, 'male' => 750, 'female' => 750],
-                                            ['category' => 'Indigenous People', 'count' => 1500, 'male' => 750, 'female' => 750],
-                                            ['category' => 'Child of Solo Parent', 'count' => 1500, 'male' => 750, 'female' => 750],
-                                            ['category' => 'Lactose Intolerant', 'count' => 1500, 'male' => 750, 'female' => 750],
-                                        ] as $beneficiary)
+                    <!-- Province Table -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Provinces</h5>
+                                <div class="datatable-container">
+                                    <table class="table table-borderless">
+                                        <thead>
                                             <tr>
-                                                <td><a href="#">{{ $beneficiary['category'] }}</a></td>
-                                                <td>{{ $beneficiary['count'] }}</td>
+                                                <th>Province</th>
+                                                <th>Target</th>
+                                                <th>Served</th>
                                             </tr>
-                                            <tr>
-                                                <td class="text-xs text-gray-400">&nbsp;&nbsp;&nbsp;Male</td>
-                                                <td class="text-xs text-gray-400">{{ $beneficiary['male'] }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-xs text-gray-400">&nbsp;&nbsp;&nbsp;Female</td>
-                                                <td class="text-xs text-gray-400">{{ $beneficiary['female'] }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (['Davao City', 'Davao del Norte', 'Davao del Sur', 'Davao de Oro', 'Davao Occidental', 'Davao Oriental'] as $province)
+                                                <tr>
+                                                    <td><a href="#">{{ $province }}</a></td>
+                                                    <td>1500</td>
+                                                    <td><a href="#" class="text-primary">1400</a></td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </div>
-</main>
+            </section>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        @vite(['resources/js/app.js'])
+
+    </main>
 @endsection

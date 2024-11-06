@@ -384,8 +384,7 @@
                                                 ])
                                             </div>
                                             <div class="mt-3">
-                                                
-                                                    {{ $isPwdChildren->links() }}
+                                                {{ $isPwdChildren->links() }}
                                             </div>
                                         </div>
                                     @endif

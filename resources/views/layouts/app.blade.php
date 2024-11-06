@@ -72,11 +72,12 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
      {{-- * Template Name: NiceAdmin
     * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
     * Updated: Apr 20 2024 with Bootstrap v5.3.3
@@ -279,8 +280,8 @@
         <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
         
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <!-- Custom JS -->
         <script src="{{ asset('js/main.js') }}"></script>
 

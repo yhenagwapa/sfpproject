@@ -1,6 +1,6 @@
 
 
-<table id='funded-table' class="table datatable text-xs text-center" style="min-width: 1800px;">
+<table id='funded-table' class="table text-xs text-center" style="min-width: 1800px;">
     <thead>
         <tr>
             <th class="border border-white w-40" rowspan="2">Name of Child</th>

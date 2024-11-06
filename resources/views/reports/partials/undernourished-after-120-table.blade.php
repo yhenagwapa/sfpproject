@@ -1,4 +1,4 @@
-<table id='undernourished-after-120-table' class="table datatable mt-3 text-xs text-center" style="min-width: 1800px;">
+<table id='undernourished-after-120-table' class="table mt-3 text-xs text-center" style="min-width: 1800px;">
     <thead>
         <tr>
             <th rowspan="3">Name of Child Development Center</th>

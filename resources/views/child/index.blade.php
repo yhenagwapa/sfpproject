@@ -37,7 +37,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Children</h5>
                             
-                            <div class="d-flex justify-content-between mt-5">
+                            
                                 <div class="col-md-6">
                                         <a href="{{ route('child.create') }}">
                                             <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9">
@@ -47,10 +47,10 @@
                                 </div>
                                 
 
-                                <div class="col-md-6">
+                                <div class="col-md-6 mt-3">
                                     <form action="{{ route('child.index') }}" method="GET">
                                         @csrf
-                                        <label for="center_name" class="form-label">Filter Children:</label>
+                                        <label for="center_name" class="form-label text-sm">Filter Children:</label>
                                         <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
                                             <option value="all_center" selected>Select a Child Development Center</option>
                                             @foreach ($centers as $center)
@@ -62,7 +62,7 @@
                                         </select>
                                     </form>
                                 </div>
-                            </div>
+                            
 
                             @include('child.partials.children-table', [
                                 'maleChildren' => $maleChildren,
