@@ -76,8 +76,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/attendance/store/{child}', [AttendanceController::class, 'store'])->name('attendance.store');
 
     Route::get('nutritionalstatus/{id}', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
-    Route::post('nutritionalstatus/store', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
-    Route::put('nutritionalstatus/store', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
+    Route::post('nutritionalstatus/store-entry', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
+Route::put('nutritionalstatus/store-exit', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
     Route::get('nutritionalstatus/{id}/edit', [NutritionalStatusController::class, 'edit'])->name('nutritionalstatus.edit');
     Route::put('nutritionalstatus/{id}/edit-upon-entry', [NutritionalStatusController::class, 'updateUponEntryDetails'])->name('nutritionalstatus.updateUponEntryDetails');
     Route::put('nutritionalstatus/{id}/edit-after-120', [NutritionalStatusController::class, 'updateAfter120Details'])->name('nutritionalstatus.updateAfter120Details');
@@ -97,7 +97,8 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/milkfeedings/create', [MilkFeedingController::class, 'create'])->name(name: 'milkfeedings.create');
-    Route::post('/milkfeedings/store', [MilkFeedingController::class, 'store'])->name(name: 'milkfeedings.store');
+    Route::post('/milkfeedings/store-cycle-attendance', [MilkFeedingController::class, 'storeCycleAttendance'])->name(name: 'milkfeedings.store-cycle-attendance');
+    Route::post('/milkfeedings/store-milk-attendance', [MilkFeedingController::class, 'storeMilkAttendance'])->name(name: 'milkfeedings.store-milk-attendance');
     Route::get('/milkfeedings/{id}/edit', [MilkFeedingController::class, 'edit'])->name(name: 'milkfeedings.edit');
     Route::put('/milkfeedings/{milkfeeding}/update', [MilkFeedingController::class, 'update'])->name(name: 'milkfeedings.update');
 

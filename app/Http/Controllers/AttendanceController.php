@@ -22,9 +22,15 @@ class AttendanceController extends Controller
     public function index($id)
     {
         $child = Child::findOrFail($id);
-        $attendances = Attendance::where('child_id', $id)->paginate(10);
+        $cycleAttendances = Attendance::where('child_id', $id)
+            ->where('attendance_type', 'cycle')
+            ->paginate(10);
 
-        return view('attendance.index', compact('child', 'attendances'));
+        $milkAttendances = Attendance::where('child_id', $id)
+            ->where('attendance_type', 'milk')
+            ->paginate(10);
+
+        return view('attendance.index', compact('child', 'cycleAttendances', 'milkAttendances'));
     }
 
     /**
@@ -38,13 +44,13 @@ class AttendanceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAttendanceRequest $request, $child_id)
+    public function storeCycleAttendance(StoreAttendanceRequest $request, $child_id)
     {
-        $withmilk = $request->input('with_milk', '0');
-        $attendanceCount = Attendance::where('child_id', $child_id)->count();
+        $cycleCount = Attendance::where('child_id', $child_id)
+            ->where('attendance_type','cycle')->count();
 
-        if ($attendanceCount >= 120) {
-            return redirect()->back()->withErrors(['error' => 'Attendance limit of 120 reached for this child.']);
+        if ($cycleCount >= 120) {
+            return redirect()->back()->withErrors(['error' => 'This child already has 120 attendances.']);
         }
 
         $validatedData = $request->validated();
@@ -52,9 +58,29 @@ class AttendanceController extends Controller
         // Create the attendance record
         Attendance::create([
             'child_id' => $child_id,
-            'feeding_no' => $attendanceCount + 1,
-            'feeding_date' => $request->feeding_date,
-            'with_milk' => $withmilk,
+            'attendance_no' => $cycleCount + 1,
+            'attendance_date' => $request->attendance_date,
+            'created_by_user_id' => auth()->id(),
+        ]);
+
+        return redirect()->back()->with('success', 'Attendance added successfully.');
+    }
+    public function storeMilkAttendance(StoreAttendanceRequest $request, $child_id)
+    {
+        $cycleCount = Attendance::where('child_id', $child_id)
+            ->where('attendance_type','cycle')->count();
+
+        if ($cycleCount >= 120) {
+            return redirect()->back()->withErrors(['error' => 'This child already has 120 attendances.']);
+        }
+
+        $validatedData = $request->validated();
+
+        // Create the attendance record
+        Attendance::create([
+            'child_id' => $child_id,
+            'attendance_no' => $cycleCount + 1,
+            'attendance_date' => $request->attendance_date,
             'created_by_user_id' => auth()->id(),
         ]);
 

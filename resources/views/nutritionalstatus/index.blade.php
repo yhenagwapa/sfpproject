@@ -132,7 +132,7 @@
                             @can(['create-nutritional-status'])
                                 <form method="post" action="{{ route('nutritionalstatus.storeExitDetails') }}">
                                     @csrf
-                                    @method('PUT')
+                                    
                                     <input type="hidden" name="child_id" value="{{ $child->id }}">
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="weight">Weight<b class="text-red-600">*</b></label>

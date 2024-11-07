@@ -21,14 +21,23 @@ class StoreAttendanceRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'feeding_date' => ['required', 'date'],
+
+        $rules = [
+            'attendance_date' => ['required', 'date'],
+            'milk_attendance_date' => ['date'],
         ];
+    
+        $this->sometimes('milk_attendance_date', 'required', function ($input) {
+            return !is_null($input->milk_feeding_id);
+        });
+    
+        return $rules;
     }
     public function messages()
     {
         return [
-            'feeding_date.required' => 'Please provide feeding date.',
+            'attendance_date.required' => 'Please provide feeding date.',
+            'milk_attendance_date.required' => 'Please provide milk feeding date.'
         ];
     }
 }

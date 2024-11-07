@@ -44,7 +44,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="container flex justify-center items-center">
+    <div class="flex justify-center items-center">
         <main id="register-main" class="register-main">
             <div class="pagetitle">
                 <nav style="--bs-breadcrumb-divider: '>';">
@@ -61,9 +61,6 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Register</h5>
-
-                                    
-
                                     <form class="row" method="post" action="{{ route('register') }}">
                                         @csrf
                                         <div class="flex flex-wrap">

@@ -58,36 +58,21 @@
                             </div>
 
                             @can(['add-attendance'])
-                                <form method="post" action="{{ route('attendance.store', $child->id) }}"
+                                <form method="post" action="{{ route('attendance.storeCycleAttendance', $child->id) }}"
                                     class="flex flex-wrap items-center gap-4">
                                     @csrf
                                     <input type="hidden" name="child_id" value="{{ $child->id }}">
 
                                     <!-- Feeding Date -->
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="feeding_date" class="col-form-label">Feeding date:<b
+                                        <label for="attendance_date" class="col-form-label">Feeding date:<b
                                                 class="text-red-600">*</b></label>
-                                        <input type="date" class="form-control rounded border-gray-300" id="feeding_date"
-                                            name='feeding_date' value="{{ old('feeding_date') }}">
-                                        @error('feeding_date')
+                                        <input type="date" class="form-control rounded border-gray-300" id="attendance_date"
+                                            name='attendance_date' value="{{ old('attendance_date') }}">
+                                        @error('attendance_date')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
-
-                                    {{-- <!-- With Milk Checkbox -->
-                                    <div class="col-md-4 mt-2 text-sm">
-                                        <label class="form-check-label" for="with_milk">
-                                            With milk?
-                                        </label>
-                                    </div>
-                                    <div class="col-md-2 mt-2 text-sm">
-                                        <input type="radio" name="with_milk" id="with_milk_yes" value="1" {{ old('with_milk', '0') == '1' ? 'checked' : '' }}>
-                                        <label for="with_milk_yes">Yes</label>
-                                    </div>
-                                    <div class="col-md-2 mt-2 text-sm">
-                                        <input type="radio" name="with_milk" id="with_milk_no" value="0" {{ old('with_milk', '0') == '0' ? 'checked' : '' }}>
-                                        <label for="with_milk_no">No</label>
-                                    </div> --}}
 
                                     <!-- Save Button -->
                                     <div class="col-md-12 text-right">
@@ -119,6 +104,55 @@
                                         </div>
                                     </div>
                                 </form>
+
+                                @if($child->milk_feeding_id)
+                                    <form method="post" action="{{ route('attendance.storeMilkAttendance', $child->id) }}"
+                                        class="flex flex-wrap items-center gap-4">
+                                        @csrf
+                                        <input type="hidden" name="child_id" value="{{ $child->id }}">
+
+                                        <!-- Feeding Date -->
+                                        <div class="col-md-12 mt-2 text-sm">
+                                            <label for="milk_attendance_date" class="col-form-label">Milk feeding date:<b
+                                                    class="text-red-600">*</b></label>
+                                            <input type="date" class="form-control rounded border-gray-300" id="attendance_date"
+                                                name='milk_attendance_date' value="{{ old('milk_attendance_date') }}">
+                                            @error('milk_attendance_date')
+                                                <span class="text-xs text-red-600">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        
+                                        <!-- Save Button -->
+                                        <div class="col-md-12 text-right">
+                                            <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
+                                                data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
+                                            <button type="reset"
+                                                class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
+                                        </div>
+
+                                        <div class="modal fade" id="verticalycentered" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-red-600">Confirmation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to save these details?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit"
+                                                            class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                                        <button type="button"
+                                                            class="text-white bg-gray-600 rounded px-3 min-h-9"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                @endif
                             @endcan
                         </div>
                     </div>

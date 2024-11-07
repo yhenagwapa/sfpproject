@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->integer('feeding_no');
-            $table->unsignedBigInteger('child_id'); 
-            $table->date('feeding_date');
-            $table->boolean('with_milk');
+            $table->integer('attendance_no');
+            $table->unsignedBigInteger('child_id')->nullable()->constrained('children'); 
+            $table->date('attendance_date');
+            $table->string('attendance_type');
             $table->unsignedBigInteger('created_by_user_id'); 
             $table->timestamps();
         });
