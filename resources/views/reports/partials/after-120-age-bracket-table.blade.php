@@ -1,4 +1,4 @@
-<table id='weight-for-age-table' class="table datatable mt-3 text-xs text-center">
+<table id='weight-for-age-table' class="table mt-3 text-xs text-center">
     <thead class="border bg-gray-200">
         <tr>
             <th class="border border-white" rowspan="2">WEIGHT FOR AGE</th>
@@ -104,7 +104,7 @@
 
 </table>
 
-<table id='weight-for-height-table' class="table datatable mt-3 text-xs text-center">
+<table id='weight-for-height-table' class="table mt-3 text-xs text-center">
     <thead class="border bg-gray-200">
         <tr>
             <th class="border border-white" rowspan="2">WEIGHT FOR HEIGHT</th>
@@ -225,7 +225,7 @@
     </tbody>
 </table>
 
-<table id='height-for-age-table' class="table datatable mt-3 text-xs text-center">
+<table id='height-for-age-table' class="table mt-3 text-xs text-center">
     <thead class="border bg-gray-200">
         <tr>
             <th class="border border-white" rowspan="3">HEIGHT FOR AGE</th>
@@ -329,7 +329,7 @@
     </tbody>
 </table>
 
-<table id='profile-table' class="table datatable mt-3 text-xs text-center">
+<table id='profile-table' class="table mt-3 text-xs text-center">
     <tbody class="profile-table text-xs">
         <thead class="border bg-gray-200">
             <tr>

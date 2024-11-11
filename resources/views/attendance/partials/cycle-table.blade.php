@@ -1,4 +1,4 @@
-<table id="cycle-attendance-table" class="table mt-3">
+<table id="cycle-attendance-table" class="table datatable mt-3 text-center">
     <thead>
         <tr>
             <th scope="col">Feeding No.</th>

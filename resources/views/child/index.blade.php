@@ -39,16 +39,16 @@
                         <div class="card-body">
                             <h5 class="card-title">Children</h5>
                             
-                            
-                                <div class="col-md-6">
+                                @can('create-child')
+                                    <div class="col-md-6">
                                         <a href="{{ route('child.create') }}">
                                             <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9">
                                                 <i class="bi bi-plus-circle"></i> Add Child Profile
                                             </button>
                                         </a>
-                                </div>
+                                    </div>
+                                @endcan
                                 
-
                                 <div class="col-md-6 mt-3">
                                     <form action="{{ route('child.index') }}" method="GET">
                                         @csrf

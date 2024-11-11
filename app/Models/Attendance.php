@@ -10,10 +10,10 @@ class Attendance extends Model
     use HasFactory;
 
     protected $fillable = [
-        'feeding_no',
+        'attendance_no',
         'child_id',
-        'feeding_date',
-        'with_milk',
+        'attendance_date',
+        'attendance_type',
         'created_by_user_id'
     ];
 }

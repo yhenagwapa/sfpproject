@@ -219,7 +219,7 @@ class NutritionalStatusController extends Controller
 
 
 
-    public function storeExitDetails(UpdateNutritionalStatusRequest $request)
+    public function storeExitDetails(StoreNutritionalStatusRequest $request)
     {
         $validatedData = $request->validated();
 
@@ -366,6 +366,7 @@ class NutritionalStatusController extends Controller
                 'is_malnourish' => $entryIsMalnourished,
                 'is_undernourish' => $entryIsUndernourished,
                 'created_by_user_id' => auth()->id(),
+                'updated_by_user_id' => auth()->id(),
             ]);
         }
 

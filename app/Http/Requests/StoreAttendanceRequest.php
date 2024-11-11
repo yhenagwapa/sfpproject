@@ -21,17 +21,26 @@ class StoreAttendanceRequest extends FormRequest
      */
     public function rules(): array
     {
-
-        $rules = [
-            'attendance_date' => ['required', 'date'],
-            'milk_attendance_date' => ['date'],
+        return [
+            'attendance_date' => [
+                $this->isStoreAttendanceRoute() ? 'required' : 'nullable',
+                'date'
+            ],
+            'milk_attendance_date' => [
+                $this->isStorMilkeAttendanceRoute() ? 'required' : 'nullable',
+                'date'
+            ],
         ];
-    
-        $this->sometimes('milk_attendance_date', 'required', function ($input) {
-            return !is_null($input->milk_feeding_id);
-        });
-    
-        return $rules;
+    }
+
+    protected function isStoreAttendanceRoute(): bool
+    {
+        return $this->routeIs('attendance.storeAttendance');
+    }
+
+    protected function isStorMilkeAttendanceRoute(): bool
+    {
+        return $this->routeIs('attendance.storeMilkAttendance');
     }
     public function messages()
     {

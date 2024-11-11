@@ -71,7 +71,7 @@
                                 @endif
                             @endcan
                         
-                            @canany('add-attendance')
+                            @can('add-attendance')
                                 <a href="{{ route('attendance.index', $maleChild->id) }}" class="relative inline-flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="#eead30" class="w-5 h-5">
@@ -81,7 +81,7 @@
                                         Attendance
                                     </span>
                                 </a>
-                            @endcanany
+                            @endcan
                         </div>
                         
                     </td>
@@ -143,7 +143,7 @@
                                 @endif
                             @endcan
                         
-                            @canany('add-attendance')
+                            @can('add-attendance')
                                 <a href="{{ route('attendance.index', $femaleChild->id) }}" class="relative inline-flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="#eead30" class="w-5 h-5">
@@ -153,7 +153,7 @@
                                         Attendance
                                     </span>
                                 </a>
-                            @endcanany
+                            @endcan
                         </div>
                     </td>
                 @endif
