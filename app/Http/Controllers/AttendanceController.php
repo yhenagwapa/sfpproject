@@ -24,11 +24,12 @@ class AttendanceController extends Controller
         $child = Child::findOrFail($id);
         $cycleAttendances = Attendance::where('child_id', $id)
             ->where('attendance_type', 'cycle')
-            ->paginate(10);
+            ->simplePaginate(10, ['*'], 'cyclePage');
+
 
         $milkAttendances = Attendance::where('child_id', $id)
             ->where('attendance_type', 'milk')
-            ->paginate(10);
+            ->simplePaginate(10, ['*'], 'milkPage');
 
         $withMilk = $child->milk_feeding_id;
 

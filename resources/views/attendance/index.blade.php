@@ -171,11 +171,13 @@
                                     'cycleAttendances' => $cycleAttendances,
                                 ])
                             </div>
-                            
+                            <div class="mt-3">
+                                {{ $cycleAttendances->withQueryString()->links('pagination::simple-bootstrap-4') }}
+                            </div>
                         </div>
                     </div>
                 </div>
-                
+
                 @if (!is_null($child->milk_feeding_id))
                     <div class="{{ is_null($child->milk_feeding_id) ? 'col-lg-8' : 'col-lg-4' }}">
                         <div class="card">
@@ -189,7 +191,7 @@
                                     ])
                                 </div>
                                 <div class="mt-3">
-                                    {{ $milkAttendances->links() }}
+                                    {{ $milkAttendances->withQueryString()->links('pagination::simple-bootstrap-4') }}
                                 </div>
                             </div>
                         </div>
@@ -198,6 +200,4 @@
             </div>
         </section>
     </div>
-
-    
 @endsection
