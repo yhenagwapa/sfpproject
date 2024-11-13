@@ -60,7 +60,7 @@
                                         action="{{ route('nutritionalstatus.updateUponEntryDetails', $entryDetails->child_id) }}">
                                         @csrf
                                         @method('PUT')
-
+                                        <input type="hidden" name="form_type" value="entry">
                                         <input type="hidden" name="child_id" value="{{ $child->id }}">
 
                                         <div class="col-md-12 mt-2 text-sm">
@@ -139,37 +139,37 @@
                                             action="{{ route('nutritionalstatus.updateAfter120Details', $exitDetails->child_id) }}">
                                             @csrf
                                             @method('PUT')
-
-                                            <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                            <input type="hidden" name="form_type" value="exit">
+                                            <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
                                             <div class="col-md-12 mt-2 text-sm">
-                                                <label for="weight">Weight<b class="text-red-600">*</b></label>
+                                                <label for="exitweight">Weight<b class="text-red-600">*</b></label>
                                                 <input type="text"
                                                     class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                    id="weight" name='weight'
-                                                    value="{{ old('weight', $exitDetails->weight ?? '') }}">
-                                                @error('weight')
+                                                    id="exitweight" name='exitweight'
+                                                    value="{{ old('exitweight', $exitDetails->weight ?? '') }}">
+                                                @error('exitweight')
                                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                             <div class="col-md-12 mt-2 text-sm">
-                                                <label for="height">Height<b class="text-red-600">*</b></label>
+                                                <label for="exitheight">Height<b class="text-red-600">*</b></label>
                                                 <input type="text"
                                                     class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                    id="height" name='height'
-                                                    value="{{ old('height', $exitDetails->height ?? '') }}">
-                                                @error('height')
+                                                    id="exitheight" name='exitheight'
+                                                    value="{{ old('exitheight', $exitDetails->height ?? '') }}">
+                                                @error('exitheight')
                                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                                 @enderror
                                             </div>
 
                                             <div class="col-md-12 mt-2 text-sm">
-                                                <label for="weighing_date">Actual date of weighing<b
+                                                <label for="exitweighing_date">Actual date of weighing<b
                                                         class="text-red-600">*</b></label>
                                                 <input type="date"
                                                     class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                    id="weighing_date" name='weighing_date'
-                                                    value="{{ old('weighing_date', $exitDetails->weighing_date ?? '') }}">
-                                                @error('weighing_date')
+                                                    id="exitweighing_date" name='exitweighing_date'
+                                                    value="{{ old('exitweighing_date', $exitDetails->weighing_date ?? '') }}">
+                                                @error('exitweighing_date')
                                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                                 @enderror
                                             </div>
@@ -212,7 +212,9 @@
                     <div class="col-lg-9">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Nutritional Status</h5>
+                                <h5 class="card-title">{{ $child->full_name }}</h5>
+                                <p class="text-sx">Date of Birth: {{ $child->date_of_birth }}</p>
+                                <p class="text-sx">Sex: {{ $child->sex->name }}</p>
                                 <div class="table-responsive">
                                     @include('nutritionalstatus.partials.ns-table')
                                 </div>

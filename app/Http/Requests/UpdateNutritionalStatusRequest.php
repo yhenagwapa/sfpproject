@@ -21,12 +21,22 @@ class UpdateNutritionalStatusRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'child_id' => ['required', 'exists:children,id'],
-            'weight' => ['required', 'numeric'],
-            'height' => ['required', 'numeric'],
-            'weighing_date' => ['required', 'date'],
-        ];
+        if ($this->input('form_type') === 'entry') {
+            return [
+                'child_id' => ['required', 'exists:children,id'],
+                'weight' => ['required', 'numeric'],
+                'height' => ['required', 'numeric'],
+                'weighing_date' => ['required', 'date'],
+            ];
+        } elseif($this->input('form_type') === 'exit') {
+            return [
+                'exitchild_id' => ['required', 'exists:children,id'],
+                'exitweight' => ['required', 'numeric'],
+                'exitheight' => ['required', 'numeric'],
+                'exitweighing_date' => ['required', 'date'],
+            ];
+        }
+        return [];
     }
     public function messages()
     {
@@ -36,6 +46,12 @@ class UpdateNutritionalStatusRequest extends FormRequest
             'height.required' => 'Please fill in weight.',
             'height.numeric' => 'Invalid entry',
             'weighing_date.required' => 'Please fill in actual date of weighing',
+
+            'exitweight.required' => 'Please fill in weight.',
+            'exitweight.numeric' => 'Invalid entry',
+            'exitheight.required' => 'Please fill in weight.',
+            'exitheight.numeric' => 'Invalid entry',
+            'exitweighing_date.required' => 'Please fill in actual date of weighing',
         ];
     }
 }

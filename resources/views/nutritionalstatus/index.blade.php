@@ -83,7 +83,7 @@
                                         <label for="weighing_date">Actual date of weighing<b class="text-red-600">*</b></label>
                                         <input type="date"
                                             class="form-control rounded border-gray-300"
-                                            id="weighing_date" name='weighing_date' value="{{ old('weighing_date') }}">
+                                            id="weighing_date" name='weighing_date' value="{{ old('weighing_date') }}" max="{{ date('Y-m-d') }}">
                                         @error('weighing_date')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -198,7 +198,9 @@
             <div class="{{ $hasUponExitData ? 'col-lg-12' : 'col-lg-9' }}">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Nutritional Status</h5>
+                        <h5 class="card-title">{{ $child->full_name }}</h5>
+                        <p class="text-sx">Date of Birth: {{ $child->date_of_birth }}</p>
+                        <p class="text-sx">Sex: {{ $child->sex->name }}</p>
                         <div class='table-responsive'>
                             @include('nutritionalstatus.partials.ns-table')
                         </div>
