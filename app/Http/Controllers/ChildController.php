@@ -30,20 +30,15 @@ class ChildController extends Controller
         $this->middleware('permission:delete-child', ['only' => ['destroy']]);
         $this->middleware('permission:search-child', ['only' => ['search']]);
     }
-    public function index(Request $request)
+    public function index(Request $request, CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-        $cdcId = $request->input('center_name', 'all_center');
+        $cycle = CycleImplementation::where('cycle_status', 'active')->first();
 
-        if (!$cycleImplementation) {
-            return view('reports.index', [
-                'fundedChildren' => collect(),
-            ]);
-        }
+        $cdcId = $request->input('center_name', 'all_center');
 
         $fundedChildren = Child::with('nutritionalStatus', 'sex')
             ->where('is_funded', true)
-            ->where('cycle_implementation_id', $cycleImplementation->id);
+            ->where('cycle_implementation_id', $cycle->id);
 
         $maleChildrenQuery = clone $fundedChildren;
         $femaleChildrenQuery = clone $fundedChildren;   
@@ -395,11 +390,11 @@ class ChildController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, CycleImplementation $cycle, $id)
     {
         $this->authorize('edit-child');
 
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $cycle = CycleImplementation::where('cycle_status', 'active')->first();
         $milkFeeding = MilkFeeding::where('status', 'active')->first();
 
         $child = Child::findOrFail($id);
@@ -448,7 +443,7 @@ class ChildController extends Controller
             'mcct' => 'MCCT'
         ];
 
-        return view('child.edit', compact('child', 'cycleImplementation', 'milkFeeding', 'centers', 'sexOptions', 'extNameOptions', 'pantawidDetails', 'psgcRecord', 'provinces', 'cities', 'barangays', 'provinceChange', 'cityChange', 'barangayChange'));
+        return view('child.edit', compact('child', 'cycle', 'milkFeeding', 'centers', 'sexOptions', 'extNameOptions', 'pantawidDetails', 'psgcRecord', 'provinces', 'cities', 'barangays', 'provinceChange', 'cityChange', 'barangayChange'));
     }
 
     /**

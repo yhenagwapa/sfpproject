@@ -85,7 +85,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="target">Target<b class='text-red-600'>*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="target"
-                                            name="target" value="{{ old('target', $milkfeeding->target) }}" maxlength="12">
+                                            name="target" value="{{ number_format(old('target', $milkfeeding->target)) }}" maxlength="12">
                                         @error('target')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -95,7 +95,7 @@
                                         <label for="allocation">Allocation<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300"
                                             id="allocation" name='allocation'
-                                            value="{{ old('allocation', $milkfeeding->allocation) }}">
+                                            value="{{ number_format(old('allocation', $milkfeeding->allocation), 2) }}">
                                         @error('allocation')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror

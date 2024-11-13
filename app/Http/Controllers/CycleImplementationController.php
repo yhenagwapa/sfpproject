@@ -58,7 +58,7 @@ class CycleImplementationController extends Controller
             'created_by_user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('child.index')->with('success', 'Cycle implementation saved successfully');
+        return redirect()->route('cycle.index')->with('success', 'Cycle implementation saved successfully');
     }
 
     /**
@@ -76,6 +76,8 @@ class CycleImplementationController extends Controller
     {
         $cycle = CycleImplementation::findOrFail($id); 
         $cycleStatuses = CycleStatus::cases();
+
+        dd($cycle);
 
         return view('cycle.edit', compact('cycle', 'cycleStatuses'));
     }

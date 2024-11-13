@@ -65,7 +65,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_name">Cycle Name<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_name"
-                                            name="cycle_name" value="{{ old('cycle_name') }}" autofocus>
+                                            name="cycle_name" value="{{ old('cycle_name') }}" style="text-transform: uppercase;" autofocus>
 
                                         @error('cycle_name')
                                             <span class="text-xs text-red-600">{{ $message }}</span>

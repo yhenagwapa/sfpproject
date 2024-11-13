@@ -216,9 +216,6 @@ class NutritionalStatusController extends Controller
 
         return redirect()->route('nutritionalstatus.index', ['id' => $request->child_id])->with('success', 'Upon entry details saved successfully.');
     }
-
-
-
     public function storeExitDetails(StoreNutritionalStatusRequest $request)
     {
         $validatedData = $request->validated();

@@ -32,6 +32,14 @@ class UpdateCycleImplementationRequest extends FormRequest
         ];
     }
 
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'cycle_target' => str_replace(',', '', $this->cycle_target),
+            'cycle_allocation' => str_replace(',', '', $this->cycle_allocation),
+        ]);
+    }
+
     public function messages(): array
     {
         return [

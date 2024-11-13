@@ -54,7 +54,7 @@
                             <h5 class='card-title'>{{ $child->full_name }}</h5>
 
                             <!-- Personal Information Form -->
-                            <form class="row" method="post" action="{{ route('child.update', $child->id) }}">
+                            <form class="row" method="post" action="{{ route('child.update', ['cycle' => $cycle->id, 'child' => $child->id]) }}">
                                         @csrf
                                         @method('patch')
 
@@ -372,11 +372,11 @@
                                             <select
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                                 id="cycle_implementation_id" name='cycle_implementation_id' onchange="setFundingStatus()">
-                                                @if ($cycleImplementation)
+                                                @if ($cycle)
                                                     <option value="">Not Applicable</option>
-                                                    <option value="{{ $cycleImplementation->id }}"
-                                                        {{ $cycleImplementation->id == old('cycle_implementation_id', $child->cycle_implementation_id) ? 'selected' : '' }}>
-                                                        {{ $cycleImplementation->cycle_name }}
+                                                    <option value="{{ $cycle->id }}"
+                                                        {{ $cycle->id == old('cycle_implementation_id', $child->cycle_implementation_id) ? 'selected' : '' }}>
+                                                        {{ $cycle->cycle_name }}
                                                     </option>
                                                 @else
                                                     <option value="" disabled selected>No active cycle implementation</option>
@@ -419,14 +419,14 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        @if ($cycleImplementation)
+                                                        @if ($cycle)
                                                             Are you sure you want to save these details?
                                                         @else
                                                             No active cycle implementation.
                                                         @endif
                                                     </div>
                                                     <div class="modal-footer">
-                                                        @if ($cycleImplementation)
+                                                        @if ($cycle)
                                                             <button type="submit" class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
                                                         @endif
                                                         <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Close</button>

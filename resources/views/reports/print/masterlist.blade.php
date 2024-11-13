@@ -200,6 +200,7 @@
                 </td>
                 <td style="border: 1px solid #6b7280;">
                     <p>This is to certify that the above list of children<br> beneficiaries has been Dewormed and received <br>Vitamin A Supplementation with the date indicated<br> prior to the feeding implementation.</p>
+                    <br>
                     <p>Certified by:</p>
                     <br>
                     <p>______________________________________</p>

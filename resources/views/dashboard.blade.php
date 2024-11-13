@@ -144,28 +144,28 @@
                                                         datasets: [
                                                                 {
                                                                 label: 'Severely Underweight',
-                                                                data: [50, 100],
+                                                                data: [100, 50],
                                                                 backgroundColor: 'rgba(0, 38, 77, 0.8)', 
                                                                 borderColor: 'rgb(0, 38, 77)',
                                                                 borderWidth: 1
                                                             },
                                                             {
                                                                 label: 'Underweight',
-                                                                data: [150, 200],
+                                                                data: [200, 150],
                                                                 backgroundColor: 'rgba(0, 102, 204, 0.8)', 
                                                                 borderColor: 'rgb(0, 102, 204)',
                                                                 borderWidth: 1
                                                             },
                                                             {
                                                                 label: 'Normal',
-                                                                data: [250, 300],
+                                                                data: [250, 350],
                                                                 backgroundColor: 'rgba(255, 187, 51, 0.8)', 
                                                                 borderColor: 'rgb(255, 187, 51)',
                                                                 borderWidth: 1
                                                             },
                                                             {
                                                                 label: 'Overweight',
-                                                                data: [250, 300],
+                                                                data: [250, 250],
                                                                 backgroundColor: 'rgba(102, 102, 153, 0.8)', 
                                                                 borderColor: 'rgb(102, 102, 153)',
                                                                 borderWidth: 1
@@ -204,35 +204,35 @@
                                                         datasets: [
                                                                 {
                                                                 label: 'Severely Wasted',
-                                                                data: [50, 100],
+                                                                data: [100, 50],
                                                                 backgroundColor: 'rgba(0, 38, 77, 0.8)', 
                                                                 borderColor: 'rgb(0, 38, 77)',
                                                                 borderWidth: 1
                                                             },
                                                             {
                                                                 label: 'Wasted',
-                                                                data: [150, 200],
+                                                                data: [200, 100],
                                                                 backgroundColor: 'rgba(0, 102, 204, 0.8)', 
                                                                 borderColor: 'rgb(0, 102, 204)',
                                                                 borderWidth: 1
                                                             },
                                                             {
                                                                 label: 'Normal',
-                                                                data: [250, 300],
+                                                                data: [200, 300],
                                                                 backgroundColor: 'rgba(255, 187, 51, 0.8)', 
                                                                 borderColor: 'rgb(255, 187, 51)',
                                                                 borderWidth: 1
                                                             },
                                                             {
                                                                 label: 'Overweight',
-                                                                data: [250, 300],
+                                                                data: [250, 250],
                                                                 backgroundColor: 'rgba(102, 102, 153, 0.8)', 
                                                                 borderColor: 'rgb(102, 102, 153)',
                                                                 borderWidth: 1
                                                             },
                                                             {
                                                                 label: 'Obese',
-                                                                data: [250, 300],
+                                                                data: [250, 250],
                                                                 backgroundColor: 'rgba(0, 30, 77, 0.8)',
                                                                 borderColor: 'rgb(255, 205, 86)',
                                                                 borderWidth: 1
@@ -271,14 +271,14 @@
                                                         datasets: [
                                                                 {
                                                                 label: 'Severely Stunted',
-                                                                data: [50, 100],
+                                                                data: [300, 250],
                                                                 backgroundColor: 'rgba(0, 38, 77, 0.8)', 
                                                                 borderColor: 'rgb(0, 38, 77)',
                                                                 borderWidth: 1
                                                             },
                                                             {
                                                                 label: 'Stunted',
-                                                                data: [150, 200],
+                                                                data: [300, 250],
                                                                 backgroundColor: 'rgba(0, 102, 204, 0.8)', 
                                                                 borderColor: 'rgb(0, 102, 204)',
                                                                 borderWidth: 1
@@ -292,7 +292,7 @@
                                                             },
                                                             {
                                                                 label: 'Tall',
-                                                                data: [250, 300],
+                                                                data: [250, 250],
                                                                 backgroundColor: 'rgba(102, 102, 153, 0.8)', 
                                                                 borderColor: 'rgb(102, 102, 153)',
                                                                 borderWidth: 1

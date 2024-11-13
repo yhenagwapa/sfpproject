@@ -66,7 +66,7 @@
                                         <label for="attendance_date" class="col-form-label">Feeding date:<b
                                                 class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300" id="attendance_date"
-                                            name='attendance_date' value="{{ old('attendance_date') }}">
+                                            name='attendance_date' value="{{ old('attendance_date') }}" max="{{ date('Y-m-d') }}">
                                         @error('attendance_date')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -118,7 +118,7 @@
                                                     class="text-red-600">*</b></label>
                                             <input type="date" class="form-control rounded border-gray-300"
                                                 id="milk_attendance_date" name='milk_attendance_date'
-                                                value="{{ old('milk_attendance_date') }}">
+                                                value="{{ old('milk_attendance_date') }}" max="{{ date('Y-m-d') }}">
                                             @error('milk_attendance_date')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror

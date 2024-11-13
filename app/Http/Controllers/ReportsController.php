@@ -19,27 +19,23 @@ class ReportsController extends Controller
         $this->middleware('permission:create-cycle-implementation', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-cycle-implementation', ['only' => ['edit', 'update']]);
     }
-    public function index(Request $request)
+    public function index(Request $request, CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
-        if (!$cycleImplementation) {
-            return view('reports.index', [
-                'fundedChildren' => collect(),
-            ]);
-        }
-
-        $fundedChildren = Child::with('nutritionalStatus', 'sex')
-            ->where('is_funded', true)
-            ->where('cycle_implementation_id', $cycleImplementation->id);
+        $fundedChildren = Child::with('nutritionalStatus', 'sex');
 
         if (auth()->user()->hasRole('admin')) {
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->paginate(10);
+                $isFunded = $fundedChildren->where('is_funded', true)
+                    ->where('cycle_implementation_id', $cycle->id)
+                    ->paginate(10);
             } else {
-                $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->paginate(10);
+                $isFunded = $fundedChildren->where('is_funded', true)
+                    ->where('cycle_implementation_id', $cycle->id)
+                    ->where('child_development_center_id', $cdcId)
+                    ->paginate(10);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
@@ -50,9 +46,15 @@ class ReportsController extends Controller
             $centerIds = $centers->pluck('id');
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereIn('child_development_center_id', $centerIds)->paginate(10);
+                $isFunded = $fundedChildren->where('is_funded', true)
+                    ->where('cycle_implementation_id', $cycle->id)
+                    ->whereIn('child_development_center_id', $centerIds)
+                    ->paginate(10);
             } else {
-                $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->paginate(10);
+                $isFunded = $fundedChildren->where('is_funded', true)
+                    ->where('cycle_implementation_id', $cycle->id)
+                    ->where('child_development_center_id', $cdcId)
+                    ->paginate(10);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
@@ -63,30 +65,29 @@ class ReportsController extends Controller
             $centerIds = $centers->pluck('id');
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereIn('child_development_center_id', $centerIds)->paginate(10);
+                $isFunded = $fundedChildren->where('is_funded', true)
+                    ->where('cycle_implementation_id', $cycle->id)
+                    ->whereIn('child_development_center_id', $centerIds)
+                    ->paginate(10);
             } else {
-                $isFunded = $fundedChildren->where('child_development_center_id', $cdcId)->paginate(10);
+                $isFunded = $fundedChildren->where('is_funded', true)
+                    ->where('cycle_implementation_id', $cycle->id)
+                    ->where('child_development_center_id', $cdcId)
+                    ->paginate(10);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
         }
 
-        return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter'));
+        return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle'));
     }
-    public function malnourish(Request $request)
+    public function malnourish(Request $request, CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
-
-        if (!$cycleImplementation) {
-            return view('reports.malnourish', [
-                'fundedChildren' => collect(),
-            ]);
-        }
 
         $fundedChildren = Child::with('nutritionalStatus', 'sex', 'center')
             ->where('is_funded', true)
-            ->where('cycle_implementation_id', $cycleImplementation->id)
+            ->where('cycle_implementation_id', $cycle->id)
             ->get();
 
         $childrenWithNutritionalStatus = [];
@@ -114,13 +115,13 @@ class ReportsController extends Controller
         if (auth()->user()->hasRole('admin')) {
             $isFunded = Child::with('nutritionalStatus', 'sex')
                 ->where('is_funded', true)
-                ->where('cycle_implementation_id', $cycleImplementation->id)
+                ->where('cycle_implementation_id', $cycle->id)
                 ->orderBy('child_development_center_id')
                 ->paginate(10);
 
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
-            return view('reports.malnourish', compact('isFunded', 'centers', 'cdcId'));
+            return view('reports.malnourish', compact('isFunded', 'centers', 'cdcId', 'cycle'));
 
         } elseif (auth()->user()->hasRole('lgu focal')) {
             $focalID = auth()->id();
@@ -129,30 +130,23 @@ class ReportsController extends Controller
 
             $isFunded = Child::with('nutritionalStatus', 'sex')
                 ->where('is_funded', true)
-                ->where('cycle_implementation_id', $cycleImplementation->id)
+                ->where('cycle_implementation_id', $cycle->id)
                 ->whereIn('child_development_center_id', $centerIds)
                 ->orderBy('child_development_center_id')
                 ->paginate(10);
 
-            return view('reports.malnourish', compact('isFunded', 'centers', 'cdcId'));
+            return view('reports.malnourish', compact('isFunded', 'centers', 'cdcId', 'cycle'));
 
         }
     }
-    public function disabilities()
+    public function disabilities(CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-        if (!$cycleImplementation) {
-            return view('reports.disabilities', [
-                'childrenWithDisabilities' => collect(),
-            ]);
-        }
 
         $childrenWithDisabilities = Child::with('center')
             ->where('is_funded', true)
             ->where('is_person_with_disability', true)
             ->where('person_with_disability_details', '!=', '')
-            ->where('cycle_implementation_id', $cycleImplementation->id);
+            ->where('cycle_implementation_id', $cycle->id);
 
 
         if (auth()->user()->hasRole('admin')) {
@@ -160,7 +154,7 @@ class ReportsController extends Controller
 
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
-            return view('reports.disabilities', compact('isPwdChildren', 'centers'));
+            return view('reports.disabilities', compact('isPwdChildren', 'centers', 'cycle'));
 
         } elseif (auth()->user()->hasRole('lgu focal')) {
             $focalID = auth()->id();
@@ -171,26 +165,20 @@ class ReportsController extends Controller
                 ->where('is_funded', true)
                 ->where('is_person_with_disability', true)
                 ->whereIn('child_development_center_id', $centerIds)
-                ->where('cycle_implementation_id', $cycleImplementation->id)
+                ->where('cycle_implementation_id', $cycle->id)
                 ->orderBy('child_development_center_id')
                 ->paginate(10);
 
-            return view('reports.disabilities', compact('isPwdChildren', 'centers'));
+            return view('reports.disabilities', compact('isPwdChildren', 'centers', 'cycle'));
         }
     }
-    public function monitoring(Request $request)
+    public function monitoring(Request $request, CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
 
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
         $fundedChildren = Child::with('nutritionalStatus', 'sex')
             ->where('is_funded', true)
-            ->where('cycle_implementation_id', $cycleImplementation->id)
+            ->where('cycle_implementation_id', $cycle->id)
             ->get();
 
         $childrenWithNutritionalStatus = [];
@@ -220,14 +208,14 @@ class ReportsController extends Controller
             if($cdcId == 'all_center') {
                 $isFunded = Child::with('nutritionalStatus', 'sex')
                     ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->where('cycle_implementation_id', $cycle->id)
                     ->paginate(10);
 
             } else {
                 $isFunded = Child::with('nutritionalStatus', 'sex')
                     ->where('is_funded', true)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->where('cycle_implementation_id', $cycle->id)
                     ->paginate(10);
             }
         
@@ -242,14 +230,14 @@ class ReportsController extends Controller
             if($cdcId == 'all_center') {
                 $isFunded = Child::with('nutritionalStatus', 'sex')
                     ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->where('cycle_implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIds)
                     ->paginate(10);
 
             } else {
                 $isFunded = Child::with('nutritionalStatus', 'sex')
                     ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->where('cycle_implementation_id', $cycle->id)
                     ->where('child_development_center_id', $cdcId)
                     ->paginate(10);
             }
@@ -262,35 +250,28 @@ class ReportsController extends Controller
             if ($cdcId == 'all_center') {
                 $isFunded = Child::with('nutritionalStatus', 'sex')
                     ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->where('cycle_implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIds)
                     ->paginate(10);
             } else {
                 $isFunded = Child::with('nutritionalStatus', 'sex')
                     ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
+                    ->where('cycle_implementation_id', $cycle->id)
                     ->where('child_development_center_id', $cdcId)
                     ->paginate(10);
             }
 
         }        
 
-        return view('reports.monitoring', compact('isFunded', 'centers', 'cdcId'));
+        return view('reports.monitoring', compact('isFunded', 'centers', 'cdcId', 'cycle'));
     }
-    public function unfunded(Request $request)
+    public function unfunded(Request $request, CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
-
-        if (!$cycleImplementation) {
-            return view('reports.index', [
-                'fundedChildren' => collect(),
-            ]);
-        }
 
         $unfundedChildren = Child::with('nutritionalStatus')
             ->where('is_funded', false)
-            ->where('cycle_implementation_id', $cycleImplementation->id);
+            ->where('cycle_implementation_id', $cycle->id);
 
 
         if (auth()->user()->hasRole('admin')) {
@@ -332,22 +313,15 @@ class ReportsController extends Controller
 
         }
 
-        return view('reports.unfunded', compact('isNotFunded', 'centers', 'cdcId'));
+        return view('reports.unfunded', compact('isNotFunded', 'centers', 'cdcId', 'cycle'));
     }
-    public function undernourishedUponEntry()
+    public function undernourishedUponEntry(CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-        if (!$cycleImplementation) {
-            return view('reports.index', [
-                'fundedChildren' => collect(),
-            ]);
-        }
 
         if (auth()->user()->hasRole('admin')) {
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->where('is_undernourish', true)
                     ->whereIn('age_in_years', [2, 3, 4, 5]);
@@ -365,7 +339,7 @@ class ReportsController extends Controller
 
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereIn('children.child_development_center_id', $centerIds)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->where('is_undernourish', true)
@@ -507,22 +481,14 @@ class ReportsController extends Controller
             ];
         });
 
-        return view('reports.undernourished-upon-entry', compact('centers', 'ageGroupsPerCenter'));
+        return view('reports.undernourished-upon-entry', compact('centers', 'ageGroupsPerCenter', 'cycle'));
     }
-    public function undernourishedAfter120()
+    public function undernourishedAfter120(CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-        if (!$cycleImplementation) {
-            return view('reports.index', [
-                'fundedChildren' => collect(),
-            ]);
-        }
-
         if (auth()->user()->hasRole('admin')) {
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->where('is_undernourish', true)
                     ->whereIn('age_in_years', [2, 3, 4, 5]);
@@ -540,7 +506,7 @@ class ReportsController extends Controller
 
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereIn('children.child_development_center_id', $centerIds)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->where('is_undernourish', true)
@@ -682,24 +648,17 @@ class ReportsController extends Controller
             ];
         });
 
-        return view('reports.undernourished-after-120', compact('centers', 'exitAgeGroupsPerCenter'));
+        return view('reports.undernourished-after-120', compact('centers', 'exitAgeGroupsPerCenter', 'cycle'));
     }
-    public function entryAgeBracket(Request $request)
+    public function entryAgeBracket(Request $request, CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
-
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
 
         if (auth()->user()->hasRole('admin')) {
             if($cdcId == 'all_center'){
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -718,7 +677,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -747,7 +706,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->whereIn('children.child_development_center_id', $centerIds)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -767,7 +726,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -793,7 +752,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->whereIn('children.child_development_center_id', $centerIds)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -813,7 +772,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -1009,24 +968,17 @@ class ReportsController extends Controller
             });
 
         
-        return view('reports.age-bracket-upon-entry', compact('fundedChildren','countsPerNutritionalStatus', 'centers', 'cdcId'));
+        return view('reports.age-bracket-upon-entry', compact('fundedChildren','countsPerNutritionalStatus', 'centers', 'cdcId', 'cycle'));
     }
-    public function after120AgeBracket(Request $request)
+    public function after120AgeBracket(Request $request, CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
-
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
 
         if (auth()->user()->hasRole('admin')) {
             if($cdcId == 'all_center'){
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -1045,7 +997,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -1074,7 +1026,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->whereIn('children.child_development_center_id', $centerIds)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -1094,7 +1046,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -1120,7 +1072,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->whereIn('children.child_development_center_id', $centerIds)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -1140,7 +1092,7 @@ class ReportsController extends Controller
                 $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
                     ->where('children.is_funded', true)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
+                    ->where('children.cycle_implementation_id', $cycle->id)
                     ->whereHas('nutritionalStatus', function ($query) {
                         $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
@@ -1348,22 +1300,15 @@ class ReportsController extends Controller
                 ];
             });
 
-        return view('reports.age-bracket-after-120', compact('fundedChildren', 'exitCountsPerNutritionalStatus', 'centers', 'cdcId'));
+        return view('reports.age-bracket-after-120', compact('fundedChildren', 'exitCountsPerNutritionalStatus', 'centers', 'cdcId', 'cycle'));
     }
-    public function weightForAgeUponEntry()
+    public function weightForAgeUponEntry(CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
 
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
             })
@@ -1379,7 +1324,7 @@ class ReportsController extends Controller
 
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereIn('children.child_development_center_id', $centerIds)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
@@ -1657,22 +1602,15 @@ class ReportsController extends Controller
 
         }
 
-        return view('reports.weight-for-age-upon-entry', compact('centers', 'ageGroupsPerCenter', 'totals'));
+        return view('reports.weight-for-age-upon-entry', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
-    public function weightForAgeAfter120()
+    public function weightForAgeAfter120(CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
 
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->where('is_undernourish', true)
                     ->whereIn('age_in_years', [2, 3, 4, 5]);
@@ -1689,7 +1627,7 @@ class ReportsController extends Controller
 
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereIn('children.child_development_center_id', $centerIds)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
@@ -1965,25 +1903,17 @@ class ReportsController extends Controller
 
         }
 
-        return view('reports.weight-for-age-after-120', compact('centers', 'ageGroupsPerCenter', 'totals'));
+        return view('reports.weight-for-age-after-120', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
-    public function weightForHeightUponEntry()
+    public function weightForHeightUponEntry(CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
-
         $province = null;
         $city = null;
         
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
             })
@@ -2009,7 +1939,7 @@ class ReportsController extends Controller
 
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereIn('children.child_development_center_id', $centerIds)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
@@ -2336,23 +2266,15 @@ class ReportsController extends Controller
 
         }
 
-        return view('reports.weight-for-height-upon-entry', compact('centers', 'ageGroupsPerCenter', 'totals'));
+        return view('reports.weight-for-height-upon-entry', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
 
     }
-    public function weightForHeightAfter120()
+    public function weightForHeightAfter120(CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
-        
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
             })
@@ -2368,7 +2290,7 @@ class ReportsController extends Controller
 
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereIn('children.child_development_center_id', $centerIds)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
@@ -2694,21 +2616,14 @@ class ReportsController extends Controller
 
         }
 
-        return view('reports.weight-for-height-after-120', compact('centers', 'ageGroupsPerCenter', 'totals'));
+        return view('reports.weight-for-height-after-120', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
-    public function heightForAgeUponEntry()
+    public function heightForAgeUponEntry(CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
             })
@@ -2724,7 +2639,7 @@ class ReportsController extends Controller
 
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereIn('children.child_development_center_id', $centerIds)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
@@ -3002,22 +2917,14 @@ class ReportsController extends Controller
 
         }
 
-        return view('reports.height-for-age-upon-entry', compact('centers', 'ageGroupsPerCenter', 'totals'));
+        return view('reports.height-for-age-upon-entry', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
-    public function heightForAgeAfter120()
+    public function heightForAgeAfter120(CycleImplementation $cycle)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
-
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
             })
@@ -3032,7 +2939,7 @@ class ReportsController extends Controller
 
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
-            ->where('children.cycle_implementation_id', $cycleImplementation->id)
+            ->where('children.cycle_implementation_id', $cycle->id)
             ->whereIn('children.child_development_center_id', $centerIds)
             ->whereHas('nutritionalStatus', function ($query) {
                 $query->whereIn('age_in_years', [2, 3, 4, 5]);
@@ -3313,7 +3220,7 @@ class ReportsController extends Controller
 
         
 
-        return view('reports.height-for-age-after-120', compact('centers', 'ageGroupsPerCenter', 'totals'));
+        return view('reports.height-for-age-after-120', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
     
     

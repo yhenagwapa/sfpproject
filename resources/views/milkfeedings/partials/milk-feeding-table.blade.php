@@ -15,8 +15,8 @@
             <tr>
                 <td>{{ $milkfeeding->name }}</td>
                 @if(auth()->user()->hasRole('admin'))
-                    <td>{{ $milkfeeding->target }}</td>
-                    <td>{{ $milkfeeding->allocation }}</td>
+                    <td>{{ number_format($milkfeeding->target) }}</td>
+                    <td>{{ number_format($milkfeeding->allocation, 2) }}</td>
                 @endif
                 <td>{{ $milkfeeding->status }}</td>
                 <td class="inline-flex items-center justify-center">

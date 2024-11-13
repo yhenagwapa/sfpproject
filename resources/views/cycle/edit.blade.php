@@ -60,7 +60,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_name">Cycle Name<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_name"
-                                               name="cycle_name" value="{{ old('cycle_name', $cycle->cycle_name) }}" autofocus>
+                                               name="cycle_name" value="{{ old('cycle_name', $cycle->cycle_name) }}" style="text-transform: uppercase;" autofocus>
                                         @error('cycle_name')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -69,7 +69,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_school_year">School Year<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_school_year"
-                                               name="cycle_school_year" value="{{ old('cycle_school_year', $cycle->cycle_school_year) }}" maxlength="9">
+                                               name="cycle_school_year" value="{{ old('cycle_school_year', $cycle->cycle_school_year) }}" maxlength="9" style="text-transform: uppercase;">
                                         @error('cycle_school_year')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -78,7 +78,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_target">Target<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_target"
-                                               name="cycle_target" value="{{ old('cycle_target', $cycle->cycle_target) }}" maxlength="12">
+                                               name="cycle_target" value="{{ (old('cycle_target', number_format($cycle->cycle_target))) }}" maxlength="12">
                                         @error('cycle_target')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -87,7 +87,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_allocation">Allocation<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_allocation"
-                                               name="cycle_allocation" value="{{ old('cycle_allocation', $cycle->cycle_allocation) }}">
+                                               name="cycle_allocation" value="{{ (old('cycle_allocation', number_format((float) $cycle->cycle_allocation), 2)) }}">
                                         @error('cycle_allocation')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror

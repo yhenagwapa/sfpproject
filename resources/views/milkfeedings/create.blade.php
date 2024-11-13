@@ -65,7 +65,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="name">Name<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="name"
-                                            name="name" value="{{ old('name') }}" autofocus>
+                                            name="name" value="{{ old('name') }}" style="text-transform: uppercase;" autofocus>
 
                                         @error('name')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
@@ -75,7 +75,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="school_year">School Year<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="school_year"
-                                            name="school_year" value="{{ old('school_year') }}" maxlength="9">
+                                            name="school_year" value="{{ old('school_year') }}" maxlength="9" style="text-transform: uppercase;">
                                         @error('school_year')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -84,7 +84,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="target">Target<b class='text-red-600'>*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="target"
-                                            name="target" value="{{ old('target') }}" maxlength="12">
+                                            name="target" value="{{ old('target') }}" maxlength="12" style="text-transform: uppercase;">
                                         @error('target')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -94,7 +94,7 @@
                                         <label for="allocation">Allocation<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300"
                                             id="allocation" name='allocation'
-                                            value="{{ old('allocation') }}">
+                                            value="{{ old('allocation') }}" style="text-transform: uppercase;">
                                         @error('allocation')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror

@@ -6,7 +6,7 @@
 
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Cycle Implementations</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Implementations</a></li>
                     <li class="breadcrumb-item ">Reports</li>
                 </ol>
             </nav>
@@ -57,7 +57,7 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <form id="masterlistForm" action="{{ route('reports.index') }}" method="POST">
+                                            <form id="masterlistForm" action="{{ route('reports.index', ['cycle' => $cycle->id]) }}" method="POST">
                                                 @csrf
                                                 <a class="report-link collapsed active" href="#" onclick="document.getElementById('masterlistForm').submit(); return false;">
                                                     <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
@@ -74,7 +74,7 @@
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <form id="malnourishedForm" action="{{ route('reports.malnourish')}}" method="POST">
+                                            <form id="malnourishedForm" action="{{ route('reports.malnourish', ['cycle' => $cycle->id])}}" method="POST">
                                                 @csrf
                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('malnourishedForm').submit(); return false;">
                                                     <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
@@ -91,7 +91,7 @@
 
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                         <li class="nav-item">
-                                            <form id="disabilitiesForm" action="{{ route('reports.disabilities')}}" method="POST">
+                                            <form id="disabilitiesForm" action="{{ route('reports.disabilities', ['cycle' => $cycle->id])}}" method="POST">
                                                 @csrf
                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('disabilitiesForm').submit(); return false;">
                                                     <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
@@ -119,7 +119,7 @@
                                             </a>
                                             <ul id="forms-nav" class="report-content collapsed">
                                                 <li class="nav-item">
-                                                    <form id="undernourishedUponEntryForm" action="{{ route('reports.undernourished-upon-entry')}}" method="POST">
+                                                    <form id="undernourishedUponEntryForm" action="{{ route('reports.undernourished-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
                                                         @csrf
                                                         <a class="report-link collapsed" href="#" onclick="document.getElementById('undernourishedUponEntryForm').submit(); return false;">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -130,7 +130,7 @@
                                                     </form>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <form id="undernourishedAfter120Form" action="{{ route('reports.undernourished-after-120')}}" method="POST">
+                                                    <form id="undernourishedAfter120Form" action="{{ route('reports.undernourished-after-120', ['cycle' => $cycle->id])}}" method="POST">
                                                         @csrf
                                                         <a class="report-link collapsed" href="#" onclick="document.getElementById('undernourishedAfter120Form').submit(); return false;">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -170,7 +170,7 @@
                                                     </a>
                                                     <ul id="forms-nav" class="report-subcontent collapsed">
                                                         <li>
-                                                            <form id="WFAUponEntryForm" action="{{ route('reports.weight-for-age-upon-entry')}}" method="POST">
+                                                            <form id="WFAUponEntryForm" action="{{ route('reports.weight-for-age-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
                                                                 @csrf
                                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('WFAUponEntryForm').submit(); return false;">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -182,7 +182,7 @@
                                                         </li>
                                                     
                                                         <li>
-                                                            <form id="WFAAfter120Form" action="{{ route('reports.weight-for-age-after-120')}}" method="POST">
+                                                            <form id="WFAAfter120Form" action="{{ route('reports.weight-for-age-after-120', ['cycle' => $cycle->id])}}" method="POST">
                                                                 @csrf
                                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('WFAAfter120Form').submit(); return false;">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -208,7 +208,7 @@
                                                     </a>
                                                     <ul id="forms-nav" class="report-subcontent collapsed">
                                                         <li>
-                                                            <form id="WFHUponEntryForm" action="{{ route('reports.weight-for-height-upon-entry')}}" method="POST">
+                                                            <form id="WFHUponEntryForm" action="{{ route('reports.weight-for-height-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
                                                                 @csrf
                                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('WFHUponEntryForm').submit(); return false;">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -220,7 +220,7 @@
                                                         </li>
                                                     
                                                         <li>
-                                                            <form id="WFHAfter120Form" action="{{ route('reports.weight-for-height-after-120')}}" method="POST">
+                                                            <form id="WFHAfter120Form" action="{{ route('reports.weight-for-height-after-120', ['cycle' => $cycle->id])}}" method="POST">
                                                                 @csrf
                                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('WFHAfter120Form').submit(); return false;">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -246,7 +246,7 @@
                                                     </a>
                                                     <ul id="forms-nav" class="report-subcontent collapsed">
                                                         <li>
-                                                            <form id="HFAUponEntryForm" action="{{ route('reports.height-for-age-upon-entry')}}" method="POST">
+                                                            <form id="HFAUponEntryForm" action="{{ route('reports.height-for-age-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
                                                                 @csrf
                                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('HFAUponEntryForm').submit(); return false;">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -258,7 +258,7 @@
                                                         </li>
                                                     
                                                         <li>
-                                                            <form id="HFAAfter120Form" action="{{ route('reports.height-for-age-after-120')}}" method="POST">
+                                                            <form id="HFAAfter120Form" action="{{ route('reports.height-for-age-after-120', ['cycle' => $cycle->id])}}" method="POST">
                                                                 @csrf
                                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('HFAAfter120Form').submit(); return false;">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -287,7 +287,7 @@
                                             </a>
                                             <ul id="forms-nav" class="report-content collapsed">
                                                     <li>
-                                                        <form id="AgeBracketUponEntryForm" action="{{ route('reports.age-bracket-upon-entry')}}" method="POST">
+                                                        <form id="AgeBracketUponEntryForm" action="{{ route('reports.age-bracket-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
                                                             @csrf
                                                             <a class="report-link collapsed" href="#" onclick="document.getElementById('AgeBracketUponEntryForm').submit(); return false;">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -299,7 +299,7 @@
                                                     </li>
                                                 
                                                     <li>
-                                                        <form id="AgeBracketAfter120Form" action="{{ route('reports.age-bracket-after-120')}}" method="POST">
+                                                        <form id="AgeBracketAfter120Form" action="{{ route('reports.age-bracket-after-120', ['cycle' => $cycle->id])}}" method="POST">
                                                             @csrf
                                                             <a class="report-link collapsed" href="#" onclick="document.getElementById('AgeBracketAfter120Form').submit(); return false;">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
@@ -317,7 +317,7 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <form id="monitoringForm" action="{{ route('reports.monitoring')}}" method="POST">
+                                            <form id="monitoringForm" action="{{ route('reports.monitoring', ['cycle' => $cycle->id])}}" method="POST">
                                                 @csrf
                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('monitoringForm').submit(); return false;">
                                                     <svg class="h-2 w-2 mr-2" width="24" height="24"
@@ -336,7 +336,7 @@
                                             auth()->user()->hasRole('lgu focal') ||
                                             auth()->user()->hasRole('child development worker'))
                                         <li class="nav-item">
-                                            <form id="unfundedForm" action="{{ route('reports.unfunded')}}" method="POST">
+                                            <form id="unfundedForm" action="{{ route('reports.unfunded', ['cycle' => $cycle->id])}}" method="POST">
                                                 @csrf
                                                 <a class="report-link collapsed" href="#" onclick="document.getElementById('unfundedForm').submit(); return false;">
                                                     <svg class="h-2 w-2 mr-2" width="24" height="24"
@@ -367,7 +367,7 @@
                                                 <h5 class="card-title">Masterlist of Funded Beneficiaries</h5>
                                                 <div class="row">
                                                     <div class="col-md-6 mt-2 text-sm">
-                                                        <form action="{{ route('reports.index') }}" method="POST" id="filterForm">
+                                                        <form action="{{ route('reports.index', ['cycle' => $cycle->id] ) }}" method="POST" id="filterForm">
                                                             @csrf
                                                             <label for="center_name">Filter per center:</label>
                                                             <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
@@ -400,14 +400,14 @@
                                                         let selectedCenterId = this.value;
                                                         let printButton = document.getElementById('printButton');
                                                         
-                                                        printButton.href = '/reports/print/masterlist?center_name=' + selectedCenterId;
+                                                        printButton.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
                                                     });
                                                 
                                                     window.onload = function() {
                                                         let selectedCenterId = document.getElementById('center_name').value;
                                                         let printButton = document.getElementById('printButton');
                                                         
-                                                        printButton.href = '/reports/print/masterlist?center_name=' + selectedCenterId;
+                                                        printButton.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
                                                     };
                                                 </script>
                                             

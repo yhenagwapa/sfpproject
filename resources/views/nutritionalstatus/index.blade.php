@@ -63,7 +63,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="weight">Weight<b class="text-red-600">*</b></label>
                                         <input type="text"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            class="form-control rounded border-gray-300"
                                             id="weight" name='weight' value="{{ old('weight') }}">
                                         @error('weight')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
@@ -72,7 +72,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="height">Height<b class="text-red-600">*</b></label>
                                         <input type="text"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            class="form-control rounded border-gray-300"
                                             id="height" name='height' value="{{ old('height') }}">
                                         @error('height')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
@@ -82,7 +82,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="weighing_date">Actual date of weighing<b class="text-red-600">*</b></label>
                                         <input type="date"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            class="form-control rounded border-gray-300"
                                             id="weighing_date" name='weighing_date' value="{{ old('weighing_date') }}">
                                         @error('weighing_date')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
@@ -137,7 +137,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="weight">Weight<b class="text-red-600">*</b></label>
                                         <input type="text"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            class="form-control rounded border-gray-300"
                                             id="weight" name='weight' value="{{ old('weight') }}">
                                         @error('weight')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
@@ -146,7 +146,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="height">Height<b class="text-red-600">*</b></label>
                                         <input type="text"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            class="form-control rounded border-gray-300"
                                             id="height" name='height' value="{{ old('height') }}">
                                         @error('height')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
@@ -156,9 +156,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="weighing_date">Actual date of weighing<b
                                                 class="text-red-600">*</b></label>
-                                        <input type="date"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="weighing_date" name='weighing_date' value="{{ old('weighing_date') }}">
+                                        <input type="date" class="form-control rounded border-gray-300" id="weighing_date" name='weighing_date' value="{{ old('weighing_date') }}" max="{{ date('Y-m-d') }}">
                                         @error('weighing_date')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror

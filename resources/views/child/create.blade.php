@@ -120,7 +120,7 @@
                                             class="text-red-600">*</label>
                                         <input type="date"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="date_of_birth" name='date_of_birth' value="{{ old('date_of_birth') }}">
+                                            id="date_of_birth" name='date_of_birth' value="{{ old('date_of_birth') }}" max="{{ date('Y-m-d') }}">
                                         @error('date_of_birth')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -150,14 +150,14 @@
                                     <label for="deworming_date">Deworming Date</label>
                                     <input type="date"
                                         class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="deworming_date" name='deworming_date' value="{{ old('deworming') }}">
+                                        id="deworming_date" name='deworming_date' value="{{ old('deworming') }}" max="{{ date('Y-m-d') }}">
                                 </div>
 
                                 <div class="col-md-6 mt-2 text-sm">
                                     <label for="vitamin_a_date">Vitamin A</label>
                                     <input type="date"
                                         class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="vitamin_a_date" name='vitamin_a_date' value="{{ old('vitamin_a') }}">
+                                        id="vitamin_a_date" name='vitamin_a_date' value="{{ old('vitamin_a') }}" max="{{ date('Y-m-d') }}">
                                 </div>
 
                                 <div class="col-md-4 mt-4 text-sm">
@@ -184,7 +184,7 @@
                                         <option value="mcct">MCCT</option>
                                     </select>
                                     @error('pantawid_details')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
                                 </div>
 

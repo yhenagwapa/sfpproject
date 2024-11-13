@@ -18,8 +18,8 @@ return new class extends Migration
             $table->decimal('cycle_allocation', 12, 2)->nullable();
             $table->string('cycle_school_year');
             $table->string('cycle_status');
-            $table->foreignId('created_by_user_id')->constrained('users')->nullable();
-            $table->foreignId('updated_by_user_id')->constrained('users')->nullable();
+            $table->foreignId('created_by_user_id')->nullable()->constrained('users');
+            $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }
