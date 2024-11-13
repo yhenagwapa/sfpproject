@@ -58,7 +58,7 @@
                 </div>
 
                 <!-- Milk Feeding Card -->
-                <div class="col-lg-12">
+                {{-- <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Milk Feeding</h5>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </section>
     </div>

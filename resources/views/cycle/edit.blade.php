@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-3 p-0">
                 <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Implementations</a></li>
-                <li class="breadcrumb-item active">{{ $cycle->cycle_name }}</li>
+                <li class="breadcrumb-item active" style="text-transform: uppercase;">{{ $cycle->cycle_name }}</li>
             </ol>
         </nav>
     </div>

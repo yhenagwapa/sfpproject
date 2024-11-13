@@ -65,6 +65,74 @@
                         </div>
                     </div>
 
+                    <!-- 2 y.o -->
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">2 years old <span>| 1,244</span></h5>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <ul>
+                                            <li>Male: 622</li>
+                                            <li>Female: 622</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3 y.o -->
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">3 years old <span>| 1,244</span></h5>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <ul>
+                                            <li>Male: 622</li>
+                                            <li>Female: 622</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4 y.o -->
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">4 years old <span>| 1,244</span></h5>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <ul>
+                                            <li>Male: 622</li>
+                                            <li>Female: 622</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5 y.o -->
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">5 years old <span>| 1,244</span></h5>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <ul>
+                                            <li>Male: 622</li>
+                                            <li>Female: 622</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     
 
                     <!-- Nutritional Status Charts -->

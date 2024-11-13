@@ -6,7 +6,7 @@
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('child.index') }}">Children</a></li>
-                    <li class="breadcrumb-item active">{{ $child->full_name }}</li>
+                    <li class="breadcrumb-item active" style="text-transform: uppercase;">{{ $child->full_name }}</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -212,9 +212,9 @@
                     <div class="col-lg-9">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">{{ $child->full_name }}</h5>
-                                <p class="text-sx">Date of Birth: {{ $child->date_of_birth }}</p>
-                                <p class="text-sx">Sex: {{ $child->sex->name }}</p>
+                                <h5 class="card-title" style="text-transform: uppercase;">{{ $child->full_name }}</h5>
+                                <p class="text-sm">Date of Birth: {{ $child->date_of_birth }}</p>
+                                <p class="text-sm" style="text-transform: uppercase;">Sex: {{ $child->sex->name }}</p>
                                 <div class="table-responsive">
                                     @include('nutritionalstatus.partials.ns-table')
                                 </div>

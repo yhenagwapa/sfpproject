@@ -15,6 +15,7 @@ use App\Http\Requests\StoreNutritionalStatusRequest;
 use App\Http\Requests\UpdateNutritionalStatusRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\Child;
+use App\Models\Sex;
 use Carbon\Carbon;
 
 class NutritionalStatusController extends Controller
@@ -246,7 +247,7 @@ class NutritionalStatusController extends Controller
 
             $entryWeighingDate = Carbon::parse($request->weighing_date);
             $entryAgeInMonths = $entryWeighingDate->diffInMonths($childBirthDate);
-            $entryAgeInYears = $entryAgeInMonths / 12;
+            $entryAgeInYears = floor($entryAgeInMonths / 12);
 
             //weight for age
             if ($childSex == '1') {
@@ -426,16 +427,20 @@ class NutritionalStatusController extends Controller
         $entryIsMalnourished = false;
         $entryIsUndernourished = false;
 
-        $child = Child::with( 'sex')
-            ->where('id', $request->child_id)
+        $child = NutritionalStatus::with( 'child')
+            ->where('child_id', $request->child_id)
+            ->orderBy('created_at')
             ->first();
 
-        $childSex = $child->sex->id;
-        $childBirthDate = Carbon::parse($child->date_of_birth);
+        $childInfo = Child::findOrFail($child->child_id);
+        $childSex = Sex::where('id', $childInfo->sex_id)
+            ->first();
+
+        $childBirthDate = Carbon::parse($childInfo->date_of_birth);
 
         $entryWeighingDate = Carbon::parse($request->weighing_date);
         $entryAgeInMonths = $entryWeighingDate->diffInMonths($childBirthDate);
-        $entryAgeInYears = $entryAgeInMonths / 12;
+        $entryAgeInYears = floor($entryAgeInMonths / 12);
 
         //weight for age
         if ($childSex == '1') {
@@ -569,20 +574,18 @@ class NutritionalStatusController extends Controller
             $exitIsMalnourished = false;
             $exitIsUndernourished = false;
 
-            $child = Child::with( 'sex')
-                ->where('id', $request->exitchild_id)
+            $child = NutritionalStatus::with( 'child')
+                ->where('child_id', $request->exitchild_id)
                 ->orderBy('created_at')
                 ->skip(1)
                 ->take(1)
                 ->first();
 
-                dd($child);
+            $childInfo = Child::findOrFail($child->child_id);
+            $childSex = Sex::where('id', $childInfo->sex_id)
+                ->first();
 
-            $childSex = $child->sex->id;
-
-           
-
-            $childBirthDate = Carbon::parse($child->date_of_birth);
+            $childBirthDate = Carbon::parse($childInfo->date_of_birth);
             
             $exitWeighingDate = Carbon::parse($request->exitweighing_date);
 
@@ -590,7 +593,7 @@ class NutritionalStatusController extends Controller
             $exitAgeInYears = floor($exitAgeInMonths / 12);
 
             //weight for age
-            if ($childSex == '1') {
+            if ($childSex->id == '1') {
                 $getAge = cgs_wfa_boys::where('age_month', $exitAgeInMonths)->first();
 
                 if ((float) $getAge->severly_underweight >= (float) $request->exitweight) {
@@ -617,7 +620,7 @@ class NutritionalStatusController extends Controller
             }
 
             //height for age
-            if ($childSex == '1') {
+            if ($childSex->id == '1') {
                 $getAge = cgs_hfa_boys::where('age_month', $exitAgeInMonths)->first();
 
                 if ((float) $getAge->severly_stunted >= (float) $request->exitheight) {
@@ -644,7 +647,7 @@ class NutritionalStatusController extends Controller
             }
 
             //weight for height
-            if ($childSex == '1') {
+            if ($childSex->id == '1') {
                 $getHeight = cgs_wfh_boys::where('length_in_cm', $request->exitheight)->first();
 
                 if ((float) $getHeight->severly_wasted >= (float) $request->exitweight) {

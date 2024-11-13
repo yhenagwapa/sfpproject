@@ -56,7 +56,11 @@
                             <h5 class="card-title">Child Details</h5>
                             <form class="row" method="post" action="{{ route('child.store') }} ">
                                 @csrf
-
+                                
+                                    <div class='col-md-2 mt-3 text-gray-400 text-xs'>Personal Information</div>
+                                    <div class='col-md-10 mt-6 text-gray-400 text-xs'>
+                                        <hr>
+                                    </div>
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="firstname">First Name</label><label for="firstname"
                                             class="text-red-600">*</label>

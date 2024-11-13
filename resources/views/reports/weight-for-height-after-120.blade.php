@@ -6,7 +6,7 @@
     <div class="pagetitle">
         <nav style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb mb-3 p-0">
-                <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Cycle Implementations</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Implementations</a></li>
                 <li class="breadcrumb-item">Reports</li>
             </ol>
         </nav>
