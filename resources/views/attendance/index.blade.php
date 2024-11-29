@@ -76,8 +76,6 @@
                                     <div class="col-md-12 text-right">
                                         <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
                                             data-bs-toggle="modal" data-bs-target="#verticalycentered1">Submit</button>
-                                        <button type="reset"
-                                            class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
                                     </div>
 
                                     <div class="modal fade" id="verticalycentered1" tabindex="-1">
@@ -128,8 +126,6 @@
                                         <div class="col-md-12 text-right">
                                             <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
                                                 data-bs-toggle="modal" data-bs-target="#verticalycentered2">Submit</button>
-                                            <button type="reset"
-                                                class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
                                         </div>
 
                                         <div class="modal fade" id="verticalycentered2" tabindex="-1">

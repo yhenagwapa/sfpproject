@@ -21,12 +21,15 @@ class ReportsController extends Controller
     }
     public function index(Request $request, CycleImplementation $cycle)
     {
+        $cycle = CycleImplementation::where('cycle_status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('nutritionalStatus', 'sex');
 
         if (auth()->user()->hasRole('admin')) {
+            $centers = ChildDevelopmentCenter::all()->keyBy('id');
+
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->where('is_funded', true)
                     ->where('cycle_implementation_id', $cycle->id)
@@ -38,7 +41,6 @@ class ReportsController extends Controller
                     ->paginate(10);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
-            $centers = ChildDevelopmentCenter::all()->keyBy('id');
             
         } elseif (auth()->user()->hasRole('lgu focal')) {
             $focalID = auth()->id();
@@ -269,10 +271,7 @@ class ReportsController extends Controller
     {
         $cdcId = $request->input('center_name', 'all_center');
 
-        $unfundedChildren = Child::with('nutritionalStatus')
-            ->where('is_funded', false)
-            ->where('cycle_implementation_id', $cycle->id);
-
+        $unfundedChildren = Child::where('is_funded', false)->get();
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
@@ -289,12 +288,10 @@ class ReportsController extends Controller
             $centerIds = $centers->pluck('id');
 
             if ($cdcId == 'all_center'){
-                $isNotFunded = $unfundedChildren->whereIn('child_development_center_id', $centerIds)
-                ->paginate(20);
+                $isNotFunded = $unfundedChildren->whereIn('child_development_center_id', $centerIds);
 
             } else{
-                $isNotFunded = $unfundedChildren->where('child_development_center_id', $cdcId)
-                ->paginate(20);
+                $isNotFunded = $unfundedChildren->where('child_development_center_id', $cdcId);
             }
 
         } else {
@@ -303,12 +300,10 @@ class ReportsController extends Controller
             $centerIds = $centers->pluck('id');
 
             if ($cdcId == 'all_center'){
-                $isNotFunded = $unfundedChildren->whereIn('child_development_center_id', $centerIds)
-                ->paginate(20);
+                $isNotFunded = $unfundedChildren->whereIn('child_development_center_id', $centerIds);
 
             } else{
-                $isNotFunded = $unfundedChildren->where('child_development_center_id', $cdcId)
-                ->paginate(20);
+                $isNotFunded = $unfundedChildren->where('child_development_center_id', $cdcId);
             }
 
         }

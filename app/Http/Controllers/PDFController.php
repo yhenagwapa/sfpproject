@@ -92,6 +92,8 @@ class PDFController extends Controller
             ->get();
 
         $childrenWithNutritionalStatus = [];
+        $province = null;
+        $city = null;
 
         foreach ($fundedChildren as $child) {
             $nutritionalStatuses = $child->nutritionalStatus;
@@ -159,6 +161,9 @@ class PDFController extends Controller
     public function printDisabilities()
     {
         $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $province = null;
+        $city = null;
+
 
         if (!$cycleImplementation) {
             return view('reports.disabilities', [
@@ -217,6 +222,8 @@ class PDFController extends Controller
     public function printUndernourishedUponEntry()
     {
         $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $province = null;
+        $city = null;
 
         if (!$cycleImplementation) {
             return view('reports.index', [
@@ -411,6 +418,8 @@ class PDFController extends Controller
     public function printUndernourishedAfter120()
     {
         $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $province = null;
+        $city = null;
 
         if (!$cycleImplementation) {
             return view('reports.index', [

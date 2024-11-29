@@ -73,8 +73,8 @@
         <table class="table">
             <tr>
                 <td>
-                    <p>Province: <u>{{ $province->implode(', ') }}</u></p>
-                    <p>City / Municipality: <u>{{ $city->implode(', ') }}</u></p>
+                    <p>Province: <u>{{ $province ? $province->implode(', ') : 'All Provinces' }}</u></p>
+                    <p>City / Municipality: <u>{{ $city ? $city->implode(', ') : 'All Cities' }}</u></p>
                 </td>
             </tr>
         </table>

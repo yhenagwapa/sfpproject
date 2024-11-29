@@ -77,7 +77,6 @@ class CycleImplementationController extends Controller
         $cycle = CycleImplementation::findOrFail($id); 
         $cycleStatuses = CycleStatus::cases();
 
-        dd($cycle);
 
         return view('cycle.edit', compact('cycle', 'cycleStatuses'));
     }

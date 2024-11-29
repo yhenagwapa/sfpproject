@@ -24,7 +24,7 @@
                 <tr>
                     <td>{{ $maleChild->full_name }}</td>
                     <td>{{ $maleChild->sex->name }}</td>
-                    <td>{{ $maleChild->date_of_birth }}</td>
+                    <td>{{ \Carbon\Carbon::parse($maleChild->date_of_birth)->format('m-d-Y') }}</td>
                     <td>{{ optional($maleChild->nutritionalStatus->first())->weight_for_age }}</td>
                     <td>{{ optional($maleChild->nutritionalStatus->first())->weight_for_height }}</td>
                     <td>{{ optional($maleChild->nutritionalStatus->first())->height_for_age }}</td>
@@ -94,7 +94,7 @@
                 <tr>
                     <td>{{ $femaleChild->full_name }}</td>
                     <td>{{ $femaleChild->sex->name }}</td>
-                    <td>{{ $femaleChild->date_of_birth }}</td>
+                    <td>{{ Carbon\Carbon::parse($femaleChild->date_of_birth)->format('m-d-Y') }}</td>
                     <td>{{ optional($femaleChild->nutritionalStatus->first())->weight_for_age }}</td>
                     <td>{{ optional($femaleChild->nutritionalStatus->first())->weight_for_height }}</td>
                     <td>{{ optional($femaleChild->nutritionalStatus->first())->height_for_age }}</td>

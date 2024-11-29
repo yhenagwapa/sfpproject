@@ -55,6 +55,10 @@ input, select, table, td {
   text-transform: uppercase;
 }
 
+.password , .email {
+  text-transform: none;
+}
+
 /* .container {
   margin-top: 60px;
   padding: 20px 15px;
@@ -201,12 +205,16 @@ input, select, table, td {
 /* Dropdown menus */
 .dropdown-menu {
   border-radius: 4px;
-  padding: 10px 0;
   animation-name: dropdown-animate;
   animation-duration: 0.2s;
   animation-fill-mode: both;
   border: 0;
   box-shadow: 0 5px 30px 0 rgba(82, 63, 105, 0.2);
+}
+
+.dropdown-menu .dropdown-divider {
+  color: #a5c5fe;
+  margin: 0;
 }
 
 .dropdown-menu .dropdown-header,
@@ -225,25 +233,14 @@ input, select, table, td {
   text-decoration: none;
 }
 
-.dropdown-menu .dropdown-divider {
-  color: #a5c5fe;
-  margin: 0;
-}
-
 .dropdown-menu .dropdown-item {
   font-size: 14px;
-  padding: 10px 15px;
   transition: 0.3s;
-}
-
-.dropdown-menu .dropdown-item i {
-  margin-right: 10px;
-  font-size: 18px;
-  line-height: 0;
 }
 
 .dropdown-menu .dropdown-item:hover {
   background-color: #f6f9ff;
+  margin: auto;
 }
 
 @media (min-width: 768px) {
@@ -924,7 +921,7 @@ input, select, table, td {
 
 .register-footer {
   padding: 20px 0;
-  font-size: 14px;
+  font-size: 8px;
   transition: all 0.3s;
   border-top: 1px solid #cddfff;
 }
@@ -937,7 +934,7 @@ input, select, table, td {
 .register-footer .credits {
   padding-top: 5px;
   text-align: center;
-  font-size: 13px;
+  font-size: 8px;
   color: #012970;
 }
 

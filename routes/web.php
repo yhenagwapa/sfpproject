@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\DashboardController;
 
 
 /*
@@ -36,9 +37,9 @@ Route::get('/', function () {
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // Route::get('/register', [ProfileController::class, 'index'])->name('register');
 // Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
@@ -109,7 +110,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/reports/{cycle}/monitoring', [ReportsController::class, 'monitoring'])->name('reports.monitoring');
     Route::post('/reports/{cycle}/undernourished-upon-entry', [ReportsController::class, 'undernourishedUponEntry'])->name('reports.undernourished-upon-entry');
     Route::post('/reports/{cycle}/undernourished-after-120', [ReportsController::class, 'undernourishedAfter120'])->name('reports.undernourished-after-120');
-    Route::post('/reports/{cycle}/age-bracket-upon-entry', [ReportsController::class, 'entryAgeBracket'])->name('reports.age-bracket-upon-entry');
+    Route::get('/reports/{cycle}/age-bracket-upon-entry', [ReportsController::class, 'entryAgeBracket'])->name('reports.age-bracket-upon-entry');
     Route::post('/reports/{cycle}/age-bracket-after-120', [ReportsController::class, 'after120AgeBracket'])->name('reports.age-bracket-after-120');
     Route::post('/reports/{cycle}/weight-for-age-upon-entry', [ReportsController::class, 'weightForAgeUponEntry'])->name('reports.weight-for-age-upon-entry');
     Route::post('/reports/{cycle}/weight-for-age-after-120', [ReportsController::class, 'weightForAgeAfter120'])->name('reports.weight-for-age-after-120');

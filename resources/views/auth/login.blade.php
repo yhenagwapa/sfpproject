@@ -10,7 +10,7 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('../img/dswd.png') }}" rel="icon">
+    <link href="{{ asset('../img/SFP-LOGO-2024.png') }}" rel="icon">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -39,9 +39,11 @@
                         <div class="card mb-6">
                             <div class="card-body">
                                 <div>
-                                    <a href="https://fo11.dswd.gov.ph" class="d-flex align-items-center w-auto mt-3">
+                                    <a href="https://fo11.dswd.gov.ph" class="d-flex align-items-center mt-2">
                                         <img src="{{ asset('../img/DSWD_Logo.png') }}" alt=""
-                                            style="width: 300px;" class="ml-1">
+                                            style="width: 250px;" class="ml-auto mr-0 mb-auto mt-auto">
+                                        <img src="{{ asset('../img/[PNG] bagong pilipinas (1).png') }}" alt=""
+                                            style="width: 90px;" class="ml-0 mr-auto mb-auto mt-auto">
                                     </a>
                                     <h5 class="card-title text-center pt-0 pb-0 fs-1 mt-4">SFP ONSE</h5>
                                 </div>
@@ -104,7 +106,7 @@
                             </div>
                         </div>
 
-                        <div class="credits mt-5">
+                        <div class="credits mt-5 small">
                             <!-- All the links in the footer should remain intact. -->
                             <!-- You can delete the links only if you purchased the pro version. -->
                             <!-- Licensing information: https://bootstrapmade.com/license/ -->
@@ -119,8 +121,7 @@
         </section>
     </main><!-- End #main -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

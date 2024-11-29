@@ -49,384 +49,380 @@
     <div class="wrapper">
         <section class="section">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-12">
                     <div class="card">
-                            <div class="report-card-body mt-4 mb-2 text-sm">
-                                <ul class="report-side-nav" id="report-side-nav">
-                                    @if (auth()->user()->hasRole('admin') ||
-                                            auth()->user()->hasRole('lgu focal') ||
-                                            auth()->user()->hasRole('child development worker'))
-                                        <li class="nav-item">
-                                            <form id="masterlistForm" action="{{ route('reports.index', ['cycle' => $cycle->id]) }}" method="POST">
-                                                @csrf
-                                                <a class="report-link collapsed active" href="#" onclick="document.getElementById('masterlistForm').submit(); return false;">
-                                                    <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                        stroke-width="2" stroke="currentColor" fill="none"
-                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" />
-                                                        <circle cx="12" cy="12" r="9" />
-                                                    </svg>
-                                                    Masterlist
-                                                </a>
-                                            </form>
-                                        </li>
-                                    @endif
-
-                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-                                        <li class="nav-item">
-                                            <form id="malnourishedForm" action="{{ route('reports.malnourish', ['cycle' => $cycle->id])}}" method="POST">
-                                                @csrf
-                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('malnourishedForm').submit(); return false;">
-                                                    <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                        stroke-width="2" stroke="currentColor" fill="none"
-                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" />
-                                                        <circle cx="12" cy="12" r="9" />
-                                                    </svg>
-                                                    Malnourished
-                                                </a>
-                                            </form>
-                                        </li>
-                                    @endif
-
-                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-                                        <li class="nav-item">
-                                            <form id="disabilitiesForm" action="{{ route('reports.disabilities', ['cycle' => $cycle->id])}}" method="POST">
-                                                @csrf
-                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('disabilitiesForm').submit(); return false;">
-                                                    <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                        stroke-width="2" stroke="currentColor" fill="none"
-                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" />
-                                                        <circle cx="12" cy="12" r="9" />
-                                                    </svg>
-                                                    Persons with Disability
-                                                </a>
-                                            </form>
-                                        </li>
-                                    @endif
-
-                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-                                        <li class="nav-item">
-                                            <a class="report-link-main collapsed" href="#">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Undernourish
-                                            </a>
-                                            <ul id="forms-nav" class="report-content collapsed">
-                                                <li class="nav-item">
-                                                    <form id="undernourishedUponEntryForm" action="{{ route('reports.undernourished-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
-                                                        @csrf
-                                                        <a class="report-link collapsed" href="#" onclick="document.getElementById('undernourishedUponEntryForm').submit(); return false;">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                            </svg>
-                                                            Upon Entry
-                                                        </a>
-                                                    </form>
+                        <div class="card-body">
+                            <nav class="header-nav ml-auto align-items-center justify-end mt-4">
+                                
+                                <ul class="d-flex list-unstyled mt-2">
+                                    <li class="nav-item dropdown pe-3">
+                                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                                            data-bs-toggle="dropdown">
+                                            <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9">
+                                                <span class="d-none d-md-block dropdown-toggle text-white">Reports</span>
+                                            </button>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                                            @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('child development worker'))
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" target="_blank" id="printButtonMasterlist">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Masterlist</span>
+                                                    </a>
                                                 </li>
-                                                <li class="nav-item">
-                                                    <form id="undernourishedAfter120Form" action="{{ route('reports.undernourished-after-120', ['cycle' => $cycle->id])}}" method="POST">
-                                                        @csrf
-                                                        <a class="report-link collapsed" href="#" onclick="document.getElementById('undernourishedAfter120Form').submit(); return false;">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                            </svg>
-                                                            After 120 Feedings
-                                                        </a>
-                                                    </form>
+                                                <li>
+                                                    <hr class="dropdown-divider">
                                                 </li>
-                                            </ul>
-                                        </li>
-                                    @endif
-
-                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-                                        <li class="nav-item">
-                                            <a class="report-link-main collapsed" href="#" data-target="ns-consolidated">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Nutritional Status
-                                            </a>
-                                    
-                                              
-                                            <ul id="forms-nav" class="report-content collapsed">
-                                                <li class="nav-item">
-                                                    <a class="report-link-main collapsed">
+                                            @endif
+                                            
+                                            @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" target="_blank" id="printButtonMalnourished">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Malnourished Children</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" target="_blank" id="printButtonPWD">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Persons with Disability</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" href="#">
                                                         <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                             stroke-width="2" stroke="currentColor" fill="none"
                                                             stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" />
-                                                            <circle cx="12" cy="12" r="9" />
+                                                            <circle cx="12" cy="12" r="6" />
+                                                        </svg>
+                                                        Undernourish
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonUndernourishEntry">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Upon Entry</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonUndernourishAfter120">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print After 120 Feedings</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" href="#" data-target="ns-consolidated">
+                                                        <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="2" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" />
+                                                            <circle cx="12" cy="12" r="6" />
+                                                        </svg>
+                                                        Nutritional Status
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3">
+                                                        <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="2" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" />
+                                                            <circle cx="12" cy="12" r="6" />
                                                         </svg>
                                                         Weight for Age
                                                     </a>
-                                                    <ul id="forms-nav" class="report-subcontent collapsed">
-                                                        <li>
-                                                            <form id="WFAUponEntryForm" action="{{ route('reports.weight-for-age-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
-                                                                @csrf
-                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('WFAUponEntryForm').submit(); return false;">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                    </svg>
-                                                                    Upon Entry
-                                                                </a>
-                                                            </form>
-                                                        </li>
-                                                    
-                                                        <li>
-                                                            <form id="WFAAfter120Form" action="{{ route('reports.weight-for-age-after-120', ['cycle' => $cycle->id])}}" method="POST">
-                                                                @csrf
-                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('WFAAfter120Form').submit(); return false;">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                    </svg>
-                                                                    After 120 Feedings
-                                                                </a>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
                                                 </li>
-                                            </ul>
-                                            <ul id="forms-nav" class="report-content collapsed">
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonWFAEntry">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Upon Entry</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonWFAAfter120">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print After 120 Feedings</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
                                                 <li class="nav-item">
-                                                    <a class="report-link-main collapsed">
+                                                    <a class="dropdown-item d-flex align-items-center ml-3">
                                                         <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                             stroke-width="2" stroke="currentColor" fill="none"
                                                             stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" />
-                                                            <circle cx="12" cy="12" r="9" />
+                                                            <circle cx="12" cy="12" r="6" />
                                                         </svg>
                                                         Weight for Height
                                                     </a>
-                                                    <ul id="forms-nav" class="report-subcontent collapsed">
-                                                        <li>
-                                                            <form id="WFHUponEntryForm" action="{{ route('reports.weight-for-height-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
-                                                                @csrf
-                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('WFHUponEntryForm').submit(); return false;">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                    </svg>
-                                                                Upon Entry
-                                                                </a>
-                                                            </form>
-                                                        </li>
-                                                    
-                                                        <li>
-                                                            <form id="WFHAfter120Form" action="{{ route('reports.weight-for-height-after-120', ['cycle' => $cycle->id])}}" method="POST">
-                                                                @csrf
-                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('WFHAfter120Form').submit(); return false;">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                    </svg>
-                                                                    After 120 Feedings
-                                                                </a>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
                                                 </li>
-                                            </ul>
-                                            <ul id="forms-nav" class="report-content collapsed">
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonWFHEntry">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Upon Entry</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonWFHAfter120">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print After 120 Feedings</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
                                                 <li class="nav-item">
-                                                    <a class="report-link-main collapsed" href="#" data-target="ns-consolidated">
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" href="#" data-target="ns-consolidated">
                                                         <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
                                                             stroke-width="2" stroke="currentColor" fill="none"
                                                             stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" />
-                                                            <circle cx="12" cy="12" r="9" />
+                                                            <circle cx="12" cy="12" r="6" />
                                                         </svg>
                                                         Height for Age
                                                     </a>
-                                                    <ul id="forms-nav" class="report-subcontent collapsed">
-                                                        <li>
-                                                            <form id="HFAUponEntryForm" action="{{ route('reports.height-for-age-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
-                                                                @csrf
-                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('HFAUponEntryForm').submit(); return false;">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                    </svg>
-                                                                    Upon Entry
-                                                                </a>
-                                                            </form>
-                                                        </li>
-                                                    
-                                                        <li>
-                                                            <form id="HFAAfter120Form" action="{{ route('reports.height-for-age-after-120', ['cycle' => $cycle->id])}}" method="POST">
-                                                                @csrf
-                                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('HFAAfter120Form').submit(); return false;">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                    </svg>
-                                                                    After 120 Feedings
-                                                                </a>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
                                                 </li>
-                                            </ul>
-                                        </li>
-                                    @endif
-
-                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('child development worker'))
-                                        <li class="nav-item">
-                                            <a class="report-link-main collapsed" href="#">
-                                                <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                                    <circle cx="12" cy="12" r="9" />
-                                                </svg>
-                                                Age Bracket
-                                            </a>
-                                            <ul id="forms-nav" class="report-content collapsed">
-                                                    <li>
-                                                        <form id="AgeBracketUponEntryForm" action="{{ route('reports.age-bracket-upon-entry', ['cycle' => $cycle->id])}}" method="POST">
-                                                            @csrf
-                                                            <a class="report-link collapsed" href="#" onclick="document.getElementById('AgeBracketUponEntryForm').submit(); return false;">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                </svg>
-                                                                Upon Entry
-                                                            </a>
-                                                        </form>
-                                                    </li>
-                                                
-                                                    <li>
-                                                        <form id="AgeBracketAfter120Form" action="{{ route('reports.age-bracket-after-120', ['cycle' => $cycle->id])}}" method="POST">
-                                                            @csrf
-                                                            <a class="report-link collapsed" href="#" onclick="document.getElementById('AgeBracketAfter120Form').submit(); return false;">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-3">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                                                </svg>
-                                                                After 120 Feedings
-                                                            </a>
-                                                        </form>
-                                                    </li>
-                                            </ul>
-                                        </li>
-                                    @endif
-
-                                    @if (auth()->user()->hasRole('admin') ||
-                                            auth()->user()->hasRole('lgu focal') ||
-                                            auth()->user()->hasRole('child development worker'))
-                                        <li class="nav-item">
-                                            <form id="monitoringForm" action="{{ route('reports.monitoring', ['cycle' => $cycle->id])}}" method="POST">
-                                                @csrf
-                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('monitoringForm').submit(); return false;">
-                                                    <svg class="h-2 w-2 mr-2" width="24" height="24"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" />
-                                                        <circle cx="12" cy="12" r="9" />
-                                                    </svg>
-                                                    Monitoring
-                                                </a>
-                                            </form>
-                                        </li>
-                                    @endif
-
-                                    @if (auth()->user()->hasRole('admin') ||
-                                            auth()->user()->hasRole('lgu focal') ||
-                                            auth()->user()->hasRole('child development worker'))
-                                        <li class="nav-item">
-                                            <form id="unfundedForm" action="{{ route('reports.unfunded', ['cycle' => $cycle->id])}}" method="POST">
-                                                @csrf
-                                                <a class="report-link collapsed" href="#" onclick="document.getElementById('unfundedForm').submit(); return false;">
-                                                    <svg class="h-2 w-2 mr-2" width="24" height="24"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" />
-                                                        <circle cx="12" cy="12" r="9" />
-                                                    </svg>
-                                                    Unfunded Children
-                                                </a>
-                                            </form>
-                                        </li>
-                                    @endif
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonHFAEntry">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Upon Entry</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonHFAAfter120">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print After 120 Feedings</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                            @endif
+                                            @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('child development worker'))
+                                                <li class="nav-item">
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" href="#">
+                                                        <svg class="h-2 w-2 mr-2" width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="2" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" />
+                                                            <circle cx="12" cy="12" r="6" />
+                                                        </svg>
+                                                        Age Bracket
+                                                    </a>
+                                                </li> 
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonAgeBracketEntry">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Upon Entry</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center ml-3" target="_blank" id="printButtonAgeBracketAfter120">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print After 120 Feedings</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" target="_blank" id="printButtonMonitoring">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Monitoring</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" target="_blank" id="printButtonUnfunded">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print Unfunded</span>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </li>
                                 </ul>
-                            </div>
-                    </div>
-                </div>
-
-                <div class="col-md-10">
-                    <div class="card">
-                        <div class="card-body">
-                            
-                                <div id="report-content">
-                                    @if (auth()->user()->hasRole('admin') ||
-                                            auth()->user()->hasRole('lgu focal') ||
-                                            auth()->user()->hasRole('child development worker'))
-                                        <div id="funded-content">
-                                                <h5 class="card-title">Masterlist of Funded Beneficiaries</h5>
-                                                <div class="row">
-                                                    <div class="col-md-6 mt-2 text-sm">
-                                                        <form action="{{ route('reports.index', ['cycle' => $cycle->id] ) }}" method="POST" id="filterForm">
-                                                            @csrf
-                                                            <label for="center_name">Filter per center:</label>
-                                                            <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
-                                                                <option value="all_center" {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>
-                                                                    All Child Development Center
-                                                                </option>
-                                                                @foreach ($centers as $center)
-                                                                    <option value="{{ $center->id }}" {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
-                                                                        {{ $center->center_name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6 mt-2">
-                                                        <a href="#" target="_blank" id="printButton">
-                                                            <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9 flex items-center">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="size-5 mr-2">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-                                                                </svg>
-                                                                <span>Print</span>
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    document.getElementById('center_name').addEventListener('change', function() {
-                                                        let selectedCenterId = this.value;
-                                                        let printButton = document.getElementById('printButton');
-                                                        
-                                                        printButton.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
-                                                    });
-                                                
-                                                    window.onload = function() {
-                                                        let selectedCenterId = document.getElementById('center_name').value;
-                                                        let printButton = document.getElementById('printButton');
-                                                        
-                                                        printButton.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
-                                                    };
-                                                </script>
-                                            
-                                            <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
-                                                @include('reports.partials.funded-table', [
-                                                    'isFunded' => $isFunded,
-                                                ])
+                            </nav>
+                            <div id="report-content">
+                                @if (auth()->user()->hasRole('admin') ||
+                                        auth()->user()->hasRole('lgu focal') ||
+                                        auth()->user()->hasRole('child development worker'))
+                                    <div id="funded-content">
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6 mt-5 mb-5 text-base">
+                                                <h3>Cycle: <b>{{ $cycle->cycle_name }}</b><br>Total No. of Children: </b></b></h3>
+                                            </div>    
+                                            <div class="col-md-6 mt-5 mb-5 text-sm">
+                                                <form action="{{ route('reports.index', ['cycle' => $cycle->id] ) }}" method="POST" id="filterForm">
+                                                    @csrf
+                                                    <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
+                                                        <option value="" disabled selected>Select Center</option>
+                                                        <option value="all_center" {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : ''}}>
+                                                            All Child Development Center
+                                                        </option>
+                                                        @foreach ($centers as $center)
+                                                            <option value="{{ $center->id }}" {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                                                                {{ $center->center_name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </form>
                                             </div>
-                                            {{-- <div class="mt-3">
-                                                @foreach ($isFunded as $fundedChildren)
-                                                    <!-- Display pagination links for each center -->
-                                                    {{ $fundedChildren->links() }}
-                                                @endforeach
-                                            </div> --}}
                                         </div>
-                                    @endif
-                                </div>
+                                        {{-- <div class="row">
+                                            <div class="col-md-6 mt-2">
+                                                <a href="#" target="_blank" id="printButton">
+                                                    <button type="button" class="bg-blue-600 text-white rounded px-3 min-h-9 flex items-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="size-5 mr-2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                        </svg>
+                                                        <span>Print</span>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div> --}}
+                                        
+                                    
+                                        <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
+                                            @include('reports.partials.funded-table', [
+                                                'isFunded' => $isFunded,
+                                            ])
+                                        </div>
+                                        <div class="mt-3">
+                                            {{ $isFunded->links() }}
+                                        </div>
+
+
+                                        <script>
+
+                                                document.getElementById('center_name').addEventListener('change', function() {
+                                                    let selectedCenterId = this.value;
+                                                    let printMasterlist = document.getElementById('printButtonMasterlist');
+                                                    let printMalnourished = document.getElementById('printButtonMalnourished');
+                                                    let printPWD = document.getElementById('printButtonPWD');
+                                                    
+                                                    let printAgeBracketEntry = document.getElementById('printButtonAgeBracketEntry');
+
+                                                    printMasterlist.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
+                                                    printAgeBracketEntry.href = '/reports/{cycle}/print/age-bracket-upon-entry?center_name=' + selectedCenterId;
+                                                });
+                                            
+                                                window.onload = function() {
+                                                    let selectedCenterId = document.getElementById('center_name').value;
+                                                    let printMasterlist = document.getElementById('printButtonMasterlist');
+                                                    let printAgeBracketEntry = document.getElementById('printButtonAgeBracketEntry');
+
+                                                    printMasterlist.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
+                                                    printAgeBracketEntry.href = '/reports/{cycle}/print/age-bracket-upon-entry?center_name=' + selectedCenterId;
+                                                };
+                                            // document.getElementById('center_name').addEventListener('change', updateLinks);
+                                            // window.onload = updateLinks;
+                    
+                                            // function updateLinks() {
+                                            //     const selectedCenterId = document.getElementById('center_name').value;
+                                            //     const cycle = "{{ $cycle }}";
+                    
+                                            //     document.getElementById('printButtonMasterlist').href = `/reports/${cycle}/print/masterlist?center_name=${selectedCenterId}`;
+                                            //     document.getElementById('printButtonMalnourished').href = `/reports/${cycle}/print/malnourished`;
+                                            //     document.getElementById('printButtonPWD').href = `/reports/${cycle}/print/disabilities`;
+                                            //     document.getElementById('printButtonUndernourishEntry').href = `/reports/${cycle}/print/undernourished-upon-entry`;
+                                            //     document.getElementById('printButtonUndernourishAfter120').href = `/reports/${cycle}/print/undernourished-after-120`;
+                                            //     document.getElementById('printButtonWFAEntry').href = `/reports/${cycle}/print/weight-for-age-upon-entry`;
+                                            //     document.getElementById('printButtonWFAAfter120').href = `/reports/${cycle}/print/weight-for-age-after-120`;
+                                            //     document.getElementById('printButtonWFHEntry').href = `/reports/${cycle}/print/weight-for-height-upon-entry`;
+                                            //     document.getElementById('printButtonWFHAfter120').href = `/reports/${cycle}/print/weight-for-height-after-120`;
+                                            //     document.getElementById('printButtonHFAEntry').href = `/reports/${cycle}/print/height-for-age-upon-entry`;
+                                            //     document.getElementById('printButtonHFAAfter120').href = `/reports/${cycle}/print/height-for-age-after-120`;
+                                            //     document.getElementById('printButtonAgeBracketEntry').href = `/reports/${cycle}/print/age-bracket-upon-entry?center_name=${selectedCenterId}`;
+                                            //     document.getElementById('printButtonAgeBracketAfter120').href = `/reports/${cycle}/print/age-bracket-after-120?center_name=${selectedCenterId}`;
+                                            //     document.getElementById('printButtonMonitoring').href = `/reports/${cycle}/print/monitoring?center_name=${selectedCenterId}`;
+                                            //     document.getElementById('printButtonUnfunded').href = `/reports/${cycle}/print/unfunded?center_name=${selectedCenterId}`;
+                                            // }
+                                        </script>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
 
             </div>

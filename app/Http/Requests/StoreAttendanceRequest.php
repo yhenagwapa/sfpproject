@@ -23,22 +23,22 @@ class StoreAttendanceRequest extends FormRequest
     {
         return [
             'attendance_date' => [
-                $this->isStoreAttendanceRoute() ? 'required' : 'nullable',
+                $this->isStoreCycleAttendanceRoute() ? 'required' : 'nullable',
                 'date'
             ],
             'milk_attendance_date' => [
-                $this->isStorMilkeAttendanceRoute() ? 'required' : 'nullable',
+                $this->isStoreMilkeAttendanceRoute() ? 'required' : 'nullable',
                 'date'
             ],
         ];
     }
 
-    protected function isStoreAttendanceRoute(): bool
+    protected function isStoreCycleAttendanceRoute(): bool
     {
-        return $this->routeIs('attendance.storeAttendance');
+        return $this->routeIs('attendance.storeCycleAttendance');
     }
 
-    protected function isStorMilkeAttendanceRoute(): bool
+    protected function isStoreMilkeAttendanceRoute(): bool
     {
         return $this->routeIs('attendance.storeMilkAttendance');
     }

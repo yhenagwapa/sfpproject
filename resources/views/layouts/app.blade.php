@@ -16,7 +16,7 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('img/dswd.png') }}" rel="icon">
+    <link href="{{ asset('../img/SFP-LOGO-2024.png') }}" rel="icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Nunito:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -53,6 +53,7 @@
 
             <div class="d-flex align-items-center justify-content-between">
                 <span class="logo d-flex align-items-center"><img src="{{ asset('img/SFP-LOGO-2024.png') }}" alt="sfp_logo"></span>
+                <i class="bi bi-list toggle-sidebar-btn"></i>
             </div>
 
             <div class="d-flex align-items-center justify-content-between">

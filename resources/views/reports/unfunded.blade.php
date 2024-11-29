@@ -411,10 +411,6 @@
                                                     'isNotFunded' => $isNotFunded,
                                                 ])
                                             </div>
-                                            <div class="mt-3">
-                                                
-                                                    {{ $isNotFunded->links() }}
-                                            </div>
                                         </div>
                                     @endif
                                 </div>
