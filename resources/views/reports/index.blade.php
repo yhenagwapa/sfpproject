@@ -377,45 +377,71 @@
                                                     let printMasterlist = document.getElementById('printButtonMasterlist');
                                                     let printMalnourished = document.getElementById('printButtonMalnourished');
                                                     let printPWD = document.getElementById('printButtonPWD');
-                                                    
+                                                    let printUndernourishedUponEntry = document.getElementById('printButtonUndernourishEntry');
+                                                    let printUndernourishedAfter120 = document.getElementById('printButtonUndernourishAfter120');
+                                                    let printWFAEntry = document.getElementById('printButtonWFAEntry');
+                                                    let printWFAAfter120 = document.getElementById('printButtonWFAAfter120');
+                                                    let printWFHEntry = document.getElementById('printButtonWFHEntry');
+                                                    let printWFHAfter120 = document.getElementById('printButtonWFHAfter120');
+                                                    let printHFAEntry = document.getElementById('printButtonHFAEntry');
+                                                    let printHFAAfter120 = document.getElementById('printButtonHFAAfter120');
                                                     let printAgeBracketEntry = document.getElementById('printButtonAgeBracketEntry');
+                                                    let printAgeBracketAfter120 = document.getElementById('printButtonAgeBracketAfter120');
+                                                    let printMonitoring = document.getElementById('printButtonMonitoring');
+                                                    let printUnfunded = document.getElementById('printButtonUnfunded');
 
                                                     printMasterlist.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
                                                     printMalnourished.href = '/reports/{cycle}/print/malnourished';
+                                                    printPWD.href = '/reports/{cycle}/print/disabilities';
+                                                    printUndernourishedUponEntry.href = '/reports/{cycle}/print/undernourished-upon-entry';
+                                                    printUndernourishedAfter120.href = '/reports/{cycle}/print/undernourished-after-120';
+                                                    printWFAEntry.href = '/reports/{cycle}/print/weight-for-age-upon-entry';
+                                                    printWFAAfter120.href = '/reports/{cycle}/print/weight-for-age-after-120';
+                                                    printWFHEntry.href = '/reports/{cycle}/print/weight-for-height-upon-entry';
+                                                    printWFHAfter120.href = '/reports/{cycle}/print/weight-for-height-after-120';
+                                                    printHFAEntry.href = '/reports/{cycle}/print/height-for-age-upon-entry';
+                                                    printHFAAfter120.href = '/reports/{cycle}/print/height-for-age-after-120';
                                                     printAgeBracketEntry.href = '/reports/{cycle}/print/age-bracket-upon-entry?center_name=' + selectedCenterId;
+                                                    printAgeBracketAfter120.href = '/reports/{cycle}/print/age-bracket-after-120?center_name=' + selectedCenterId;
+                                                    printMonitoring.href = '/reports/{cycle}/print/monitoring?center_name=' + selectedCenterId;
+                                                    printUnfunded.href = '/reports/{cycle}/print/unfunded?center_name=' + selectedCenterId;
+                                                    
                                                 });
                                             
                                                 window.onload = function() {
                                                     let selectedCenterId = document.getElementById('center_name').value;
                                                     let printMasterlist = document.getElementById('printButtonMasterlist');
+                                                    let printMalnourished = document.getElementById('printButtonMalnourished');
+                                                    let printPWD = document.getElementById('printButtonPWD');
+                                                    let printUndernourishedUponEntry = document.getElementById('printButtonUndernourishEntry');
+                                                    let printUndernourishedAfter120 = document.getElementById('printButtonUndernourishAfter120');
+                                                    let printWFAEntry = document.getElementById('printButtonWFAEntry');
+                                                    let printWFAAfter120 = document.getElementById('printButtonWFAAfter120');
+                                                    let printWFHEntry = document.getElementById('printButtonWFHEntry');
+                                                    let printWFHAfter120 = document.getElementById('printButtonWFHAfter120');
+                                                    let printHFAEntry = document.getElementById('printButtonHFAEntry');
+                                                    let printHFAAfter120 = document.getElementById('printButtonHFAAfter120');
                                                     let printAgeBracketEntry = document.getElementById('printButtonAgeBracketEntry');
-
+                                                    let printAgeBracketAfter120 = document.getElementById('printButtonAgeBracketAfter120');
+                                                    let printMonitoring = document.getElementById('printButtonMonitoring');
+                                                    let printUnfunded = document.getElementById('printButtonUnfunded');
+                                                    
                                                     printMasterlist.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
+                                                    printMalnourished.href = '/reports/{cycle}/print/malnourished';
+                                                    printPWD.href = '/reports/{cycle}/print/disabilities';
+                                                    printUndernourishedUponEntry.href = '/reports/{cycle}/print/undernourished-upon-entry';
+                                                    printUndernourishedAfter120.href = '/reports/{cycle}/print/undernourished-after-120';
+                                                    printWFAEntry.href = '/reports/{cycle}/print/weight-for-age-upon-entry';
+                                                    printWFAAfter120.href = '/reports/{cycle}/print/weight-for-age-after-120';
+                                                    printWFHEntry.href = '/reports/{cycle}/print/weight-for-height-upon-entry';
+                                                    printWFHAfter120.href = '/reports/{cycle}/print/weight-for-height-after-120';
+                                                    printHFAEntry.href = '/reports/{cycle}/print/height-for-age-upon-entry';
+                                                    printHFAAfter120.href = '/reports/{cycle}/print/height-for-age-after-120';
                                                     printAgeBracketEntry.href = '/reports/{cycle}/print/age-bracket-upon-entry?center_name=' + selectedCenterId;
+                                                    printAgeBracketAfter120.href = '/reports/{cycle}/print/age-bracket-after-120?center_name=' + selectedCenterId;
+                                                    printMonitoring.href = '/reports/{cycle}/print/monitoring?center_name=' + selectedCenterId;
+                                                    printUnfunded.href = '/reports/{cycle}/print/unfunded?center_name=' + selectedCenterId;
                                                 };
-                                            // document.getElementById('center_name').addEventListener('change', updateLinks);
-                                            // window.onload = updateLinks;
-                    
-                                            // function updateLinks() {
-                                            //     const selectedCenterId = document.getElementById('center_name').value;
-                                            //     const cycle = "{{ $cycle }}";
-                    
-                                            //     document.getElementById('printButtonMasterlist').href = `/reports/${cycle}/print/masterlist?center_name=${selectedCenterId}`;
-                                            //     document.getElementById('printButtonMalnourished').href = `/reports/${cycle}/print/malnourished`;
-                                            //     document.getElementById('printButtonPWD').href = `/reports/${cycle}/print/disabilities`;
-                                            //     document.getElementById('printButtonUndernourishEntry').href = `/reports/${cycle}/print/undernourished-upon-entry`;
-                                            //     document.getElementById('printButtonUndernourishAfter120').href = `/reports/${cycle}/print/undernourished-after-120`;
-                                            //     document.getElementById('printButtonWFAEntry').href = `/reports/${cycle}/print/weight-for-age-upon-entry`;
-                                            //     document.getElementById('printButtonWFAAfter120').href = `/reports/${cycle}/print/weight-for-age-after-120`;
-                                            //     document.getElementById('printButtonWFHEntry').href = `/reports/${cycle}/print/weight-for-height-upon-entry`;
-                                            //     document.getElementById('printButtonWFHAfter120').href = `/reports/${cycle}/print/weight-for-height-after-120`;
-                                            //     document.getElementById('printButtonHFAEntry').href = `/reports/${cycle}/print/height-for-age-upon-entry`;
-                                            //     document.getElementById('printButtonHFAAfter120').href = `/reports/${cycle}/print/height-for-age-after-120`;
-                                            //     document.getElementById('printButtonAgeBracketEntry').href = `/reports/${cycle}/print/age-bracket-upon-entry?center_name=${selectedCenterId}`;
-                                            //     document.getElementById('printButtonAgeBracketAfter120').href = `/reports/${cycle}/print/age-bracket-after-120?center_name=${selectedCenterId}`;
-                                            //     document.getElementById('printButtonMonitoring').href = `/reports/${cycle}/print/monitoring?center_name=${selectedCenterId}`;
-                                            //     document.getElementById('printButtonUnfunded').href = `/reports/${cycle}/print/unfunded?center_name=${selectedCenterId}`;
-                                            // }
                                         </script>
                                     </div>
                                 @endif

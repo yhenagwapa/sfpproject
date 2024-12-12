@@ -82,12 +82,12 @@
                 <div class="col-lg-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">2 years old <span>| 1,244</span></h5>
+                            <h5 class="card-title">2 years old <span>| {{ $ageGroupsPerCenter['2_years_old'] ?? 0 }}</span></h5>
                             <div class="d-flex align-items-center mt-3">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <ul>
-                                        <li>Male: 622</li>
-                                        <li>Female: 622</li>
+                                        <li>Male: {{ $ageGroupsPerCenter['2_years_old']['male'] ?? 0 }}</li>
+                                        <li>Female: {{ $ageGroupsPerCenter['2_years_old']['female'] ?? 0 }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -99,12 +99,12 @@
                 <div class="col-lg-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">3 years old <span>| 1,244</span></h5>
+                            <h5 class="card-title">3 years old <span>| {{ $ageGroupsPerCenter['3_years_old'] ?? 0 }}</span></h5>
                             <div class="d-flex align-items-center mt-3">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <ul>
-                                        <li>Male: 622</li>
-                                        <li>Female: 622</li>
+                                        <li>Male: {{ $ageGroupsPerCenter['3_years_old']['male'] ?? 0 }}</li>
+                                        <li>Female: {{ $ageGroupsPerCenter['3_years_old']['female'] ?? 0 }}</li>
                                     </ul>
                                 </div>
                             </div>
