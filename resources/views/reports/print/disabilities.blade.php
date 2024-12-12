@@ -37,6 +37,7 @@
 
         .disability-table th, .disability-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
         }
     
         .footer-table {

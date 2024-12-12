@@ -49,6 +49,7 @@
         .age-bracket-after-120-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
             padding: 1px;
+            text-transform: uppercase;
         }
 
         .age-bracket-after-120-table td:first-child {

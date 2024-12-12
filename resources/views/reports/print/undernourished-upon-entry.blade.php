@@ -42,6 +42,7 @@
 
         .undernourished-upon-entry-table th, .undernourished-upon-entry-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
         }
     
         .footer-table {

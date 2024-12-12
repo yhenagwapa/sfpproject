@@ -42,7 +42,9 @@
 
         .funded-table th, .funded-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
         }
+        
 
         .funded-table td:first-child{
             width: 15%;

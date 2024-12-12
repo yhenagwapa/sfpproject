@@ -43,6 +43,7 @@
         .unfunded-table th, .unfunded-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
             padding: 10px;
+            text-transform: uppercase;
         }
 
         .unfunded-table td:first-child{

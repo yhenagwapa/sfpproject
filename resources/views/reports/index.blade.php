@@ -372,7 +372,6 @@
 
 
                                         <script>
-
                                                 document.getElementById('center_name').addEventListener('change', function() {
                                                     let selectedCenterId = this.value;
                                                     let printMasterlist = document.getElementById('printButtonMasterlist');
@@ -382,6 +381,7 @@
                                                     let printAgeBracketEntry = document.getElementById('printButtonAgeBracketEntry');
 
                                                     printMasterlist.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
+                                                    printMalnourished.href = '/reports/{cycle}/print/malnourished';
                                                     printAgeBracketEntry.href = '/reports/{cycle}/print/age-bracket-upon-entry?center_name=' + selectedCenterId;
                                                 });
                                             

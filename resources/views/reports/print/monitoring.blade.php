@@ -42,6 +42,7 @@
 
         .monitoring-table th, .monitoring-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
         }
 
         .monitoring-table td:first-child{

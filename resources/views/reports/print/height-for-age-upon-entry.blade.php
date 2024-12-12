@@ -60,6 +60,7 @@
         .height-for-age-upon-entry-table th,
         .height-for-age-upon-entry-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
         }
 
         .totals {

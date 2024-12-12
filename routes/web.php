@@ -105,7 +105,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/milkfeedings/{milkfeeding}/update', [MilkFeedingController::class, 'update'])->name(name: 'milkfeedings.update');
 
     Route::post('/reports/{cycle}', [ReportsController::class, 'index'])->name('reports.index');
-    Route::post('/reports/{cycle}/malnourish', [ReportsController::class, 'malnourish'])->name('reports.malnourish');
+    Route::get('/reports/{cycle}/malnourish', [ReportsController::class, 'malnourish'])->name('reports.malnourish');
     Route::post('/reports/{cycle}/disabilities', [ReportsController::class, 'disabilities'])->name('reports.disabilities');
     Route::post('/reports/{cycle}/monitoring', [ReportsController::class, 'monitoring'])->name('reports.monitoring');
     Route::post('/reports/{cycle}/undernourished-upon-entry', [ReportsController::class, 'undernourishedUponEntry'])->name('reports.undernourished-upon-entry');

@@ -42,6 +42,7 @@
 
         .undernourished-after-120-table th, .undernourished-after-120-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
         }
     
         .footer-table {
