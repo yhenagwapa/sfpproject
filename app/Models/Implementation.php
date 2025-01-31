@@ -7,17 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class CycleImplementation extends Model
+class Implementation extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'cycle_name',
-        'cycle_school_year',
-        'cycle_target',
-        'cycle_allocation',
-        'cycle_status',
-        'created_by_user_id', 
+        'name',
+        'school_year',
+        'target',
+        'allocation',
+        'type',
+        'status',
+        'created_by_user_id',
         'updated_by_user_id'
     ];
 

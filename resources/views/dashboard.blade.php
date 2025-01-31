@@ -78,73 +78,22 @@
                     </div>
                 </div>
 
-                <!-- 2 y.o -->
+                @foreach ($ageCounts as $ageGroup => $counts)
                 <div class="col-lg-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">2 years old <span>| {{ $ageGroupsPerCenter['2_years_old'] ?? 0 }}</span></h5>
-                            <div class="d-flex align-items-center mt-3">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <ul>
-                                        <li>Male: {{ $ageGroupsPerCenter['2_years_old']['male'] ?? 0 }}</li>
-                                        <li>Female: {{ $ageGroupsPerCenter['2_years_old']['female'] ?? 0 }}</li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <h5 class="card-title">
+                                {{ ucwords(str_replace('_', ' ', $ageGroup)) }}
+                                <span>| {{ $counts['total'] ?? 0 }}</span>
+                            </h5>
+                            <ul>
+                                <li>Male: {{ $counts['male'] ?? 0 }}</li>
+                                <li>Female: {{ $counts['female'] ?? 0 }}</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-
-                <!-- 3 y.o -->
-                <div class="col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">3 years old <span>| {{ $ageGroupsPerCenter['3_years_old'] ?? 0 }}</span></h5>
-                            <div class="d-flex align-items-center mt-3">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <ul>
-                                        <li>Male: {{ $ageGroupsPerCenter['3_years_old']['male'] ?? 0 }}</li>
-                                        <li>Female: {{ $ageGroupsPerCenter['3_years_old']['female'] ?? 0 }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4 y.o -->
-                <div class="col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">4 years old <span>| 1,244</span></h5>
-                            <div class="d-flex align-items-center mt-3">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <ul>
-                                        <li>Male: 622</li>
-                                        <li>Female: 622</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5 y.o -->
-                <div class="col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">5 years old <span>| 1,244</span></h5>
-                            <div class="d-flex align-items-center mt-3">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <ul>
-                                        <li>Male: 622</li>
-                                        <li>Female: 622</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
 
 
                 <div class="col-12">

@@ -31,7 +31,7 @@
 
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
@@ -43,16 +43,20 @@
 </head>
 
 <body class="font-sans antialiased">
-    
+
         <header id="header" class="header fixed-top d-flex align-items-right">
             <div class="d-flex justify-center">
                 <a href="https://fo11.dswd.gov.ph/" class="logo d-flex align-items-center">
                     <img src="{{ asset('img/DSWD_Logo.png') }}" alt="dswd_logo">
+
                 </a>
             </div>
 
             <div class="d-flex align-items-center justify-content-between">
-                <span class="logo d-flex align-items-center"><img src="{{ asset('img/SFP-LOGO-2024.png') }}" alt="sfp_logo"></span>
+                <span class="logo d-flex align-items-center">
+                    <img src="{{ asset('img/SFP-LOGO-2024.png') }}" alt="sfp_logo">
+                    <img src="{{ asset('img/[PNG] bagong pilipinas (1).png') }}" alt="bagongpilipinas">
+                </span>
                 <i class="bi bi-list toggle-sidebar-btn"></i>
             </div>
 
@@ -118,17 +122,18 @@
 
         <aside id="sidebar" class="sidebar">
             <ul class="sidebar-nav" id="sidebar-nav">
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="{{ route('dashboard') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="#899bbd" class="mr-2 size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
-                        </svg>
-                        <span class="text-sm">Dashboard</span>
-                    </a>
-                </li>
+                @if (!auth()->user()->hasRole('encoder'))
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="{{ route('dashboard') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="#899bbd" class="mr-2 size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+                            </svg>
+                            <span class="text-sm">Dashboard</span>
+                        </a>
+                    </li>
+                @endif
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="{{ route('child.index') }}">
@@ -197,7 +202,7 @@
                     </li><!-- End Audit Logs Page Nav -->
                 @endif
             </ul>
-            
+
 
         </aside><!-- End Sidebar-->
 
@@ -207,10 +212,12 @@
 
 
         <footer id="footer" class="footer">
-            <div class="copyright">
-                &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+            <div class="footer-dswd">
+                &copy; 2024 Department of Social Welfare and Development.
             </div>
-            <div class="credits">
+            <div class="credits mt-2 mb-0">
+                &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+
                 <!-- All the links in the footer should remain intact. -->
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
@@ -236,7 +243,7 @@
         <!-- DataTables JS -->
         <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-        
+
 
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -244,7 +251,7 @@
         <script src="{{ asset('js/main.js') }}"></script>
 
         @vite(['resources/js/app.js'])
-    
+
 </body>
 
 </html>

@@ -42,8 +42,8 @@
                                     <a href="https://fo11.dswd.gov.ph" class="d-flex align-items-center mt-2">
                                         <img src="{{ asset('../img/DSWD_Logo.png') }}" alt=""
                                             style="width: 250px;" class="ml-auto mr-0 mb-auto mt-auto">
-                                        <img src="{{ asset('../img/[PNG] bagong pilipinas (1).png') }}" alt=""
-                                            style="width: 90px;" class="ml-0 mr-auto mb-auto mt-auto">
+                                        <img src="{{ asset('../img/SFP-LOGO-2024.png') }}" alt=""
+                                            style="width: 100px;" class="ml-0 mr-auto mb-auto mt-auto">
                                     </a>
                                     <h5 class="card-title text-center pt-0 pb-0 fs-1 mt-4">SFP ONSE</h5>
                                 </div>

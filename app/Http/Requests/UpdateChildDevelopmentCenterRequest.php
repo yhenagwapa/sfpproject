@@ -25,11 +25,11 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
             'center_name' => ['required', 'string', 'max:255'],
             'assigned_focal_user_id' => ['required', 'exists:users,id'],
             'assigned_worker_user_id' => ['required', 'exists:users,id'],
+            'assigned_encoder_user_id' => ['exists:users,id'],
             'province_psgc' => ['required'],
             'city_name_psgc' => ['required'],
             'brgy_psgc' => ['required'],
             'address' => ['required', 'string'],
-            'zip_code' => ['required', 'digits:4'],
         ];
     }
     public function messages()
@@ -43,8 +43,6 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
             'city_name_psgc.required' => 'Please select a city.',
             'brgy_psgc.required' => 'Please select a barangay.',
             'address.required' => 'Please fill in the address.',
-            'zip_code.required' => 'Please fill in the zip code.',
-            'zip_code.digits' => 'Zip code must be 4 digits.',
         ];
     }
 }

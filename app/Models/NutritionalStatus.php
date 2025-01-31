@@ -12,12 +12,11 @@ class NutritionalStatus extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'cycle_implementation_id',
-        'milk_feeding_id',
+        'implementation_id',
         'child_id',
         'weight',
         'height',
-        'weighing_date',
+        'actual_weighing_date',
         'age_in_months',
         'age_in_years',
         'weight_for_age',
@@ -25,6 +24,8 @@ class NutritionalStatus extends Model
         'height_for_age',
         'is_malnourish',
         'is_undernourish',
+        'deworming_date',
+        'vitamin_a_date',
         'updated_by_user_id',
         'created_by_user_id'
     ];
@@ -38,7 +39,7 @@ class NutritionalStatus extends Model
     {
         return LogOptions::defaults()->logAll();
     }
-    
+
 
     public function child()
     {

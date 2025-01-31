@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('center_name');
             $table->string('address');
-            $table->unsignedBigInteger('psgc_id')->nullable(); 
-            $table->integer('zip_code');
-            $table->foreignId('assigned_worker_user_id')->nullable()->constrained('users');
+            $table->unsignedBigInteger('psgc_id')->nullable();
+            $table->foreign('psgc_id')
+                  ->references('psgc_id')
+                  ->on('psgcs');
             $table->foreignId('created_by_user_id')->nullable()->constrained('users');
             $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
             $table->timestamps();

@@ -13,17 +13,21 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('lastname');
             $table->string('firstname');
             $table->string('middlename')->nullable();
-            $table->string('lastname');
             $table->string('extension_name')->nullable();
-            $table->string('contact_no');
+            $table->string('contact_number');
             $table->string('address');
             $table->unsignedBigInteger('psgc_id')->nullable();
-            $table->integer('zip_code');
+            $table->foreign('psgc_id')
+                  ->references('psgc_id')
+                  ->on('psgcs');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('status')->default('for activation');
+            
             $table->rememberToken();
             $table->timestamps();
         });

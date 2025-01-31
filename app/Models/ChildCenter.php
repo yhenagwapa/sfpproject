@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class ChildCenter extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'child_id',
+        'child_development_center_id',
+        'implementation_id',
+        'status',
+        'created_by_user_id',
+        'updated_by_user_id'
+    ];
+
+    public function child()
+    {
+        return $this->belongsTo(Child::class, 'child_id', 'id');
+    }
+
+    public function center()
+    {
+        return $this->belongsTo(ChildDevelopmentCenter::class, 'child_development_center_id', 'id');
+    }
+
+    public function implementation()
+    {
+        return $this->belongsTo(Implementation::class, 'implementation_id', 'id');
+    }
+}

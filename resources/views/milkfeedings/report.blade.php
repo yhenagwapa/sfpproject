@@ -7,7 +7,7 @@
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Implementations</a></li>
-                    <li class="breadcrumb-item">Cycle Implementation Reports</li>
+                    <li class="breadcrumb-item">Milk Feeding Reports</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -328,10 +328,10 @@
 
                                         <div class="row">
                                             <div class="col-md-6 mt-5 mb-5 text-base">
-                                                <h3>Cycle: <b>{{ $cycle->cycle_name }}</b><br>Total No. of Children: </b></b></h3>
+                                                <h3>Milk Feeding: <b>{{ $milkfeeding->name }}</b><br>Total No. of Children: </b></b></h3>
                                             </div>
                                             <div class="col-md-6 mt-5 mb-5 text-sm">
-                                                <form action="{{ route('reports.index', ['cycle' => $cycle->id] ) }}" method="POST" id="filterForm">
+                                                <form action="{{ route('milkfeedings.report', ['milkfeeding' => $milkfeeding->id] ) }}" method="POST" id="filterForm">
                                                     @csrf
                                                     <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
                                                         <option value="" disabled selected>Select Center</option>
@@ -350,7 +350,7 @@
 
 
                                         <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
-                                            @include('reports.partials.funded-table', [
+                                            @include('milkfeedings.partials.report-table', [
                                                 'isFunded' => $isFunded,
                                             ])
                                         </div>
@@ -378,9 +378,9 @@
                                                     let printMonitoring = document.getElementById('printButtonMonitoring');
                                                     let printUnfunded = document.getElementById('printButtonUnfunded');
 
-                                                    printMasterlist.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
-                                                    printMalnourished.href = '/reports/{cycle}/print/malnourished';
-                                                    printPWD.href = '/reports/{cycle}/print/disabilities';
+                                                    printMasterlist.href = '/milkfeedings/report/{milkfeeding}/print/masterlist?center_name=' + selectedCenterId;
+                                                    printMalnourished.href = '/milkfeedings/report/{milkfeeding}/print/malnourished';
+                                                    printPWD.href = '/milkfeedings/report/{milkfeeding}/print/disabilities';
                                                     printUndernourishedUponEntry.href = '/reports/{cycle}/print/undernourished-upon-entry';
                                                     printUndernourishedAfter120.href = '/reports/{cycle}/print/undernourished-after-120';
                                                     printWFAEntry.href = '/reports/{cycle}/print/weight-for-age-upon-entry';
@@ -414,9 +414,9 @@
                                                     let printMonitoring = document.getElementById('printButtonMonitoring');
                                                     let printUnfunded = document.getElementById('printButtonUnfunded');
 
-                                                    printMasterlist.href = '/reports/{cycle}/print/masterlist?center_name=' + selectedCenterId;
-                                                    printMalnourished.href = '/reports/{cycle}/print/malnourished';
-                                                    printPWD.href = '/reports/{cycle}/print/disabilities';
+                                                    printMasterlist.href = '/milkfeedings/report/{milkfeeding}/print/masterlist?center_name=' + selectedCenterId;
+                                                    printMalnourished.href = '/milkfeedings/report/{milkfeeding}/print/malnourished';
+                                                    printPWD.href = '/milkfeedings/report/{milkfeeding}/print/disabilities';
                                                     printUndernourishedUponEntry.href = '/reports/{cycle}/print/undernourished-upon-entry';
                                                     printUndernourishedAfter120.href = '/reports/{cycle}/print/undernourished-after-120';
                                                     printWFAEntry.href = '/reports/{cycle}/print/weight-for-age-upon-entry';

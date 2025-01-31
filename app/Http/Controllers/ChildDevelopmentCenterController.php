@@ -19,7 +19,7 @@ class ChildDevelopmentCenterController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('permission:create-child-development-center', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit-child-development-center', ['only' => ['edit', 'update']]);options: 
+        $this->middleware('permission:edit-child-development-center', ['only' => ['edit', 'update']]);options:
     }
 
     public function index()
@@ -46,6 +46,7 @@ class ChildDevelopmentCenterController extends Controller
         $centers = ChildDevelopmentCenter::all();
         $workers = User::role('child development worker')->get();
         $focals = User::role('lgu focal')->get();
+        $encoders = User::role('encoder')->get();
         $psgc = new Psgc();
 
         $provinces = $psgc->getProvinces();
@@ -54,16 +55,16 @@ class ChildDevelopmentCenterController extends Controller
 
         if ($request->has('province_psgc') && !empty($request->input('province_psgc'))) {
             $province_psgc = $request->input('province_psgc');
-            
+
             $cities = $psgc->allCities()->get($province_psgc, collect([]));
         }
-    
+
         if ($request->has('city_name_psgc') && !empty($request->input('city_name_psgc'))) {
             $city_psgc = $request->input('city_name_psgc');
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('centers.create', compact('centers', 'workers', 'focals', 'provinces', 'cities', 'barangays'));
+        return view('centers.create', compact('centers', 'workers', 'focals', 'encoders', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -72,7 +73,7 @@ class ChildDevelopmentCenterController extends Controller
     public function store(StoreChildDevelopmentCenterRequest $request)
     {
         $this->authorize('create-child-development-center');
-       
+
         $validatedData = $request->validated();
 
         // Check if the center already exists
@@ -112,7 +113,7 @@ class ChildDevelopmentCenterController extends Controller
      */
     public function show($id)
     {
-       
+
     }
 
     /**
@@ -122,13 +123,13 @@ class ChildDevelopmentCenterController extends Controller
     {
         $this->authorize('edit-child-development-center');
 
-        $center = ChildDevelopmentCenter::findOrFail($id); 
+        $center = ChildDevelopmentCenter::findOrFail($id);
         $workers = User::role('child development worker')->get();
         $focals = User::role('lgu focal')->get();
         $psgc = new Psgc();
 
         $psgcRecord = Psgc::find($center->psgc_id);
-        
+
         $provinces = $psgc->getProvinces();  // Assuming this returns associative array
         $cities = $psgc->getCities($psgcRecord->province_psgc);
         $barangays = $psgc->getBarangays($psgcRecord->city_name_psgc);
@@ -141,7 +142,7 @@ class ChildDevelopmentCenterController extends Controller
         //     'barangays' => $barangays,
         //     'psgcRecord' => $psgcRecord,
         // ]);
-    
+
 
         return view('centers.edit', [
             'center' => $center,
@@ -162,7 +163,7 @@ class ChildDevelopmentCenterController extends Controller
     public function update(UpdateChildDevelopmentCenterRequest $request, ChildDevelopmentCenter $center)
     {
         $validatedData = $request->validated();
-        
+
         $center->update(array_merge($validatedData, [
             'updated_by_user_id' => auth()->id(),
         ]));

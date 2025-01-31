@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->integer('attendance_no')->nullable();
-            $table->unsignedBigInteger('child_id')->nullable()->constrained('children'); 
+            $table->foreignId(column: 'implementation_id')->nullable()->constrained('implementations');
+            $table->foreignId('child_id')->nullable()->constrained('children');
             $table->date('attendance_date');
             $table->string('attendance_type');
-            $table->unsignedBigInteger('created_by_user_id'); 
+            $table->foreignId('created_by_user_id')->nullable()->constrained('users');
+            $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

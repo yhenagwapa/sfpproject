@@ -17,6 +17,7 @@ class PermissionSeeder extends Seeder
         $permissions = [
             'create-child',
             'edit-child',
+            'view-child',
             'add-attendance',
             'create-nutritional-status',
             'edit-nutritional-status',
@@ -33,7 +34,7 @@ class PermissionSeeder extends Seeder
             'edit-cycle-implementation',
             'view-cycle-implementation'
         ];
- 
+
         foreach ($permissions as $permission) {
             if (!Permission::where('name', $permission)->exists()) {
                 Permission::create(['name' => $permission, 'guard_name' => 'web']);
@@ -45,12 +46,19 @@ class PermissionSeeder extends Seeder
 
         $cdw = Role::firstOrCreate(['name' => 'child development worker',
                             'guard_name' => 'web']);
-        
+
         $lguFocal= Role::firstOrCreate(['name' => 'lgu focal',
+                            'guard_name' => 'web']);
+
+        $encoder= Role::firstOrCreate(['name' => 'encoder',
+                            'guard_name' => 'web']);
+
+        $pdo= Role::firstOrCreate(['name' => 'pdo',
                             'guard_name' => 'web']);
 
         $admin->givePermissionTo([
             'edit-child',
+            'view-child',
             'edit-nutritional-status',
             'view-report',
             'print-report',
@@ -67,6 +75,7 @@ class PermissionSeeder extends Seeder
 
         $cdw->givePermissionTo([
             'create-child',
+            'view-child',
             'add-attendance',
             'create-nutritional-status',
             'view-report',
@@ -78,12 +87,22 @@ class PermissionSeeder extends Seeder
 
         $lguFocal->givePermissionTo([
             'view-report',
+            'view-child',
             'print-report',
             'register',
             'edit-user-profile',
             'view-cycle-implementation',
             'create-child-development-center',
             'edit-child-development-center',
+        ]);
+
+        $encoder->givePermissionTo([
+            'create-child',
+            'view-child',
+        ]);
+
+        $pdo->givePermissionTo([
+            'view-child',
         ]);
     }
 }

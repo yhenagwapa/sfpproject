@@ -23,10 +23,13 @@ class UpdateNutritionalStatusRequest extends FormRequest
     {
         if ($this->input('form_type') === 'entry') {
             return [
+                'implementation_id' => ['required', 'exists:implementations,id'],
                 'child_id' => ['required', 'exists:children,id'],
                 'weight' => ['required', 'numeric'],
                 'height' => ['required', 'numeric'],
-                'weighing_date' => ['required', 'date'],
+                'actual_weighing_date' => ['required', 'date'],
+                'deworming_date' => ['required', 'date'],
+                'vitamin_a_date' => ['required', 'date'],
             ];
         } elseif($this->input('form_type') === 'exit') {
             return [
@@ -42,10 +45,12 @@ class UpdateNutritionalStatusRequest extends FormRequest
     {
         return [
             'weight.required' => 'Please fill in weight.',
-            'weight.numeric' => 'Invalid entry',
+            'weight.numeric' => 'Invalid entry.',
             'height.required' => 'Please fill in weight.',
-            'height.numeric' => 'Invalid entry',
-            'weighing_date.required' => 'Please fill in actual date of weighing',
+            'height.numeric' => 'Invalid entry.',
+            'actual_weighing_date.required' => 'Please fill in actual date of weighing.',
+            'deworming_date.required' => 'Please fill in deworming date.',
+            'vitamin_a_date.required' => 'Please fill in Vitamin A supplementation date.',
 
             'exitweight.required' => 'Please fill in weight.',
             'exitweight.numeric' => 'Invalid entry',

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CycleImplementation;
+use App\Models\Implementation;
 use App\Models\MilkFeeding;
-use App\Http\Requests\StoreCycleImplementationRequest;
-use App\Http\Requests\UpdateCycleImplementationRequest;
+use App\Http\Requests\StoreImplementationRequest;
+use App\Http\Requests\UpdateImplementationRequest;
 use App\Enums\CycleStatus;
 
-class CycleImplementationController extends Controller
+class ImplementationController extends Controller
 {
     public function __construct()
     {
@@ -19,9 +19,9 @@ class CycleImplementationController extends Controller
     }
     public function index()
     {
-        $allCycles = CycleImplementation::all();
+        $allCycles = Implementation::all();
         $milkFeedings = MilkFeeding::all();
-        
+
         return view('cycle.index', compact('allCycles', 'milkFeedings'));
     }
 
@@ -38,18 +38,18 @@ class CycleImplementationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCycleImplementationRequest $request)
+    public function store(StoreImplementationRequest $request)
     {
         $validatedData = $request->validated();
 
-        $cycleExists = CycleImplementation::where('cycle_name', $request->cycle_name)
+        $cycleExists = Implementation::where('cycle_name', $request->cycle_name)
                             ->exists();
 
         if ($cycleExists) {
             return redirect()->back()->with('error', 'Cycle already exists.');
         }
 
-        $cycle = CycleImplementation::create([
+        $cycle = Implementation::create([
             'cycle_name' => $request->cycle_name,
             'cycle_school_year' => $request->cycle_school_year,
             'cycle_target' => $request->cycle_target,
@@ -64,7 +64,7 @@ class CycleImplementationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CycleImplementation $cycleImplementation)
+    public function show(Implementation $Implementation)
     {
         //
     }
@@ -72,9 +72,9 @@ class CycleImplementationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CycleImplementation $cycle, $id)
+    public function edit(Implementation $cycle, $id)
     {
-        $cycle = CycleImplementation::findOrFail($id); 
+        $cycle = Implementation::findOrFail($id);
         $cycleStatuses = CycleStatus::cases();
 
 
@@ -84,9 +84,9 @@ class CycleImplementationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCycleImplementationRequest $request, $id)
+    public function update(UpdateImplementationRequest $request, $id)
     {
-        $cycle = CycleImplementation::findOrFail($id);
+        $cycle = Implementation::findOrFail($id);
 
         $validatedData = $request->validated();
         $validatedData['updated_by_user_id'] = auth()->id();
@@ -96,22 +96,22 @@ class CycleImplementationController extends Controller
         return redirect()->route('cycle.index')->with('success', 'Cycle updated successfully.');
     }
 
-    public function updateStatus(UpdateCycleImplementationRequest $request, CycleImplementation $cycleImplementation)
+    public function updateStatus(UpdateImplementationRequest $request, Implementation $Implementation)
     {
         $request->validate([
             'cycle_status' => ['required', 'enum:' . CycleStatus::class],  // Validate the enum value
         ]);
-    
-        $cycle = CycleImplementation::firstWhere('id', $cycleImplementation);
-    
+
+        $cycle = Implementation::firstWhere('id', $Implementation);
+
         if (!$cycle) {
             // Handle the case where no record is found
             return redirect()->route('cycles.index')->with('error', 'No data found in the Cycle Implementation table.');
         }
-    
+
         $cycle->cycle_status = CycleStatus::from($request->cycle_status);  // Set the status
         $cycle->save();  // Save the updated status
-    
+
         return redirect()->route('cycle.index', ['id' => $cycle->id])->with('success', 'Cycle status updated successfully.');
     }
 
@@ -119,7 +119,7 @@ class CycleImplementationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CycleImplementation $cycleImplementation)
+    public function destroy(Implementation $Implementation)
     {
         //
     }

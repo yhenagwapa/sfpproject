@@ -13,24 +13,24 @@ return new class extends Migration
     {
         Schema::create('children', function (Blueprint $table) {
             $table->id();
+            $table->string('lastname');
             $table->string('firstname');
             $table->string('middlename')->nullable();
-            $table->string('lastname');
             $table->string('extension_name')->nullable();
             $table->date('date_of_birth');
+            $table->foreignId('sex_id')->nullable()->constrained('sexes');
             $table->string('address');
-            $table->unsignedBigInteger('psgc_id')->nullable(); 
-            $table->integer('zip_code');
-            $table->boolean('is_pantawid');   
-            $table->string('pantawid_details')->nullable(); ;   
-            $table->boolean('is_person_with_disability');    
+            $table->unsignedBigInteger('psgc_id')->nullable();
+            $table->foreign('psgc_id')
+                  ->references('psgc_id')
+                  ->on('psgcs');
+            $table->string('pantawid_details')->nullable();
             $table->string('person_with_disability_details')->nullable(); ;
-            $table->boolean('is_indigenous_people'); 
-            $table->boolean('is_child_of_soloparent'); 
+            $table->boolean('is_indigenous_people');
+            $table->boolean('is_child_of_soloparent');
             $table->boolean('is_lactose_intolerant');
-            $table->date('deworming_date')->nullable();
-            $table->date('vitamin_a_date')->nullable();
-            $table->foreignId('created_by_user_id')->constrained('users')->nullable();
+            $table->foreignId('created_by_user_id')->nullable()->constrained('users');
+            $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

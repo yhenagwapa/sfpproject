@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cycle_implementations', function (Blueprint $table) {
+        Schema::create('implementations', function (Blueprint $table) {
             $table->id();
-            $table->string('cycle_name');
-            $table->integer('cycle_target');
-            $table->decimal('cycle_allocation', 12, 2)->nullable();
-            $table->string('cycle_school_year');
-            $table->string('cycle_status');
+            $table->string('name');
+            $table->integer('target');
+            $table->decimal('allocation', 12, 2)->nullable();
+            $table->string('school_year');
+            $table->string('type');
+            $table->string('status');
             $table->foreignId('created_by_user_id')->nullable()->constrained('users');
             $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
             $table->timestamps();

@@ -63,7 +63,7 @@
                                         <hr>
                                     </div>
 
-                                    <div class="col-md-12 mt-3 text-sm">
+                                    <div class="col-md-6 mt-3 text-sm">
                                         <label for="center_name">Center Name<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="center_name" name="center_name" value="{{ old('center_name') }}" autofocus>
 
@@ -73,31 +73,14 @@
                                     </div>
 
                                     <div class="col-md-6 mt-3 text-sm">
-                                        <label for="assigned_user_id">Assigned LGU Focal<b
-                                                class='text-red-600'>*</b></label>
-                                        <select class="form-control rounded border-gray-300" id="assigned_focal_user_id"
-                                            name="assigned_focal_user_id">
-                                            <option value="" selected>Select LGU Focal</option>
-                                            @foreach ($focals as $focal)
-                                                <option value="{{ $focal->id }}" {{ auth()->user()->id == $focal->id ? 'selected' : '' }}>
-                                                    {{ $focal->full_name }} 
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('assigned_focal_user_id')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-    
-                                    <div class="col-md-6 mt-3 text-sm">
-                                        <label for="assigned_user_id">Assigned Child Development Worker<b
+                                        <label for="assigned_worker_user_id">Assigned Child Development Worker<b
                                                 class='text-red-600'>*</b></label>
                                         <select class="form-control rounded border-gray-300" id="assigned_worker_user_id"
                                             name="assigned_worker_user_id">
                                             <option value="" selected>Select Worker</option>
                                             @foreach ($workers as $worker)
                                                 <option value="{{ $worker->id }}" {{ old('assigned_worker_worker_id') == $worker->id ? 'selected' : '' }}>
-                                                    {{ $worker->full_name }} 
+                                                    {{ $worker->full_name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -106,6 +89,38 @@
                                         @enderror
                                     </div>
 
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="assigned_focal_user_id">Assigned LGU Focal<b
+                                                class='text-red-600'>*</b></label>
+                                        <select class="form-control rounded border-gray-300" id="assigned_focal_user_id"
+                                            name="assigned_focal_user_id">
+                                            <option value="" selected>Select LGU Focal</option>
+                                            @foreach ($focals as $focal)
+                                                <option value="{{ $focal->id }}" {{ auth()->user()->id == $focal->id ? 'selected' : '' }}>
+                                                    {{ $focal->full_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('assigned_focal_user_id')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="assigned_encoder_user_id">Assigned Encoder</label>
+                                        <select class="form-control rounded border-gray-300" id="assigned_encoder_user_id"
+                                            name="assigned_encoder_user_id">
+                                            <option value="" selected>Select Encoder</option>
+                                            @foreach ($encoders as $encoder)
+                                                <option value="{{ $encoder->id }}" {{ auth()->user()->id == $encoder->id ? 'selected' : '' }}>
+                                                    {{ $encoder->full_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('assigned_focal_user_id')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                     <div class='col-md-1 mt-4 text-gray-400 text-xs'>Address</div>
                                     <div class='col-md-11 mt-8 text-gray-400 text-xs'>
                                         <hr>
@@ -213,7 +228,7 @@
                                         <a href="{{ route('centers.index') }}"></a><button type="reset"
                                             class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button></a>
                                     </div>
-                                    
+
                                     <div class="modal fade" id="verticalycentered" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">

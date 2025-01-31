@@ -23,13 +23,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'lastname',
         'firstname',
         'middlename',
-        'lastname',
         'extension_name',
-        'contact_no',
+        'contact_number',
         'address',
-        'zip_code',
         'psgc_id',
         'email',
         'password',
@@ -65,7 +64,7 @@ class User extends Authenticatable
         $user = User::findOrFail($userId);
 
         if ($user->hasRole('child development worker')) {
-            
+
             $permissions = [
                 'create-child',
                 'add-attendance',
@@ -78,7 +77,7 @@ class User extends Authenticatable
             ];
             $role = Role::where('name', 'child development worker')->firstOrFail();
         } elseif ($user->hasRole('admin')) {
-            
+
             $permissions = [
                 'edit-child',
                 'delete-child',
@@ -109,7 +108,7 @@ class User extends Authenticatable
         }
 
         // Optionally, assign permissions directly to the user
-        $user->syncPermissions($permissionModels);  
+        $user->syncPermissions($permissionModels);
     }
 
     public function getFullNameAttribute()
@@ -117,21 +116,10 @@ class User extends Authenticatable
         return "{$this->firstname} {$this->middlename} {$this->lastname} {$this->extension_name}";
     }
 
-    public function worker()
+    public function centers()
     {
-        return $this->hasMany(ChildDevelopmentCenter::class, 'assigned_worker_user_id');
+        return $this->belongsToMany(ChildDevelopmentCenter::class);
     }
-
-    public function focal()
-    {
-        return $this->hasMany(ChildDevelopmentCenter::class, 'assigned_focal_user_id');
-    }
-
-    public function center()
-    {
-        return $this->belongsTo(ChildDevelopmentCenter::class);
-    }
-
 
 
 }
