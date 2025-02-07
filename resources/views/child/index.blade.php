@@ -29,16 +29,16 @@
         });
     </script>
 
-    
+
 
     <div class="wrapper">
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="row card-body">
                             <h5 class="card-title">Children</h5>
-                            
+
                                 @can('create-child')
                                     <div class="col-md-6">
                                         <a href="{{ route('child.create') }}">
@@ -46,10 +46,15 @@
                                                 <i class="bi bi-plus-circle"></i> Add Child Profile
                                             </button>
                                         </a>
+                                        <a href="{{ route('child.create') }}">
+                                            <button type="button" class="bg-yellow-600 text-white rounded px-3 min-h-9">
+                                                <i class="bi bi-plus-circle"></i> Import
+                                            </button>
+                                        </a>
                                     </div>
                                 @endcan
-                                
-                                <div class="col-md-6 mt-3">
+
+                                <div class="col-md-6">
                                     <form action="{{ route('child.index') }}" method="GET">
                                         @csrf
                                         <label for="center_name" class="form-label text-sm">Filter Children:</label>
@@ -64,7 +69,7 @@
                                         </select>
                                     </form>
                                 </div>
-                            
+
                             <div class="table-responsive">
                                 @include('child.partials.children-table', [
                                     'maleChildren' => $maleChildren,

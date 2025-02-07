@@ -241,12 +241,15 @@ class ChildController extends Controller
     public function create(Request $request)
     {
         $this->authorize('create-child');
-        $implementation = Implementation::where('status', 'active')->first();
+        $cycleImplementations = Implementation::where('status', 'active')->where('type', 'regular')->get();
+        $milkFeedings = Implementation::where('status', 'active')->where('type', 'milk')->get();
 
         $userID = auth()->id();
         if (auth()->user()->hasRole('child development worker')){
-            $centers = UserCenter::with('center')
-                ->where('user_id', $userID)->get();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
+
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
         } elseif(auth()->user()->hasRole('encoder')){
             $centers = ChildDevelopmentCenter::where('assigned_encoder_user_id', $userID)->get();
@@ -272,7 +275,7 @@ class ChildController extends Controller
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('child.create', compact('Implementation', 'milkFeeding', 'centers', 'sexOptions', 'provinces', 'cities', 'barangays'));
+        return view('child.create', compact('cycleImplementations', 'milkFeedings', 'centerNames', 'sexOptions', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -284,58 +287,84 @@ class ChildController extends Controller
 
         $validatedData = $request->validated();
 
-        $Implementation = Implementation::where('status', 'active')->first();
+        $implementation = Implementation::where('id', $request->implementation_id)
+                ->where('status', 'active')->get();
 
-        $childExists = Child::where('firstname', $request->firstname)
+        $child = Child::where('firstname', $request->firstname)
             ->where('middlename', $request->middlename)
             ->where('lastname', $request->lastname)
             ->where('extension_name', $request->extension_name)
             ->where('date_of_birth', $request->date_of_birth)
-            ->where('cycle_implementation_id', $Implementation->id)
-            ->exists();
+            ->get();
 
-        if ($childExists) {
-            return redirect()->back()->with('error', 'Child already exists.');
-        }
+        if ($child->isNotEmpty()) {
+            $childIDs = $child->pluck('id');
+            $childExists = ChildCenter::whereIn('child_id', $childIDs)
+                ->where('child_development_center_id', $request->child_development_center_id)
+                ->where('implementation_id', $request->implementation_id)
+                ->where('status', 'active')
+                ->exists();
 
-        $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
+            if ($childExists) {
+                return redirect()->back()->with('error', 'Child already exists.');
+            }
+
+            $childExistsInactive = ChildCenter::whereIn('child_id', $childIDs)
+                ->where('child_development_center_id', $request->child_development_center_id)
+                ->where('implementation_id', $request->implementation_id)
+                ->whereIn('status', ['inactive', 'unfunded'])
+                ->exists();
+
+            if ($childExistsInactive) {
+                ChildCenter::create([
+                    'child_id' => $childIDs->first(),
+                    'child_development_center_id' => $request->child_development_center_id,
+                    'implementation_id' => $request->implementation_id,
+                    'status' => 'active',
+                ]);
+
+                return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
+            }
+
+        } else {
+
+            $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
             ->where('city_name_psgc', $request->input('city_name_psgc'))
             ->where('brgy_psgc', $request->input('brgy_psgc'))
             ->first();
 
-        if ($psgc) {
-            $psgc_id = $psgc->psgc_id;
-        } else {
-            return redirect()->back()->withErrors(['msg' => 'Location not found']);
+            if ($psgc) {
+                $psgc_id = $psgc->psgc_id;
+            } else {
+                return redirect()->back()->withErrors(['msg' => 'Location not found']);
+            }
+
+            $addChild = Child::create([
+                'firstname' => $request->firstname,
+                'middlename' => $request->middlename,
+                'lastname' => $request->lastname,
+                'extension_name' => $request->extension_name,
+                'date_of_birth' => $request->date_of_birth,
+                'sex_id' => $request->sex_id,
+                'address' => $request->address,
+                'psgc_id' => $psgc_id,
+                'pantawid_details' => $request->pantawid_details,
+                'person_with_disability_details' => $request->person_with_disability_details ? $request->person_with_disability_details : '0',
+                'is_indigenous_people' => $request->is_indigenous_people,
+                'is_child_of_soloparent' => $request->is_child_of_soloparent,
+                'is_lactose_intolerant' => $request->is_lactose_intolerant,
+                'created_by_user_id' => auth()->id(),
+            ]);
+
+            ChildCenter::create([
+                'child_id' => $addChild->id,
+                'child_development_center_id' => $request->child_development_center_id,
+                'implementation_id' => $request->implementation_id,
+                'status' => $request->implementation_id ? 'active' : 'unfunded',
+            ]);
+
+            return redirect()->route('child.index')->with('success', 'Child details saved successfully');
         }
-
-        $child = Child::create([
-            'cycle_implementation_id' => $request->cycle_implementation_id,
-            'milk_feeding_id' => $request->milk_feeding_id,
-            'firstname' => $request->firstname,
-            'middlename' => $request->middlename,
-            'lastname' => $request->lastname,
-            'extension_name' => $request->extension_name,
-            'date_of_birth' => $request->date_of_birth,
-            'sex_id' => $request->sex_id,
-            'address' => $request->address,
-            'psgc_id' => $psgc_id,
-            'zip_code' => $request->zip_code,
-            'is_pantawid' => $request->is_pantawid,
-            'pantawid_details' => $request->pantawid_details,
-            'is_person_with_disability' => $request->is_person_with_disability,
-            'person_with_disability_details' => $request->person_with_disability_details,
-            'is_indigenous_people' => $request->is_indigenous_people,
-            'is_child_of_soloparent' => $request->is_child_of_soloparent,
-            'is_lactose_intolerant' => $request->is_lactose_intolerant,
-            'deworming_date' => $request->deworming_date,
-            'vitamin_a_date' => $request->vitamin_a_date,
-            'is_funded' => $request->is_funded,
-            'child_development_center_id' => $request->child_development_center_id,
-            'created_by_user_id' => auth()->id(),
-        ]);
-
-        return redirect()->route('child.index')->with('success', 'Child details saved successfully');
     }
 
     /**

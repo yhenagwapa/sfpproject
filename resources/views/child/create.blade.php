@@ -35,14 +35,14 @@
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
                     bsAlert1.close();
-                }, 2000);
+                }, 5000);
             }
             if (alert2) {
                 // Automatically close the alert after 3 seconds (3000 milliseconds)
                 setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
-                }, 2000);
+                }, 5000);
             }
         });
     </script>
@@ -56,112 +56,96 @@
                             <h5 class="card-title">Child Details</h5>
                             <form class="row" method="post" action="{{ route('child.store') }} ">
                                 @csrf
-                                
-                                    <div class='col-md-2 mt-3 text-gray-400 text-xs'>Personal Information</div>
-                                    <div class='col-md-10 mt-6 text-gray-400 text-xs'>
-                                        <hr>
-                                    </div>
-                                    <div class="col-md-6 mt-3 text-sm">
-                                        <label for="firstname">First Name</label><label for="firstname"
-                                            class="text-red-600">*</label>
-                                        <input type="text"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="firstname" name='firstname' value="{{ old('firstname') }}" autofocus>
-                                        @error('firstname')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-6 mt-3 text-sm">
-                                        <label for="middlename">Middle Name</label>
-                                        <input type="text"
-                                            class="form-control invalid:border-red-500 rounded border-gray-300"
-                                            id="middlename" name='middlename' value="{{ old('middlename') }}">
-                                        @error('middlename')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-6 mt-2 text-sm">
-                                        <label for="lastname">Last Name</label><label for="lastname"
-                                            class="text-red-600">*</label>
-                                        <input type="text"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="lastname" name='lastname' value="{{ old('lastname') }}">
-                                        @error('lastname')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-6 mt-2 text-sm">
-                                        <label for="extension_name">Extension Name</label>
-                                        <select
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="extension_name" name='extension_name'>
-                                            <option value="" disabled selected></option>
-                                            <option value="Jr" {{ old('extension_name') == 'jr' ? 'selected' : '' }}>Jr
-                                            </option>
-                                            <option value="Sr" {{ old('extension_name') == 'sr' ? 'selected' : '' }}>Sr
-                                            </option>
-                                            <option value="I" {{ old('extension_name') == 'i' ? 'selected' : '' }}>I</option>
-                                            <option value="II" {{ old('extension_name') == 'ii' ? 'selected' : '' }}>II
-                                            </option>
-                                            <option value="III" {{ old('extension_name') == 'iii' ? 'selected' : '' }}>III
-                                            </option>
-                                            <option value="IV" {{ old('extension_name') == 'iv' ? 'selected' : '' }}>IV
-                                            </option>
-                                            <option value="V" {{ old('extension_name') == 'v' ? 'selected' : '' }}>V</option>
-                                            <option value="VI" {{ old('extension_name') == 'vi' ? 'selected' : '' }}>VI
-                                            </option>
-                                            <option value="VII" {{ old('extension_name') == 'vii' ? 'selected' : '' }}>VII
-                                            </option>
-                                            <option value="VIII" {{ old('extension_name') == 'viii' ? 'selected' : '' }}>VIII
-                                            </option>
-                                            <option value="IX" {{ old('extension_name') == 'ix' ? 'selected' : '' }}>IX
-                                            </option>
-                                            <option value="X" {{ old('extension_name') == 'x' ? 'selected' : '' }}>X</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 mt-2 text-sm">
-                                        <label for="date_of_birth">Date of Birth</label><label for="date_of_birth"
-                                            class="text-red-600">*</label>
-                                        <input type="date"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="date_of_birth" name='date_of_birth' value="{{ old('date_of_birth') }}" max="{{ date('Y-m-d') }}">
-                                        @error('date_of_birth')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-6 mt-2 text-sm">
-                                        <label for="sex">Sex</label><label for="sex"
-                                            class="text-red-600">*</label>
-                                        <select
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="sex_id" name='sex_id'>
-                                            <option value="" disabled selected>Select sex</option>
-                                            @foreach ($sexOptions as $sex)
-                                                <option value="{{ $sex->id }}"
-                                                {{ $sex->id == old('sex_id', $sex->id) }}>
-                                                {{ $sex->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('sex_id')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
-                                    </div>
 
-                                
-
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="deworming_date">Deworming Date</label>
-                                    <input type="date"
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="deworming_date" name='deworming_date' value="{{ old('deworming') }}" max="{{ date('Y-m-d') }}">
+                                <div class='col-md-2 mt-3 text-gray-400 text-xs'>Personal Information</div>
+                                <div class='col-md-10 mt-6 text-gray-400 text-xs'>
+                                    <hr>
                                 </div>
-
+                                <div class="col-md-6 mt-3 text-sm">
+                                    <label for="firstname">First Name</label><label for="firstname"
+                                        class="text-red-600">*</label>
+                                    <input type="text"
+                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                        id="firstname" name='firstname' value="{{ old('firstname') }}" autofocus>
+                                    @error('firstname')
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mt-3 text-sm">
+                                    <label for="middlename">Middle Name</label>
+                                    <input type="text"
+                                        class="form-control invalid:border-red-500 rounded border-gray-300"
+                                        id="middlename" name='middlename' value="{{ old('middlename') }}">
+                                    @error('middlename')
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </div>
                                 <div class="col-md-6 mt-2 text-sm">
-                                    <label for="vitamin_a_date">Vitamin A</label>
+                                    <label for="lastname">Last Name</label><label for="lastname"
+                                        class="text-red-600">*</label>
+                                    <input type="text"
+                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                        id="lastname" name='lastname' value="{{ old('lastname') }}">
+                                    @error('lastname')
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mt-2 text-sm">
+                                    <label for="extension_name">Extension Name</label>
+                                    <select
+                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                        id="extension_name" name='extension_name'>
+                                        <option value="" disabled selected></option>
+                                        <option value="Jr" {{ old('extension_name') == 'jr' ? 'selected' : '' }}>Jr
+                                        </option>
+                                        <option value="Sr" {{ old('extension_name') == 'sr' ? 'selected' : '' }}>Sr
+                                        </option>
+                                        <option value="I" {{ old('extension_name') == 'i' ? 'selected' : '' }}>I</option>
+                                        <option value="II" {{ old('extension_name') == 'ii' ? 'selected' : '' }}>II
+                                        </option>
+                                        <option value="III" {{ old('extension_name') == 'iii' ? 'selected' : '' }}>III
+                                        </option>
+                                        <option value="IV" {{ old('extension_name') == 'iv' ? 'selected' : '' }}>IV
+                                        </option>
+                                        <option value="V" {{ old('extension_name') == 'v' ? 'selected' : '' }}>V</option>
+                                        <option value="VI" {{ old('extension_name') == 'vi' ? 'selected' : '' }}>VI
+                                        </option>
+                                        <option value="VII" {{ old('extension_name') == 'vii' ? 'selected' : '' }}>VII
+                                        </option>
+                                        <option value="VIII" {{ old('extension_name') == 'viii' ? 'selected' : '' }}>VIII
+                                        </option>
+                                        <option value="IX" {{ old('extension_name') == 'ix' ? 'selected' : '' }}>IX
+                                        </option>
+                                        <option value="X" {{ old('extension_name') == 'x' ? 'selected' : '' }}>X</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mt-2 text-sm">
+                                    <label for="date_of_birth">Date of Birth</label><label for="date_of_birth"
+                                        class="text-red-600">*</label>
                                     <input type="date"
                                         class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="vitamin_a_date" name='vitamin_a_date' value="{{ old('vitamin_a') }}" max="{{ date('Y-m-d') }}">
+                                        id="date_of_birth" name='date_of_birth' value="{{ old('date_of_birth') }}" max="{{ date('Y-m-d') }}">
+                                    @error('date_of_birth')
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mt-2 text-sm">
+                                    <label for="sex">Sex</label><label for="sex"
+                                        class="text-red-600">*</label>
+                                    <select
+                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                        id="sex_id" name='sex_id'>
+                                        <option value="" disabled selected>Select sex</option>
+                                        @foreach ($sexOptions as $sex)
+                                            <option value="{{ $sex->id }}"
+                                            {{ $sex->id == old('sex_id', $sex->id) }}>
+                                            {{ $sex->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('sex_id')
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="col-md-4 mt-4 text-sm">
@@ -349,7 +333,7 @@
                                 </div>
 
 
-                                <div class="col-6 mt-2 text-sm">
+                                <div class="col-12 mt-2 text-sm">
                                     <label for="address">House No./ Street/ Purok</label><label for="address"
                                         class="text-red-600">*</label>
                                     <input type="text"
@@ -359,21 +343,10 @@
                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="zip_code">Zip Code</label><label for="zip_code"
-                                        class="text-red-600">*</label>
-                                    <input type="text"
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="zip_code" name='zip_code' value="{{ old('zip_code') }}"
-                                        maxlength="4">
-                                    @error('zip_code')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
 
                                 <input type="hidden" id="psgc_id" name="psgc_id" value="">
 
-                                    
+
 
                                     <div class='col-md-3 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised Neighborhood Play</div>
                                     <div class='col-md-9 mt-8 text-gray-400 text-xs'>
@@ -385,9 +358,9 @@
                                             class="text-red-600">*</b>
                                             <select class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300" id="child_development_center_id" name='child_development_center_id'>
                                                 <option value="" disabled selected>Select CDC or SNP</option>
-                                                @foreach ($centers as $center)
+                                                @foreach ($centerNames as $center)
                                                     <option value="{{ $center->id }}"
-                                                        {{ $center->id == old('child_development_center_id') ? 'selected' : '' }}>
+                                                        {{ $center->id == old('id') ? 'selected' : '' }}>
                                                         {{ $center->center_name }}
                                                     </option>
                                                 @endforeach
@@ -407,13 +380,16 @@
                                         <label for="cycle_implementation_id">Cycle Implementation</label>
                                         <select
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="cycle_implementation_id" name='cycle_implementation_id' onchange="setFundingStatus()">
-                                            @if ($cycleImplementation)
+                                            id="implementation_id" name='implementation_id' onchange="setFundingStatus()">
+                                            @if ($cycleImplementations)
                                                 <option value="" selected>Not Applicable</option>
-                                                <option value="{{ $cycleImplementation->id }}"
-                                                    {{ $cycleImplementation->id == old('cycle_implementation_id') ? 'selected' : '' }}>
-                                                    {{ $cycleImplementation->cycle_name }}
-                                                </option>
+                                                @foreach ($cycleImplementations as $cycle)
+                                                    <option value="{{ $cycle->id }}"
+                                                        {{ $cycle->id == old('implementation_id') ? 'selected' : '' }}>
+                                                        {{ $cycle->name }}
+                                                    </option>
+                                                @endforeach
+
                                             @else
                                                 <option value="" disabled selected>No active cycle implementation</option>
                                             @endif
@@ -425,12 +401,14 @@
                                         <select
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                             id="milk_feeding_id" name='milk_feeding_id'>
-                                            @if ($milkFeeding)
+                                            @if ($milkFeedings)
                                                 <option value="" selected>Not Applicable</option>
-                                                <option value="{{ $milkFeeding->id }}"
-                                                    {{ $milkFeeding->id == old('milk_feeding_id') ? 'selected' : '' }}>
-                                                    {{ $milkFeeding->name }}
-                                                </option>
+                                                @foreach ($milkFeedings as $milkFeeding)
+                                                    <option value="{{ $milkFeeding->id }}"
+                                                        {{ $milkFeeding->id == old('milk_feeding_id') ? 'selected' : '' }}>
+                                                        {{ $milkFeeding->name }}
+                                                    </option>
+                                                @endforeach
                                             @else
                                                 <option value="" disabled selected>No active cycle implementation</option>
                                             @endif
@@ -455,14 +433,14 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    @if ($cycleImplementation)
+                                                    @if ($cycleImplementations)
                                                         Are you sure you want to save these details?
                                                     @else
                                                         No active cycle implementation.
                                                     @endif
                                                 </div>
                                                 <div class="modal-footer">
-                                                    @if ($cycleImplementation)
+                                                    @if ($cycleImplementations)
                                                         <button type="submit" class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
                                                     @endif
                                                     <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Close</button>
@@ -573,14 +551,4 @@
         });
     </script>
 
-    <script>
-        function setFundingStatus() {
-            const selectElement = document.getElementById('cycle_implementation_id');
-            const isFundedInput = document.getElementById('is_funded');
-
-            isFundedInput.value = selectElement.value ? 1 : 0;
-        }
-
-        document.addEventListener('DOMContentLoaded', setFundingStatus);
-    </script>
 @endsection
