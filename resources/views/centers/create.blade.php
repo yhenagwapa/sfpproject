@@ -184,7 +184,7 @@
                                     </div>
 
 
-                                    <div class="col-6 mt-2 text-sm">
+                                    <div class="col-12 mt-2 text-sm">
                                         <label for="address">Purok<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="address"
                                             name='address' value="{{ old('address') }}">
@@ -192,16 +192,6 @@
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <div class="col-md-6 mt-2 text-sm">
-                                        <label for="zip_code">Zip Code<b class="text-red-600">*</b></label>
-                                        <input type="text" class="form-control rounded border-gray-300" id="zip_code"
-                                            name='zip_code' value="{{ old('zip_code') }}" maxlength="4">
-                                        @error('zip_code')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-
 
                                     {{-- <div class='col-md-1 mt-4 text-gray-400 text-xs'>Areas</div>
                                     <div class='col-md-11 mt-8 text-gray-400 text-xs'>

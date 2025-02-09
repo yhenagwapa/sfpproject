@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ChildDevelopmentCenter;
 use App\Http\Requests\StoreChildDevelopmentCenterRequest;
 use App\Http\Requests\UpdateChildDevelopmentCenterRequest;
-use App\Models\Child;
+use App\Models\UserCenter;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
@@ -24,16 +24,42 @@ class ChildDevelopmentCenterController extends Controller
 
     public function index()
     {
-        if(auth()->user()->hasRole('admin')){
-            $centers = ChildDevelopmentCenter::with(['user', 'focal', 'psgc'])->get();
+        $centersQuery = ChildDevelopmentCenter::query();
 
-        } elseif(auth()->user()->hasRole('lgu focal')){
-            $focalID = auth()->id();
-            $centers = ChildDevelopmentCenter::with(['user', 'focal', 'psgc'])
-                ->where('assigned_focal_user_id', $focalID)->get();
+        if (auth()->user()->hasRole('admin')) {
+            $centers = $centersQuery->get();
+        } else {
+            $userCenters = UserCenter::where('user_id', auth()->id())->get();
+            $centerIDs = $userCenters->pluck('child_development_center_id');
+            $centers = $centersQuery->whereIn('id', $centerIDs)->get();
         }
 
-        return view('centers.index', compact('centers'));
+        $centersWithRoles = [];
+
+        foreach ($centers as $center) {
+            $centerUsers = UserCenter::where('child_development_center_id', $center->id)
+                ->pluck('user_id');
+            
+            $users = User::whereIn('id', $centerUsers)->get();
+            
+            $worker = $users->firstWhere(fn($user) => $user->hasRole('child development worker'));
+            $encoder = $users->firstWhere(fn($user) => $user->hasRole('encoder'));
+            $focal = $users->firstWhere(fn($user) => $user->hasRole('lgu focal'));
+            $pdo = $users->firstWhere(fn($user) => $user->hasRole('pdo'));
+
+            $centersWithRoles[$center->id] = [
+                'center_id' => $center->id,
+                'center_name' => $center->center_name,
+                'worker' => $worker,
+                'encoder' => $encoder,
+                'focal' => $focal,
+                'pdo' => $pdo,
+                'address' => $center->getfulladdress(),
+            ];
+        }
+
+        return view('centers.index', compact('centersWithRoles'));
+
     }
 
     /**
@@ -98,9 +124,6 @@ class ChildDevelopmentCenterController extends Controller
             'center_name' => $request->center_name,
             'psgc_id' => $psgc_id,
             'address' => $request->address,
-            'zip_code' => $request->zip_code,
-            'assigned_focal_user_id' => auth()->id(),
-            'assigned_worker_user_id' => $request->assigned_worker_user_id,
             'created_by_user_id' => auth()->id(),
         ]);
 

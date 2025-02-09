@@ -10,7 +10,7 @@ use App\Http\Controllers\ChildController;
 use App\Http\Controllers\NutritionalStatusController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReportsController;
-use App\Http\Controllers\CycleImplementationController;
+use App\Http\Controllers\ImplementationController;
 use App\Http\Controllers\ChildDevelopmentCenterController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -91,11 +91,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/centers/{id}/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
     Route::put('/centers/{center}/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
 
-    Route::get('/cycle', [CycleImplementationController::class, 'index'])->name(name: 'cycle.index');
-    Route::get('/cycle/create', [CycleImplementationController::class, 'create'])->name(name: 'cycle.create');
-    Route::post('/cycle/store', [CycleImplementationController::class, 'store'])->name(name: 'cycle.store');
-    Route::get('/cycle/{id}/edit', [CycleImplementationController::class, 'edit'])->name(name: 'cycle.edit');
-    Route::put('/cycle/{cycle}/update', [CycleImplementationController::class, 'update'])->name(name: 'cycle.update');
+    Route::get('/cycle', [ImplementationController::class, 'index'])->name(name: 'cycle.index');
+    Route::get('/cycle/create', [ImplementationController::class, 'create'])->name(name: 'cycle.create');
+    Route::post('/cycle/store', [ImplementationController::class, 'store'])->name(name: 'cycle.store');
+    Route::get('/cycle/{id}/edit', [ImplementationController::class, 'edit'])->name(name: 'cycle.edit');
+    Route::put('/cycle/{cycle}/update', [ImplementationController::class, 'update'])->name(name: 'cycle.update');
 
 
     Route::get('/milkfeedings/create', [MilkFeedingController::class, 'create'])->name(name: 'milkfeedings.create');

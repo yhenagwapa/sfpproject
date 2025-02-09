@@ -46,11 +46,11 @@
                                                 <i class="bi bi-plus-circle"></i> Add Child Profile
                                             </button>
                                         </a>
-                                        <a href="{{ route('child.create') }}">
+                                        {{-- <a href="{{ route('child.create') }}">
                                             <button type="button" class="bg-yellow-600 text-white rounded px-3 min-h-9">
                                                 <i class="bi bi-plus-circle"></i> Import
                                             </button>
-                                        </a>
+                                        </a> --}}
                                     </div>
                                 @endcan
 
@@ -60,7 +60,7 @@
                                         <label for="center_name" class="form-label text-sm">Filter Children:</label>
                                         <select class="form-control" name="center_name" id="center_name" onchange="this.form.submit()">
                                             <option value="all_center" selected>Select a Child Development Center</option>
-                                            @foreach ($centers as $center)
+                                            @foreach ($centerNames as $center)
                                                 <option value="{{ $center->id }}"
                                                     {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
                                                     {{ $center->center_name }}

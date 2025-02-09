@@ -33,6 +33,8 @@ class Child extends Model
         'updated_by_user_id'
     ];
 
+    
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logAll();

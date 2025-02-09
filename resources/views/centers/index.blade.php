@@ -51,7 +51,7 @@
 
                             <!-- Centers Table -->
                             <div class="col-md-12" id="centers-table">
-                                @include('centers.partials.table', ['centers' => $centers])
+                                @include('centers.partials.table', ['centersWithRoles' => $centersWithRoles])
                             </div>
                         </div>
                     </div>

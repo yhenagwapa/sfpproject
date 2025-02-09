@@ -31,11 +31,11 @@ class ChildDevelopmentCenter extends Model
 
     public function getFullAddress()
     {
-        return "{$this->address}, {$this->psgc->getBrgyCityProvince()}, {$this->zip_code}";
+        return "{$this->address}, {$this->psgc->getBrgyCityProvince()}";
     }
-    public function users()
+    public function usercenter()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(UserCenter::class);
     }
 
 

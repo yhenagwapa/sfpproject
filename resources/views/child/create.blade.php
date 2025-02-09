@@ -282,8 +282,7 @@
                                 <div class="col-md-6 mt-3 text-sm">
                                     <label for="province">Province</label><label for="province"
                                         class="text-red-600">*</label>
-                                    <select class="form-control" id="province" name="province_psgc"
-                                        onchange="filterCities()">
+                                    <select class="form-control" id="province" name="province_psgc">
                                         <option value="" selected>Select Province</option>
                                         @foreach ($provinces as $psgc => $name)
                                         <option value="{{ $psgc }}"
@@ -300,8 +299,7 @@
                                 <div class="col-md-6 mt-2 text-sm">
                                     <label for="city">City/Municipality</label><label for="city"
                                         class="text-red-600">*</label>
-                                    <select class="form-control" id="city" name="city_name_psgc"
-                                        onchange="filterBarangays()">
+                                    <select class="form-control" id="city" name="city_name_psgc">
                                         <option value="" selected>Select City/Municipality</option>
                                         @foreach ($cities as $psgc => $name)
                                         <option value="{{ $psgc }}"
@@ -397,7 +395,7 @@
                                     </div>
 
                                     <div class="col-md-6 mt-3 text-sm">
-                                        <label for="milk_feeding_id">Milk Feeding</label>
+                                        <label for="milk_feeding_id">Milk Feeding Implementation</label>
                                         <select
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                             id="milk_feeding_id" name='milk_feeding_id'>

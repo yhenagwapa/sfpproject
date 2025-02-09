@@ -11,7 +11,7 @@
         </nav>
     </div>
 
-   @if (session('error'))
+        @if (session('error'))
             <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
                 {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -24,6 +24,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+
+        {{-- @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif --}}
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var alert1 = document.getElementById('success-alert');
@@ -54,7 +65,7 @@
                             <h5 class='card-title'>{{ $child->full_name }}</h5>
 
                             <!-- Personal Information Form -->
-                            <form class="row" method="post" action="{{ route('child.update', ['cycle' => $cycle->id, 'child' => $child->id]) }}">
+                            <form class="row" method="post" action="{{ route('child.update', ['child' => $child->id]) }}">
                                         @csrf
                                         @method('patch')
 
@@ -114,28 +125,18 @@
                                         </div>
                                         <div class="col-md-6 mt-2 text-sm">
                                             <label for="sex">Sex<b class="text-red-600">*</b></label>
-                                            <select class="form-control rounded border-gray-300" id="sex" name="sex">
+                                            <select class="form-control rounded border-gray-300" id="sex_id" name="sex_id">
                                                 <option value="" disabled>Select Sex</option>
                                                 @foreach ($sexOptions as $sex)
                                                     <option value="{{ $sex->id }}" 
-                                                        {{ old('sex', $child->sex_id) == $sex->id ? 'selected' : '' }}>
+                                                        {{ old('sex_id', $child->sex_id) == $sex->id ? 'selected' : '' }}>
                                                         {{ $sex->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
-                                        </div>
-
-                                        <div class="col-md-6 mt-2">
-                                            <label for="deworming">Deworming Date</label>
-                                            <input type="date" class="form-control rounded border-gray-300"
-                                                id="deworming" name='deworming'
-                                                value="{{ old('deworming', $child->deworming) }}">
-                                        </div>
-                                        <div class="col-md-6 mt-2">
-                                            <label for="vitamin_a">Vitamin A Date</label>
-                                            <input type="date" class="form-control rounded border-gray-300"
-                                                id="vitamin_a" name='vitamin_a'
-                                                value="{{ old('vitamin_a', $child->vitamin_a) }}">
+                                            @error('sex_id')
+                                                <span class="text-xs text-red-600">{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         <div class="col-md-4 mt-4">
@@ -143,12 +144,12 @@
                                         </div>
                                         <div class="col-md-1 mt-4">
                                             <input type="radio" id="is_pantawid_yes" name="is_pantawid" value="1"
-                                                {{ old('is_pantawid', $child->is_pantawid) == '1' ? 'checked' : '' }}>
+                                                {{ old('is_pantawid', $isChildPantawid) == true ? 'checked' : '' }}>
                                             <label for="is_pantawid_yes">Yes</label>
                                         </div>
                                         <div class="col-md-1 mt-4">
                                             <input type="radio" id="is_pantawid_no" name="is_pantawid" value="0"
-                                                {{ old('is_pantawid', $child->is_pantawid) == '0' ? 'checked' : '' }}>
+                                                {{ old('is_pantawid', $isChildPantawid) == false ? 'checked' : '' }}>
                                             <label for="is_pantawid_no">No</label>
                                         </div>
                                         <div class="col-md-6 mt-4 additional-details">
@@ -175,22 +176,22 @@
                                         <div class="col-md-1 mt-2">
                                             <input type="radio" id="is_person_with_disability_yes"
                                                 name="is_person_with_disability" value="1"
-                                                {{ old('is_person_with_disability', $child->is_person_with_disability) == '1' ? 'checked' : '' }}>
+                                                {{ old('is_person_with_disability', $isChildPWD) == true ? 'checked' : '' }}>
                                             <label for="is_person_with_disability_yes">Yes</label>
                                         </div>
                                         <div class="col-md-1 mt-2">
                                             <input type="radio" id="is_person_with_disability_no"
                                                 name="is_person_with_disability" value="0"
-                                                {{ old('is_person_with_disability', $child->is_person_with_disability) == '0' ? 'checked' : '' }}>
+                                                {{ old('is_person_with_disability', $isChildPWD) == false ? 'checked' : '' }}>
                                             <label for="is_person_with_disability_no">No</label>
                                         </div>
                                         <div class="col-md-6 mt-2 additional-details"
-                                            id="perspn_with_disability_additionalDetails">
+                                            id="person_with_disability_additionalDetails">
                                             <input type="text" class="form-control rounded border-gray-300"
-                                                id="perspn_with_disability_details" name="perspn_with_disability_details"
+                                                id="person_with_disability_details" name="person_with_disability_details"
                                                 placeholder="Please specify"
-                                                value="{{ old('perspn_with_disability_details', $child->person_with_disability_details) }}"
-                                                {{ $child->is_person_with_disability ? '' : 'disabled' }}>
+                                                value="{{ old('person_with_disability_details', $child->person_with_disability_details) }}"
+                                                {{ $isChildPWD == true ? 'enabled' : 'disabled' }}>
                                             @error('person_with_disability_details')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
@@ -273,7 +274,7 @@
                                         <div class="col-md-6 mt-3 text-sm">
                                             <label for="province">Province<b class="text-red-600">*</b></label>
                                             <select class="form-control rounded border-gray-300" id="province"
-                                                name="province_psgc" onchange="filterCities()">
+                                                name="province_psgc">
                                                 <option value="" selected>Select Province</option>
                                                 @foreach ($provinces as $psgc => $name)
                                                     <option value="{{ $psgc }}"
@@ -288,7 +289,7 @@
 
                                         <div class="col-md-6 mt-2 text-sm">
                                             <label for="city">City/Municipality<b class="text-red-600">*</b></label>
-                                            <select class="form-control rounded border-gray-300" id="city" name="city_name_psgc" onchange="filterBarangays()">
+                                            <select class="form-control rounded border-gray-300" id="city" name="city_name_psgc">
                                                 <option value="" selected>Select City/Municipality</option>
                                                 @foreach ($cities as $psgc => $name)
                                                     <option value="{{ $psgc }}" {{ $psgc == old('city_name_psgc', $psgcRecord->city_name_psgc) ? 'selected' : '' }}>
@@ -320,7 +321,7 @@
                                         <input type="hidden" id="psgc_id" name="psgc_id"
                                             value="{{ $child->psgc_id }}">
 
-                                        <div class="col-md-6 mt-2 text-sm">
+                                        <div class="col-md-12 mt-2 text-sm">
                                             <label for="address">House No./ Street/ Purok<b class="text-red-600">*</b></label>
                                             <input type="text" class="form-control rounded border-gray-300"
                                                 id="address" name='address'
@@ -329,15 +330,7 @@
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="col-md-6 mt-2">
-                                            <label for="zip_code">Zip Code<b class="text-red-600">*</b></label>
-                                            <input type="text" class="form-control rounded border-gray-300"
-                                                id="zip_code" name='zip_code'
-                                                value="{{ old('zip_code', $child->zip_code) }}" maxlength="4">
-                                            @error('zip_code')
-                                                <span class="text-xs text-red-600">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+                                        
 
                                         <div class='col-md-3 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised Neighborhood Play</div>
                                         <div class='col-md-9 mt-8 text-gray-400 text-xs'>
@@ -351,7 +344,7 @@
                                                     <option value="" disabled selected>Select CDC or SNP</option>
                                                     @foreach ($centers as $center)
                                                         <option value="{{ $center->id }}"
-                                                            {{ $center->id == old('child_development_center_id', $child->child_development_center_id) ? 'selected' : '' }}>
+                                                            {{ $center->id == old('child_development_center_id', $childCenterId->child_development_center_id) ? 'selected' : '' }}>
                                                             {{ $center->center_name }}
                                                         </option>
                                                     @endforeach
@@ -371,12 +364,12 @@
                                             <label for="cycle_implementation_id">Cycle Implementation</label>
                                             <select
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="cycle_implementation_id" name='cycle_implementation_id' onchange="setFundingStatus()">
+                                                id="implementation_id" name='implementation_id'>
                                                 @if ($cycle)
                                                     <option value="">Not Applicable</option>
                                                     <option value="{{ $cycle->id }}"
-                                                        {{ $cycle->id == old('cycle_implementation_id', $child->cycle_implementation_id) ? 'selected' : '' }}>
-                                                        {{ $cycle->cycle_name }}
+                                                        {{ $cycle->id == old('implementation_id', $cycle->id) ? 'selected' : '' }}>
+                                                        {{ $cycle->name }}
                                                     </option>
                                                 @else
                                                     <option value="" disabled selected>No active cycle implementation</option>
@@ -385,23 +378,21 @@
                                         </div>
     
                                         <div class="col-md-6 mt-3 text-sm">
-                                            <label for="milk_feeding_id">Milk Feeding</label>
+                                            <label for="milk_feeding_id">Milk Feeding Implementation</label>
                                             <select
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                                 id="milk_feeding_id" name='milk_feeding_id'>
                                                 @if ($milkFeeding)
                                                     <option value="">Not Applicable</option>
                                                     <option value="{{ $milkFeeding->id }}"
-                                                        {{ $milkFeeding->id == old('milk_feeding_id', $child->milk_feeding_id) ? 'selected' : '' }}>
+                                                        {{ $milkFeeding->id == old('milk_feeding_id', $milkFeeding->id) ? 'selected' : '' }}>
                                                         {{ $milkFeeding->name }}
                                                     </option>
                                                 @else
-                                                    <option value="" disabled selected>No active cycle implementation</option>
+                                                    <option value="" disabled selected>No active milk feeding implementation</option>
                                                 @endif
                                             </select>
                                         </div>
-    
-                                        <input type="hidden" id="is_funded" name="is_funded" value="">
     
                                         <div class="col-md-12 mt-4 text-right">
                                             <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
@@ -444,30 +435,29 @@
 	 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         {{-- pantawid and pwd additional details --}}
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Function to toggle additional details based on radio button selection
+            document.addEventListener("DOMContentLoaded", function () {
                 function toggleAdditionalDetails(radioName, additionalDetailsId) {
                     const radios = document.getElementsByName(radioName);
-                    const additionalDetailsSelect = document.getElementById(additionalDetailsId);
+                    const additionalDetailsElement = document.getElementById(additionalDetailsId);
 
-                    radios.forEach(radio => {
-                        radio.addEventListener('change', function() {
-                            if (radio.value === '1' && radio.checked) {
-                                additionalDetailsSelect.disabled = false;
-                                additionalDetailsElement.setAttribute('required', 'required');
-                            } else if (radio.value === '0' && radio.checked) {
-                                additionalDetailsSelect.disabled = true;
-                                additionalDetailsElement.removeAttribute('required');
+                    radios.forEach((radio) => {
+                        radio.addEventListener("change", function () {
+                            if (radio.value === "1" && radio.checked) {
+                                additionalDetailsElement.disabled = false;
+                                additionalDetailsElement.setAttribute("required", "required");
+                            } else if (radio.value === "0" && radio.checked) {
+                                additionalDetailsElement.disabled = true;
+                                additionalDetailsElement.removeAttribute("required");
+                                additionalDetailsElement.value = '';
                             }
                         });
                     });
-
                 }
 
-                toggleAdditionalDetails('is_pantawid', 'pantawid_details');
-                toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
-
+                toggleAdditionalDetails("is_pantawid", "pantawid_details");
+                toggleAdditionalDetails("is_person_with_disability", "person_with_disability_details");
             });
+
         </script>
 
         {{-- city and barangay  --}}
@@ -532,15 +522,5 @@
                 provinceSelect.addEventListener('change', filterCities);
                 citySelect.addEventListener('change', filterBarangays);
             });
-        </script>
-        <script>
-            function setFundingStatus() {
-                const selectElement = document.getElementById('cycle_implementation_id');
-                const isFundedInput = document.getElementById('is_funded');
-    
-                isFundedInput.value = selectElement.value ? 1 : 0;
-            }
-    
-            document.addEventListener('DOMContentLoaded', setFundingStatus);
         </script>
 @endsection
