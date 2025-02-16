@@ -449,17 +449,22 @@ class ChildController extends Controller
             'updated_by_user_id' => auth()->id(),
         ]);
 
-        ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
-        
-        $funded = $request->implementation_id ? true : false;
+        $currentChildCenter = ChildCenter::where('child_id', $child->id)
+        ->where('status', 'active')->first();
 
-        ChildCenter::create([
-            'child_id' => $child->id,
-            'child_development_center_id' => $request->child_development_center_id,
-            'implementation_id' => $request->implementation_id,
-            'status' => 'active',
-            'funded' => $funded
-        ]);
+        if($request->child_development_center_id != $currentChildCenter->child_development_center_id){
+            ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
+        
+            $funded = $request->implementation_id ? true : false;
+
+            ChildCenter::create([
+                'child_id' => $child->id,
+                'child_development_center_id' => $request->child_development_center_id,
+                'implementation_id' => $request->implementation_id,
+                'status' => 'active',
+                'funded' => $funded
+            ]);
+        }
 
         return redirect()->route('child.index')->with('success', 'Child record updated successfully.');
 

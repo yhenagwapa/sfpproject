@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Implementation;
+use App\Models\Psgc;
 use Illuminate\Http\Request;
 use App\Models\ChildCenter;
 use App\Models\Child;
@@ -31,9 +32,22 @@ class DashboardController extends Controller
             'lactoseintolerant' => ['male' => 0, 'female' => 0, 'total' => 0],
         ];
 
-        $allChildren = Child::all();
+        $provinceCounts = [
+            'davao_city' => ['served' => 0],
+            'davao_del_norte' => ['served' => 0],
+            'davao_del_sur' => ['served' => 0],
+            'davao_de_oro' => ['served' => 0],
+            'davao_occidental' => ['served' => 0],
+            'davao_oriental' => ['served' => 0],
+        ];
 
-        $children = ChildCenter::with('child', 'center', 'implementation');
+        $allChildren = Child::all();
+        $childrenIDs = $allChildren->pluck('id');
+
+        $children = ChildCenter::with('child', 'center', 'implementation')
+            ->whereIn('child_id', $childrenIDs)
+            ->where('status', 'active');
+
 
         $totalChildrenQuery = clone $children;
         $totalMaleQuery = clone $children;
@@ -43,75 +57,101 @@ class DashboardController extends Controller
         if(auth()->user()->hasRole('admin')){
             $totalChild = $totalChildrenQuery->whereHas('implementation', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id);
-                    })->count();
+                    })->get();
 
-            $totalMale = $totalMaleQuery->whereHas('child', function ($query) {
+            $childIDs = $totalChild->pluck('child_id');
+            $totalChildCount = $totalChild->count();
+
+            $males = $totalMaleQuery->whereHas('child', function ($query) {
                         $query->where('sex_id', 1);
                     })->whereHas('implementation', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id);
-                    })->count();
-            $totalFemale = $totalFemaleQuery->whereHas('child', function ($query) {
+                    })->get();
+            
+            $totalMaleCount = $males->count();
+
+            $females = $totalFemaleQuery->whereHas('child', function ($query) {
                         $query->where('sex_id', 2);
                     })->whereHas('implementation', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id);
-                    })->count();
+                    })->get();
 
+            $totalFemaleCount = $females->count();
 
+            $allChild = Child::whereIn('id', $childIDs)->get();
 
-            // $childrenPerAge = $fundedChildren->whereHas('child', function ($query){
-            //         $query->whereNotNull('date_of_birth')->where('date_of_birth', '!=', '');
-            //     })->get();
+            $childPSGCs = $allChild->pluck('psgc_id');
 
+            foreach($allChild as $child) {
 
-            foreach ($allChildren as $child) {
-                $getChildrenInCenter = ChildCenter::whereIn('child_id', $child->pluck('id'))
-                    ->whereNotNull('implementation_id')->get();
+                $dob = Carbon::parse($child->date_of_birth);
+                $ageInYears = $dob->diffInYears(Carbon::now());
 
-
-
-                foreach($getChildrenInCenter as $childCenter) {
-                    $males = Child::where('id', $childCenter->child_id)->where('sex_id', 1);
-                    $females = Child::where('id', $childCenter->child_id)->where('sex_id', 2);
-
-                    $dob = Carbon::parse($child->date_of_birth);
-                    $ageInYears = $dob->diffInYears(Carbon::now());
+                if ($ageInYears == 2) {
+                    $child->sex_id == 1 ? $ageCounts['2_years_old']['male']++ : $ageCounts['2_years_old']['female']++;
+                    $ageCounts['2_years_old']['total']++;
+                } elseif ($ageInYears == 3) {
+                    $child->sex_id == 1 ? $ageCounts['3_years_old']['male']++ : $ageCounts['3_years_old']['female']++;
+                    $ageCounts['3_years_old']['total']++;
+                } elseif ($ageInYears == 4) {
+                    $child->sex_id == 1 ? $ageCounts['4_years_old']['male']++ : $ageCounts['4_years_old']['female']++;
+                    $ageCounts['4_years_old']['total']++;
+                } elseif ($ageInYears == 5) {
+                    $child->sex_id == 1 ? $ageCounts['5_years_old']['male']++ : $ageCounts['5_years_old']['female']++;
+                    $ageCounts['5_years_old']['total']++;
                 }
 
-
-                // foreach ($getChildrenInCenter as $childInCenter) {
-
-                    if ($ageInYears == 2) {
-                        $males ? $ageCounts['2_years_old']['male']++ : $ageCounts['2_years_old']['female']++;
-                        $ageCounts['2_years_old']['total']++;
-                    } elseif ($ageInYears == 3) {
-                        $males ? $ageCounts['3_years_old']['male']++ : $ageCounts['3_years_old']['female']++;
-                        $ageCounts['3_years_old']['total']++;
-                    } elseif ($ageInYears == 4) {
-                        $males ? $ageCounts['4_years_old']['male']++ : $ageCounts['4_years_old']['female']++;
-                        $ageCounts['4_years_old']['total']++;
-                    } elseif ($ageInYears == 5) {
-                        $males ? $ageCounts['5_years_old']['male']++ : $ageCounts['5_years_old']['female']++;
-                        $ageCounts['5_years_old']['total']++;
-                    }
-
-                    if ($child->is_pantawid == true) {
-                        $males ? $profileCounts['pantawid']['male']++ : $profileCounts['pantawid']['female']++;
-                        $profileCounts['pantawid']['total']++;
-                    } elseif ($child->is_person_with_disability == true) {
-                        $males ? $profileCounts['pwd']['male']++ : $profileCounts['pwd']['female']++;
-                        $profileCounts['pwd']['total']++;
-                    } elseif ($child->is_indigenous_people == true) {
-                        $males ? $profileCounts['ip']['male']++ : $profileCounts['ip']['female']++;
-                        $profileCounts['ip']['total']++;
-                    } elseif ($child->is_child_of_soloparent == true) {
-                        $males ? $profileCounts['soloparent']['male']++ : $profileCounts['soloparent']['female']++;
-                        $profileCounts['soloparent']['total']++;
-                    } elseif ($child->is_lactose_intolerant == true) {
-                        $males ? $profileCounts['lactoseintolerant']['male']++ : $profileCounts['lactoseintolerant']['female']++;
-                        $profileCounts['lactoseintolerant']['total']++;
-                    }
-                // }
+                if ($child->pantawid_details != null) {
+                    $child->sex_id == 1 ? $profileCounts['pantawid']['male']++ : $profileCounts['pantawid']['female']++;
+                    $profileCounts['pantawid']['total']++;
+                } elseif ($child->person_with_disability_details != null) {
+                    $child->sex_id == 1 ? $profileCounts['pwd']['male']++ : $profileCounts['pwd']['female']++;
+                    $profileCounts['pwd']['total']++;
+                } elseif ($child->is_indigenous_people == true) {
+                    $child->sex_id == 1 ? $profileCounts['ip']['male']++ : $profileCounts['ip']['female']++;
+                    $profileCounts['ip']['total']++;
+                } elseif ($child->is_child_of_soloparent == true) {
+                    $child->sex_id == 1 ? $profileCounts['soloparent']['male']++ : $profileCounts['soloparent']['female']++;
+                    $profileCounts['soloparent']['total']++;
+                } elseif ($child->is_lactose_intolerant == true) {
+                    $child->sex_id == 1 ? $profileCounts['lactoseintolerant']['male']++ : $profileCounts['lactoseintolerant']['female']++;
+                    $profileCounts['lactoseintolerant']['total']++;
+                }
             }
+
+            $getChildPSGC = Psgc::whereIn('psgc_id', $childPSGCs)->get();
+
+            dd($childPSGCs, $getChildPSGC);
+        
+            $childCity = $getChildPSGC->pluck('city_name');
+            $childProvince = $getChildPSGC->pluck('province_name');
+
+            foreach ($getChildPSGC as $psgc) { 
+                if ($psgc->city_name === "DAVAO CITY") {
+                    $provinceCounts['davao_city']['served']++;
+                }
+            
+                switch ($psgc->province_name) {
+                    case "DAVAO DEL NORTE":
+                        $provinceCounts['davao_del_norte']['served']++;
+                        break;
+                    case "DAVAO DEL SUR":
+                        $provinceCounts['davao_del_sur']['served']++;
+                        break;
+                    case "DAVAO DE ORO":
+                        $provinceCounts['davao_de_oro']['served']++;
+                        break;
+                    case "DAVAO OCCIDENTAL":
+                        $provinceCounts['davao_occidental']['served']++;
+                        break;
+                    case "DAVAO ORIENTAL":
+                        $provinceCounts['davao_oriental']['served']++;
+                        break;
+                }
+            }
+            
+
+            
 
         } elseif(auth()->user()->hasRole('lgu focal')){
             $focalID = auth()->id();
@@ -161,7 +201,8 @@ class DashboardController extends Controller
                 ->count();
         }
 
-        return view('dashboard', compact('totalChild', 'ageCounts'));
+
+        return view('dashboard', compact('totalChildCount', 'totalMaleCount', 'totalFemaleCount', 'ageCounts', 'profileCounts', 'provinceCounts'));
     }
 
     // public function getAgeCountsBySex()

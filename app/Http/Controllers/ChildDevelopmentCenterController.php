@@ -159,14 +159,6 @@ class ChildDevelopmentCenterController extends Controller
         $changedCities = $psgc->allCities();      // Fetch all cities once
         $changedBrgys = $psgc->allBarangays();
 
-        // dd([
-        //     'provinces' => $provinces,
-        //     'cities' => $cities,
-        //     'barangays' => $barangays,
-        //     'psgcRecord' => $psgcRecord,
-        // ]);
-
-
         return view('centers.edit', [
             'center' => $center,
             'focals' => $focals,

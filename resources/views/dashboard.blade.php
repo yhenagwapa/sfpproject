@@ -17,12 +17,12 @@
                 <div class="col-lg-2">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Children <span>| {{ $totalChild }}</span></h5>
+                            <h5 class="card-title">Children <span>| {{ $totalChildCount }}</span></h5>
                             <div class="d-flex align-items-center mt-3">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <ul>
-                                        <li>Male: {{ $totalMale }}</li>
-                                        <li>Female: {{ $totalFemale }}</li>
+                                        <li>Male: {{ $totalMaleCount }}</li>
+                                        <li>Female: {{ $totalFemaleCount }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -287,18 +287,24 @@
                             <div class="datatable-container">
                                 <table class="table table-borderless">
                                     <tbody>
-                                        @foreach ([['category' => 'Pantawid Member', 'count' => 1500, 'male' => 750, 'female' => 750], ['category' => 'Persons with Disability', 'count' => 1500, 'male' => 750, 'female' => 750], ['category' => 'Indigenous People', 'count' => 1500, 'male' => 750, 'female' => 750], ['category' => 'Child of Solo Parent', 'count' => 1500, 'male' => 750, 'female' => 750], ['category' => 'Lactose Intolerant', 'count' => 1500, 'male' => 750, 'female' => 750]] as $beneficiary)
+                                        @foreach ([
+                                            'pantawid' => 'Pantawid Member',
+                                            'pwd' => 'Persons with Disability',
+                                            'ip' => 'Indigenous People',
+                                            'soloparent' => 'Child of Solo Parent',
+                                            'lactoseintolerant' => 'Lactose Intolerant'
+                                        ] as $key => $category)
                                             <tr>
-                                                <td><a href="#">{{ $beneficiary['category'] }}</a></td>
-                                                <td>{{ $beneficiary['count'] }}</td>
+                                                <td><a href="#">{{ $category }}</a></td>
+                                                <td>{{ $profileCounts[$key]['total'] }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-xs text-gray-400">&nbsp;&nbsp;&nbsp;Male</td>
-                                                <td class="text-xs text-gray-400">{{ $beneficiary['male'] }}</td>
+                                                <td class="text-xs text-gray-400">{{ $profileCounts[$key]['male'] }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-xs text-gray-400">&nbsp;&nbsp;&nbsp;Female</td>
-                                                <td class="text-xs text-gray-400">{{ $beneficiary['female'] }}</td>
+                                                <td class="text-xs text-gray-400">{{ $profileCounts[$key]['female'] }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -317,16 +323,21 @@
                                     <thead>
                                         <tr>
                                             <th>Province</th>
-                                            <th>Target</th>
                                             <th>Served</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (['Davao City', 'Davao del Norte', 'Davao del Sur', 'Davao de Oro', 'Davao Occidental', 'Davao Oriental'] as $province)
+                                        @foreach ([
+                                            'davao_city' => 'Davao City',
+                                            'davao_del_norte' => 'Davao del Norte',
+                                            'davao_del_sur' => 'Davao del Sur',
+                                            'davao_de_oro' => 'Davao de Oro',
+                                            'davao_occidental' => 'Davao Occidental',
+                                            'davao_oriental' => 'Davao Oriental'
+                                        ] as $key => $province)
                                             <tr>
                                                 <td><a href="#">{{ $province }}</a></td>
-                                                <td>1500</td>
-                                                <td><a href="#" class="text-primary">1400</a></td>
+                                                <td><a href="#" class="text-primary">{{ $provinceCounts[$key]['served']}}</a></td>
                                             </tr>
                                         @endforeach
                                     </tbody>

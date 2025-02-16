@@ -86,6 +86,7 @@ class PermissionSeeder extends Seeder
         ]);
 
         $lguFocal->givePermissionTo([
+            'edit-child',
             'view-report',
             'view-child',
             'print-report',
