@@ -21,48 +21,59 @@ class StoreChildRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $step = $this->input('step', 1);
 
-            'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'firstname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'middlename' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'date_of_birth' => ['required', 'date'],
-            'sex_id' => ['required', 'exists:sexes,id'],
-            'province_psgc' => ['required'],
-            'city_name_psgc' => ['required'],
-            'brgy_psgc' => ['required'],
-            'address' => ['required', 'string'],
-            'pantawid_details' => ['nullable','required_if:is_pantawid,1'],
-            'person_with_disability_details' => ['nullable','required_if:is_person_with_disability,1','string','max:255'],
-            'is_indigenous_people' => ['required', 'boolean'],
-            'is_child_of_soloparent' => ['required', 'boolean'],
-            'is_lactose_intolerant' => ['required', 'boolean'],
-            'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
-            'implementation_id' => ['nullable', 'exists:implementations,id'],
-        ];
+        if ($step == 1) {
+            return [
+                'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
+                'firstname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
+                'middlename' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
+                'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
+                'date_of_birth' => ['required', 'date'],
+                'sex_id' => ['required', 'exists:sexes,id'],
+                'province_psgc' => ['required'],
+                'city_name_psgc' => ['required'],
+                'brgy_psgc' => ['required'],
+                'address' => ['required', 'string'],
+                'pantawid_details' => ['nullable','required_if:is_pantawid,1'],
+                'person_with_disability_details' => ['nullable','required_if:is_person_with_disability,1','string','max:255'],
+                'is_indigenous_people' => ['required', 'boolean'],
+                'is_child_of_soloparent' => ['required', 'boolean'],
+                'is_lactose_intolerant' => ['required', 'boolean'],
+            ];
+
+        } elseif ($step == 2) {
+            return [
+                'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
+                'cycle_implementation_id' => ['nullable', 'exists:cycle_implementations,id'],
+            ];
+        }
+
+        return [];
     }
     public function messages()
     {
-        return [
-            'firstname.required' => 'Please fill in first name.',
-            'firstname.regex' => 'Invalid entry.',
-            'middlename.regex' => 'Invalid entry.',
-            'lastname.required' => 'Please fill in last name.',
-            'lastname.regex' => 'Invalid entry.',
-            'date_of_birth.required' => 'Please select date of birth.',
-            'sex_id.required' => 'Please select sex.',
+            return [
 
-            'province_psgc.required' => 'Please select a province.',
-            'city_name_psgc.required' => 'Please select a city.',
-            'brgy_psgc.required' => 'Please select a barangay.',
-            'address.required' => 'Please fill in address.',
+                'firstname.required' => 'Please fill in first name.',
+                'firstname.regex' => 'Invalid entry.',
+                'middlename.regex' => 'Invalid entry.',
+                'lastname.required' => 'Please fill in last name.',
+                'lastname.regex' => 'Invalid entry.',
+                'date_of_birth.required' => 'Please select date of birth.',
+                'sex_id.required' => 'Please select sex.',
 
-            'pantawid_details.required_if' => 'Please specify pantawid details.',
-            'person_with_disability_details.required_if' => 'Please fill in disability details.',
+                'province_psgc.required' => 'Please select a province.',
+                'city_name_psgc.required' => 'Please select a city.',
+                'brgy_psgc.required' => 'Please select a barangay.',
+                'address.required' => 'Please fill in address.',
 
-            'child_development_center_id.required' => 'Please select a CDC or SNP.'
-        ];
+                'pantawid_details.required_if' => 'Please specify pantawid details.',
+                'person_with_disability_details.required_if' => 'Please fill in disability details.',
+
+                'child_development_center_id.required' => 'Please select CDC or SNP.',
+            ];
+
     }
 
 

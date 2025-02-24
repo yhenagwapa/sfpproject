@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\ChildCenterController;
 use App\Http\Controllers\NutritionalStatusController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReportsController;
@@ -64,8 +65,8 @@ Route::middleware('auth')->group(function () {
         'child' => ChildController::class,
     ]);
 
-    Route::get('/child/search', [ChildController::class, 'search'])->name('child.search');
     Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');
+    Route::get('/child/{id}/additional-info', [ChildCenterController::class, 'additionalInfo'])->name('child.additional-info');
 
     Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');

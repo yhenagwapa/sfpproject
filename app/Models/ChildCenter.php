@@ -18,11 +18,11 @@ class ChildCenter extends Model
         'created_by_user_id',
         'updated_by_user_id'
     ];
-    
+
     protected $casts = [
         'funded' => 'boolean',
     ];
-    
+
 
     public function child()
     {

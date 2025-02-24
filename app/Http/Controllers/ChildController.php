@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use App\Models\Implementation;
 use App\Models\ChildCenter;
+use Illuminate\Support\Facades\Session;
 
 class ChildController extends Controller
 {
@@ -26,7 +27,7 @@ class ChildController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:create-child', ['only' => ['create', 'store']]);
+        $this->middleware('permission:create-child', ['only' => ['create', 'store', 'additionalInfo']]);
         $this->middleware('permission:edit-child', ['only' => ['edit', 'update']]);
         $this->middleware('permission:view-child', ['only' => ['index']]);
     }
@@ -184,63 +185,57 @@ class ChildController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+     public function multiStepForm(Request $request)
+    {
+
+
+        return view('multi-step-form', compact('step'));
+    }
     public function store(StoreChildRequest $request)
     {
         $this->authorize('create-child');
 
-        $validatedData = $request->validated();
-
-        // Get the active implementation
         $implementation = Implementation::where('id', $request->implementation_id)
             ->where('status', 'active')
             ->first();
 
-        // Check if the child already exists in `children` table
-        $child = Child::where([
-            'firstname' => $request->firstname,
-            'middlename' => $request->middlename,
-            'lastname' => $request->lastname,
-            'extension_name' => $request->extension_name,
-            'date_of_birth' => $request->date_of_birth
-        ])->first();
+        $step = $request->input('step', 1);
+        $validatedData = $request->validated();
 
-        if ($child) {
-            $childID = $child->id;
+        if ($request->isMethod('post')) {
+            if ($step == 1) {
+                $child = Child::where([
+                    'firstname' => $request->firstname,
+                    'middlename' => $request->middlename,
+                    'lastname' => $request->lastname,
+                    'extension_name' => $request->extension_name,
+                    'date_of_birth' => $request->date_of_birth
+                ])->exists();
 
-            // Check if a child center record exists
-            $existingEntry = ChildCenter::where('child_id', $childID)
-                ->where('child_development_center_id', $request->child_development_center_id)
-                ->where('implementation_id', $request->implementation_id)
-                ->where('status', 'active')
-                ->exists();
+                if ($child) {
+                    return redirect()->back()->with('error', 'Child already exists.');
+                } else {
+                    Session::put('step1Data', $validatedData);
+                    return redirect()->back()->with('step', 2);
+                }
 
-            if ($existingEntry) {
-                return redirect()->back()->with('error', 'Child already exists.');
-            }
+            } elseif ($step == 2) {
+                Session::put('step2Data', $validatedData);
+                return redirect()->back()->with('step', 3);
 
-            // Set previous records to inactive before inserting a new one
-            ChildCenter::where('child_id', $childID)->update(['status' => 'inactive']);
+            } elseif ($step == 3) {
+                // Final step - process data
+                $finalData = array_merge(
+            Session::get('step1Data', []),
+                    Session::get('step2Data', [])
+                );
 
-            // Determine if the child is funded
-            $funded = $request->implementation_id ? true : false;
-
-            // Create a new entry in `child_centers`
-            ChildCenter::create([
-                'child_id' => $childID,
-                'child_development_center_id' => $request->child_development_center_id,
-                'implementation_id' => $request->implementation_id,
-                'status' => 'active',
-                'funded' => $funded
-            ]);
-
-            return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
-        }
-
-        // Handle new child creation if the child doesn't exist
-        $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
-                ->where('city_name_psgc', $request->input('city_name_psgc'))
-                ->where('brgy_psgc', $request->input('brgy_psgc'))
-                ->first();
+                // Handle new child creation if the child doesn't exist
+                $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
+                        ->where('city_name_psgc', $request->input('city_name_psgc'))
+                        ->where('brgy_psgc', $request->input('brgy_psgc'))
+                        ->first();
 
                 if ($psgc) {
                     $psgc_id = $psgc->psgc_id;
@@ -248,37 +243,41 @@ class ChildController extends Controller
                     return redirect()->back()->withErrors(['msg' => 'Location not found']);
                 }
 
-        // Create a new child record
-        $newChild = Child::create([
-            'firstname' => $request->firstname,
-            'middlename' => $request->middlename,
-            'lastname' => $request->lastname,
-            'extension_name' => $request->extension_name,
-            'date_of_birth' => $request->date_of_birth,
-            'sex_id' => $request->sex_id,
-            'address' => $request->address,
-            'psgc_id' => $psgc->psgc_id,
-            'pantawid_details' => $request->pantawid_details ? $request->pantawid_details : null,
-            'person_with_disability_details' => $request->person_with_disability_details ? $request->person_with_disability_details : null,
-            'is_indigenous_people' => $request->is_indigenous_people,
-            'is_child_of_soloparent' => $request->is_child_of_soloparent,
-            'is_lactose_intolerant' => $request->is_lactose_intolerant,
-            'created_by_user_id' => auth()->id(),
-        ]);
+                // Create a new child record
+                $newChild = Child::create([
+                    'firstname' => $request->firstname,
+                    'middlename' => $request->middlename,
+                    'lastname' => $request->lastname,
+                    'extension_name' => $request->extension_name,
+                    'date_of_birth' => $request->date_of_birth,
+                    'sex_id' => $request->sex_id,
+                    'address' => $request->address,
+                    'psgc_id' => $psgc->psgc_id,
+                    'pantawid_details' => $request->pantawid_details ? $request->pantawid_details : null,
+                    'person_with_disability_details' => $request->person_with_disability_details ? $request->person_with_disability_details : null,
+                    'is_indigenous_people' => $request->is_indigenous_people,
+                    'is_child_of_soloparent' => $request->is_child_of_soloparent,
+                    'is_lactose_intolerant' => $request->is_lactose_intolerant,
+                    'created_by_user_id' => auth()->id(),
+                ]);
 
-        // Determine if the new child is funded
-        $funded = $request->implementation_id ? true : false;
+                $funded = $request->implementation_id ? true : false;
 
-        // Create a new entry in `child_centers`
-        ChildCenter::create([
-            'child_id' => $newChild->id,
-            'child_development_center_id' => $request->child_development_center_id,
-            'implementation_id' => $request->implementation_id,
-            'status' => 'active',
-            'funded' => $funded
-        ]);
+                ChildCenter::create([
+                        'child_id' => $newChild->id,
+                        'child_development_center_id' => $request->child_development_center_id,
+                        'implementation_id' => $request->implementation_id,
+                        'status' => 'active',
+                        'funded' => $funded
+                    ]);
 
-        return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
+                // Clear session and complete
+                Session::forget(['step1Data', 'step2Data']);
+
+                return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
+            }
+        }
+
     }
 
 
@@ -360,26 +359,26 @@ class ChildController extends Controller
             ->first();
 
         $centerName = ChildDevelopmentCenter::where('id', $childCenterId);
-        
+
 
         return view('child.edit',
         compact([
             'child',
-            'cycle', 
-            'milkFeeding', 
-            'centers', 
-            'sexOptions', 
-            'extNameOptions', 
-            'pantawidDetails', 
-            'psgcRecord', 
-            'provinces', 
-            'cities', 
-            'barangays', 
-            'provinceChange', 
-            'cityChange', 
-            'barangayChange', 
-            'isChildPantawid', 
-            'isChildPWD', 
+            'cycle',
+            'milkFeeding',
+            'centers',
+            'sexOptions',
+            'extNameOptions',
+            'pantawidDetails',
+            'psgcRecord',
+            'provinces',
+            'cities',
+            'barangays',
+            'provinceChange',
+            'cityChange',
+            'barangayChange',
+            'isChildPantawid',
+            'isChildPWD',
             'childCenterId',
             'centerName'
         ]));
@@ -388,6 +387,8 @@ class ChildController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
+
     public function edit($id)
     {
 
@@ -431,7 +432,7 @@ class ChildController extends Controller
         } else {
             return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
         }
-        
+
         $updated = $child->update([
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
@@ -454,7 +455,7 @@ class ChildController extends Controller
 
         if($request->child_development_center_id != $currentChildCenter->child_development_center_id){
             ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
-        
+
             $funded = $request->implementation_id ? true : false;
 
             ChildCenter::create([
