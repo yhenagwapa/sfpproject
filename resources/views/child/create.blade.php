@@ -72,7 +72,7 @@
                                             class="text-red-600">*</label>
                                         <input type="text"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="firstname" name='firstname' value="{{ old('firstname', session('firstname')) }}" autofocus>
+                                            id="firstname" name='firstname' value="{{ old('firstname', session('step1Data.firstname')) }}" autofocus>
                                         @if ($errors->has('firstname'))
                                             <span class="text-xs text-red-600">{{ $errors->first('firstname') }}</span>
                                         @endif
@@ -81,7 +81,7 @@
                                         <label for="middlename">Middle Name</label>
                                         <input type="text"
                                             class="form-control invalid:border-red-500 rounded border-gray-300" id="middlename"
-                                            name='middlename' value="{{ old('middlename', session('middlename')) }}">
+                                            name='middlename' value="{{ old('middlename', session('step1Data.middlename')) }}">
                                         @if ($errors->has('middlename'))
                                             <span class="text-xs text-red-600">{{ $errors->first('middlename') }}</span>
                                         @endif
@@ -91,7 +91,7 @@
                                             class="text-red-600">*</label>
                                         <input type="text"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="lastname" name='lastname' value="{{ old('lastname', session('lastname')) }}">
+                                            id="lastname" name='lastname' value="{{ old('lastname', session('step1Data.lastname')) }}">
                                         @if ($errors->has('lastname'))
                                             <span class="text-xs text-red-600">{{ $errors->first('lastname') }}</span>
                                         @endif
@@ -102,29 +102,29 @@
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                             id="extension_name" name='extension_name'>
                                             <option value="" disabled selected></option>
-                                            <option value="Jr" {{ old('extension_name', session('extension_name')) == 'jr' ? 'selected' : '' }}>Jr
+                                            <option value="Jr" {{ old('extension_name', session('step1Data.extension_name')) == 'jr' ? 'selected' : '' }}>Jr
                                             </option>
-                                            <option value="Sr" {{ old('extension_name', session('extension_name')) == 'sr' ? 'selected' : '' }}>Sr
+                                            <option value="Sr" {{ old('extension_name', session('step1Data.extension_name')) == 'sr' ? 'selected' : '' }}>Sr
                                             </option>
-                                            <option value="I" {{ old('extension_name', session('extension_name')) == 'i' ? 'selected' : '' }}>I
+                                            <option value="I" {{ old('extension_name', session('step1Data.extension_name')) == 'i' ? 'selected' : '' }}>I
                                             </option>
-                                            <option value="II" {{ old('extension_name', session('extension_name')) == 'ii' ? 'selected' : '' }}>II
+                                            <option value="II" {{ old('extension_name', session('step1Data.extension_name')) == 'ii' ? 'selected' : '' }}>II
                                             </option>
-                                            <option value="III" {{ old('extension_name', session('extension_name')) == 'iii' ? 'selected' : '' }}>III
+                                            <option value="III" {{ old('extension_name', session('step1Data.extension_name')) == 'iii' ? 'selected' : '' }}>III
                                             </option>
-                                            <option value="IV" {{ old('extension_name', session('extension_name')) == 'iv' ? 'selected' : '' }}>IV
+                                            <option value="IV" {{ old('extension_name', session('step1Data.extension_name')) == 'iv' ? 'selected' : '' }}>IV
                                             </option>
-                                            <option value="V" {{ old('extension_name', session('extension_name')) == 'v' ? 'selected' : '' }}>V
+                                            <option value="V" {{ old('extension_name', session('step1Data.extension_name')) == 'v' ? 'selected' : '' }}>V
                                             </option>
-                                            <option value="VI" {{ old('extension_name', session('extension_name')) == 'vi' ? 'selected' : '' }}>VI
+                                            <option value="VI" {{ old('extension_name', session('step1Data.extension_name')) == 'vi' ? 'selected' : '' }}>VI
                                             </option>
-                                            <option value="VII" {{ old('extension_name', session('extension_name')) == 'vii' ? 'selected' : '' }}>VII
+                                            <option value="VII" {{ old('extension_name', session('step1Data.extension_name')) == 'vii' ? 'selected' : '' }}>VII
                                             </option>
-                                            <option value="VIII" {{ old('extension_name', session('extension_name')) == 'viii' ? 'selected' : '' }}>VIII
+                                            <option value="VIII" {{ old('extension_name', session('step1Data.extension_name')) == 'viii' ? 'selected' : '' }}>VIII
                                             </option>
-                                            <option value="IX" {{ old('extension_name', session('extension_name')) == 'ix' ? 'selected' : '' }}>IX
+                                            <option value="IX" {{ old('extension_name', session('step1Data.extension_name')) == 'ix' ? 'selected' : '' }}>IX
                                             </option>
-                                            <option value="X" {{ old('extension_name', session('extension_name')) == 'x' ? 'selected' : '' }}>X
+                                            <option value="X" {{ old('extension_name', session('step1Data.extension_name')) == 'x' ? 'selected' : '' }}>X
                                             </option>
                                         </select>
                                     </div>
@@ -133,7 +133,7 @@
                                             class="text-red-600">*</label>
                                         <input type="date"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="date_of_birth" name='date_of_birth' value="{{ old('date_of_birth', session('date_of_birth')) }}"
+                                            id="date_of_birth" name='date_of_birth' value="{{ old('date_of_birth', session('step1Data.date_of_birth')) }}"
                                             max="{{ date('Y-m-d') }}">
                                         @if ($errors->has('date_of_birth'))
                                             <span class="text-xs text-red-600">{{ $errors->first('date_of_birth') }}</span>
@@ -145,9 +145,9 @@
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                             id="sex_id"
                                             name="sex_id">
-                                            <option value="" disabled {{ old('sex_id', session('sex_id')) == '' ? 'selected' : '' }}>Select sex</option>
+                                            <option value="" disabled {{ old('sex_id', session('step1Data.sex_id')) == '' ? 'selected' : '' }}>Select sex</option>
                                             @foreach ($sexOptions as $sex)
-                                                <option value="{{ $sex->id }}" {{ $sex->id == old('sex_id', session('sex_id')) ? 'selected' : '' }}>
+                                                <option value="{{ $sex->id }}" {{ $sex->id == old('sex_id', session('step1Data.sex_id')) ? 'selected' : '' }}>
                                                     {{ $sex->name }}
                                                 </option>
                                             @endforeach
@@ -162,21 +162,21 @@
                                     </div>
                                     <div class="col-md-1 mt-4 text-sm">
                                         <input type="radio" id="is_pantawid_yes" name="is_pantawid" value="1"
-                                            {{ old('is_pantawid', session('is_pantawid')) == '1' ? 'checked' : '' }}>
+                                            {{ old('is_pantawid', session('step1Data.is_pantawid')) == '1' ? 'checked' : '' }}>
                                         <label for="is_pantawid_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-4 text-sm">
                                         <input type="radio" id="is_pantawid_no" name="is_pantawid" value="0"
-                                            {{ old('is_pantawid', session('is_pantawid', '0')) == '0' ? 'checked' : '' }} checked>
+                                            {{ old('is_pantawid', session('step1Data.is_pantawid', '0')) == '0' ? 'checked' : '' }} checked>
                                         <label for="is_pantawid_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-4 text-sm additional-details">
                                         <select class="form-control rounded border-gray-300" id="pantawid_details"
                                             name="pantawid_details" placeholder="Please specify if RCCT or MCCT"
-                                            {{ old('is_pantawid', session('is_pantawid')) == '1' ? '' : 'disabled' }}>
+                                            {{ old('is_pantawid', session('step1Data.is_pantawid')) == '1' ? '' : 'disabled' }}>
                                             <option value="" disabled>Select an option</option>
-                                            <option value="rcct" {{ old('pantawid_details', session('pantawid_details')) == 'rcct' ? 'selected' : '' }}>RCCT</option>
-                                            <option value="mcct" {{ old('pantawid_details', session('pantawid_details')) == 'mcct' ? 'selected' : '' }}>MCCT</option>
+                                            <option value="rcct" {{ old('pantawid_details', session('step1Data.pantawid_details')) == 'rcct' ? 'selected' : '' }}>RCCT</option>
+                                            <option value="mcct" {{ old('pantawid_details', session('step1Data.pantawid_details')) == 'mcct' ? 'selected' : '' }}>MCCT</option>
                                         </select>
                                         @if ($errors->has('pantawid_details'))
                                             <span class="text-xs text-red-600">{{ $errors->first('pantawid_details') }}</span>
@@ -191,19 +191,19 @@
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" id="is_person_with_disability_yes"
                                             name="is_person_with_disability" value="1"
-                                            {{ old('is_person_with_disability', session('is_person_with_disability')) == '1' ? 'checked' : '' }}>
+                                            {{ old('is_person_with_disability', session('step1Data.is_person_with_disability')) == '1' ? 'checked' : '' }}>
                                         <label for="is_person_with_disability_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" id="is_person_with_disability_no"
                                             name="is_person_with_disability" value="0"
-                                            {{ old('is_person_with_disability', session('is_person_with_disability')) == '0' ? 'checked' : '' }} checked>
+                                            {{ old('is_person_with_disability', session('step1Data.is_person_with_disability')) == '0' ? 'checked' : '' }} checked>
                                         <label for="is_person_with_disability_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm additional-details">
                                         <input type="text" class="form-control rounded border-gray-300"
                                             id="person_with_disability_details" name="person_with_disability_details"
-                                            placeholder="Please specify" disabled value="{{ old('person_with_disability_details', session('person_with_disability_details')) }}">
+                                            placeholder="Please specify" disabled value="{{ old('person_with_disability_details', session('step1Data.person_with_disability_details')) }}">
                                         @if ($errors->has('person_with_disability_details'))
                                             <span class="text-xs text-red-600">{{ $errors->first('person_with_disability_details') }}</span>
                                         @endif
@@ -214,12 +214,12 @@
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_indigenous_people" id="is_indigenous_people_yes"
-                                            value="1" {{ old('is_indigenous_people', session('is_indigenous_people')) == '1' ? 'checked' : '' }}>
+                                            value="1" {{ old('is_indigenous_people', session('step1Data.is_indigenous_people')) == '1' ? 'checked' : '' }}>
                                         <label for="is_indigenous_people_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_indigenous_people" id="is_indigenous_people_no"
-                                            value="0" {{ old('is_indigenous_people', session('is_indigenous_people')) == '0' ? 'checked' : '' }} checked>
+                                            value="0" {{ old('is_indigenous_people', session('step1Data.is_indigenous_people')) == '0' ? 'checked' : '' }} checked>
                                         <label for="is_indigenous_people_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
@@ -233,12 +233,12 @@
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_child_of_soloparent" id="is_child_of_soloparent_yes"
-                                            value="1" {{ old('is_child_of_soloparent', session('is_child_of_soloparent')) == '1' ? 'checked' : '' }}>
+                                            value="1" {{ old('is_child_of_soloparent', session('step1Data.is_child_of_soloparent')) == '1' ? 'checked' : '' }}>
                                         <label for="is_child_of_soloparent_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_child_of_soloparent" id="is_child_of_soloparent_no"
-                                            value="0" {{ old('is_child_of_soloparent', session('is_child_of_soloparent')) == '0' ? 'checked' : '' }} checked>
+                                            value="0" {{ old('is_child_of_soloparent', session('step1Data.is_child_of_soloparent')) == '0' ? 'checked' : '' }} checked>
                                         <label for="is_child_of_soloparent_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
@@ -252,12 +252,12 @@
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_yes"
-                                            value="1" {{ old('is_lactose_intolerant', session('is_lactose_intolerant')) == '1' ? 'checked' : '' }}>
+                                            value="1" {{ old('is_lactose_intolerant', session('step1Data.is_lactose_intolerant')) == '1' ? 'checked' : '' }}>
                                         <label for="is_lactose_intolerant_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_no"
-                                            value="0" {{ old('is_lactose_intolerant', session('is_lactose_intolerant')) == '0' ? 'checked' : '' }} checked>
+                                            value="0" {{ old('is_lactose_intolerant', session('step1Data.is_lactose_intolerant')) == '0' ? 'checked' : '' }} checked>
                                         <label for="is_lactose_intolerant_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
@@ -290,7 +290,7 @@
                                             <option value="" selected>Select Province</option>
                                             @foreach ($provinces as $psgc => $name)
                                                 <option value="{{ $psgc }}"
-                                                    {{ old('province_psgc', session('province_psgc')) == $psgc ? 'selected' : '' }}>
+                                                    {{ old('province_psgc', session('step1Data.province_psgc')) == $psgc ? 'selected' : '' }}>
                                                     {{ $name }}
                                                 </option>
                                             @endforeach
@@ -307,7 +307,7 @@
                                             <option value="" selected>Select City/Municipality</option>
                                             @foreach ($cities as $psgc => $name)
                                                 <option value="{{ $psgc }}"
-                                                    {{ old('city_name_psgc', session('city_name_psgc')) == $psgc ? 'selected' : '' }}>
+                                                    {{ old('city_name_psgc', session('step1Data.city_name_psgc')) == $psgc ? 'selected' : '' }}>
                                                     {{ $name }}
                                                 </option>
                                             @endforeach
@@ -324,7 +324,7 @@
                                             <option value="" selected>Select Barangay</option>
                                             @foreach ($barangays as $psgc => $name)
                                                 <option value="{{ $psgc }}"
-                                                    {{ old('brgy_psgc', session('brgy_psgc')) == $psgc ? 'selected' : '' }}>
+                                                    {{ old('brgy_psgc', session('step1Data.brgy_psgc')) == $psgc ? 'selected' : '' }}>
                                                     {{ $name }}
                                                 </option>
                                             @endforeach
@@ -340,7 +340,7 @@
                                             class="text-red-600">*</label>
                                         <input type="text"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="address" name='address' value="{{ old('address', session('address')) }}">
+                                            id="address" name='address' value="{{ old('address', session('step1Data.address')) }}">
                                             @if ($errors->has('address'))
                                             <span class="text-xs text-red-600">{{ $errors->first('address') }}</span>
                                         @endif
@@ -348,13 +348,15 @@
 
                                     <input type="hidden" id="psgc_id" name="psgc_id" value="">
 
+                                    {{-- @dd(session('step1Data')) --}}
+
                                     <div class="col-md-12 mt-4 text-right">
                                         <button type="submit" id='nextButton' class="text-white bg-blue-600 rounded px-3 min-h-9" onclick="nextStep()">Next</button>
                                     </div>
                                 </div>
 
                             @elseif(session('step') == 2)
-                                <div id="step2" class="row d-none">
+                                <div id="step2" class="row step">
                                     <h5 class="card-title ml-3">Child Development Center Details</h5>
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="child_development_center_id">CDC or SNP <span
@@ -363,7 +365,7 @@
                                             name='child_development_center_id'>
                                             <option value="" disabled selected>Select CDC or SNP</option>
                                             @foreach ($centerNames as $center)
-                                                <option value="{{ $center->id == old('child_development_center_id', session ('child_development_center_id')) ? 'selected' : '' }}">
+                                                <option value="{{ $center->id == old('child_development_center_id', session ('step2Data.child_development_center_id')) ? 'selected' : '' }}">
                                                     {{ $center->center_name }}
                                                 </option>
                                             @endforeach
@@ -375,7 +377,7 @@
                                             name='implementation_id'>
                                             <option value="" selected>Not Applicable</option>
                                             @foreach ($cycleImplementations as $cycle)
-                                                <option value="{{ $cycle->id  == old('implementation_id', session('implementation_id')) ? 'selected' : '' }}">
+                                                <option value="{{ $cycle->id  == old('implementation_id', session('step2Data.implementation_id')) ? 'selected' : '' }}">
                                                     {{ $cycle->name }}
                                                 </option>
                                             @endforeach
@@ -387,7 +389,7 @@
                                             name='milk_feeding_id'>
                                             <option value="" selected>Not Applicable</option>
                                             @foreach ($milkFeedings as $milkFeeding)
-                                                <option value="{{ $milkFeeding->id  == old('milk_feeding_id', session('milk_feeding_id')) ? 'selected' : '' }}">
+                                                <option value="{{ $milkFeeding->id  == old('milk_feeding_id', session('step2Data.milk_feeding_id')) ? 'selected' : '' }}">
                                                     {{ $milkFeeding->name }}
                                                 </option>
                                             @endforeach
@@ -395,13 +397,23 @@
                                     </div>
 
                                     <div class="col-md-12 mt-4 text-right">
-                                        <button type="submit" id="prevButton" class="text-white bg-gray-600 rounded px-3 min-h-9">Previous</button>
-                                        <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9" data-bs-toggle="modal"
-                                            data-bs-target="#confirmModal">Submit</button>
+                                        <button type="submit" id="prevButton" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="prevStep()">Previous</button>
+                                        <button type="submit" id='nextButton' class="text-white bg-blue-600 rounded px-3 min-h-9" onclick="nextStep()">Next</button>
                                     </div>
                                 </div>
+                            @elseif(session('step') == 3)
+                            <div id="step3" class="row step">
+                                <h5 class="card-title ml-3">Summary</h5>
+                                
+                                @dd(session('step1Data'))
+
+                                <div class="col-md-12 mt-4 text-right">
+                                    <button type="submit" id="prevButton" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="prevStep()">Previous</button>
+                                    <button type="submit" class="text-white bg-blue-600 rounded px-3 min-h-9">Submit</button>
+                                </div>
+                            </div>
                             @endif
-                            <div class="modal fade" id="confirmModal" tabindex="-1">
+                            {{-- <div class="modal fade" id="confirmModal" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -419,14 +431,12 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </form><!-- End floating Labels Form -->
                     </div>
                 </div>
-
             </div>
-
-    </div>
+        </div>
     </div>
 
     </section>
@@ -464,98 +474,125 @@
 
     {{-- city and barangay  --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const locations = {
                 provinces: @json($provinces),
                 cities: @json($cities),
                 barangays: @json($barangays)
             };
-
+        
             const provinceSelect = document.getElementById('province');
             const citySelect = document.getElementById('city');
             const barangaySelect = document.getElementById('barangay');
-
+        
+            // ✅ Get saved session values
+            const selectedCity = "{{ session('step1Data.city_name_psgc') }}";
+            const selectedBarangay = "{{ session('step1Data.brgy_psgc') }}";
+        
             function filterCities() {
                 const provincePsgc = provinceSelect.value;
-
                 citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
                 barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-
-                if (provincePsgc) {
+        
+                if (provincePsgc && locations.cities[provincePsgc]) {
+                    locations.cities[provincePsgc].forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.psgc;
+                        option.text = city.name;
+                        citySelect.appendChild(option);
+                    });
+        
                     citySelect.style.display = 'block';
-                    if (locations.cities[provincePsgc]) {
-                        locations.cities[provincePsgc].forEach(city => {
-                            const option = document.createElement('option');
-                            option.value = city.psgc;
-                            option.text = city.name;
-                            citySelect.appendChild(option);
-                        });
-                    }
+        
+                    // ✅ Set selected city AFTER the dropdown is populated
+                    setTimeout(() => {
+                        if (selectedCity && citySelect.querySelector(`option[value="${selectedCity}"]`)) {
+                            citySelect.value = selectedCity;
+                            filterBarangays(); // Load barangays
+                        }
+                    }, 100);
                 } else {
-                    citySelect.style.display = 'disabled';
+                    citySelect.style.display = 'none';
                 }
-
-                citySelect.value = '';
+        
                 barangaySelect.value = '';
-                barangaySelect.style.display = 'disabled';
+                barangaySelect.style.display = 'none';
             }
-
+        
             function filterBarangays() {
                 const cityPsgc = citySelect.value;
-
                 barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-
-                if (cityPsgc) {
+        
+                if (cityPsgc && locations.barangays[cityPsgc]) {
+                    locations.barangays[cityPsgc].forEach(barangay => {
+                        const option = document.createElement('option');
+                        option.value = barangay.psgc;
+                        option.text = barangay.name;
+                        barangaySelect.appendChild(option);
+                    });
+        
                     barangaySelect.style.display = 'block';
-                    if (locations.barangays[cityPsgc]) {
-                        locations.barangays[cityPsgc].forEach(barangay => {
-                            const option = document.createElement('option');
-                            option.value = barangay.psgc;
-                            option.text = barangay.name;
-                            barangaySelect.appendChild(option);
-                        });
-                    }
+        
+                    // ✅ Set selected barangay AFTER the dropdown is populated
+                    setTimeout(() => {
+                        if (selectedBarangay && barangaySelect.querySelector(`option[value="${selectedBarangay}"]`)) {
+                            barangaySelect.value = selectedBarangay;
+                        }
+                    }, 100);
                 } else {
-                    barangaySelect.style.display = 'disabled';
+                    barangaySelect.style.display = 'none';
                 }
             }
-
+        
+            // ✅ Automatically detect and set the province from selected city
+            setTimeout(() => {
+                if (selectedCity) {
+                    const provincePsgc = Object.keys(locations.cities).find(province =>
+                        locations.cities[province].some(city => city.psgc == selectedCity)
+                    );
+        
+                    if (provincePsgc) {
+                        provinceSelect.value = provincePsgc;
+                        filterCities();
+                    } else {
+                        console.warn("⚠️ Province not found for selected city!");
+                    }
+                }
+            }, 200);
+        
+            // ✅ Event Listeners
             provinceSelect.addEventListener('change', filterCities);
             citySelect.addEventListener('change', filterBarangays);
-
-            filterCities();
-            filterBarangays();
         });
+    </script>    
+    <script>
+        let currentStep = 1; // Track the current step
+
+        function showStep(step) {
+            document.querySelectorAll('.step').forEach(stepDiv => {
+                stepDiv.classList.remove('d-none'); // Hide all steps
+            });
+
+            document.getElementById(`step${step}`).classList.add('d-none'); // Show only the selected step
+            currentStep = step;
+        }
+
+        function nextStep() {
+            if (currentStep < 3) {
+                showStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        // Initialize step 1 on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            showStep(1);
+        });
+
     </script>
-
-<script>
-    function nextStep() {
-        document.getElementById('step1').classList.add('d-none');
-
-        // Re-add event listener for the Previous button
-        let prevButton = document.getElementById('prevButton');
-        if (prevButton) {
-            prevButton.addEventListener("click", prevStep);
-        }
-    }
-
-    function prevStep() {
-        document.getElementById('step2').classList.add('d-none');
-        document.getElementById('step1').classList.remove('d-none');
-
-        // Re-add event listener for the Next button
-        let nextButton = document.getElementById('nextButton');
-        if (nextButton) {
-            nextButton.addEventListener("click", nextStep);
-        }
-    }
-
-    // Initial event listener for Next button (Step 1)
-    document.addEventListener("DOMContentLoaded", function() {
-        let nextButton = document.getElementById('nextButton');
-        if (nextButton) {
-            nextButton.addEventListener("click", nextStep);
-        }
-    });
-</script>
 @endsection

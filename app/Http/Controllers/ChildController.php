@@ -205,6 +205,7 @@ class ChildController extends Controller
 
         if ($request->isMethod('post')) {
             if ($step == 1) {
+                
                 $child = Child::where([
                     'firstname' => $request->firstname,
                     'middlename' => $request->middlename,
@@ -221,6 +222,7 @@ class ChildController extends Controller
                 }
 
             } elseif ($step == 2) {
+                dd($step);
                 Session::put('step2Data', $validatedData);
                 return redirect()->back()->with('step', 3);
 

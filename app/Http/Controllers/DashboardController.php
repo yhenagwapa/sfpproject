@@ -121,7 +121,7 @@ class DashboardController extends Controller
 
             $getChildPSGC = Psgc::whereIn('psgc_id', $childPSGCs)->get();
 
-            dd($childPSGCs, $getChildPSGC);
+            // dd($childPSGCs, $getChildPSGC);
         
             $childCity = $getChildPSGC->pluck('city_name');
             $childProvince = $getChildPSGC->pluck('province_name');
