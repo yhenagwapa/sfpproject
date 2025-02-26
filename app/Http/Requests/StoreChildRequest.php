@@ -45,7 +45,7 @@ class StoreChildRequest extends FormRequest
         } elseif ($step == 2) {
             return [
                 'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
-                'cycle_implementation_id' => ['nullable', 'exists:cycle_implementations,id'],
+                'implementation_id' => ['nullable', 'exists:cycle_implementations,id'],
             ];
         }
 

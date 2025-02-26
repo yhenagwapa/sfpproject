@@ -416,20 +416,23 @@
                                             <option value="" disabled selected>Select CDC or SNP</option>
                                             @foreach ($centerNames as $center)
                                                 <option
-                                                    value="{{ $center->id == old('child_development_center_id', session('step2Data.child_development_center_id')) ? 'selected' : '' }}">
+                                                    value="{{ $center->id }}" {{ $center->id == old('child_development_center_id', session('step2Data.child_development_center_id')) ? 'selected' : '' }}>
                                                     {{ $center->center_name }}
                                                 </option>
                                             @endforeach
                                         </select>
+                                        @if ($errors->has('child_development_center_id'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('child_development_center_id') }}</span>
+                                        @endif
                                     </div>
                                     <div class="col-md-6 mt-3 text-sm">
-                                        <label for="cycle_implementation_id">Cycle Implementation</label>
+                                        <label for="implementation_id">Cycle Implementation</label>
                                         <select class="form-control rounded border-gray-300" id="implementation_id"
                                             name='implementation_id'>
                                             <option value="" selected>Not Applicable</option>
                                             @foreach ($cycleImplementations as $cycle)
                                                 <option
-                                                    value="{{ $cycle->id == old('implementation_id', session('step2Data.implementation_id')) ? 'selected' : '' }}">
+                                                    value="{{ $cycle->id }}" {{ $cycle->id == old('implementation_id', session('step2Data.implementation_id')) ? 'selected' : '' }}>
                                                     {{ $cycle->name }}
                                                 </option>
                                             @endforeach
@@ -442,7 +445,7 @@
                                             <option value="" selected>Not Applicable</option>
                                             @foreach ($milkFeedings as $milkFeeding)
                                                 <option
-                                                    value="{{ $milkFeeding->id == old('milk_feeding_id', session('step2Data.milk_feeding_id')) ? 'selected' : '' }}">
+                                                    value="{{ $milkFeeding->id }}" {{ $milkFeeding->id == old('milk_feeding_id', session('step2Data.milk_feeding_id')) ? 'selected' : '' }}>
                                                     {{ $milkFeeding->name }}
                                                 </option>
                                             @endforeach
@@ -455,21 +458,128 @@
                                 <div id="step3" class="row step">
                                     <h5 class="card-title ml-3">Summary</h5>
 
-                                    @dd(session('step1Data'))
-                                    @dd(session('step2Data'))
+                                    <div class='col-md-6 mt-3 text-gray-400 text-xs'>Personal Information</div>
+                                    <div class='col-md-6 mt-3 text-gray-400 text-xs'>Center Information</div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>First Name:</label>
+                                        </div>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='firstname'
+                                                value="{{session('step1Data.firstname') }}" disabled>
+                                        </div>
+                                        <div class="col-md-3 mt-3 text-sm">
+                                            <label>CDC/SNP:</label>
+                                        </div>
+                                        <div class="col-md-3 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='child_development_center_id'
+                                                value="{{session('step2Data.child_development_center_id') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Middle Name:</label>
+                                        </div>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='middlename'
+                                                value="{{session('step1Data.middlename') }}" disabled>
+                                        </div>
+                                        <div class="col-md-3 mt-3 text-sm">
+                                            <label>Cycle Implementation:</label>
+                                        </div>
+                                        <div class="col-md-3 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='implementation_id'
+                                                value="{{session('step2Data.implementation_id') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Last Name:</label>
+                                        </div>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='last_name'
+                                                value="{{session('step1Data.last_name') }}" disabled>
+                                        </div>
+                                        <div class="col-md-3 mt-3 text-sm">
+                                            <label>Milk Feeding:</label>
+                                        </div>
+                                        <div class="col-md-3 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='milk_feeding_id'
+                                                value="{{session('step2Data.milk_feeding_id') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Extension Name:</label>
+                                        </div>
+                                        <div class="col-md-10 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='extension_name'
+                                                value="{{session('step1Data.extension_name') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Date of birth:</label>
+                                        </div>
+                                        <div class="col-md-10 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='date_of_birth'
+                                                value="{{session('step1Data.date_of_birth') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Sex:</label>
+                                        </div>
+                                        <div class="col-md-10 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='sex_id'
+                                                value="{{session('step1Data.sex_id') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Pantawid Member:</label>
+                                        </div>
+                                        <div class="col-md-10 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='pantawid_details'
+                                                value="{{session('step1Data.pantawid_details') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Person with Disability Details:</label>
+                                        </div>
+                                        <div class="col-md-10 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='person_with_disability_details'
+                                                value="{{session('step1Data.person_with_disability_details') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Indigenous People:</label>
+                                        </div>
+                                        <div class="col-md-10 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='is_indigenous_people'
+                                                value="{{session('step1Data.is_indigenous_people') ? 'Yes' : 'No' }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Child of Solo Parent:</label>
+                                        </div>
+                                        <div class="col-md-10 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='is_child_of_soloparent'
+                                                value="{{session('step1Data.is_child_of_soloparent') ? 'Yes' : 'No' }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Lactose Intolerant:</label>
+                                        </div>
+                                        <div class="col-md-10 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='is_lactose_intolerant'
+                                                value="{{session('step1Data.is_lactose_intolerant') ? 'Yes' : 'No' }}" disabled>
+                                        </div>
 
+                                    
                                     {{-- <div class="col-md-12 mt-4 text-right">
                                         <button type="submit" id="prevBtnn" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="prevStep()">Previous</button>
-                                        <button type="submit" class="text-white bg-blue-600 rounded px-3 min-h-9">Submit</button>
+                                        
                                     </div> --}}
                                 </div>
                             @endif
 
                             <div class="col-md-12 mt-4 text-right">
-                                <button type="submit" id="prevBtn"
-                                    class="text-white bg-gray-600 rounded px-3 min-h-9">Previous</button>
-                                <button type="submit" id='nextBtn'
-                                    class="text-white bg-blue-600 rounded px-3 min-h-9">Next</button>
+                                @if (session('step', 1) > 1)
+                                    <button type="submit" name="action" value="prev"
+                                        class="text-white bg-gray-600 rounded px-3 min-h-9">Previous</button>
+                                @endif
+                        
+                                @if (session('step', 1) < 3)
+                                    <button type="submit" name="action" value="next"
+                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Next</button>
+                                @else
+                                    <button type="submit" name="action" value="submit"
+                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Submit</button>
+                                @endif
                             </div>
                             {{-- <div class="modal fade" id="confirmModal" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
@@ -626,7 +736,7 @@
         });
     </script>
 
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function () {
     console.log("Page loaded");
 
@@ -689,6 +799,6 @@
     showStep(1);
 });
 
-    </script>
+    </script> --}}
 
 @endsection
