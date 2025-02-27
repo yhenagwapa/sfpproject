@@ -23,7 +23,7 @@
                     <div class="inline-flex space-x-3">
                         @can('edit-cycle-implementation')
 
-                        @if($cycle->status !== 'inactive')
+                        @if($cycle->status !== 'closed')
                             <form>
                                 <a href="{{ route('cycle.edit', $cycle->id) }}" class="relative inline-flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

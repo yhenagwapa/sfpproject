@@ -47,7 +47,7 @@ class ImplementationController extends Controller
     {
         $validatedData = $request->validated();
 
-        $cycleExists = Implementation::where('cycle_name', $request->cycle_name)
+        $cycleExists = Implementation::where('name', $request->cycle_name)
                             ->exists();
 
         if ($cycleExists) {
@@ -55,11 +55,12 @@ class ImplementationController extends Controller
         }
 
         $cycle = Implementation::create([
-            'cycle_name' => $request->cycle_name,
-            'cycle_school_year' => $request->cycle_school_year,
-            'cycle_target' => $request->cycle_target,
-            'cycle_allocation' => $request->cycle_allocation,
-            'cycle_status' => $request->cycle_status,
+            'name' => $request->cycle_name,
+            'school_year' => $request->cycle_school_year,
+            'target' => $request->cycle_target,
+            'allocation' => $request->cycle_allocation,
+            'type' => $request->cycle_type,
+            'status' => $request->cycle_status,
             'created_by_user_id' => auth()->id(),
         ]);
 

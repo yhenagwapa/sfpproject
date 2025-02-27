@@ -66,38 +66,50 @@
                                         <label for="cycle_name">Cycle Name<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_name"
                                             name="cycle_name" value="{{ old('cycle_name') }}" style="text-transform: uppercase;" autofocus>
-
-                                        @error('cycle_name')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
+                                        @if ($errors->has('cycle_name'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('cycle_name') }}</span>
+                                        @endif
                                     </div>
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_school_year">School Year<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_school_year"
                                             name="cycle_school_year" value="{{ old('cycle_school_year') }}" maxlength="9">
-                                        @error('cycle_school_year')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
+                                        @if ($errors->has('cycle_school_year'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('cycle_school_year') }}</span>
+                                        @endif
                                     </div>
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_target">Target<b class='text-red-600'>*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_target"
                                             name="cycle_target" value="{{ old('cycle_target') }}" maxlength="12">
-                                        @error('cycle_target')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
+                                        @if ($errors->has('cycle_target'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('cycle_target') }}</span>
+                                        @endif
                                     </div>
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_allocation">Allocation<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300"
                                             id="cycle_allocation" name='cycle_allocation'
-                                            value="{{ old('cycle_allocation') }}">
-                                        @error('cycle_allocation')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
+                                            value="{{ old('cycle_allocation') }}" maxlength="12">
+                                        @if ($errors->has('cycle_allocation'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('cycle_allocation') }}</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="cycle_type">Type<b class="text-red-600">*</b></label>
+                                        <select type="text" class="form-control rounded border-gray-300" id="cycle_type"
+                                            name='cycle_type'>
+                                            <option value="" selected disabled>Select Type</option>
+                                                <option value="regular" {{ old('cycle_type') }}>REGULAR</option>
+                                                <option value="milk" {{ old('cycle_type') }}>MILK</option>
+                                        </select>
+                                        @if ($errors->has('cycle_type'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('cycle_type') }}</span>
+                                        @endif
                                     </div>
 
                                     <div class="col-md-6 mt-2 text-sm">
@@ -109,9 +121,9 @@
                                                 <option value="{{ $cycleStatus->value }}">{{ $cycleStatus->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('cycle_status')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
+                                        @if ($errors->has('cycle_status'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('cycle_status') }}</span>
+                                        @endif
                                     </div>
 
                                     <div class="col-md-12 mt-4 text-right">

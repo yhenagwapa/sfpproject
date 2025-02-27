@@ -22,7 +22,7 @@
                 <td class="inline-flex items-center justify-center">
                     <div class="inline-flex space-x-3">
                         @can('edit-cycle-implementation')
-                            @if( $milkfeeding->status !== 'inactive')
+                            @if( $milkfeeding->status !== 'closed')
                                 <form>
                                     <a href="{{ route('milkfeedings.edit', $milkfeeding->id) }}" class="relative inline-flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

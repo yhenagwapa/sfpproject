@@ -22,26 +22,26 @@ class StoreImplementationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string:255'],
-            'target' => ['required','numeric'],
-            'allocation' => ['required', 'regex:/^\d{1,12}(\.\d{2})?$/'],
-            'school_year' => ['required','string:9'],
-            'type' => ['required','string:255'],
-            'status' => ['required','string:255'],
+            'cycle_name' => ['required','string:255'],
+            'cycle_target' => ['required','numeric'],
+            'cycle_allocation' => ['required', 'regex:/^\d{1,12}(\.\d{2})?$/'],
+            'cycle_school_year' => ['required','string:9'],
+            'cycle_type' => ['required','string:255'],
+            'cycle_status' => ['required','string:255'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Please fill in cycle name',
-            'target.required' => 'Please fill in target.',
-            'target.numeric' => 'Invalid entry.',
-            'allocation.required' => 'Please fill in allocation',
-            'allocation.regex' => 'Invalid entry.',
-            'school_year.required' => 'Please fill in school year.',
-            'type.required' => 'Please select type.',
-            'status.required' => 'Please select a status.'
+            'cycle_name.required' => 'Please fill in cycle name',
+            'cycle_target.required' => 'Please fill in target.',
+            'cycle_target.numeric' => 'Invalid entry.',
+            'cycle_allocation.required' => 'Please fill in allocation',
+            'cycle_allocation.regex' => 'Invalid entry.',
+            'cycle_school_year.required' => 'Please fill in school year.',
+            'cycle_type.required' => 'Please select type.',
+            'cycle_status.required' => 'Please select a status.'
         ];
     }
 }
