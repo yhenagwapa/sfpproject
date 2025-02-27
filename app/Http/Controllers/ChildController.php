@@ -202,7 +202,7 @@ class ChildController extends Controller
 
         $step = $request->input('step', 1);
 
-        
+
 
         if ($step == 1) {
             $validatedData = $request->validated();
@@ -219,25 +219,43 @@ class ChildController extends Controller
                 return redirect()->back()->with('error', 'Child already exists.');
             }
 
-            session()->put('step1Data', $validatedData);
+            $step1Data = $validatedData;
+            $step1Data['sex_name'] = Sex::where('id', $request->sex_id)->value('name');
+
+            $step1Data['region_name'] = PSGC::where('region_psgc', $request->region_psgc ?? null)->value('region_name');
+            $step1Data['province_name'] = PSGC::where('province_psgc', $request->province_psgc ?? null)->value('province_name');
+            $step1Data['city_name'] = PSGC::where('city_name_psgc', $request->city_name_psgc ?? null)->value('city_name');
+            $step1Data['brgy_name'] = PSGC::where('brgy_psgc', $request->brgy_psgc ?? null)->value('brgy_name');
+
+            session()->put('step1Data', $step1Data);
             session()->put('step', 2); // Move to step 2
             session()->save();
+
+            // dd($step1Data);
+
 
             return redirect()->back();
 
         }
 
         if ($step == 2) {
+            $validatedData = $request->validated();
+
             if ($request->input('action') === 'prev') {
                 session()->put('step', 1);
                 return redirect()->back();
             } else {
-                // Only validate when moving forward
-                $validatedData = $request->validated();
-                session()->put('step2Data', $validatedData);
-                session()->put('step', 3); // Move to step 3
+                $step2Data = $validatedData;
+
+                $step2Data['center_name'] = ChildDevelopmentCenter::where('id', $request->child_development_center_id)->value('center_name');
+                $step2Data['implementation_name'] = Implementation::where('id', $request->implementation_id)->value('name');
+                $step2Data['milk_feeding_name'] = Implementation::where('id', $request->milk_feeding_id)->value('name');
+
+                session()->put('step2Data', $step2Data);
+                session()->put('step', 3); // Move to step 2
+                session()->save();
             }
-        
+
             return redirect()->back();
         }
 
@@ -253,10 +271,10 @@ class ChildController extends Controller
                 session()->get('step2Data', [])
             );
 
-            // Handle new child creation if the child doesn't exist
-            $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
-                ->where('city_name_psgc', $request->input('city_name_psgc'))
-                ->where('brgy_psgc', $request->input('brgy_psgc'))
+            $psgc = Psgc::where('region_psgc', $finalData['region_psgc'])
+                ->where('province_psgc', $finalData['province_psgc'])
+                ->where('city_name_psgc', $finalData['city_name_psgc'])
+                ->where('brgy_psgc', $finalData['brgy_psgc'])
                 ->first();
 
             if ($psgc) {
@@ -267,28 +285,29 @@ class ChildController extends Controller
 
             // Create a new child record
             $newChild = Child::create([
-                'firstname' => $request->firstname,
-                'middlename' => $request->middlename,
-                'lastname' => $request->lastname,
-                'extension_name' => $request->extension_name,
-                'date_of_birth' => $request->date_of_birth,
-                'sex_id' => $request->sex_id,
-                'address' => $request->address,
-                'psgc_id' => $psgc->psgc_id,
-                'pantawid_details' => $request->pantawid_details ? $request->pantawid_details : null,
-                'person_with_disability_details' => $request->person_with_disability_details ? $request->person_with_disability_details : null,
-                'is_indigenous_people' => $request->is_indigenous_people,
-                'is_child_of_soloparent' => $request->is_child_of_soloparent,
-                'is_lactose_intolerant' => $request->is_lactose_intolerant,
+                'firstname' => $finalData['firstname'],
+                'middlename' => $finalData['middlename'] ?? null,
+                'lastname' => $finalData['lastname'],
+                'extension_name' => $finalData['extension_name'] ?? null,
+                'date_of_birth' => $finalData['date_of_birth'],
+                'sex_id' => $finalData['sex_id'],
+                'address' => $finalData['address'],
+                'psgc_id' => $psgc_id,
+                'pantawid_details' => $finalData['pantawid_details'] ?? null,
+                'person_with_disability_details' => $finalData['person_with_disability_details'] ?? null,
+                'is_indigenous_people' => $finalData['is_indigenous_people'] ?? false,
+                'is_child_of_soloparent' => $finalData['is_child_of_soloparent'] ?? false,
+                'is_lactose_intolerant' => $finalData['is_lactose_intolerant'] ?? false,
                 'created_by_user_id' => auth()->id(),
             ]);
 
-            $funded = $request->implementation_id ? true : false;
+            $funded = $finalData['implementation_id'] ? true : false;
 
             ChildCenter::create([
                 'child_id' => $newChild->id,
-                'child_development_center_id' => $request->child_development_center_id,
-                'implementation_id' => $request->implementation_id,
+                'child_development_center_id' => $finalData['child_development_center_id'],
+                'implementation_id' => $finalData['implementation_id'],
+                'milk_feeding_id' => $finalData['milk_feeding_id'],
                 'status' => 'active',
                 'funded' => $funded
             ]);

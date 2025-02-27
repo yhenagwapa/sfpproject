@@ -324,7 +324,7 @@
                                             class="text-red-600">*</label>
                                         <select
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="region" disabled>
+                                            id="region_psgc" name="region_psgc" disabled>
                                             <option value="110000000" selected>Region XI</option>
                                         </select>
                                     </div>
@@ -459,7 +459,8 @@
                                     <h5 class="card-title ml-3">Summary</h5>
 
                                     <div class='col-md-6 mt-3 text-gray-400 text-xs'>Personal Information</div>
-                                    <div class='col-md-6 mt-3 text-gray-400 text-xs'>Center Information</div>
+                                    <div class='col-md-6 mt-3 text-gray-400 text-xs'>Address</div>
+
                                         <div class="col-md-2 mt-3 text-sm">
                                             <label>First Name:</label>
                                         </div>
@@ -467,12 +468,12 @@
                                             <input type="text" class="rounded border-gray-300" name='firstname'
                                                 value="{{session('step1Data.firstname') }}" disabled>
                                         </div>
-                                        <div class="col-md-3 mt-3 text-sm">
-                                            <label>CDC/SNP:</label>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Region:</label>
                                         </div>
-                                        <div class="col-md-3 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='child_development_center_id'
-                                                value="{{session('step2Data.child_development_center_id') }}" disabled>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='region_psgc'
+                                                value="{{ session('step1Data.region_name') }}" disabled>
                                         </div>
                                         <div class="col-md-2 mt-3 text-sm">
                                             <label>Middle Name:</label>
@@ -481,88 +482,128 @@
                                             <input type="text" class="rounded border-gray-300" name='middlename'
                                                 value="{{session('step1Data.middlename') }}" disabled>
                                         </div>
-                                        <div class="col-md-3 mt-3 text-sm">
-                                            <label>Cycle Implementation:</label>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Province:</label>
                                         </div>
-                                        <div class="col-md-3 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='implementation_id'
-                                                value="{{session('step2Data.implementation_id') }}" disabled>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='province_psgc'
+                                                value="{{session('step1Data.province_name') }}" disabled>
                                         </div>
                                         <div class="col-md-2 mt-3 text-sm">
                                             <label>Last Name:</label>
                                         </div>
                                         <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='last_name'
-                                                value="{{session('step1Data.last_name') }}" disabled>
+                                            <input type="text" class="rounded border-gray-300" name='lastname'
+                                                value="{{session('step1Data.lastname') }}" disabled>
                                         </div>
-                                        <div class="col-md-3 mt-3 text-sm">
-                                            <label>Milk Feeding:</label>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>City/Municpality:</label>
                                         </div>
-                                        <div class="col-md-3 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='milk_feeding_id'
-                                                value="{{session('step2Data.milk_feeding_id') }}" disabled>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='city_name_psgc'
+                                                value="{{session('step1Data.city_name') }}" disabled>
                                         </div>
                                         <div class="col-md-2 mt-3 text-sm">
                                             <label>Extension Name:</label>
                                         </div>
-                                        <div class="col-md-10 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='extension_name'
-                                                value="{{session('step1Data.extension_name') }}" disabled>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" id="extension_name" name="extension_name"
+                                                value="{{ session('step1Data.extension_name') ?? '' }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Barangay:</label>
+                                        </div>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='brgy_psgc'
+                                                value="{{session('step1Data.brgy_name') }}" disabled>
                                         </div>
                                         <div class="col-md-2 mt-3 text-sm">
                                             <label>Date of birth:</label>
                                         </div>
-                                        <div class="col-md-10 mt-1 text-sm">
+                                        <div class="col-md-4 mt-1 text-sm">
                                             <input type="text" class="rounded border-gray-300" name='date_of_birth'
                                                 value="{{session('step1Data.date_of_birth') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Address:</label>
+                                        </div>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='address'
+                                                value="{{session('step1Data.address') }}" disabled>
                                         </div>
                                         <div class="col-md-2 mt-3 text-sm">
                                             <label>Sex:</label>
                                         </div>
                                         <div class="col-md-10 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='sex_id'
-                                                value="{{session('step1Data.sex_id') }}" disabled>
+                                            <input type="text" class="rounded border-gray-300" name='sex_name'
+                                                value="{{session('step1Data.sex_name') }}" disabled>
                                         </div>
+
                                         <div class="col-md-2 mt-3 text-sm">
                                             <label>Pantawid Member:</label>
                                         </div>
                                         <div class="col-md-10 mt-1 text-sm">
                                             <input type="text" class="rounded border-gray-300" name='pantawid_details'
-                                                value="{{session('step1Data.pantawid_details') }}" disabled>
+                                                value="{{session('step1Data.pantawid_details') ? session('step1Data.pantawid_details') : 'No'}}" disabled>
                                         </div>
+
                                         <div class="col-md-2 mt-3 text-sm">
-                                            <label>Person with Disability Details:</label>
+                                            <label>Person with Disability:</label>
                                         </div>
-                                        <div class="col-md-10 mt-1 text-sm">
+                                        <div class="col-md-4 mt-1 text-sm">
                                             <input type="text" class="rounded border-gray-300" name='person_with_disability_details'
-                                                value="{{session('step1Data.person_with_disability_details') }}" disabled>
+                                                value="{{session('step1Data.person_with_disability_details') ? session('step1Data.person_with_disability_details') : 'No'}}" disabled>
                                         </div>
+                                        <div class='col-md-6 mt-3 text-gray-400 text-xs'>Center Information</div>
+
                                         <div class="col-md-2 mt-3 text-sm">
                                             <label>Indigenous People:</label>
                                         </div>
-                                        <div class="col-md-10 mt-1 text-sm">
+                                        <div class="col-md-4 mt-1 text-sm">
                                             <input type="text" class="rounded border-gray-300" name='is_indigenous_people'
                                                 value="{{session('step1Data.is_indigenous_people') ? 'Yes' : 'No' }}" disabled>
                                         </div>
                                         <div class="col-md-2 mt-3 text-sm">
+                                            <label>CDC/SNP:</label>
+                                        </div>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='child_development_center_id'
+                                                value="{{session('step2Data.center_name') }}" disabled>
+                                        </div>
+
+                                        <div class="col-md-2 mt-3 text-sm">
                                             <label>Child of Solo Parent:</label>
                                         </div>
-                                        <div class="col-md-10 mt-1 text-sm">
+                                        <div class="col-md-4 mt-1 text-sm">
                                             <input type="text" class="rounded border-gray-300" name='is_child_of_soloparent'
                                                 value="{{session('step1Data.is_child_of_soloparent') ? 'Yes' : 'No' }}" disabled>
                                         </div>
                                         <div class="col-md-2 mt-3 text-sm">
+                                            <label>Cycle Implementation:</label>
+                                        </div>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='implementation_id'
+                                                value="{{session('step2Data.implementation_name') }}" disabled>
+                                        </div>
+                                        <div class="col-md-2 mt-3 text-sm">
                                             <label>Lactose Intolerant:</label>
                                         </div>
-                                        <div class="col-md-10 mt-1 text-sm">
+                                        <div class="col-md-4 mt-1 text-sm">
                                             <input type="text" class="rounded border-gray-300" name='is_lactose_intolerant'
                                                 value="{{session('step1Data.is_lactose_intolerant') ? 'Yes' : 'No' }}" disabled>
                                         </div>
+                                        <div class="col-md-2 mt-3 text-sm">
+                                            <label>Milk Feeding:</label>
+                                        </div>
+                                        <div class="col-md-4 mt-1 text-sm">
+                                            <input type="text" class="rounded border-gray-300" name='milk_feeding_id'
+                                                value="{{session('step2Data.milk_feeding_name') }}" disabled>
+                                        </div>
 
-                                    
+
                                     {{-- <div class="col-md-12 mt-4 text-right">
                                         <button type="submit" id="prevBtnn" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="prevStep()">Previous</button>
-                                        
+
                                     </div> --}}
                                 </div>
                             @endif
@@ -572,7 +613,7 @@
                                     <button type="submit" name="action" value="prev"
                                         class="text-white bg-gray-600 rounded px-3 min-h-9">Previous</button>
                                 @endif
-                        
+
                                 @if (session('step', 1) < 3)
                                     <button type="submit" name="action" value="next"
                                         class="text-white bg-blue-600 rounded px-3 min-h-9">Next</button>

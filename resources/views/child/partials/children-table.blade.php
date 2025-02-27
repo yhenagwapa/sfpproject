@@ -40,16 +40,7 @@
                                     </span>
                                 </a>
                             @endcan
-                            @can(['create-child'])
-                                <a href="{{ route('child.additional-info', $maleChild['id']) }}" class="relative inline-flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#3968d2" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                    <span class="font-semibold text-sm" style="color: #3968d2;">
-                                        Add Info
-                                    </span>
-                                </a>
-                            @endcan
+
                             @can(['create-nutritional-status'])
                                 <a href="{{ route('nutritionalstatus.index', $maleChild->id) }}" class="relative inline-flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -115,16 +106,7 @@
                                     </span>
                                 </a>
                             @endcan
-                            @can(['create-child'])
-                                <a href="{{ route('child.additional-info', $femaleChild['id']) }}" class="relative inline-flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#3968d2" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                    <span class="font-semibold text-sm" style="color: #3968d2;">
-                                        Add Info
-                                    </span>
-                                </a>
-                            @endcan
+
                             @can(['create-nutritional-status'])
                                 <a href="{{ route('nutritionalstatus.index', $femaleChild->id) }}" class="relative inline-flex items-center justify-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

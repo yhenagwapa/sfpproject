@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('child_id')->nullable()->constrained('children');
             $table->foreignId('child_development_center_id')->nullable()->constrained('child_development_centers');
             $table->foreignId('implementation_id')->nullable()->constrained('implementations');
+            $table->foreignId('milk_feeding_id')->nullable()->constrained('implementations');
             $table->string('status')->default("active");
             $table->boolean('funded')->default(false);
             $table->timestamps();

@@ -43,14 +43,14 @@
                             </div>
                             @if ($activity['event_type'] === 'Updated')
                                 <div class="modal-body">
-                                    
+
                                     <h5>Updated Values:</h5>
                                     <ul>
                                         @foreach ($activity['changed_fields'] as $field => $values)
                                             <li>{{ $field }}: from "{{ $values['old'] }}" to "{{ $values['new'] }}"</li>
                                         @endforeach
                                     </ul>
-                                    
+
                                 </div>
                             @else
                                 <div class="modal-body">
@@ -62,10 +62,10 @@
                                     </ul>
                                 </div>
                             @endif
-                            
+
                             <div class="modal-footer">
-                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Close</button>  
-                            </div>  
+                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Close</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,59 +89,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script>
-    $(document).ready(function() {
-        var search_ajax;
-        $('#search').on('input change', function() {
-            var searchTxt = $(this).val();
 
-            // Update URL without reloading
-            var newUrl = searchTxt ? `{{ route('child.search') }}?q=${encodeURIComponent(searchTxt)}` : `{{ route('child.search') }}`;
-            history.pushState({}, "", newUrl);
-
-            if (search_ajax) {
-                search_ajax.abort();
-            }
-
-            search_ajax = $.ajax({
-                url: newUrl,
-                dataType: 'json',
-                success: function(resp) {
-                    var tblBody = $('.children-table');
-                    var paginationLink = $('#pagination-links');
-                    tblBody.html('');
-                    paginationLink.html('');
-
-                    if (resp.children.length > 0) {
-                        resp.children.forEach(child => {
-                            var tr = $('<tr>');
-                            tr.append(`<td>${child.full_name}</td>`);
-                            tr.append(`<td>${child.sex}</td>`);
-                            tr.append(`<td>${child.dob}</td>`);
-                            tr.append(`<td>${child.weight}</td>`);
-                            tr.append(`<td>${child.height}</td>`);
-                            tr.append(`<td><a href="#" class="editChildBtn" data-bs-toggle="modal" data-bs-target="#ExtralargeModal" data-id="${child.id}"><i class="bi bi-pencil text-white border-2 border-blue-600 bg-blue-600 rounded px-3"></i></a></td>`);
-                            tblBody.append(tr);
-                        });
-                    } else {
-                        tblBody.append('<tr><td class="text-center" colspan="6">No search keyword match found.</td></tr>');
-                    }
-
-                    if (resp.pagination_links) {
-                        paginationLink.html(resp.pagination_links);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('AJAX error:', textStatus, errorThrown);
-                    alert('An error occurred: ' + (jqXHR.responseText || 'Unknown error'));
-                }
-            });
-        });
-    });
-
-    // Function to handle modal form update
-    function generateUpdateUrl(childId) {
-        return `{{ url('child') }}/${childId}`;
-    }
 </script>
 

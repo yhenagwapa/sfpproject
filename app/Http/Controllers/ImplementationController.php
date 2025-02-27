@@ -19,8 +19,13 @@ class ImplementationController extends Controller
     }
     public function index()
     {
-        $allCycles = Implementation::all();
-        $milkFeedings = MilkFeeding::all();
+        $allCycles = Implementation::where('type', 'regular')
+            ->orderBy('status', 'desc')
+            ->get();
+
+        $milkFeedings = Implementation::where('type', 'milk')
+            ->orderBy('status', 'desc')
+            ->get();
 
         return view('cycle.index', compact('allCycles', 'milkFeedings'));
     }

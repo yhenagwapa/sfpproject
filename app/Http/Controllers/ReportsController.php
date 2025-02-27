@@ -7,7 +7,7 @@ use App\Models\Psgc;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Child;
-use App\Models\CycleImplementation;
+use App\Models\Implementation;
 use Carbon\Carbon;
 
 class ReportsController extends Controller
@@ -19,9 +19,9 @@ class ReportsController extends Controller
         $this->middleware('permission:create-cycle-implementation', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-cycle-implementation', ['only' => ['edit', 'update']]);
     }
-    public function index(Request $request, CycleImplementation $cycle)
+    public function index(Request $request, Implementation $cycle)
     {
-        $cycle = CycleImplementation::where('cycle_status', 'active')->first();
+        $cycle = Implementation::where('status', 'active')->first();
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
@@ -41,7 +41,7 @@ class ReportsController extends Controller
                     ->paginate(10);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
-            
+
         } elseif (auth()->user()->hasRole('lgu focal')) {
             $focalID = auth()->id();
             $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
@@ -83,7 +83,7 @@ class ReportsController extends Controller
 
         return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle'));
     }
-    public function malnourish(Request $request, CycleImplementation $cycle)
+    public function malnourish(Request $request, Implementation $cycle)
     {
         $cdcId = $request->input('center_name', 'all_center');
 
@@ -141,7 +141,7 @@ class ReportsController extends Controller
 
         }
     }
-    public function disabilities(CycleImplementation $cycle)
+    public function disabilities(Implementation $cycle)
     {
 
         $childrenWithDisabilities = Child::with('center')
@@ -174,7 +174,7 @@ class ReportsController extends Controller
             return view('reports.disabilities', compact('isPwdChildren', 'centers', 'cycle'));
         }
     }
-    public function monitoring(Request $request, CycleImplementation $cycle)
+    public function monitoring(Request $request, Implementation $cycle)
     {
         $cdcId = $request->input('center_name', 'all_center');
 
@@ -187,11 +187,11 @@ class ReportsController extends Controller
 
         foreach ($fundedChildren as $child) {
             $nutritionalStatuses = $child->nutritionalStatus;
-            
+
             if ($nutritionalStatuses && $nutritionalStatuses->count() > 0) {
                 $entry = $nutritionalStatuses->first();
                 $exit = $nutritionalStatuses->count() > 1 ? $nutritionalStatuses[1] : null;
-                
+
             } else {
                 $entry = null;
                 $exit = null;
@@ -220,9 +220,9 @@ class ReportsController extends Controller
                     ->where('cycle_implementation_id', $cycle->id)
                     ->paginate(10);
             }
-        
-            
-        
+
+
+
         } elseif (auth()->user()->hasRole('lgu focal')) {
 
             $focalID = auth()->id();
@@ -243,12 +243,12 @@ class ReportsController extends Controller
                     ->where('child_development_center_id', $cdcId)
                     ->paginate(10);
             }
-        
+
         } else {
             $workerID = auth()->id();
             $centers = ChildDevelopmentCenter::where('assigned_worker_user_id', $workerID)->get();
             $centerIds = $centers->pluck('id');
-            
+
             if ($cdcId == 'all_center') {
                 $isFunded = Child::with('nutritionalStatus', 'sex')
                     ->where('is_funded', true)
@@ -263,11 +263,11 @@ class ReportsController extends Controller
                     ->paginate(10);
             }
 
-        }        
+        }
 
         return view('reports.monitoring', compact('isFunded', 'centers', 'cdcId', 'cycle'));
     }
-    public function unfunded(Request $request, CycleImplementation $cycle)
+    public function unfunded(Request $request, Implementation $cycle)
     {
         $cdcId = $request->input('center_name', 'all_center');
 
@@ -310,7 +310,7 @@ class ReportsController extends Controller
 
         return view('reports.unfunded', compact('isNotFunded', 'centers', 'cdcId', 'cycle'));
     }
-    public function undernourishedUponEntry(CycleImplementation $cycle)
+    public function undernourishedUponEntry(Implementation $cycle)
     {
 
         if (auth()->user()->hasRole('admin')) {
@@ -478,7 +478,7 @@ class ReportsController extends Controller
 
         return view('reports.undernourished-upon-entry', compact('centers', 'ageGroupsPerCenter', 'cycle'));
     }
-    public function undernourishedAfter120(CycleImplementation $cycle)
+    public function undernourishedAfter120(Implementation $cycle)
     {
         if (auth()->user()->hasRole('admin')) {
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
@@ -489,7 +489,7 @@ class ReportsController extends Controller
                     ->whereIn('age_in_years', [2, 3, 4, 5]);
             })
             ->get();
-            
+
             $centers = ChildDevelopmentCenter::paginate(15);
             $centers->getCollection()->keyBy('id');
 
@@ -509,7 +509,7 @@ class ReportsController extends Controller
             })
             ->get();
         }
-        
+
         $nutritionalStatusOccurrences = $fundedChildren->map(function ($child) {
             if ($child->nutritionalStatus->isEmpty()) {
                 return [
@@ -645,7 +645,7 @@ class ReportsController extends Controller
 
         return view('reports.undernourished-after-120', compact('centers', 'exitAgeGroupsPerCenter', 'cycle'));
     }
-    public function entryAgeBracket(Request $request, CycleImplementation $cycle)
+    public function entryAgeBracket(Request $request, Implementation $cycle)
     {
         $cdcId = $request->input('center_name', 'all_center');
 
@@ -958,14 +958,14 @@ class ReportsController extends Controller
                             return $child->sex_id == 2 && $child->is_child_of_soloparent != null;
                         })->count(),
                     ],
-                
+
                 ];
             });
 
-        
+
         return view('reports.age-bracket-upon-entry', compact('fundedChildren','countsPerNutritionalStatus', 'centers', 'cdcId', 'cycle'));
     }
-    public function after120AgeBracket(Request $request, CycleImplementation $cycle)
+    public function after120AgeBracket(Request $request, Implementation $cycle)
     {
         $cdcId = $request->input('center_name', 'all_center');
 
@@ -1297,7 +1297,7 @@ class ReportsController extends Controller
 
         return view('reports.age-bracket-after-120', compact('fundedChildren', 'exitCountsPerNutritionalStatus', 'centers', 'cdcId', 'cycle'));
     }
-    public function weightForAgeUponEntry(CycleImplementation $cycle)
+    public function weightForAgeUponEntry(Implementation $cycle)
     {
 
         if(auth()->user()->hasRole('admin')){
@@ -1599,7 +1599,7 @@ class ReportsController extends Controller
 
         return view('reports.weight-for-age-upon-entry', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
-    public function weightForAgeAfter120(CycleImplementation $cycle)
+    public function weightForAgeAfter120(Implementation $cycle)
     {
 
         if(auth()->user()->hasRole('admin')){
@@ -1900,11 +1900,11 @@ class ReportsController extends Controller
 
         return view('reports.weight-for-age-after-120', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
-    public function weightForHeightUponEntry(CycleImplementation $cycle)
+    public function weightForHeightUponEntry(Implementation $cycle)
     {
         $province = null;
         $city = null;
-        
+
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
             ->where('children.is_funded', true)
@@ -2264,7 +2264,7 @@ class ReportsController extends Controller
         return view('reports.weight-for-height-upon-entry', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
 
     }
-    public function weightForHeightAfter120(CycleImplementation $cycle)
+    public function weightForHeightAfter120(Implementation $cycle)
     {
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
@@ -2613,7 +2613,7 @@ class ReportsController extends Controller
 
         return view('reports.weight-for-height-after-120', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
-    public function heightForAgeUponEntry(CycleImplementation $cycle)
+    public function heightForAgeUponEntry(Implementation $cycle)
     {
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
@@ -2914,7 +2914,7 @@ class ReportsController extends Controller
 
         return view('reports.height-for-age-upon-entry', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
-    public function heightForAgeAfter120(CycleImplementation $cycle)
+    public function heightForAgeAfter120(Implementation $cycle)
     {
         if(auth()->user()->hasRole('admin')){
             $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
@@ -2941,7 +2941,7 @@ class ReportsController extends Controller
             })
             ->get();
         }
-        
+
 
         $nutritionalStatusOccurrences = $fundedChildren->map(function ($child) {
             $statuses = $child->nutritionalStatus->whereIn('age_in_years', [2, 3, 4, 5])
@@ -3213,12 +3213,12 @@ class ReportsController extends Controller
 
         }
 
-        
+
 
         return view('reports.height-for-age-after-120', compact('centers', 'ageGroupsPerCenter', 'totals', 'cycle'));
     }
-    
-    
+
+
 
     public function create()
     {

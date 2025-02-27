@@ -64,14 +64,37 @@
                                         <input type="hidden" name="child_id" value="{{ $child->id }}">
 
                                         <div class="col-md-12 mt-2 text-sm">
+                                            <label for="deworming_date">Deworming Date:<b
+                                                    class="text-red-600">*</b></label>
+                                            <input type="date" class="form-control rounded border-gray-300"
+                                                id="deworming_date" name='deworming_date'
+                                                value="{{ old('deworming_date', $entryDetails->deworming_date) }}" max="{{ date('Y-m-d') }}">
+                                            @if ($errors->has('deworming_date'))
+                                                <span
+                                                    class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-12 mt-2 text-sm">
+                                            <label for="vitamin_a_date">Vitamin A Date:<b
+                                                    class="text-red-600">*</b></label>
+                                            <input type="date" class="form-control rounded border-gray-300"
+                                                id="vitamin_a_date" name='vitamin_a_date'
+                                                value="{{ old('vitamin_a_date', $entryDetails->vitamin_a_date) }}" max="{{ date('Y-m-d') }}">
+                                            @if ($errors->has('vitamin_a_date'))
+                                                <span
+                                                    class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-12 mt-2 text-sm">
                                             <label for="weight">Weight<b class="text-red-600">*</b></label>
                                             <input type="text"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                                 id="weight" name='weight'
                                                 value="{{ old('weight', $entryDetails->weight) }}">
-                                            @error('weight')
-                                                <span class="text-xs text-red-600">{{ $message }}</span>
-                                            @enderror
+                                                @if ($errors->has('weight'))
+                                                    <span
+                                                        class="text-xs text-red-600">{{ $errors->first('weight') }}</span>
+                                                @endif
                                         </div>
                                         <div class="col-md-12 mt-2 text-sm">
                                             <label for="height">Height<b class="text-red-600">*</b></label>
@@ -79,21 +102,23 @@
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                                 id="height" name='height'
                                                 value="{{ old('height', $entryDetails->height) }}">
-                                            @error('height')
-                                                <span class="text-xs text-red-600">{{ $message }}</span>
-                                            @enderror
+                                                @if ($errors->has('height'))
+                                                    <span
+                                                        class="text-xs text-red-600">{{ $errors->first('height') }}</span>
+                                                @endif
                                         </div>
 
                                         <div class="col-md-12 mt-2 text-sm">
-                                            <label for="weighing_date">Actual date of weighing<b
+                                            <label for="actual_weighing_date">Actual date of weighing<b
                                                     class="text-red-600">*</b></label>
                                             <input type="date"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="weighing_date" name='weighing_date'
-                                                value="{{ old('weighing_date', $entryDetails->weighing_date) }}">
-                                            @error('weighing_date')
-                                                <span class="text-xs text-red-600">{{ $message }}</span>
-                                            @enderror
+                                                id="actual_weighing_date" name='actual_weighing_date'
+                                                value="{{ old('actual_weighing_date', $entryDetails->actual_weighing_date) }}">
+                                                @if ($errors->has('actual_weighing_date'))
+                                                    <span
+                                                        class="text-xs text-red-600">{{ $errors->first('actual_weighing_date') }}</span>
+                                                @endif
                                         </div>
 
                                         <div class="col-md-12 mt-4 text-right">
@@ -147,9 +172,10 @@
                                                     class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                                     id="exitweight" name='exitweight'
                                                     value="{{ old('exitweight', $exitDetails->weight ?? '') }}">
-                                                @error('exitweight')
-                                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                                @enderror
+                                                    @if ($errors->has('exitweight'))
+                                                        <span
+                                                            class="text-xs text-red-600">{{ $errors->first('exitweight') }}</span>
+                                                    @endif
                                             </div>
                                             <div class="col-md-12 mt-2 text-sm">
                                                 <label for="exitheight">Height<b class="text-red-600">*</b></label>
@@ -157,9 +183,10 @@
                                                     class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                                     id="exitheight" name='exitheight'
                                                     value="{{ old('exitheight', $exitDetails->height ?? '') }}">
-                                                @error('exitheight')
-                                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                                @enderror
+                                                    @if ($errors->has('exitheight'))
+                                                        <span
+                                                            class="text-xs text-red-600">{{ $errors->first('exitheight') }}</span>
+                                                    @endif
                                             </div>
 
                                             <div class="col-md-12 mt-2 text-sm">
@@ -168,10 +195,11 @@
                                                 <input type="date"
                                                     class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                                     id="exitweighing_date" name='exitweighing_date'
-                                                    value="{{ old('exitweighing_date', $exitDetails->weighing_date ?? '') }}">
-                                                @error('exitweighing_date')
-                                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                                @enderror
+                                                    value="{{ old('exitweighing_date', $exitDetails->actual_weighing_date ?? '') }}">
+                                                    @if ($errors->has('exitweighing_date'))
+                                                        <span
+                                                            class="text-xs text-red-600">{{ $errors->first('exitweighing_date') }}</span>
+                                                    @endif
                                             </div>
 
                                             <div class="col-md-12 mt-4 text-right">

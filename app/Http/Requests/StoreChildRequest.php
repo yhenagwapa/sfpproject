@@ -31,6 +31,7 @@ class StoreChildRequest extends FormRequest
                 'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
                 'date_of_birth' => ['required', 'date'],
                 'sex_id' => ['required', 'exists:sexes,id'],
+                'region_psgc' => ['required'],
                 'province_psgc' => ['required'],
                 'city_name_psgc' => ['required'],
                 'brgy_psgc' => ['required'],
@@ -45,7 +46,8 @@ class StoreChildRequest extends FormRequest
         } elseif ($step == 2) {
             return [
                 'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
-                'implementation_id' => ['nullable', 'exists:cycle_implementations,id'],
+                'implementation_id' => ['nullable', 'exists:implementations,id'],
+                'milk_feeding_id' => ['nullable', 'exists:implementations,id'],
             ];
         }
 
