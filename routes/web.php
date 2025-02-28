@@ -97,6 +97,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/cycle/store', [ImplementationController::class, 'store'])->name(name: 'cycle.store');
     Route::get('/cycle/{id}/edit', [ImplementationController::class, 'edit'])->name(name: 'cycle.edit');
     Route::put('/cycle/{cycle}/update', [ImplementationController::class, 'update'])->name(name: 'cycle.update');
+    Route::put('/cycle/{cycle}/update-status', [ImplementationController::class, 'updateStatus'])->name(name: 'cycle.update-status');
 
 
     Route::get('/milkfeedings/create', [MilkFeedingController::class, 'create'])->name(name: 'milkfeedings.create');

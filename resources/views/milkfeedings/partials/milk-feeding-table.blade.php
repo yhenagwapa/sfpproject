@@ -18,7 +18,69 @@
                     <td>{{ number_format($milkfeeding->target) }}</td>
                     <td>{{ number_format($milkfeeding->allocation, 2) }}</td>
                 @endif
-                <td>{{ $milkfeeding->status }}</td>
+                <td class="w-40">
+                    <select id="milkStatusSelect-{{ $milkfeeding->status }}" name="milkfeeding_status" class="form-control w-40 border-none" @if ($milkfeeding->status === 'closed') disabled @endif>
+                        <option value="active" {{ $milkfeeding->status == 'active' ? 'selected' : '' }}>
+                            Active
+                        </option>
+                        <option value="closed" {{ $milkfeeding->status == 'closed' ? 'selected' : '' }}>
+                            Closed
+                        </option>
+                    </select>
+                </td>
+
+                <!-- Modal for status change -->
+                <div class="modal fade" id="milkStatusConfirmationModal-{{ $milkfeeding->status }}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-red-600">Confirmation</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to change close the status of this milk feeding? This cannot be undone.
+                            </div>
+                            <div class="modal-footer">
+                                <button id="milkConfirmStatusChange-{{ $milkfeeding->status }}" type="button"
+                                    class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                <button id="cancelStatusChange-{{ $milkfeeding->status }}" type="button"
+                                    class="text-white bg-gray-600 rounded px-3 min-h-9"
+                                    data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="statusForm-{{ $milkfeeding->status }}" method="POST"
+                    action="{{ route('cycle.update-status', $milkfeeding->status) }}">
+                    @csrf
+
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" id="statusValue-{{ $milkfeeding->status }}" name="milkfeeding_status" value="">
+                    <input type="hidden" id="milkfeeding_id" name="milkfeeding_id" value="{{ $milkfeeding->id }}">
+                </form>
+
+                <script>
+                    let selectedStatus{{ $milkfeeding->status }} = '';
+                    let originalStatus{{ $milkfeeding->status }} = document.getElementById('statusSelect-{{ $milkfeeding->status }}').value;
+
+                    document.getElementById('milkStatusSelect-{{ $milkfeeding->status }}').addEventListener('change', function() {
+                        selectedStatus{{ $milkfeeding->status }} = this.value;
+                        let modal = new bootstrap.Modal(document.getElementById(
+                        'milkStatusConfirmationModal-{{ $milkfeeding->status }}'));
+                        modal.show();
+                    });
+
+                    document.getElementById('milkConfirmStatusChange-{{ $milkfeeding->status }}').addEventListener('click', function() {
+                        document.getElementById('statusValue-{{ $milkfeeding->status }}').value = selectedStatus{{ $milkfeeding->status }};
+                        document.getElementById('statusForm-{{ $milkfeeding->status }}').submit();
+                    });
+
+                    document.getElementById('cancelStatusChange-{{ $milkfeeding->status }}').addEventListener('click', function() {
+                        document.getElementById('statusSelect-{{ $milkfeeding->status }}').value = originalStatus{{ $milkfeeding->status }};
+                    });
+                </script>
                 <td class="inline-flex items-center justify-center">
                     <div class="inline-flex space-x-3">
                         @can('edit-cycle-implementation')

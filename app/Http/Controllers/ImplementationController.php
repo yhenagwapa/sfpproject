@@ -7,6 +7,7 @@ use App\Models\MilkFeeding;
 use App\Http\Requests\StoreImplementationRequest;
 use App\Http\Requests\UpdateImplementationRequest;
 use App\Enums\CycleStatus;
+use Illuminate\Http\Request;
 
 class ImplementationController extends Controller
 {
@@ -20,14 +21,14 @@ class ImplementationController extends Controller
     public function index()
     {
         $allCycles = Implementation::where('type', 'regular')
-            ->orderBy('status', 'desc')
             ->get();
 
         $milkFeedings = Implementation::where('type', 'milk')
-            ->orderBy('status', 'desc')
             ->get();
 
-        return view('cycle.index', compact('allCycles', 'milkFeedings'));
+        $cycleStatuses = CycleStatus::cases();
+
+        return view('cycle.index', compact('allCycles', 'milkFeedings', 'cycleStatuses'));
     }
 
     /**
@@ -83,8 +84,12 @@ class ImplementationController extends Controller
         $cycle = Implementation::findOrFail($id);
         $cycleStatuses = CycleStatus::cases();
 
+        $cycleType = [
+            'regular' => 'REGULAR',
+            'milk' => 'MILK',
+        ];
 
-        return view('cycle.edit', compact('cycle', 'cycleStatuses'));
+        return view('cycle.edit', compact('cycle', 'cycleStatuses', 'cycleType'));
     }
 
     /**
@@ -95,30 +100,34 @@ class ImplementationController extends Controller
         $cycle = Implementation::findOrFail($id);
 
         $validatedData = $request->validated();
-        $validatedData['updated_by_user_id'] = auth()->id();
 
-        $cycle->update($validatedData);
+        $cycle->update([
+            'name' => $validatedData['cycle_name'],
+            'school_year' => $validatedData['cycle_school_year'],
+            'target' => $validatedData['cycle_target'],
+            'allocation' => $validatedData['cycle_allocation'],
+            'type' => $validatedData['cycle_type'],
+            'status' => $validatedData['cycle_status'],
+            'updated_by_user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('cycle.index')->with('success', 'Cycle updated successfully.');
     }
 
-    public function updateStatus(UpdateImplementationRequest $request, Implementation $Implementation)
+
+    public function updateStatus(Request $request, $implementation)
     {
+        $implementation = Implementation::findOrFail($request->cycle_id);
+
         $request->validate([
-            'cycle_status' => ['required', 'enum:' . CycleStatus::class],  // Validate the enum value
+            'cycle_status' => 'required|string|in:active,closed',
         ]);
 
-        $cycle = Implementation::firstWhere('id', $Implementation);
+        $implementation->update([
+            'status' => $request->cycle_status,
+        ]);
 
-        if (!$cycle) {
-            // Handle the case where no record is found
-            return redirect()->route('cycles.index')->with('error', 'No data found in the Cycle Implementation table.');
-        }
-
-        $cycle->cycle_status = CycleStatus::from($request->cycle_status);  // Set the status
-        $cycle->save();  // Save the updated status
-
-        return redirect()->route('cycle.index', ['id' => $cycle->id])->with('success', 'Cycle status updated successfully.');
+        return redirect()->back()->with('success', 'Cycle status updated successfully.');
     }
 
 

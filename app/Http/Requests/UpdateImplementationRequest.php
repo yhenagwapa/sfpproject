@@ -24,35 +24,35 @@ class UpdateImplementationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string:255',  Rule::unique('implementations')->ignore($this->route('cycle'))],
-            'target' => ['required','numeric'],
-            'allocation' => ['required', 'regex:/^\d{1,12}(\.\d{2})?$/'],
-            'school_year' => ['required','string:9'],
-            'type' => ['required','string:255'],
-            'status' => ['required','string:255'],
+            'cycle_name' => ['required','string:255',  Rule::unique('implementations', 'name')->ignore($this->route('cycle'))],
+            'cycle_target' => ['required','numeric'],
+            'cycle_allocation' => ['required', 'regex:/^\d{1,12}(\.\d{2})?$/'],
+            'cycle_school_year' => ['required','string:9'],
+            'cycle_type' => ['required','string:255'],
+            'cycle_status' => ['required','string:255'],
         ];
     }
 
     public function prepareForValidation()
     {
         $this->merge([
-            'target' => str_replace(',', '', $this->target),
-            'allocation' => str_replace(',', '', $this->allocation),
+            'cycle_target' => str_replace(',', '', $this->cycle_target),
+            'cycle_allocation' => str_replace(',', '', $this->cycle_allocation),
         ]);
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Please fill in cycle name',
-            'name.unique' => 'The cycle name has already been taken. Please choose another name.',
-            'target.required' => 'Please fill in target.',
-            'target.numeric' => 'Invalid entry.',
-            'allocation.required' => 'Please fill in allocation',
-            'allocation.regex' => 'Invalid entry.',
-            'school_year.required' => 'Please fill in school year.',
-            'type.required' => 'Please select type.',
-            'status.required' => 'Please select a status.'
+            'cycle_name.required' => 'Please fill in cycle name',
+            'cycle_name.unique' => 'The cycle name has already been taken. Please choose another name.',
+            'cycle_target.required' => 'Please fill in target.',
+            'cycle_target.numeric' => 'Invalid entry.',
+            'cycle_allocation.required' => 'Please fill in allocation.',
+            'cycle_allocation.regex' => 'Invalid entry.',
+            'cycle_school_year.required' => 'Please fill in school year.',
+            'cycle_type.required' => 'Please select type.',
+            'cycle_status.required' => 'Please select a status.'
         ];
     }
 }

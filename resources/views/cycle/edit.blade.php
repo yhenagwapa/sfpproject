@@ -4,10 +4,10 @@
 
     <!-- Page Title -->
     <div class="pagetitle">
-        <nav aria-label="breadcrumb">
+        <nav style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb mb-3 p-0">
                 <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Implementations</a></li>
-                <li class="breadcrumb-item active" style="text-transform: uppercase;">{{ $cycle->cycle_name }}</li>
+                <li class="breadcrumb-item active" style="text-transform: uppercase;">{{ $cycle->name }}</li>
             </ol>
         </nav>
     </div>
@@ -40,6 +40,8 @@
         });
     </script>
 
+
+
     <!-- Cycle Implementation Form -->
     <div class="wrapper">
         <section class="section">
@@ -47,20 +49,23 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Cycle Implementation</h5>
-                            <form method="post" action="{{ route('cycle.update', $cycle->id) }}">
+                            <h5 class="card-title">Implementation</h5>
+                            <form class="row" method="post" action="{{ route('cycle.update', $cycle->id) }}">
                                 @csrf
                                 @method('put')
 
                                 <!-- Cycle Information -->
-                                <div class="col-md-3 mt-2 text-gray-400 text-xs">Cycle Implementation Information</div>
-                                <div class="col-md-9 mt-3 text-gray-400 text-xs"><hr></div>
+                                <div class='col-md-3 mt-2 text-gray-400 text-xs'>Implementation Information
+                                </div>
+                                <div class='col-md-9 mt-3 text-gray-400 text-xs'>
+                                    <hr>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mt-3 text-sm">
-                                        <label for="cycle_name">Cycle Name<b class="text-red-600">*</b></label>
+                                        <label for="cycle_name">Implementation Name<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_name"
-                                               name="cycle_name" value="{{ old('cycle_name', $cycle->cycle_name) }}" style="text-transform: uppercase;" autofocus>
+                                               name="cycle_name" value="{{ old('cycle_name', $cycle->name) }}" style="text-transform: uppercase;" autofocus>
                                         @error('cycle_name')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -69,7 +74,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_school_year">School Year<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_school_year"
-                                               name="cycle_school_year" value="{{ old('cycle_school_year', $cycle->cycle_school_year) }}" maxlength="9" style="text-transform: uppercase;">
+                                               name="cycle_school_year" value="{{ old('cycle_school_year', $cycle->school_year) }}" maxlength="9" style="text-transform: uppercase;">
                                         @error('cycle_school_year')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -78,7 +83,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_target">Target<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_target"
-                                               name="cycle_target" value="{{ (old('cycle_target', number_format($cycle->cycle_target))) }}" maxlength="12">
+                                               name="cycle_target" value="{{ (old('cycle_target', number_format($cycle->target))) }}" maxlength="12">
                                         @error('cycle_target')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -87,8 +92,23 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_allocation">Allocation<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_allocation"
-                                               name="cycle_allocation" value="{{ (old('cycle_allocation', number_format((float) $cycle->cycle_allocation), 2)) }}">
+                                               name="cycle_allocation" value="{{ (old('cycle_allocation', number_format((float) $cycle->allocation), 2)) }}">
                                         @error('cycle_allocation')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="cycle_type">Status<b class="text-red-600">*</b></label>
+                                        <select class="form-control rounded border-gray-300" id="cycle_type" name="cycle_type">
+                                            <option value="" selected disabled>Select status</option>
+                                            @foreach ($cycleType as $type => $name)
+                                                <option value="{{ $type }}" {{ old('cycle_type', $cycle->type) == $type ? 'selected' : '' }}>
+                                                    {{ $name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('cycle_type')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -99,7 +119,7 @@
                                             <option value="" selected disabled>Select status</option>
                                             @foreach ($cycleStatuses as $cycleStatus)
                                                 <option value="{{ $cycleStatus->value }}"
-                                                    {{ old('cycle_status', $cycle->cycle_status) == $cycleStatus->value ? 'selected' : '' }}>
+                                                    {{ old('cycle_status', $cycle->status) == $cycleStatus->value ? 'selected' : '' }}>
                                                     {{ $cycleStatus->name }}
                                                 </option>
                                             @endforeach
