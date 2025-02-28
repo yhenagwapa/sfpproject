@@ -40,12 +40,12 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Cycle Implementations</h5>
+                            <h5 class="card-title">Implementations</h5>
                             <div class="row">
                                 @can('add-cycle-implementation')
                                     <div class="col-6 mb-5 d-flex align-items-center">
                                         <a href="{{ route('cycle.create') }}" class="btn btn-primary">
-                                            <i class="bi bi-plus-circle me-2"></i>New Cycle Implementation
+                                            <i class="bi bi-plus-circle me-2"></i>New Implementation
                                         </a>
                                     </div>
                                 @endcan
@@ -62,15 +62,6 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Milk Feeding</h5>
-                            <div class="row">
-                                @can('add-cycle-implementation')
-                                    <div class="col-6 mb-5 d-flex align-items-center">
-                                        <a href="{{ route('milkfeedings.create')}}" class="btn btn-primary">
-                                            <i class="bi bi-plus-circle me-2"></i>New Milk Feeding
-                                        </a>
-                                    </div>
-                                @endcan
-                            </div>
                             <div class="table-responsive" id="milk-feeding-table">
                                 @include('milkfeedings.partials.milk-feeding-table', ['milkFeedings' => $milkFeedings])
                             </div>

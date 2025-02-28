@@ -7,7 +7,7 @@
             <nav style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb mb-3 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Implemetations</a></li>
-                    <li class="breadcrumb-item active">Cycle Implementation Details</li>
+                    <li class="breadcrumb-item active">Implementation Details</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -52,18 +52,18 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Cycle Implementation</h5>
+                                <h5 class="card-title">Implementation</h5>
                                 <form class="row" method="post" action="{{ route('cycle.store') }} ">
                                     @csrf
 
-                                    <div class='col-md-3 mt-2 text-gray-400 text-xs'>Cycle Implementation Information
+                                    <div class='col-md-3 mt-2 text-gray-400 text-xs'>Implementation Information
                                     </div>
                                     <div class='col-md-9 mt-3 text-gray-400 text-xs'>
                                         <hr>
                                     </div>
 
                                     <div class="col-md-6 mt-3 text-sm">
-                                        <label for="cycle_name">Cycle Name<b class="text-red-600">*</b></label>
+                                        <label for="cycle_name">Implementation Name<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_name"
                                             name="cycle_name" value="{{ old('cycle_name') }}" style="text-transform: uppercase;" autofocus>
                                         @if ($errors->has('cycle_name'))
@@ -99,7 +99,7 @@
                                         @endif
                                     </div>
 
-                                    <div class="col-md-6 mt-2 text-sm">
+                                    <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_type">Type<b class="text-red-600">*</b></label>
                                         <select type="text" class="form-control rounded border-gray-300" id="cycle_type"
                                             name='cycle_type'>
@@ -112,7 +112,7 @@
                                         @endif
                                     </div>
 
-                                    <div class="col-md-6 mt-2 text-sm">
+                                    <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_status">Status<b class="text-red-600">*</b></label>
                                         <select type="text" class="form-control rounded border-gray-300" id="cycle_status"
                                             name='cycle_status'>

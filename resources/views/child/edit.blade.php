@@ -55,6 +55,15 @@
                 }
             });
         </script>
+        {{-- @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif --}}
 
     <div class="wrapper">
         <section class="section">
@@ -128,7 +137,7 @@
                                             <select class="form-control rounded border-gray-300" id="sex_id" name="sex_id">
                                                 <option value="" disabled>Select Sex</option>
                                                 @foreach ($sexOptions as $sex)
-                                                    <option value="{{ $sex->id }}" 
+                                                    <option value="{{ $sex->id }}"
                                                         {{ old('sex_id', $child->sex_id) == $sex->id ? 'selected' : '' }}>
                                                         {{ $sex->name }}
                                                     </option>
@@ -285,7 +294,7 @@
                                             @error('province_psgc')
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
-                                        </div>                                        
+                                        </div>
 
                                         <div class="col-md-6 mt-2 text-sm">
                                             <label for="city">City/Municipality<b class="text-red-600">*</b></label>
@@ -301,7 +310,7 @@
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        
+
                                         <div class="col-md-6 mt-2 text-sm">
                                             <label for="barangay">Barangay<b class="text-red-600">*</b></label>
                                             <select class="form-control rounded border-gray-300" id="barangay" name="brgy_psgc">
@@ -316,7 +325,7 @@
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        
+
 
                                         <input type="hidden" id="psgc_id" name="psgc_id"
                                             value="{{ $child->psgc_id }}">
@@ -330,7 +339,7 @@
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        
+
 
                                         <div class='col-md-3 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised Neighborhood Play</div>
                                         <div class='col-md-9 mt-8 text-gray-400 text-xs'>
@@ -353,13 +362,13 @@
                                                 <span class="text-xs text-red-600">{{ $message }}</span>
                                             @enderror
                                         </div>
-    
+
                                         <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
                                             <input type="text"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                                 name="spaceonly">
                                         </div>
-    
+
                                         <div class="col-md-6 mt-3 text-sm">
                                             <label for="cycle_implementation_id">Cycle Implementation</label>
                                             <select
@@ -368,7 +377,7 @@
                                                 @if ($cycle)
                                                     <option value="">Not Applicable</option>
                                                     <option value="{{ $cycle->id }}"
-                                                        {{ $cycle->id == old('implementation_id', $cycle->id) ? 'selected' : '' }}>
+                                                        {{ $cycle->id == old('implementation_id', $childCenterId->implementation_id) ? 'selected' : '' }}>
                                                         {{ $cycle->name }}
                                                     </option>
                                                 @else
@@ -376,7 +385,7 @@
                                                 @endif
                                             </select>
                                         </div>
-    
+
                                         <div class="col-md-6 mt-3 text-sm">
                                             <label for="milk_feeding_id">Milk Feeding Implementation</label>
                                             <select
@@ -385,7 +394,7 @@
                                                 @if ($milkFeeding)
                                                     <option value="">Not Applicable</option>
                                                     <option value="{{ $milkFeeding->id }}"
-                                                        {{ $milkFeeding->id == old('milk_feeding_id', $milkFeeding->id) ? 'selected' : '' }}>
+                                                        {{ $milkFeeding->id == old('milk_feeding_id', $childCenterId->milk_feeding_id) ? 'selected' : '' }}>
                                                         {{ $milkFeeding->name }}
                                                     </option>
                                                 @else
@@ -393,14 +402,14 @@
                                                 @endif
                                             </select>
                                         </div>
-    
+
                                         <div class="col-md-12 mt-4 text-right">
                                             <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
                                                 data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
                                             <button type="reset"
                                                 class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
                                         </div>
-    
+
                                         <div class="modal fade" id="verticalycentered" tabindex="-1">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
@@ -429,7 +438,7 @@
                         </div>
                     </div>
                 </div>
-            </div>              
+            </div>
         </section>
     </div>
 	 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -468,19 +477,19 @@
                     cities: @json($cityChange),
                     barangays: @json($barangayChange)
                 };
-    
+
                 const provinceSelect = document.getElementById('province');
                 const citySelect = document.getElementById('city');
                 const barangaySelect = document.getElementById('barangay');
-    
+
                 function filterCities() {
                     const provincePsgc = provinceSelect.value;
-                    
-    
+
+
                     if (provincePsgc) {
                         citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
                         barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-                        citySelect.style.display = 'block'; 
+                        citySelect.style.display = 'block';
 
                         if (locations.cities[provincePsgc]) {
                             locations.cities[provincePsgc].forEach(city => {
@@ -491,9 +500,9 @@
                             });
                         }
                     } else {
-                        citySelect.style.display = 'disabled'; 
+                        citySelect.style.display = 'disabled';
                     }
-    
+
                     citySelect.value = '';
                     barangaySelect.value = '';
                     barangaySelect.style.display = 'disabled';
@@ -501,11 +510,11 @@
 
                 function filterBarangays() {
                     const cityPsgc = citySelect.value;
-    
+
                     barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-    
+
                     if (cityPsgc) {
-                        barangaySelect.style.display = 'block'; 
+                        barangaySelect.style.display = 'block';
                         if (locations.barangays[cityPsgc]) {
                             locations.barangays[cityPsgc].forEach(barangay => {
                                 const option = document.createElement('option');
@@ -515,10 +524,10 @@
                             });
                         }
                     } else {
-                        barangaySelect.style.display = 'disabled'; 
+                        barangaySelect.style.display = 'disabled';
                     }
                 }
-    
+
                 provinceSelect.addEventListener('change', filterCities);
                 citySelect.addEventListener('change', filterBarangays);
             });

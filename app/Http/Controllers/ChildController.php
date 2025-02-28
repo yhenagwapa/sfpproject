@@ -211,11 +211,16 @@ class ChildController extends Controller
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
                 'lastname' => $request->lastname,
-                'extension_name' => $request->extension_name,
                 'date_of_birth' => $request->date_of_birth
-            ])->exists();
+            ]);
 
-            if ($child) {
+            if (isset($validatedData['extension_name'])) {
+                $child->where('extension_name', $validatedData['extension_name']);
+            }
+
+            $existingChild = $child->first();
+
+            if ($existingChild) {
                 return redirect()->back()->with('error', 'Child already exists.');
             }
 
@@ -400,6 +405,8 @@ class ChildController extends Controller
             ->first();
 
         $centerName = ChildDevelopmentCenter::where('id', $childCenterId);
+        $childCycle = $childCenterId->implementation_id;
+        $childMilkFeeding = $childCenterId->milk_feeding_id;
 
 
         return view(
@@ -444,8 +451,6 @@ class ChildController extends Controller
     {
         $validatedData = $request->validated();
 
-        $implementation = Implementation::where('status', 'active')->first();
-
         $query = Child::where('firstname', $validatedData['firstname'])
             ->where('middlename', $validatedData['middlename'])
             ->where('lastname', $validatedData['lastname'])
@@ -458,11 +463,8 @@ class ChildController extends Controller
 
         $existingChild = $query->first();
 
-
         if ($existingChild) {
-            return redirect()->back()->withErrors([
-                'error' => 'A child with the same name and date of birth already exists in this cycle.',
-            ])->withInput();
+            return redirect()->back()->with('error', 'Child already exists.');
         }
 
         $psgc = Psgc::where('province_psgc', $request->province_psgc)
@@ -505,6 +507,7 @@ class ChildController extends Controller
                 'child_id' => $child->id,
                 'child_development_center_id' => $request->child_development_center_id,
                 'implementation_id' => $request->implementation_id,
+                'milk_feeding_id' => $request->implementation_id,
                 'status' => 'active',
                 'funded' => $funded
             ]);
