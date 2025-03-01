@@ -7,6 +7,8 @@ use App\Models\Psgc;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Child;
+use App\Models\ChildCenter;
+use App\Models\UserCenter;
 use App\Models\Implementation;
 use Carbon\Carbon;
 
@@ -21,67 +23,101 @@ class ReportsController extends Controller
     }
     public function index(Request $request, Implementation $cycle)
     {
-        $cycle = Implementation::where('status', 'active')->first();
+        $cycle = Implementation::where('status', 'active')
+            ->where('type', 'regular')->first();
+            
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
-        $fundedChildren = Child::with('nutritionalStatus', 'sex');
+        $fundedChildren = Child::with('records','nutritionalStatus', 'sex');
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycle->id)
-                    ->paginate(10);
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
+                    if ($cycle) {     
+                        $query->where('implementation_id', $cycle->id)
+                                ->where('status', 'active')
+                                ->where('funded', 1);
+                    }
+                })
+                ->whereHas('sex', function ($query) {
+                    $query->where('name', 'Male');
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id);
+                })
+                ->paginate(5);
+                    
             } else {
-                $isFunded = $fundedChildren->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycle->id)
-                    ->where('child_development_center_id', $cdcId)
-                    ->paginate(10);
-                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
-            }
-
-        } elseif (auth()->user()->hasRole('lgu focal')) {
-            $focalID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
-            $centerIds = $centers->pluck('id');
-
-            if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycle->id)
-                    ->whereIn('child_development_center_id', $centerIds)
-                    ->paginate(10);
-            } else {
-                $isFunded = $fundedChildren->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycle->id)
-                    ->where('child_development_center_id', $cdcId)
-                    ->paginate(10);
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
+                    if ($cycle) {     
+                        $query->where('child_development_center_id', $cdcId)
+                                ->where('implementation_id', $cycle->id)
+                                ->where('status', 'active')
+                                ->where('funded', 1);
+                    }
+                })
+                ->whereHas('sex', function ($query) {
+                    $query->where('name', 'Male');
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id);
+                })
+                ->paginate(5);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
         } else {
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
 
-            $workerID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_worker_user_id', $workerID)->get();
-            $centerIds = $centers->pluck('id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycle->id)
-                    ->whereIn('child_development_center_id', $centerIds)
-                    ->paginate(10);
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
+                    if ($cycle) {     
+                        $query->whereIn('child_development_center_id', $centerIDs)
+                            ->where('implementation_id', $cycle->id)
+                            ->where('status', 'active')
+                            ->where('funded', 1);
+                    }
+                })
+                ->whereHas('sex', function ($query) {
+                    $query->where('name', 'Male');
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id);
+                })
+                ->paginate(5);
             } else {
-                $isFunded = $fundedChildren->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycle->id)
-                    ->where('child_development_center_id', $cdcId)
-                    ->paginate(10);
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
+                    if ($cycle) {     
+                        $query->where('child_development_center_id', $cdcId)
+                                ->where('implementation_id', $cycle->id)
+                                ->where('status', 'active')
+                                ->where('funded', 1);
+                    }
+                })
+                ->whereHas('sex', function ($query) {
+                    $query->where('name', 'Male');
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id);
+                })
+                ->paginate(5);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
         }
 
-        return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle'));
+        return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames'));
     }
     public function malnourish(Request $request, Implementation $cycle)
     {

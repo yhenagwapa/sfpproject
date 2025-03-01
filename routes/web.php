@@ -99,12 +99,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/cycle/{cycle}/update', [ImplementationController::class, 'update'])->name(name: 'cycle.update');
     Route::put('/cycle/{cycle}/update-status', [ImplementationController::class, 'updateStatus'])->name(name: 'cycle.update-status');
 
-
-    Route::get('/milkfeedings/create', [MilkFeedingController::class, 'create'])->name(name: 'milkfeedings.create');
-    Route::post('/milkfeedings/store', [MilkFeedingController::class, 'store'])->name(name: 'milkfeedings.store');
-    Route::get('/milkfeedings/{id}/edit', [MilkFeedingController::class, 'edit'])->name(name: 'milkfeedings.edit');
-    Route::put('/milkfeedings/{milkfeeding}/update', [MilkFeedingController::class, 'update'])->name(name: 'milkfeedings.update');
-
     Route::post('/reports/{cycle}', [ReportsController::class, 'index'])->name('reports.index');
     Route::get('/reports/{cycle}/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
     Route::get('/reports/{cycle}/print/malnourished', [PDFController::class, 'printMalnourish'])->name('reports.print.malnourished');

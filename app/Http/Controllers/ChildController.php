@@ -69,6 +69,7 @@ class ChildController extends Controller
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Female');
                     })->paginate(5);
+                    
             } else {
                 $centerId = ChildCenter::where('child_development_center_id', $cdcId)->first();
 

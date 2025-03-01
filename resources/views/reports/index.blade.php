@@ -338,7 +338,7 @@
                                                         <option value="all_center" {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : ''}}>
                                                             All Child Development Center
                                                         </option>
-                                                        @foreach ($centers as $center)
+                                                        @foreach ($centerNames as $center)
                                                             <option value="{{ $center->id }}" {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
                                                                 {{ $center->center_name }}
                                                             </option>
