@@ -726,7 +726,6 @@
                 }
 
                 barangaySelect.value = '';
-                barangaySelect.style.display = 'none';
             }
 
             function filterBarangays() {

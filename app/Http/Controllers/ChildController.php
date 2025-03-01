@@ -259,6 +259,8 @@ class ChildController extends Controller
                 session()->put('step2Data', $step2Data);
                 session()->put('step', 3); // Move to step 2
                 session()->save();
+
+                
             }
 
             return redirect()->back();
@@ -288,6 +290,7 @@ class ChildController extends Controller
                 return redirect()->back()->withErrors(['msg' => 'Location not found']);
             }
 
+            // dd($finalData);
             // Create a new child record
             $newChild = Child::create([
                 'firstname' => $finalData['firstname'],
@@ -308,14 +311,36 @@ class ChildController extends Controller
 
             $funded = $finalData['implementation_id'] ? true : false;
 
-            ChildCenter::create([
-                'child_id' => $newChild->id,
-                'child_development_center_id' => $finalData['child_development_center_id'],
-                'implementation_id' => $finalData['implementation_id'],
-                'milk_feeding_id' => $finalData['milk_feeding_id'],
-                'status' => 'active',
-                'funded' => $funded
-            ]);
+            if (!empty($finalData['implementation_id']) && !empty($finalData['milk_feeding_id'])){
+
+                ChildCenter::create([
+                    'child_id' => $newChild->id,
+                    'child_development_center_id' => $finalData['child_development_center_id'],
+                    'implementation_id' => $finalData['implementation_id'],
+                    'status' => 'active',
+                    'funded' => $funded
+                ]);
+
+                ChildCenter::create([
+                    'child_id' => $newChild->id,
+                    'child_development_center_id' => $finalData['child_development_center_id'],
+                    'implementation_id' => $finalData['milk_feeding_id'],
+                    'status' => 'active',
+                    'funded' => $funded
+                ]);
+            } elseif (!empty($finalData['implementation_id'])) {  
+                
+                ChildCenter::create([
+                    'child_id' => $newChild->id,
+                    'child_development_center_id' => $finalData['child_development_center_id'],
+                    'implementation_id' => $finalData['implementation_id'],
+                    'status' => 'active',
+                    'funded' => $funded
+                ]);
+            }
+
+            
+            
 
             // Clear session and complete
             session()->forget(['step', 'step1Data', 'step2Data']);
