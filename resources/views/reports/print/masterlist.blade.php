@@ -76,7 +76,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
-        <p>{{ $cycleImplementation->cycle_name}} ( SY {{ $cycleImplementation->cycle_school_year }} )</p>
+        <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
         <p><b>MASTERLIST OF BENEFICIARIES</b></p>
         <br>
     </div>
@@ -150,8 +150,8 @@
                             No
                         @endif
                     </td>
-                    <td style="white-space: nowrap;">{{ $fundedChild->deworming_date }}</td>
-                    <td style="white-space: nowrap;">{{ $fundedChild->vitamin_a_date }}</td>
+                    <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->deworming_date }}</td>
+                    <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->vitamin_a_date }}</td>
                     <td>{{ $fundedChild->pantawid_details ?  $fundedChild->pantawid_details : 'No'}}</td>
                     <td>{{ $fundedChild->is_indigenous_people ? 'Yes' : 'No' }}</td>
                     <td>{{ $fundedChild->person_with_disability_details ? $fundedChild->person_with_disability_details : 'No'}}</td>
