@@ -115,18 +115,9 @@
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_status">Status<b class="text-red-600">*</b></label>
-                                        <select class="form-control rounded border-gray-300" id="cycle_status" name="cycle_status">
-                                            <option value="" selected disabled>Select status</option>
-                                            @foreach ($cycleStatuses as $cycleStatus)
-                                                <option value="{{ $cycleStatus->value }}"
-                                                    {{ old('cycle_status', $cycle->status) == $cycleStatus->value ? 'selected' : '' }}>
-                                                    {{ $cycleStatus->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('cycle_status')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
+                                        <input type="text" class="form-control rounded border-gray-300" id="cycle_status"
+                                               name="cycle_status" value="{{ old('cycle_status', $cycle->status) }}" disabled>
+                                        
                                     </div>
                                 </div>
 

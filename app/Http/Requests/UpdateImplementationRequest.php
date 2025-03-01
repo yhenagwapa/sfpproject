@@ -29,7 +29,6 @@ class UpdateImplementationRequest extends FormRequest
             'cycle_allocation' => ['required', 'regex:/^\d{1,12}(\.\d{2})?$/'],
             'cycle_school_year' => ['required','string:9'],
             'cycle_type' => ['required','string:255'],
-            'cycle_status' => ['required','string:255'],
         ];
     }
 

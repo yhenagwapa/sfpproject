@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Implementation;
-use App\Models\MilkFeeding;
+use App\Models\ChildCenter;
 use App\Http\Requests\StoreImplementationRequest;
 use App\Http\Requests\UpdateImplementationRequest;
 use App\Enums\CycleStatus;
@@ -107,7 +107,6 @@ class ImplementationController extends Controller
             'target' => $validatedData['cycle_target'],
             'allocation' => $validatedData['cycle_allocation'],
             'type' => $validatedData['cycle_type'],
-            'status' => $validatedData['cycle_status'],
             'updated_by_user_id' => auth()->id(),
         ]);
 
@@ -127,7 +126,11 @@ class ImplementationController extends Controller
             'status' => $request->cycle_status,
         ]);
 
-        return redirect()->back()->with('success', 'Cycle status updated successfully.');
+        ChildCenter::where('status', 'active')
+            ->where('implementation_id', $request->cycle_id)
+            ->update(['status' => 'inactive']);
+
+        return redirect()->back()->with('success', 'Implementation closed.');
     }
 
 
