@@ -52,7 +52,9 @@ class ChildController extends Controller
             if ($cdcId == 'all_center') {
                 $maleChildren = $maleChildrenQuery->whereHas('records', function ($query) use ($centerIds) {
                     $query->whereIn('child_development_center_id', $centerIds)
-                        ->where('status', 'active');
+                        ->where('status', 'active')
+                        ->where('funded', 1)
+                        ->groupBy('child_id');
                 })
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Male');
@@ -60,7 +62,9 @@ class ChildController extends Controller
 
                 $femaleChildren = $femaleChildrenQuery->whereHas('records', function ($query) use ($centerIds) {
                     $query->whereIn('child_development_center_id', $centerIds)
-                        ->where('status', 'active');
+                        ->where('status', 'active')
+                        ->where('funded', 1)
+                        ->groupBy('child_id');
                 })
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Female');
@@ -70,7 +74,9 @@ class ChildController extends Controller
 
                 $maleChildren = $maleChildrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
-                        ->where('status', 'active');
+                        ->where('status', 'active')
+                        ->where('funded', 1)
+                        ->groupBy('child_id');
                 })
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Male');
@@ -79,7 +85,9 @@ class ChildController extends Controller
 
                 $femaleChildren = $femaleChildrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
-                        ->where('status', 'active');
+                        ->where('status', 'active')
+                        ->where('funded', 1)
+                        ->groupBy('child_id');
                 })
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Female');
@@ -96,7 +104,9 @@ class ChildController extends Controller
             if ($cdcId == 'all_center') {
                 $maleChildren = $maleChildrenQuery->whereHas('records', function ($query) use ($centerIDs) {
                     $query->whereIn('child_development_center_id', $centerIDs)
-                        ->where('status', 'active');
+                        ->where('status', 'active')
+                        ->where('funded', 1)
+                        ->groupBy('child_id');
                 })
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Male');
@@ -105,7 +115,9 @@ class ChildController extends Controller
 
                 $femaleChildren = $femaleChildrenQuery->whereHas('records', function ($query) use ($centerIDs) {
                     $query->whereIn('child_development_center_id', $centerIDs)
-                        ->where('status', 'active');
+                        ->where('status', 'active')
+                        ->where('funded', 1)
+                        ->groupBy('child_id');
                 })
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Female');
@@ -115,7 +127,9 @@ class ChildController extends Controller
             } else {
                 $maleChildren = $maleChildrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
-                        ->where('status', 'active');
+                        ->where('status', 'active')
+                        ->where('funded', 1)
+                        ->groupBy('child_id');
                 })
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Male');
@@ -124,7 +138,9 @@ class ChildController extends Controller
 
                 $femaleChildren = $femaleChildrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
-                        ->where('status', 'active');
+                        ->where('status', 'active')
+                        ->where('funded', 1)
+                        ->groupBy('child_id');
                 })
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Female');
@@ -185,13 +201,6 @@ class ChildController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
-    public function multiStepForm(Request $request)
-    {
-
-
-        return view('multi-step-form', compact('step'));
-    }
     public function store(StoreChildRequest $request)
     {
         $this->authorize('create-child');
