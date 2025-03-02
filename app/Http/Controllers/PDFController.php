@@ -28,6 +28,8 @@ class PDFController extends Controller
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
+            $centerIDs = $centers->pluck('id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
@@ -121,19 +123,14 @@ class PDFController extends Controller
     }
     public function printMalnourish(Request $request)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
-        $cdcId = $request->input('center_name', 'all_center');
-
-        if (!$cycleImplementation) {
-            return view('reports.malnourish', [
-                'fundedChildren' => collect(),
-            ]);
+        $cycle = Implementation::where('status', 'active')
+            ->where('type', 'regular')->first();
+            
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
         }
 
-        $fundedChildren = Child::with('nutritionalStatus', 'sex', 'center')
-            ->where('is_funded', true)
-            ->where('cycle_implementation_id', $cycleImplementation->id)
-            ->get();
+        $fundedChildren = Child::with('records','nutritionalStatus', 'sex');
 
         $childrenWithNutritionalStatus = [];
         $province = null;
@@ -159,21 +156,33 @@ class PDFController extends Controller
         }
 
         if (auth()->user()->hasRole('admin')) {
-            $isFunded = Child::with('nutritionalStatus', 'sex')
-                ->where('is_funded', true)
-                ->where('cycle_implementation_id', $cycleImplementation->id)
-                ->orderBy('child_development_center_id')
-                ->paginate(10);
-
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
+            $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
+                if ($cycle) {     
+                    $query->where('implementation_id', $cycle->id)
+                            ->where('status', 'active')
+                            ->where('funded', 1)
+                            ->orderBy('child_development_center_id');
+                }
+            })
+            ->whereHas('sex', function ($query) {
+                $query->where('name', 'Male');
+            })
+            ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                $query->where('implementation_id', $cycle->id)
+                        ->where('is_malnourish', 1);
+            })
+            ->paginate('10');
 
         } elseif (auth()->user()->hasRole('lgu focal')) {
-            $focalID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
-            $centerIds = $centers->pluck('id');
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
 
-            $getPsgc = $centers->pluck('psgc_id');
+            $focalCenters = ChildDevelopmentCenter::whereIn('id', $centerIDs);
+
+            $getPsgc = $focalCenters->pluck('psgc_id');
 
             $province = Psgc::whereIn('psgc_id', $getPsgc)
                 ->pluck('province_name')
@@ -183,15 +192,26 @@ class PDFController extends Controller
                 ->pluck('city_name')
                 ->unique();        
 
-            $isFunded = Child::with('nutritionalStatus', 'sex')
-                ->where('is_funded', true)
-                ->where('cycle_implementation_id', $cycleImplementation->id)
-                ->whereIn('child_development_center_id', $centerIds)
-                ->orderBy('child_development_center_id')
-                ->paginate(10);
+            $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                    if ($cycle) {     
+                        $query->where('implementation_id', $cycle->id)
+                                ->where('status', 'active')
+                                ->where('funded', 1)
+                                ->whereIn('child_development_center_id', $centerIDs)
+                                ->orderBy('child_development_center_id');
+                    }
+                })
+                ->whereHas('sex', function ($query) {
+                    $query->where('name', 'Male');
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                            ->where('is_malnourish', 1);
+                })
+                ->paginate('10');
         }
 
-        $pdf = PDF::loadView('reports.print.malnourished', compact('cycleImplementation', 'isFunded', 'centers', 'province', 'city'))
+        $pdf = PDF::loadView('reports.print.malnourished', compact('cycle', 'isFunded', 'centers', 'province', 'city'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -200,59 +220,68 @@ class PDFController extends Controller
                 'margin-left' => 1
             ]);
 
-        return $pdf->stream($cycleImplementation->cycle_name . ' Malnourished.pdf');
+        return $pdf->stream($cycle->cycle_name . ' Malnourished.pdf');
     }
     public function printDisabilities()
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $cycle = Implementation::where('status', 'active')
+            ->where('type', 'regular')->first();
+            
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
+        $childrenWithDisabilities = Child::with('records','nutritionalStatus', 'sex')
+            ->where('person_with_disability_details', '!=', null);
+
         $province = null;
         $city = null;
 
-
-        if (!$cycleImplementation) {
-            return view('reports.disabilities', [
-                'childrenWithDisabilities' => collect(),
-            ]);
-        }
-
-        $childrenWithDisabilities = Child::with('center')
-            ->where('is_funded', true)
-            ->where('is_person_with_disability', true)
-            ->where('person_with_disability_details', '!=', '')
-            ->where('cycle_implementation_id', $cycleImplementation->id);
-
-
         if (auth()->user()->hasRole('admin')) {
-            $isPwdChildren = $childrenWithDisabilities->orderBy('child_development_center_id')->paginate(10);
-
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
+            $isPwdChildren = $childrenWithDisabilities->whereHas('records', function ($query) use ($cycle) {
+                if ($cycle) {     
+                    $query->where('implementation_id', $cycle->id)
+                            ->where('status', 'active')
+                            ->where('funded', 1)
+                            ->orderBy('child_development_center_id');
+                }
+            })
+            ->whereHas('sex', function ($query) {
+                $query->where('name', 'Male');
+            })
+            ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                $query->where('implementation_id', $cycle->id);;
+            })
+            ->paginate('10');
+
         } elseif (auth()->user()->hasRole('lgu focal')) {
-            $focalID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
-            $centerIds = $centers->pluck('id');
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
 
-            $getPsgc = $centers->pluck('psgc_id');
+            $focalCenters = ChildDevelopmentCenter::whereIn('id', $centerIDs);
 
-            $province = Psgc::whereIn('psgc_id', $getPsgc)
-                ->pluck('province_name')
-                ->unique();
-
-            $city = Psgc::whereIn('psgc_id', $getPsgc)
-                ->pluck('city_name')
-                ->unique();
-
-            $isPwdChildren = $childrenWithDisabilities = Child::with('center')
-                ->where('is_funded', true)
-                ->where('is_person_with_disability', true)
-                ->whereIn('child_development_center_id', $centerIds)
-                ->where('cycle_implementation_id', $cycleImplementation->id)
-                ->orderBy('child_development_center_id')
-                ->paginate(10);
-
+            $isPwdChildren = $childrenWithDisabilities->whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                if ($cycle) {     
+                    $query->where('implementation_id', $cycle->id)
+                            ->where('status', 'active')
+                            ->where('funded', 1)
+                            ->whereIn('child_development_center_id', $centerIDs)
+                            ->orderBy('child_development_center_id');
+                }
+            })
+            ->whereHas('sex', function ($query) {
+                $query->where('name', 'Male');
+            })
+            ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                $query->where('implementation_id', $cycle->id);;
+            })
+            ->paginate('10');
         }   
 
-        $pdf = PDF::loadView('reports.print.disabilities', compact('cycleImplementation', 'isPwdChildren', 'centers', 'province', 'city'))
+        $pdf = PDF::loadView('reports.print.disabilities', compact('cycle', 'isPwdChildren', 'centers', 'province', 'city'))
             ->setPaper('folio')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -261,7 +290,7 @@ class PDFController extends Controller
                 'margin-left' => 1
             ]);
 
-        return $pdf->stream($cycleImplementation->cycle_name . ' Persons with Disability.pdf');
+        return $pdf->stream($cycle->name . ' Persons with Disability.pdf');
     }
     public function printUndernourishedUponEntry()
     {

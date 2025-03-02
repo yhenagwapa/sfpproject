@@ -65,7 +65,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
-        <p>{{ $cycleImplementation->cycle_name}} ( SY {{ $cycleImplementation->cycle_school_year }} )</p>
+        <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
         <p><b>LIST OF MALNOURISHED CHILDREN</b></p>
         <br>
     </div>
@@ -96,11 +96,7 @@
                 <tr>
                     <td>{{ $childrenWithDisability->full_name }}</td>
                     <td>
-                        @if($childrenWithDisability->center)
-                            {{ $childrenWithDisability->center->center_name }}
-                        @else
-                            No Center Assigned
-                        @endif
+                        {{ optional($childrenWithDisability->records->first()->center)->center_name ?? 'N/A' }}
                     </td>
                     <td>{{ $childrenWithDisability->sex->name }}</td>
                     <td>{{ $childrenWithDisability->date_of_birth }}</td>

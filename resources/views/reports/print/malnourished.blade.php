@@ -71,7 +71,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
-        <p>{{ $cycleImplementation->cycle_name}} ( SY {{ $cycleImplementation->cycle_school_year }} )</p>
+        <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
         <p><b>LIST OF MALNOURISHED CHILDREN</b></p>
         <br>
     </div>
@@ -124,7 +124,7 @@
             @foreach ($isFunded as $fundedChild)
                 <tr>
                     <td class="first">{{ $fundedChild->full_name }}</td>
-                    <td class="first">{{ $fundedChild->center->center_name }}</td>
+                    <td class="first">{{ optional($fundedChild->records->first()->center)->center_name ?? 'N/A' }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
                     <td class="no-wrap">{{ $fundedChild->date_of_birth }}</td>
 
