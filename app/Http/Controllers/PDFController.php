@@ -34,7 +34,8 @@ class PDFController extends Controller
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
                     if ($cycle) {
                         $query->where('implementation_id', $cycle->id)
-                                ->where('funded', 1);
+                                ->where('funded', 1)
+                                ->where('status', 'active');
                     }
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -47,7 +48,8 @@ class PDFController extends Controller
                     if ($cycle) {
                         $query->where('child_development_center_id', $cdcId)
                                 ->where('implementation_id', $cycle->id)
-                                ->where('funded', 1);
+                                ->where('funded', 1)
+                                ->where('status', 'active');
                     }
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -69,7 +71,8 @@ class PDFController extends Controller
                     if ($cycle) {
                         $query->whereIn('child_development_center_id', $centerIDs)
                             ->where('implementation_id', $cycle->id)
-                            ->where('funded', 1);
+                            ->where('funded', 1)
+                            ->where('status', 'active');
                     }
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -81,7 +84,8 @@ class PDFController extends Controller
                     if ($cycle) {
                         $query->where('child_development_center_id', $cdcId)
                                 ->where('implementation_id', $cycle->id)
-                                ->where('funded', 1);
+                                ->where('funded', 1)
+                                ->where('status', 'active');;
                     }
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -149,9 +153,6 @@ class PDFController extends Controller
                             ->orderBy('child_development_center_id');
                 }
             })
-            ->whereHas('sex', function ($query) {
-                $query->where('name', 'Male');
-            })
             ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id)
                         ->where('is_malnourish', 1);
@@ -183,9 +184,6 @@ class PDFController extends Controller
                                 ->whereIn('child_development_center_id', $centerIDs)
                                 ->orderBy('child_development_center_id');
                     }
-                })
-                ->whereHas('sex', function ($query) {
-                    $query->where('name', 'Male');
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id)
@@ -231,9 +229,6 @@ class PDFController extends Controller
                             ->orderBy('child_development_center_id');
                 }
             })
-            ->whereHas('sex', function ($query) {
-                $query->where('name', 'Male');
-            })
             ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id);;
             })
@@ -254,9 +249,6 @@ class PDFController extends Controller
                             ->whereIn('child_development_center_id', $centerIDs)
                             ->orderBy('child_development_center_id');
                 }
-            })
-            ->whereHas('sex', function ($query) {
-                $query->where('name', 'Male');
             })
             ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id);;

@@ -43,7 +43,8 @@ class ReportsController extends Controller
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
                     if ($cycle) {
                         $query->where('implementation_id', $cycle->id)
-                                ->where('funded', 1);
+                                ->where('funded', 1)
+                                ->where('status', 'active');
                     }
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -57,7 +58,8 @@ class ReportsController extends Controller
                     if ($cycle) {
                         $query->where('child_development_center_id', $request->center_name)
                                 ->where('implementation_id', $cycle->id)
-                                ->where('funded', 1);
+                                ->where('funded', 1)
+                                ->where('status', 'active');
                     }
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -79,7 +81,8 @@ class ReportsController extends Controller
                     if ($cycle) {
                         $query->whereIn('child_development_center_id', $centerIDs)
                             ->where('implementation_id', $cycle->id)
-                            ->where('funded', 1);
+                            ->where('funded', 1)
+                            ->where('status', 'active');
                     }
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -92,7 +95,8 @@ class ReportsController extends Controller
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                         $query->where('child_development_center_id', $cdcId)
                                 ->where('implementation_id', $cycle->id)
-                                ->where('funded', 1);
+                                ->where('funded', 1)
+                                ->where('status', 'active');
 
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
