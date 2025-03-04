@@ -100,7 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/cycle/{cycle}/update-status', [ImplementationController::class, 'updateStatus'])->name(name: 'cycle.update-status');
 
     Route::post('/reports/{cycle}', [ReportsController::class, 'index'])->name('reports.index');
-    Route::get('/reports/{cycle}/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
+    Route::post('/reports/{cycle}/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
     Route::get('/reports/{cycle}/print/malnourished', [PDFController::class, 'printMalnourish'])->name('reports.print.malnourished');
     Route::get('/reports/{cycle}/print/disabilities', [PDFController::class, 'printDisabilities'])->name('reports.print.disabilities');
     Route::get('/reports/{cycle}/print/undernourished-upon-entry', [PDFController::class, 'printUndernourishedUponEntry'])->name('reports.print.undernourished-upon-entry');

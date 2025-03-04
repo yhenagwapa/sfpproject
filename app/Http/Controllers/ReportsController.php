@@ -23,9 +23,8 @@ class ReportsController extends Controller
     }
     public function index(Request $request, Implementation $cycle)
     {
-        $cycle = Implementation::where('status', 'active')
-            ->where('type', 'regular')->first();
-            
+        $cycle = Implementation::where('id', $request->cycle_id)->first();
+
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
         }
@@ -42,31 +41,24 @@ class ReportsController extends Controller
 
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                    if ($cycle) {     
+                    if ($cycle) {
                         $query->where('implementation_id', $cycle->id)
-                                ->where('status', 'active')
                                 ->where('funded', 1);
                     }
-                })
-                ->whereHas('sex', function ($query) {
-                    $query->where('name', 'Male');
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);
                 })
                 ->paginate(5);
-                    
+
             } else {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
-                    if ($cycle) {     
-                        $query->where('child_development_center_id', $cdcId)
+
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($request, $cycle) {
+                    if ($cycle) {
+                        $query->where('child_development_center_id', $request->center_name)
                                 ->where('implementation_id', $cycle->id)
-                                ->where('status', 'active')
                                 ->where('funded', 1);
                     }
-                })
-                ->whereHas('sex', function ($query) {
-                    $query->where('name', 'Male');
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);
@@ -84,31 +76,24 @@ class ReportsController extends Controller
 
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
-                    if ($cycle) {     
+                    if ($cycle) {
                         $query->whereIn('child_development_center_id', $centerIDs)
                             ->where('implementation_id', $cycle->id)
-                            ->where('status', 'active')
                             ->where('funded', 1);
                     }
-                })
-                ->whereHas('sex', function ($query) {
-                    $query->where('name', 'Male');
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);
                 })
                 ->paginate(5);
             } else {
+
+        // dd($cdcId);
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
-                    if ($cycle) {     
                         $query->where('child_development_center_id', $cdcId)
                                 ->where('implementation_id', $cycle->id)
-                                ->where('status', 'active')
                                 ->where('funded', 1);
-                    }
-                })
-                ->whereHas('sex', function ($query) {
-                    $query->where('name', 'Male');
+
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);

@@ -44,7 +44,7 @@
             border: 1px solid rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
         }
-        
+
 
         .funded-table td:first-child{
             width: 15%;
@@ -99,7 +99,7 @@
             <p>Child Development Center: <u>All Child Development Centers</u></p>
         @endif
     </div>
-    
+
     <table id='funded-table' class="table datatable funded-table w-full">
         <thead>
             <tr>
@@ -134,7 +134,7 @@
                     <td>{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
                     <td style="white-space: nowrap;">{{ $fundedChild->date_of_birth }}</td>
-    
+
                     <td style="white-space: nowrap;">{{ optional($fundedChild->nutritionalStatus->first())->weighing_date }}</td>
                     <td>{{ optional($fundedChild->nutritionalStatus->first())->weight }}</td>
                     <td>{{ optional($fundedChild->nutritionalStatus->first())->height }}</td>
@@ -161,7 +161,7 @@
             @endforeach
             @if (count($isFunded) <= 0)
                 <tr>
-                    <td class="text-center" colspan="6">
+                    <td class="text-center" colspan="19">
                         @if (empty($search))
                             No Data found
                         @endif
@@ -170,7 +170,7 @@
             @endif
         </tbody>
     </table>
-    
+
     <div class="footer-section">
         <table class="footer-table">
             <tr></tr>
@@ -215,6 +215,6 @@
     <footer>
 
     </footer>
-    
+
 </body>
 </html>
