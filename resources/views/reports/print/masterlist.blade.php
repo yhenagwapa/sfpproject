@@ -135,7 +135,7 @@
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
                     <td style="white-space: nowrap;">{{ $fundedChild->date_of_birth }}</td>
 
-                    <td style="white-space: nowrap;">{{ optional($fundedChild->nutritionalStatus->first())->weighing_date }}</td>
+                    <td style="white-space: nowrap;">{{ optional($fundedChild->nutritionalStatus->first())->actual_weighing_date }}</td>
                     <td>{{ optional($fundedChild->nutritionalStatus->first())->weight }}</td>
                     <td>{{ optional($fundedChild->nutritionalStatus->first())->height }}</td>
                     <td>{{ optional($fundedChild->nutritionalStatus->first())->age_in_months }}</td>
