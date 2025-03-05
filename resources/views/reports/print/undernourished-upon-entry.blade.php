@@ -72,7 +72,7 @@
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
         <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
-        <p><b>Summary of Undernourished Children, Ethnicity, $Ps, Deworming & Vitamin A</b></p>
+        <p><b>Summary of Undernourished Children, Ethnicity, 4Ps, Deworming & Vitamin A</b></p>
         <p><i>Upon Entry</i></p>
         <br>
     </div>
