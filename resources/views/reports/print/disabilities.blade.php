@@ -39,7 +39,7 @@
             border: 1px solid rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
         }
-    
+
         .footer-table {
             width: 100%;
             font-family: 'Arial', sans-serif;
@@ -80,7 +80,7 @@
             </tr>
         </table>
     </div>
-    
+
     <table id='disability-table' class="table datatable disability-table w-full text-base">
         <thead>
             <tr>
@@ -92,7 +92,7 @@
             </tr>
         </thead>
         <tbody class="disability-table text-xs">
-            @foreach ($isPwdChildren as $childrenWithDisability) 
+            @foreach ($isPwdChildren as $childrenWithDisability)
                 <tr>
                     <td>{{ $childrenWithDisability->full_name }}</td>
                     <td>
@@ -102,11 +102,11 @@
                     <td>{{ $childrenWithDisability->date_of_birth }}</td>
                     <td>{{ $childrenWithDisability->person_with_disability_details }}</td>
                 </tr>
-            
+
             @endforeach
             @if (count($isPwdChildren) <= 0)
                 <tr>
-                    <td class="text-center" colspan="6">
+                    <td class="text-center" colspan="5">
                         @if (empty($search))
                             No Data found
                         @endif
@@ -115,7 +115,7 @@
             @endif
         </tbody>
     </table>
-    
+
     <div class="footer-section">
         <table class="footer-table">
             <tr></tr>
@@ -146,6 +146,6 @@
     <footer>
 
     </footer>
-    
+
 </body>
 </html>

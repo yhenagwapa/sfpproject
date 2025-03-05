@@ -44,7 +44,7 @@
             border: 1px solid rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
         }
-    
+
         .footer-table {
             width: 100%;
             font-family: 'Arial', sans-serif;
@@ -71,7 +71,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
-        <p>{{ $cycleImplementation->cycle_name}} ( SY {{ $cycleImplementation->cycle_school_year }} )</p>
+        <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
         <p><b>Summary of Undernourished Children, Ethnicity, $Ps, Deworming & Vitamin A</b></p>
         <p><i>Upon Entry</i></p>
         <br>
@@ -87,7 +87,7 @@
             </tr>
         </table>
     </div>
-    
+
     <table id='undernourished-upon-entry-table' class="table datatable undernourished-upon-entry-table w-full">
         <thead class="border bg-gray-200">
             <tr>
@@ -136,10 +136,11 @@
             </tr>
         </thead>
         <tbody class="undernourished-upon-entry-table text-xs">
-            @foreach ($centers as $center)
+            @foreach ($centerNames as $center)
                 <tr>
                     <td>{{ $center->center_name }}</td>
-                    <td>{{ $center->user->full_name }}</td>
+                    <td></td>
+                    {{-- {{ $center->user->full_name }} --}}
                     <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['male'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['female'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['3_years_old']['male'] ?? 0 }}</td>
@@ -148,7 +149,7 @@
                     <td>{{ $ageGroupsPerCenter[$center->id]['4_years_old']['female'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['male'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['female'] ?? 0 }}</td>
-                    
+
                     <td>{{ $ageGroupsPerCenter[$center->id]['indigenous_people']['male'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['indigenous_people']['female'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['pantawid']['male'] ?? 0 }}</td>
@@ -165,7 +166,7 @@
                     <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a ']['female'] ?? 0 }}</td>
                 </tr>
             @endforeach
-            @if (count($centers) <= 0)
+            {{-- @if (count($centers) <= 0)
                 <tr>
                     <td class="text-center" colspan="6">
                         @if (empty($search))
@@ -173,10 +174,10 @@
                         @endif
                     </td>
                 </tr>
-            @endif
+            @endif --}}
         </tbody>
     </table>
-    
+
     <div class="footer-section">
         <table class="footer-table">
             <tr></tr>
@@ -207,6 +208,6 @@
     <footer>
 
     </footer>
-    
+
 </body>
 </html>

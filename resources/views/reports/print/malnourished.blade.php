@@ -44,7 +44,7 @@
             border: 1px solid rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
         }
-    
+
         .footer-table {
             width: 100%;
             font-family: 'Arial', sans-serif;
@@ -86,7 +86,7 @@
             </tr>
         </table>
     </div>
-    
+
     <table id='malnourished-table' class="table datatable malnourished-table w-full">
         <thead>
             <tr>
@@ -104,8 +104,8 @@
                 <th rowspan="2">Height in cm.</th>
                 <th colspan="2">Age in month/year</th>
                 <th colspan="3">NS AFTER 120 FEEDINGS</th>
-    
-    
+
+
             </tr>
             <tr>
                 <th>Month</th>
@@ -138,7 +138,7 @@
                             <td></td>
                             <td></td>
                         @else
-                            <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weighing_date : 'N/A' }}</td>
+                            <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_months : 'N/A' }}</td>
@@ -148,7 +148,7 @@
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height_for_age : 'N/A' }}</td>
                         @endif
                         @if (isset($fundedChild->nutritionalStatus[1]))
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weighing_date : 'N/A' }}</td>
+                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->actual_weighing_date : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->height : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->age_in_months : 'N/A' }}</td>
@@ -179,7 +179,7 @@
             @endif
         </tbody>
     </table>
-    
+
     <div class="footer-section">
         <table class="footer-table">
             <tr></tr>
@@ -210,6 +210,6 @@
     <footer>
 
     </footer>
-    
+
 </body>
 </html>
