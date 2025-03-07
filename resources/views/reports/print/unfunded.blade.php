@@ -47,7 +47,7 @@
         }
 
         .unfunded-table td:first-child{
-            width: 50%;
+            width: 20%;
         }
 
         .footer-table {
@@ -76,7 +76,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
-            {{ $cycleImplementation->cycle_name}} ( SY {{ $cycleImplementation->cycle_school_year }} )</p>
+            {{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
         <p><b>UNFUNDED CHILDREN</b></p>
         <br>
     </div>
@@ -99,21 +99,20 @@
             <p>Child Development Center: <u>All Child Development Centers</u></p>
         @endif
     </div>
-    
+
     <table id='unfunded-table' class="table datatable unfunded-table w-full">
         <thead>
             <tr>
                 <th class="no-wrap">Name of Child</th>
                 <th>Sex</th>
                 <th class="no-wrap">Date of Birth</th>
-                <th class="no-wrap">Deworming</th>
-                <th class="no-wrap">Vitamin A</th>
-                <th>Pantawid Member</th>
-                <th>IPs</th>
+                <th class="no-wrap">Address</th>
+                <th>Pantawid</th>
+                <th>IP</th>
                 <th>PWD</th>
                 <th>Child of Solo Parent</th>
                 <th>Lactose Intolerant</th>
-            </tr>    
+            </tr>
         </thead>
 
         <tbody class="funded-table text-xs">
@@ -122,9 +121,7 @@
                     <td>{{ $unfundedChild->full_name }}</td>
                     <td>{{ $unfundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
                     <td>{{ $unfundedChild->date_of_birth }}</td>
-    
-                    <td>{{ $unfundedChild->deworming_date }}</td>
-                    <td>{{ $unfundedChild->vitamin_a_date }}</td>
+                    <td>{{ $unfundedChild->psgc->brgy_name }} {{ $unfundedChild->psgc->city_name }} {{ $unfundedChild->psgc->province_name }}</td>
                     <td>{{ $unfundedChild->pantawid_details ? $unfundedChild->pantawid_details : 'No' }}</td>
                     <td>{{ $unfundedChild->is_indigenous_people ? 'Yes' : 'No' }}</td>
                     <td>{{ $unfundedChild->person_with_disability_details ? $unfundedChild->person_with_disability_details : 'No' }}</td>
@@ -132,10 +129,19 @@
                     <td>{{ $unfundedChild->is_lactose_intolerant ? 'Yes' : 'No' }}</td>
                 </tr>
             @endforeach
+            @if (count($isNotFunded) <= 0)
+                <tr>
+                    <td class="text-center" colspan="9">
+                        @if (empty($search))
+                            No Data found
+                        @endif
+                    </td>
+                </tr>
+            @endif
         </tbody>
     </table>
-    
-    
+
+
     <div class="footer-section">
         <table class="footer-table">
             <tr></tr>
@@ -164,6 +170,6 @@
     <footer>
 
     </footer>
-    
+
 </body>
 </html>

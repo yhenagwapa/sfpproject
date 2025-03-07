@@ -113,7 +113,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
-            {{ $cycleImplementation->cycle_name }} ( SY {{ $cycleImplementation->cycle_school_year }} )<br>
+            {{ $cycle->name }} ( SY {{ $cycle->school_year }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS (NS) PER AGE BRACKET</b><br>
             <i>AFTER 120 FEEDING DAYS</i>
         </p>
@@ -549,7 +549,7 @@
                 $totalLactoseIntolerantFemale += $exitCountsPerNutritionalStatus[$age]['lactose_intolerant']['male'] ?? 0;
             }
         @endphp
-        
+
         <tbody class="profile-table text-xs">
             <tr>
                 <td class="text-left">Summary of Undernourished Children</td>

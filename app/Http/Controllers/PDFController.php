@@ -288,7 +288,7 @@ class PDFController extends Controller
                     $query->where('is_undernourish', true)
                         ->whereIn('age_in_years', [2, 3, 4, 5]);
                 })
-                ->with('records') // Ensure records are eager loaded
+                ->with('records')
                 ->get();
 
             $centers = ChildDevelopmentCenter::paginate(15);
@@ -342,10 +342,7 @@ class PDFController extends Controller
             ];
         });
 
-        // dd($nutritionalStatusOccurrences);
-
         $ageGroupsPerCenter = $fundedChildren->groupBy(function ($child) {
-            // Get the first record that matches the cycle ID`
             return optional($child->records->first())->child_development_center_id;
         })
             ->map(function ($childrenByCenter) use ($nutritionalStatusOccurrences) {
@@ -464,8 +461,6 @@ class PDFController extends Controller
             ];
         });
 
-        // dd($centers);
-
         $pdf = PDF::loadView('reports.print.undernourished-upon-entry', compact('cycle', 'centerNames', 'ageGroupsPerCenter', 'province', 'city'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
@@ -550,111 +545,111 @@ class PDFController extends Controller
             return [
                 '2_years_old' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $exitStatus && $exitStatus->age_in_years == 2 && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $exitStatus && $exitStatus->age_in_years == 2 && $child->sex_id == 2;
                     })->count(),
                 ],
                 '3_years_old' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $exitStatus && $exitStatus->age_in_years == 3 && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $exitStatus && $exitStatus->age_in_years == 3 && $child->sex_id == 2;
                     })->count(),
                 ],
                 '4_years_old' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $exitStatus && $exitStatus->age_in_years == 4 && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $exitStatus && $exitStatus->age_in_years == 4 && $child->sex_id == 2;
                     })->count(),
                 ],
                 '5_years_old' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $exitStatus && $exitStatus->age_in_years == 5 && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $exitStatus && $exitStatus->age_in_years == 5 && $child->sex_id == 2;
                     })->count(),
                 ],
                 'indigenous_people' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->is_indegenous_people == true && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->is_indegenous_people == true && $child->sex_id == 2;
                     })->count(),
                 ],
                 'pantawid' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->pantawid_details != null && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->pantawid_details != null && $child->sex_id == 2;
                     })->count(),
                 ],
                 'pwd' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->person_with_disability_details != null && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->person_with_disability_details != null && $child->sex_id == 2;
                     })->count(),
                 ],
                 'lactose_intolerant' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->is_lactose_intolerant == true && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->is_lactose_intolerant == true && $child->sex_id == 2;
                     })->count(),
                 ],
                 'child_of_solo_parent' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->is_child_of_soloparent == true && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $child->is_child_of_soloparent == true && $child->sex_id == 2;
                     })->count(),
                 ],
                 'dewormed' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->deworming_date != null && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->deworming_date != null && $child->sex_id == 2;
                     })->count(),
                 ],
                 'vitamin_a' => [
                     'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->vitamin_a_date != null && $child->sex_id == 1;
                     })->count(),
                     'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                        $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                         return $firstStatus && $child->vitamin_a_date != null && $child->sex_id == 2;
                     })->count(),
                 ],
@@ -1083,41 +1078,41 @@ class PDFController extends Controller
                         'weight_for_age' => [
                             'normal' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_age == 'Normal' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_age == 'Normal' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'underweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_age == 'Underweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_age == 'Underweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'severely_underweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_age == 'Severely Underweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_age == 'Severely Underweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'overweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_age == 'Overweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_age == 'Overweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
@@ -1127,41 +1122,41 @@ class PDFController extends Controller
                         'weight_for_age' => [
                             'normal' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 3 && $firstStatus->weight_for_age == 'Normal' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 3 && $firstStatus->weight_for_age == 'Normal' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'underweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 3 && $firstStatus->weight_for_age == 'Underweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 3 && $firstStatus->weight_for_age == 'Underweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'severely_underweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 3 && $firstStatus->weight_for_age == 'Severely Underweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 3 && $firstStatus->weight_for_age == 'Severely Underweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'overweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 3 && $firstStatus->weight_for_age == 'Overweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 3 && $firstStatus->weight_for_age == 'Overweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
@@ -1171,41 +1166,41 @@ class PDFController extends Controller
                         'weight_for_age' => [
                             'normal' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 4 && $firstStatus->weight_for_age == 'Normal' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 4 && $firstStatus->weight_for_age == 'Normal' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'underweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 4 && $firstStatus->weight_for_age == 'Underweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 4 && $firstStatus->weight_for_age == 'Underweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'severely_underweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 4 && $firstStatus->weight_for_age == 'Severely Underweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 4 && $firstStatus->weight_for_age == 'Severely Underweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'overweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 4 && $firstStatus->weight_for_age == 'Overweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 4 && $firstStatus->weight_for_age == 'Overweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
@@ -1215,41 +1210,41 @@ class PDFController extends Controller
                         'weight_for_age' => [
                             'normal' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 5 && $firstStatus->weight_for_age == 'Normal' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 5 && $firstStatus->weight_for_age == 'Normal' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'underweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 5 && $firstStatus->weight_for_age == 'Underweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 5 && $firstStatus->weight_for_age == 'Underweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'severely_underweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 5 && $firstStatus->weight_for_age == 'Severely Underweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 5 && $firstStatus->weight_for_age == 'Severely Underweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
                             'overweight' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 5 && $firstStatus->weight_for_age == 'Overweight' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 5 && $firstStatus->weight_for_age == 'Overweight' && $child->sex_id == 2;
                                 })->count(),
                             ],
@@ -1797,11 +1792,11 @@ class PDFController extends Controller
                         'weight_for_height' => [
                             'normal' => [
                                 'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_height == 'Normal' && $child->sex_id == 1;
                                 })->count(),
                                 'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                                    $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)->exit;
                                     return $firstStatus && $firstStatus->age_in_years == 2 && $firstStatus->weight_for_height == 'Normal' && $child->sex_id == 2;
                                 })->count(),
                             ],
@@ -2770,33 +2765,40 @@ class PDFController extends Controller
     }
     public function printAgeBracketUponEntry(Request $request)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $cycle = Implementation::where('id', $request->cycle_id)->first();
+
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
+        $fundedChildren = Child::with('records','nutritionalStatus', 'sex');
 
         if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::all();
-            $centerIds = $centers->pluck('id');
+            $centers = ChildDevelopmentCenter::all()->keyBy('id');
+            $centerIDs = $centers->pluck('id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if($cdcId == 'all_center'){
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
+            if ($cdcId == 'all_center') {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                })
+                ->paginate(5);
 
                 $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     }])
-                    ->where('is_funded', true)
+                    ->whereHas('records', function ($query) use ($cycle) {
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('funded', 1);
+                    })
                     ->get()
                     ->filter(function ($child) {
                     return $child->nutritionalStatus->isNotEmpty();
@@ -2804,120 +2806,89 @@ class PDFController extends Controller
 
             } else {
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
+
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                    $query->where('implementation_id', $cycle->id)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                })
+                ->paginate(5);
 
                 $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     }])
-                    ->where('is_funded', true)
-                    ->where('child_development_center_id', $cdcId)
-                    ->get()
-                    ->filter(function ($child) {
-                    return $child->nutritionalStatus->isNotEmpty();
-                });
-            }
-
-        } elseif (auth()->user()->hasRole('lgu focal')) {
-            $focalID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
-            $centerIds = $centers->pluck('id');
-
-            if($cdcId == 'all_center'){
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
-                    ->whereIn('children.child_development_center_id', $centerIds)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
+                    ->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('child_development_center_id', $cdcId)
+                            ->where('funded', 1);
                     })
-                    ->get();
-
-                $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
-                    $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    }])
-                    ->where('is_funded', true)
-                    ->whereIn('child_development_center_id', $centerIds)
                     ->get()
                     ->filter(function ($child) {
                     return $child->nutritionalStatus->isNotEmpty();
                 });
-
-            } else {
-                $selectedCenter = ChildDevelopmentCenter::find($cdcId);
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
-                    ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
-
-                $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
-                    $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    }])
-                    ->where('is_funded', true)
-                    ->where('child_development_center_id', $cdcId)
-                    ->get()
-                    ->filter(function ($child) {
-                    return $child->nutritionalStatus->isNotEmpty();
-                });
-
             }
 
         } else {
-            $workerID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_worker_user_id', $workerID)->get();
-            $centerIds = $centers->pluck('id');
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
 
-            if($cdcId == 'all_center'){
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
-                    ->whereIn('children.child_development_center_id', $centerIds)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+
+            if ($cdcId == 'all_center') {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('child_development_center_id', $centerIDs)
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                })
+                ->paginate(5);
 
                 $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     }])
-                    ->where('is_funded', true)
-                    ->whereIn('child_development_center_id', $centerIds)
+                    ->whereHas('records', function ($query) use ($cycle) {
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('funded', 1);
+                    })
                     ->get()
                     ->filter(function ($child) {
                     return $child->nutritionalStatus->isNotEmpty();
                 });
 
             } else {
-                $selectedCenter = ChildDevelopmentCenter::find($cdcId);
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
+                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
+
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                    $query->where('implementation_id', $cycle->id)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                })
+                ->paginate(5);
 
                 $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     }])
-                    ->where('is_funded', true)
-                    ->where('child_development_center_id', $cdcId)
+                    ->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('child_development_center_id', $cdcId)
+                            ->where('funded', 1);
+                    })
                     ->get()
                     ->filter(function ($child) {
                     return $child->nutritionalStatus->isNotEmpty();
                 });
-
             }
         }
 
@@ -3080,18 +3051,18 @@ class PDFController extends Controller
                     ],
                     'dewormed' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child->sex_id == 1 && $child->deworming_date != null;
+                            return $child->sex_id == 1 && $child->nutritionalStatus->first()->deworming_date != null;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child->sex_id == 2 && $child->deworming_date != null;
+                            return $child->sex_id == 2 && $child->nutritionalStatus->first()->deworming_date != null;
                         })->count(),
                     ],
                     'vitamin_a' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child->sex_id == 1 && $child->vitamin_a_date != null;
+                            return $child->sex_id == 1 && $child->nutritionalStatus->first()->vitamin_a_date != null;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child->sex_id == 2 && $child->is_child_of_soloparent != null;
+                            return $child->sex_id == 2 && $child->nutritionalStatus->first()->vitamin_a_date != null;
                         })->count(),
                     ],
 
@@ -3100,7 +3071,7 @@ class PDFController extends Controller
 
 
 
-        $pdf = PDF::loadView('reports.print.age-bracket-upon-entry', compact('cycleImplementation', 'fundedChildren','countsPerNutritionalStatus', 'centers', 'cdcId', 'selectedCenter'))
+        $pdf = PDF::loadView('reports.print.age-bracket-upon-entry', compact('cycle', 'fundedChildren','countsPerNutritionalStatus', 'centerNames', 'cdcId', 'selectedCenter'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -3110,34 +3081,44 @@ class PDFController extends Controller
             ]);
 
 
-        return $pdf->stream($cycleImplementation->cycle_name . ' Age Bracket Upon Entry.pdf');
+        return $pdf->stream($cycle->name . ' Age Bracket Upon Entry.pdf');
     }
     public function printAgeBracketAfter120(Request $request)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $cycle = Implementation::where('id', $request->cycle_id)->first();
+
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
+        $fundedChildren = Child::with('records','nutritionalStatus', 'sex');
 
         if (auth()->user()->hasRole('admin')) {
-            if($cdcId == 'all_center'){
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
+            $centers = ChildDevelopmentCenter::all()->keyBy('id');
+            $centerIDs = $centers->pluck('id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+
+            if ($cdcId == 'all_center') {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                })
+                ->paginate(5);
 
                 $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     }])
-                    ->where('is_funded', true)
+                    ->whereHas('records', function ($query) use ($cycle) {
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('funded', 1);
+                    })
                     ->get()
                     ->filter(function ($child) {
                     return $child->nutritionalStatus->isNotEmpty();
@@ -3145,70 +3126,26 @@ class PDFController extends Controller
 
             } else {
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
+
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                    $query->where('implementation_id', $cycle->id)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                })
+                ->paginate(5);
 
                 $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     }])
-                    ->where('is_funded', true)
-                    ->where('child_development_center_id', $cdcId)
-                    ->get()
-                    ->filter(function ($child) {
-                    return $child->nutritionalStatus->isNotEmpty();
-                });
-            }
-
-            $centers = ChildDevelopmentCenter::all();
-            $centerIds = $centers->pluck('id');
-
-        } elseif (auth()->user()->hasRole('lgu focal')) {
-            $focalID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
-            $centerIds = $centers->pluck('id');
-
-            if($cdcId == 'all_center'){
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
-                    ->whereIn('children.child_development_center_id', $centerIds)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
+                    ->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('child_development_center_id', $cdcId)
+                            ->where('funded', 1);
                     })
-                    ->get();
-
-                $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
-                    $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    }])
-                    ->where('is_funded', true)
-                    ->whereIn('child_development_center_id', $centerIds)
-                    ->get()
-                    ->filter(function ($child) {
-                    return $child->nutritionalStatus->isNotEmpty();
-                });
-
-            } else {
-                $selectedCenter = ChildDevelopmentCenter::find($cdcId);
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
-                    ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
-
-                $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
-                    $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    }])
-                    ->where('is_funded', true)
-                    ->where('child_development_center_id', $cdcId)
                     ->get()
                     ->filter(function ($child) {
                     return $child->nutritionalStatus->isNotEmpty();
@@ -3216,48 +3153,61 @@ class PDFController extends Controller
             }
 
         } else {
-            $workerID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_worker_user_id', $workerID)->get();
-            $centerIds = $centers->pluck('id');
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
 
-            if($cdcId == 'all_center'){
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
-                    ->whereIn('children.child_development_center_id', $centerIds)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+
+            if ($cdcId == 'all_center') {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('child_development_center_id', $centerIDs)
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                })
+                ->paginate(5);
 
                 $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     }])
-                    ->where('is_funded', true)
-                    ->whereIn('child_development_center_id', $centerIds)
+                    ->whereHas('records', function ($query) use ($cycle) {
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('funded', 1);
+                    })
                     ->get()
                     ->filter(function ($child) {
                     return $child->nutritionalStatus->isNotEmpty();
                 });
 
             } else {
-                $selectedCenter = ChildDevelopmentCenter::find($cdcId);
-                $fundedChildren = Child::with('sex', 'nutritionalStatus', 'center')
-                    ->where('children.is_funded', true)
+                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
+
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                    $query->where('implementation_id', $cycle->id)
                     ->where('child_development_center_id', $cdcId)
-                    ->where('children.cycle_implementation_id', $cycleImplementation->id)
-                    ->whereHas('nutritionalStatus', function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    })
-                    ->get();
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                })
+                ->paginate(5);
 
                 $allCountsPerNutritionalStatus = Child::with(['nutritionalStatus' => function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5]);
                     }])
-                    ->where('is_funded', true)
-                    ->where('child_development_center_id', $cdcId)
+                    ->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('child_development_center_id', $cdcId)
+                            ->where('funded', 1);
+                    })
                     ->get()
                     ->filter(function ($child) {
+
                     return $child->nutritionalStatus->isNotEmpty();
                 });
             }
@@ -3266,194 +3216,195 @@ class PDFController extends Controller
         $exitCountsPerNutritionalStatus = $allCountsPerNutritionalStatus->map(function ($child) {
             $statuses = $child->nutritionalStatus->whereIn('age_in_years', [2, 3, 4, 5]);
 
+            $entry = $statuses->first();
             $exit = $statuses->skip(1)->first();
 
-            return [
-                'child_id' => $child->id,
-                'sex_id' => $child->sex_id,
+            return (object) [
+                'child' => $child,
+                'entry' => $entry,
                 'exit' => $exit,
             ];
             })
             ->filter(function ($child) {
-                return $child['exit'] !== null;
+                return $child->exit !== null;
             })
             ->groupBy(function ($child) {
-                return $child['exit']->age_in_years ?? null;
+                return $child->exit->age_in_years ?? null;
             })
             ->map(function ($childrenByAge) {
                 return [
                     'weight_for_age_normal' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->weight_for_age == 'Normal';
+                            return $child->child->sex_id == 1 && $child->exit->weight_for_age == 'Normal';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->weight_for_age == 'Normal';
+                            return $child->child->sex_id == 2 && $child->exit->weight_for_age == 'Normal';
                         })->count(),
                     ],
                     'weight_for_age_underweight' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->weight_for_age == 'Underweight';
+                            return $child->child->sex_id == 1 && $child->exit->weight_for_age == 'Underweight';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->weight_for_age == 'Underweight';
+                            return $child->child->sex_id == 2 && $child->exit->weight_for_age == 'Underweight';
                         })->count(),
                     ],
                     'weight_for_age_severely_underweight' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->weight_for_age == 'Severely Underweight';
+                            return $child->child->sex_id == 1 && $child->exit->weight_for_age == 'Severely Underweight';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->weight_for_age == 'Severely Underweight';
+                            return $child->child->sex_id == 2 && $child->exit->weight_for_age == 'Severely Underweight';
                         })->count(),
                     ],
                     'weight_for_age_overweight' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->weight_for_age == 'Overweight';
+                            return $child->child->sex_id == 1 && $child->exit->weight_for_age == 'Overweight';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->weight_for_age == 'Overweight';
+                            return $child->child->sex_id == 2 && $child->exit->weight_for_age == 'Overweight';
                         })->count(),
                     ],
                     'weight_for_height_normal' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->weight_for_height == 'Normal';
+                            return $child->child->sex_id == 1 && $child->exit->weight_for_height == 'Normal';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->weight_for_height == 'Normal';
+                            return $child->child->sex_id == 2 && $child->exit->weight_for_height == 'Normal';
                         })->count(),
                     ],
                     'weight_for_height_wasted' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->weight_for_height == 'Wasted';
+                            return $child->child->sex_id == 1 && $child->exit->weight_for_height == 'Wasted';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->weight_for_height == 'Wasted';
+                            return $child->child->sex_id == 2 && $child->exit->weight_for_height == 'Wasted';
                         })->count(),
                     ],
                     'weight_for_height_severely_wasted' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->weight_for_height == 'Severely Wasted';
+                            return $child->child->sex_id == 1 && $child->exit->weight_for_height == 'Severely Wasted';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->weight_for_height == 'Severely Wasted';
+                            return $child->child->sex_id == 2 && $child->exit->weight_for_height == 'Severely Wasted';
                         })->count(),
                     ],
                     'weight_for_height_overweight' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->weight_for_height == 'Overweight';
+                            return $child->child->sex_id == 1 && $child->exit->weight_for_height == 'Overweight';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->weight_for_height == 'Overweight';
+                            return $child->child->sex_id == 2 && $child->exit->weight_for_height == 'Overweight';
                         })->count(),
                     ],
                     'weight_for_height_obese' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->weight_for_height == 'Obese';
+                            return $child->child->sex_id == 1 && $child->exit->weight_for_height == 'Obese';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->weight_for_height == 'Obese';
+                            return $child->child->sex_id == 2 && $child->exit->weight_for_height == 'Obese';
                         })->count(),
                     ],
                     'height_for_age_normal' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->height_for_age == 'Normal';
+                            return $child->child->sex_id == 1 && $child->exit->height_for_age == 'Normal';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->height_for_age == 'Normal';
+                            return $child->child->sex_id == 2 && $child->exit->height_for_age == 'Normal';
                         })->count(),
                     ],
                     'height_for_age_stunted' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->height_for_age == 'Stunted';
+                            return $child->child->sex_id == 1 && $child->exit->height_for_age == 'Stunted';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->height_for_age == 'Stunted';
+                            return $child->child->sex_id == 2 && $child->exit->height_for_age == 'Stunted';
                         })->count(),
                     ],
                     'height_for_age_severely_stunted' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->height_for_age == 'Severely Stunted';
+                            return $child->child->sex_id == 1 && $child->exit->height_for_age == 'Severely Stunted';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->height_for_age == 'Severely Stunted';
+                            return $child->child->sex_id == 2 && $child->exit->height_for_age == 'Severely Stunted';
                         })->count(),
                     ],
                     'height_for_age_tall' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->height_for_age == 'Tall';
+                            return $child->child->sex_id == 1 && $child->exit->height_for_age == 'Tall';
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->height_for_age == 'Tall';
+                            return $child->child->sex_id == 2 && $child->exit->height_for_age == 'Tall';
                         })->count(),
                     ],
                     'is_undernourish' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->is_undernourish == true;
+                            return $child->child->sex_id == 1 && $child->exit->is_undernourish == true;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->is_undernourish == true;
+                            return $child->child->sex_id == 2 && $child->exit->is_undernourish == true;
                         })->count(),
                     ],
                     'indigenous_people' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->is_indigenous_people == true;
+                            return $child->child->sex_id == 1 && $child->child->is_indigenous_people == true;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->is_indigenous_people == true;
+                            return $child->child->sex_id == 2 && $child->child->is_indigenous_people == true;
                         })->count(),
                     ],
                     'pantawid' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->pantawid_details != null;
+                            return $child->child->sex_id == 1 && $child->child->pantawid_details != null;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->pantawid_details != null;
+                            return $child->child->sex_id == 2 && $child->child->pantawid_details != null;
                         })->count(),
                     ],
                     'pwd' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 &&$child['exit']->person_with_disability_details != null;
+                            return $child->child->sex_id == 1 && $child->child->person_with_disability_details != null;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->person_with_disability_details != null;
+                            return $child->child->sex_id == 2 && $child->child->person_with_disability_details != null;
                         })->count(),
                     ],
                     'lactose_intolerant' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->is_lactose_intolerant == true;
+                            return $child->child->sex_id == 1 && $child->child->is_lactose_intolerant == true;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->is_lactose_intolerant == true;
+                            return $child->child->sex_id == 2 && $child->child->is_lactose_intolerant == true;
                         })->count(),
                     ],
                     'child_of_soloparent' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->is_child_of_soloparent == true;
+                            return $child->child->sex_id == 1 && $child->child->is_child_of_soloparent == true;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->is_child_of_soloparent == true;
+                            return $child->child->sex_id == 2 && $child->child->is_child_of_soloparent == true;
                         })->count(),
                     ],
                     'dewormed' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->deworming_date != null;
+                            return $child->child->sex_id == 1 && $child->entry->deworming_date != null;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->deworming_date != null;
+                            return $child->child->sex_id == 2 && $child->entry->deworming_date != null;
                         })->count(),
                     ],
                     'vitamin_a' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 1 && $child['exit']->vitamin_a_date != null;
+                            return $child->child->sex_id == 1 && $child->entry->vitamin_a_date != null;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child['sex_id'] == 2 && $child['exit']->is_child_of_soloparent != null;
+                            return $child->child->sex_id == 2 && $child->entry->vitamin_a_date != null;
                         })->count(),
                     ],
                 ];
             });
 
-            $pdf = PDF::loadView('reports.print.age-bracket-after-120', compact('cycleImplementation', 'fundedChildren', 'exitCountsPerNutritionalStatus', 'centers', 'cdcId', 'selectedCenter'))
+            $pdf = PDF::loadView('reports.print.age-bracket-after-120', compact('cycle', 'fundedChildren', 'exitCountsPerNutritionalStatus', 'centers', 'cdcId', 'selectedCenter'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -3463,24 +3414,25 @@ class PDFController extends Controller
             ]);
 
 
-        return $pdf->stream($cycleImplementation->cycle_name . ' Age Bracket After 120 Feeding Days.pdf');
+        return $pdf->stream($cycle->name . ' Age Bracket After 120 Feeding Days.pdf');
     }
 
     public function printMonitoring(Request $request)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $cycle = Implementation::where('id', $request->cycle_id)->first();
+
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
-        if (!$cycleImplementation) {
-            return view('reports.monitoring', [
-                'fundedChildren' => collect(),
-            ]);
-        }
-        $fundedChildren = Child::with('nutritionalStatus', 'sex')
-            ->where('is_funded', true)
-            ->where('cycle_implementation_id', $cycleImplementation->id)
-            ->get();
+        $fundedChildren = Child::with('records','nutritionalStatus', 'sex')
+        ->whereHas('records', function ($query) use ($cycle) {
+            $query->where('implementation_id', $cycle->id)
+                ->where('funded', 1);
+        });
 
         $childrenWithNutritionalStatus = [];
 
@@ -3505,72 +3457,66 @@ class PDFController extends Controller
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
+            $centerIDs = $centers->pluck('id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if($cdcId == 'all_center') {
-                $isFunded = Child::with('nutritionalStatus', 'sex')
-                    ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
-                    ->paginate(10);
+
+                $isFunded = Child::with('records','nutritionalStatus', 'sex')
+                ->whereHas('records', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus')
+                ->paginate(10);
+
 
             } else {
-                $isFunded = Child::with('nutritionalStatus', 'sex')
-                    ->where('is_funded', true)
-                    ->where('child_development_center_id', $cdcId)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
-                    ->paginate(10);
+                $isFunded = Child::with('records','nutritionalStatus', 'sex')
+                ->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('child_development_center_id', $cdcId)
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus')
+                ->paginate(10);
 
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
+        } else {
 
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
 
-        } elseif (auth()->user()->hasRole('lgu focal')) {
-
-            $focalID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
-            $centerIds = $centers->pluck('id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if($cdcId == 'all_center') {
-                $isFunded = Child::with('nutritionalStatus', 'sex')
-                    ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
-                    ->whereIn('child_development_center_id', $centerIds)
-                    ->paginate(10);
+                $isFunded = Child::with('records','nutritionalStatus', 'sex')
+                ->whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('child_development_center_id', $centerIDs)
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus')
+                ->paginate(10);
 
             } else {
-                $isFunded = Child::with('nutritionalStatus', 'sex')
-                    ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
-                    ->where('child_development_center_id', $cdcId)
-                    ->paginate(10);
+                $isFunded = Child::with('records','nutritionalStatus', 'sex')
+                ->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('child_development_center_id', $cdcId)
+                        ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus')
+                ->paginate(10);
 
                 $selectedCenter = ChildDevelopmentCenter::find($cdcId);
             }
-
-        } else {
-            $workerID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_worker_user_id', $workerID)->get();
-            $centerIds = $centers->pluck('id');
-
-            if ($cdcId == 'all_center') {
-                $isFunded = Child::with('nutritionalStatus', 'sex')
-                    ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
-                    ->whereIn('child_development_center_id', $centerIds)
-                    ->paginate(10);
-            } else {
-                $isFunded = Child::with('nutritionalStatus', 'sex')
-                    ->where('is_funded', true)
-                    ->where('cycle_implementation_id', $cycleImplementation->id)
-                    ->where('child_development_center_id', $cdcId)
-                    ->paginate(10);
-
-                $selectedCenter = ChildDevelopmentCenter::find($cdcId);
-            }
-
         }
 
-        $pdf = PDF::loadView('reports.print.monitoring', compact('cycleImplementation', 'isFunded', 'centers', 'cdcId', 'selectedCenter'))
+        $pdf = PDF::loadView('reports.print.monitoring', compact('cycle', 'isFunded', 'centers', 'cdcId', 'selectedCenter'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -3579,24 +3525,25 @@ class PDFController extends Controller
                 'margin-left' => 1
             ]);
 
-        return $pdf->stream($cycleImplementation->cycle_name . ' Weight and Height Monitoring.pdf');
+        return $pdf->stream($cycle->name . ' Weight and Height Monitoring.pdf');
 
     }
     public function printUnfunded(Request $request)
     {
-        $cycleImplementation = CycleImplementation::where('cycle_status', 'active')->first();
+        $cycle = Implementation::where('id', $request->cycle_id)->first();
+
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
-        if (!$cycleImplementation) {
-            return view('reports.index', [
-                'fundedChildren' => collect(),
-            ]);
-        }
-
-        $unfundedChildren = Child::with('nutritionalStatus')
-            ->where('is_funded', false)
-            ->where('cycle_implementation_id', $cycleImplementation->id);
+        $unfundedChildren = Child::with('records','nutritionalStatus', 'sex', 'psgc')
+            ->whereHas('records', function ($query) use ($cycle) {
+                $query->where('implementation_id', $cycle->id)
+                    ->where('funded', 0);
+        });
 
 
         if (auth()->user()->hasRole('admin')) {
@@ -3605,44 +3552,38 @@ class PDFController extends Controller
             if ($cdcId == 'all_center'){
                 $isNotFunded = $unfundedChildren->paginate(20);
             } else{
-                $isNotFunded = $unfundedChildren->where('child_development_center_id', $cdcId)
+                $isNotFunded = $unfundedChildren->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                    $query->where('child_development_center_id', $cdcId);
+                })
                 ->paginate(20);
+
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
-        } elseif (auth()->user()->hasRole('lgu focal')) {
-            $focalID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $focalID)->get();
-            $centerIds = $centers->pluck('id');
-
-            if ($cdcId == 'all_center'){
-                $isNotFunded = $unfundedChildren->whereIn('child_development_center_id', $centerIds)
-                ->paginate(20);
-
-            } else{
-                $isNotFunded = $unfundedChildren->where('child_development_center_id', $cdcId)
-                ->paginate(20);
-                $selectedCenter = ChildDevelopmentCenter::find($cdcId);
-            }
-
         } else {
-            $workerID = auth()->id();
-            $centers = ChildDevelopmentCenter::where('assigned_focal_user_id', $workerID)->get();
-            $centerIds = $centers->pluck('id');
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
+
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId == 'all_center'){
-                $isNotFunded = $unfundedChildren->whereIn('child_development_center_id', $centerIds)
+                $isNotFunded = $unfundedChildren->whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                    $query->whereIn('child_development_center_id', $centerIDs);
+                })
                 ->paginate(20);
 
             } else{
-                $isNotFunded = $unfundedChildren->where('child_development_center_id', $cdcId)
+                $isNotFunded = $unfundedChildren->whereHas('records', function ($query) use ($cycle, $cdcId) {
+                    $query->where('child_development_center_id', $cdcId);
+                })
                 ->paginate(20);
-                $selectedCenter = ChildDevelopmentCenter::find($cdcId);
-            }
 
+                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
+            }
         }
 
-        $pdf = PDF::loadView('reports.print.unfunded', compact('cycleImplementation', 'isNotFunded', 'centers', 'cdcId', 'selectedCenter'))
-            ->setPaper('folio', 'portrait')
+        $pdf = PDF::loadView('reports.print.unfunded', compact('cycle', 'isNotFunded', 'centers', 'cdcId', 'selectedCenter'))
+            ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
@@ -3650,7 +3591,7 @@ class PDFController extends Controller
                 'margin-left' => 1
             ]);
 
-        return $pdf->stream($cycleImplementation->cycle_name . ' Unfunded Children.pdf');
+        return $pdf->stream($cycle->name . ' Unfunded Children.pdf');
 
     }
 }

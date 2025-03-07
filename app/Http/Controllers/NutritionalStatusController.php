@@ -230,7 +230,7 @@ class NutritionalStatusController extends Controller
     {
         $validatedData = $request->validated();
 
-        $exitRecord = NutritionalStatus::where('child_id', $request->child_id)->count();
+        $exitRecord = NutritionalStatus::where('child_id', $request->exitchild_id)->count();
 
         if ($exitRecord >= 2 ) {
             return redirect()->back()->with(['error' => 'Exit details already exist for this child.']);
@@ -276,6 +276,8 @@ class NutritionalStatusController extends Controller
                     $exitWeightForAge = 'Normal';
                 } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Overweight';
+                } else {
+                    $exitWeightForAge = 'Not Applicable';
                 }
             } else {
                 $getAge = cgs_wfa_girls::where('age_month', $exitAgeInMonths)->first();
@@ -288,6 +290,8 @@ class NutritionalStatusController extends Controller
                     $exitWeightForAge = 'Normal';
                 } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Overweight';
+                } else {
+                    $exitWeightForAge = 'Not Applicable';
                 }
             }
 
@@ -303,6 +307,8 @@ class NutritionalStatusController extends Controller
                     $exitHeightForAge = 'Normal';
                 } elseif ((float) $getAge->tall <= (float) $request->exitheight) {
                     $exitHeightForAge = 'Tall';
+                } else {
+                    $exitHeightForAge = 'Not Applicable';
                 }
             } else {
                 $getAge = cgs_hfa_girls::where('age_month', $exitAgeInMonths)->first();
@@ -315,12 +321,14 @@ class NutritionalStatusController extends Controller
                     $exitHeightForAge = 'Normal';
                 } elseif ((float) $getAge->tall <= (float) $request->exitheight) {
                     $exitHeightForAge = 'Tall';
+                } else {
+                    $exitHeightForAge = 'Not Applicable';
                 }
             }
 
             //weight for height
             if ($childSex == '1') {
-                $getHeight = cgs_wfh_boys::where('length_in_cm', $request->height)->first();
+                $getHeight = cgs_wfh_boys::where('length_in_cm', $request->exitheight)->first();
 
                 if ((float) $getHeight->severly_wasted >= (float) $request->exitweight) {
                     $exitWeightForHeight = 'Severely Wasted';
@@ -332,9 +340,11 @@ class NutritionalStatusController extends Controller
                     $exitWeightForHeight = 'Overweight';
                 } elseif ((float) $getHeight->obese <= (float) $request->exitweight) {
                     $exitWeightForHeight = 'Obese';
+                } else {
+                    $exitWeightForHeight = 'Not Applicable';
                 }
             } else {
-                $getHeight = cgs_wfh_girls::where('length_in_cm', $request->height)->first();
+                $getHeight = cgs_wfh_girls::where('length_in_cm', $request->exitheight)->first();
 
                 if ((float) $getHeight->severly_wasted >= (float) $request->exitweight) {
                     $exitWeightForHeight = 'Severely Wasted';
@@ -346,6 +356,8 @@ class NutritionalStatusController extends Controller
                     $exitWeightForHeight = 'Overweight';
                 } elseif ((float) $getHeight->obese <= (float) $request->exitweight) {
                     $exitWeightForHeight = 'Obese';
+                } else {
+                    $exitWeightForHeight = 'Not Applicable';
                 }
 
             }
@@ -361,8 +373,6 @@ class NutritionalStatusController extends Controller
             } else {
                 $exitIsUndernourished = false;
             }
-
-
 
             $exitNutritionalStatus = NutritionalStatus::create([
                 'implementation_id' => $cycleID,
@@ -382,7 +392,7 @@ class NutritionalStatusController extends Controller
             ]);
         }
 
-        return redirect()->route('nutritionalstatus.index', ['id' => $request->child_id])->with('success', 'After 120 feeding days details saved successfully.');
+        return redirect()->route('nutritionalstatus.index', ['id' => $request->exitchild_id])->with('success', 'After 120 feeding days details saved successfully.');
     }
 
 

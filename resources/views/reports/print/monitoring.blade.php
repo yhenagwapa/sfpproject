@@ -100,7 +100,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
-            {{ $cycleImplementation->cycle_name}} ( SY {{ $cycleImplementation->cycle_school_year }} )</p>
+            {{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
         <p><b>WEIGHT AND HEIGHT MONITORING</b></p>
         <br>
     </div>
@@ -123,7 +123,7 @@
             <p>Child Development Center: <u>All Child Development Centers</u></p>
         @endif
     </div>
-    
+
     <table id='monitoring-table' class="table datatable monitoring-table w-full">
         <thead>
             <tr>
@@ -142,7 +142,7 @@
                 <th class="border border-white" colspan="2">Age in month/year</th>
                 <th class="border border-white" colspan="3">Nutritional Status After 120 Feedings</th>
                 <th class="border border-white w-10" rowspan="2">Summary of Undernourished Children</th>
-    
+
             </tr>
             <tr>
                 <th class="border border-white">Month</th>
@@ -166,7 +166,7 @@
                     <td>{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name }}</td>
                     <td>{{ $fundedChild->date_of_birth }}</td>
-    
+
                     @if ($fundedChild->nutritionalStatus)
                         @if ($fundedChild->nutritionalStatus->first() === null)
                             <td></td>
@@ -179,7 +179,7 @@
                             <td></td>
                             <td></td>
                         @else
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weighing_date : 'N/A' }}</td>
+                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_months : 'N/A' }}</td>
@@ -196,7 +196,7 @@
                             </td>
                         @endif
                         @if (isset($fundedChild->nutritionalStatus[1]))
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weighing_date : 'N/A' }}</td>
+                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->actual_weighing_date : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->height : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->age_in_months : 'N/A' }}</td>
@@ -212,7 +212,7 @@
                                 @endif
                             </td>
                         @else
-                            
+
                             <td></td>
                             <td></td>
                             <td></td>
@@ -238,7 +238,7 @@
                         <td></td>
                     @endif
                 </tr>
-    
+
             @endforeach
             @if (count($isFunded) <= 0)
                 <tr>
@@ -251,8 +251,8 @@
             @endif
         </tbody>
     </table>
-    
-    
+
+
     <div class="footer-section">
         <table class="footer-table">
             <tr></tr>
@@ -290,6 +290,6 @@
         SFP Forms 2 (c/o CDW/CDT)
         <span class="pagenum"></span>
     </div>
-    
+
 </body>
 </html>
