@@ -34,11 +34,6 @@ class UserCenterSeeder extends Seeder
             'child_development_center_id' => '1',
         ]);
 
-        $assignment5 = UserCenter::create([
-            'user_id' => '4',
-            'child_development_center_id' => '2',
-        ]);
-
         $assignment6 = UserCenter::create([
             'user_id' => '3',
             'child_development_center_id' => '3',

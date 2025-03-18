@@ -121,4 +121,6 @@ class User extends Authenticatable
         return $this->belongsToMany(ChildDevelopmentCenter::class);
     }
 
+
+
 }

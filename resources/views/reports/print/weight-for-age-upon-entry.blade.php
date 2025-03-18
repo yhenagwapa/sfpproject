@@ -121,7 +121,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
-            {{ $cycleImplementation->cycle_name }} ( SY {{ $cycleImplementation->cycle_school_year }} )<br>
+            {{ $cycle->name }} ( SY {{ $cycle->school_year }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS REPORT</b><br>
             <i>(Weight-for-Age)<br>Upon Entry</i></p>
         <br>
@@ -358,7 +358,21 @@
                 <tr>
                     <td>{{ $count }}</td>
                     <td class="columns">{{ $center->center_name }}</td>
-                    <td class="columns">{{ $center->user->full_name }}</td>
+                    <td class="columns">
+                        @php
+                            $users = $center->users->filter(function ($user) {
+                                return $user->roles->contains('name', 'child development worker');
+                            });
+                        @endphp
+
+                        @if ($users->isNotEmpty())
+                            @foreach ($users as $user)
+                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
+                            @endforeach
+                        @else
+                            No Worker Assigned
+                        @endif
+                    </td>
                     <td>{{ $totals[$center->id]['total_served'] ?? 0 }}</td>
                     <td>{{ $totals[$center->id]['total_male'] ?? 0 }}</td>
                     <td>{{ $totals[$center->id]['total_female'] ?? 0 }}</td>

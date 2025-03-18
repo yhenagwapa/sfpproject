@@ -123,7 +123,7 @@
 
         <aside id="sidebar" class="sidebar">
             <ul class="sidebar-nav" id="sidebar-nav">
-                @if (!auth()->user()->hasRole('encoder'))
+                {{-- @if (!auth()->user()->hasRole('encoder'))
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('dashboard') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -134,7 +134,7 @@
                             <span class="text-sm">Dashboard</span>
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="{{ route('child.index') }}">
@@ -252,6 +252,20 @@
         <script src="{{ asset('js/main.js') }}"></script>
 
         @vite(['resources/js/app.js'])
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (!window.location.pathname.includes('/reports')) {
+                    localStorage.removeItem('selected_cycle_id');
+                }
+
+                if (!window.location.pathname.includes('/child/create')) {
+                    sessionStorage.removeItem('step');
+                    sessionStorage.removeItem('step1Data');
+                    sessionStorage.removeItem('step2Data');
+                }
+            });
+        </script>
 
 </body>
 

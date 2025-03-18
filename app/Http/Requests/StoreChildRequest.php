@@ -45,7 +45,10 @@ class StoreChildRequest extends FormRequest
 
         } elseif ($step == 2) {
             return [
-                'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
+                'child_development_center_id' => $this->input('action') === 'next'
+                    ? ['required', 'exists:child_development_centers,id']
+                    : ['nullable', 'exists:child_development_centers,id'],
+
                 'implementation_id' => ['nullable', 'exists:implementations,id'],
                 'milk_feeding_id' => ['nullable', 'exists:implementations,id'],
             ];

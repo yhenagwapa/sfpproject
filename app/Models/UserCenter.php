@@ -14,13 +14,13 @@ class UserCenter extends Model
         'child_development_center_id',
     ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function center()
     {
-        return $this->belongsTo(ChildDevelopmentCenter::class);
+        return $this->belongsTo(ChildDevelopmentCenter::class, 'child_development_center_id');
     }
 }

@@ -69,8 +69,8 @@
                                                         <form id="printCDWForm" action="" method="POST"
                                                             target="_blank">
                                                             @csrf
-                                                            <input type="hidden" name="cycle_id"
-                                                                value="{{ $cycle->id }}">
+                                                            <input type="hidden" name="cycle_id" id="cycle_id"
+                                                                value="">
                                                             <input type="hidden" name="center_name" id="center_id"
                                                                 value="">
 
@@ -89,7 +89,7 @@
                                                                         class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
-                                                                                id="printButtonMasterlist"
+                                                                                href="#"
                                                                                 onclick="workerReport('masterlist', '{{ $cycle->id }}'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
@@ -107,8 +107,7 @@
                                                                         </li>
 
                                                                         <li class="nav-item">
-                                                                            <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                href="#">
+                                                                            <a class="dropdown-item d-flex align-items-center ml-3">
                                                                                 <svg class="h-2 w-2 mr-2" width="24"
                                                                                     height="24" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -127,8 +126,7 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                target="_blank"
-                                                                                id="printButtonAgeBracketEntry"
+                                                                                href="#"
                                                                                 onclick="workerReport('age-bracket-upon-entry', '{{ $cycle->id }}'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
@@ -146,8 +144,7 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                target="_blank"
-                                                                                id="printButtonAgeBracketAfter120"
+                                                                                href="#"
                                                                                 onclick="workerReport('age-bracket-after-120', '{{ $cycle->id }}'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
@@ -165,7 +162,7 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
-                                                                                target="_blank" id="printButtonMonitoring"
+                                                                                href="#"
                                                                                 onclick="workerReport('monitoring', '{{ $cycle->id }}'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
@@ -183,7 +180,7 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
-                                                                                target="_blank" id="printButtonUnfunded"
+                                                                                href="#"
                                                                                 onclick="workerReport('unfunded', '{{ $cycle->id }}'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
@@ -202,13 +199,7 @@
                                                         </form>
                                                     @endif
                                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-                                                        <form id="printFocalForm" action="" method="POST"
-                                                            target="_blank">
-                                                            @csrf
-                                                            <input type="hidden" name="cycle_id"
-                                                                value="{{ $cycle->id }}">
-                                                            <input type="hidden" name="center_name" id="center_id"
-                                                                value="">
+
 
                                                             <ul class="d-flex list-unstyled">
                                                                 <li class="nav-item dropdown pe-3">
@@ -223,12 +214,18 @@
                                                                     </a>
                                                                     <ul
                                                                         class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                                                                        <form id="printFocalForm" action="" method="POST"
+                                                            target="_blank">
+                                                            @csrf
+                                                            <input type="hidden" name="cycle_id2" id="cycle_id2"
+                                                                value="">
+                                                            <input type="hidden" name="center_name2" id="center_id2"
+                                                                value="">
                                                                         @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center"
-                                                                                    target="_blank"
-                                                                                    id="printButtonMalnourished"
-                                                                                    onclick="focalReport('malnourished', '{{ $cycle->id }}'); return false;">
+                                                                                    href="#"
+                                                                                    onclick="focalReport('malnourished', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -246,8 +243,8 @@
                                                                             </li>
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center"
-                                                                                    target="_blank" id="printButtonPWD"
-                                                                                    onclick="focalReport('disabilities', '{{ $cycle->id }}'); return false;">
+                                                                                   href="#"
+                                                                                    onclick="focalReport('disabilities', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -265,8 +262,7 @@
                                                                                 <hr class="dropdown-divider">
                                                                             </li>
                                                                             <li>
-                                                                                <a class="dropdown-item d-flex align-items-center"
-                                                                                    href="#">
+                                                                                <a class="dropdown-item d-flex align-items-center">
                                                                                     <svg class="h-2 w-2 mr-2"
                                                                                         width="24" height="24"
                                                                                         viewBox="0 0 24 24"
@@ -288,9 +284,8 @@
                                                                             </li>
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    target="_blank"
-                                                                                    id="printButtonUndernourishEntry"
-                                                                                    onclick="focalReport('undernourished-upon-entry', '{{ $cycle->id }}'); return false;">
+                                                                                    href="#"
+                                                                                    onclick="focalReport('undernourished-upon-entry', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -308,9 +303,8 @@
                                                                             </li>
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    target="_blank"
-                                                                                    id="printButtonUndernourishAfter120"
-                                                                                    onclick="focalReport('undernourished-after-120', '{{ $cycle->id }}'); return false;">
+                                                                                    href="#"
+                                                                                    onclick="focalReport('undernourished-after-120', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -327,9 +321,7 @@
                                                                                 <hr class="dropdown-divider">
                                                                             </li>
                                                                             <li>
-                                                                                <a class="dropdown-item d-flex align-items-center"
-                                                                                    href="#"
-                                                                                    data-target="ns-consolidated">
+                                                                                <a class="dropdown-item d-flex align-items-center">
                                                                                     <svg class="h-2 w-2 mr-2"
                                                                                         width="24" height="24"
                                                                                         viewBox="0 0 24 24"
@@ -373,8 +365,7 @@
                                                                             </li>
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    target="_blank"
-                                                                                    id="printButtonWFAEntry"
+                                                                                    href="#"
                                                                                     onclick="focalReport('weight-for-age-upon-entry', '{{ $cycle->id }}'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -393,8 +384,7 @@
                                                                             </li>
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    target="_blank"
-                                                                                    id="printButtonWFAAfter120"
+                                                                                    href="#"
                                                                                     onclick="focalReport('weight-for-age-after-120', '{{ $cycle->id }}'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -412,8 +402,7 @@
                                                                                 <hr class="dropdown-divider">
                                                                             </li>
                                                                             <li class="nav-item">
-                                                                                <a
-                                                                                    class="dropdown-item d-flex align-items-center ml-3">
+                                                                                <a class="dropdown-item d-flex align-items-center ml-3">
                                                                                     <svg class="h-2 w-2 mr-2"
                                                                                         width="24" height="24"
                                                                                         viewBox="0 0 24 24"
@@ -435,8 +424,7 @@
                                                                             </li>
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    target="_blank"
-                                                                                    id="printButtonWFHEntry"
+                                                                                    href="#"
                                                                                     onclick="focalReport('weight-for-height-upon-entry', '{{ $cycle->id }}'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -455,8 +443,7 @@
                                                                             </li>
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    target="_blank"
-                                                                                    id="printButtonWFHAfter120"
+                                                                                    href="#"
                                                                                     onclick="focalReport('weight-for-height-after-120', '{{ $cycle->id }}'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -474,9 +461,7 @@
                                                                                 <hr class="dropdown-divider">
                                                                             </li>
                                                                             <li class="nav-item">
-                                                                                <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    href="#"
-                                                                                    data-target="ns-consolidated">
+                                                                                <a class="dropdown-item d-flex align-items-center ml-3">
                                                                                     <svg class="h-2 w-2 mr-2"
                                                                                         width="24" height="24"
                                                                                         viewBox="0 0 24 24"
@@ -498,8 +483,7 @@
                                                                             </li>
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    target="_blank"
-                                                                                    id="printButtonHFAEntry"
+                                                                                    href="#"
                                                                                     onclick="focalReport('height-for-age-upon-entry', '{{ $cycle->id }}'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -518,8 +502,7 @@
                                                                             </li>
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    target="_blank"
-                                                                                    id="printButtonHFAAfter120"
+                                                                                    href="#"
                                                                                     onclick="focalReport('height-for-age-after-120', '{{ $cycle->id }}'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -546,8 +529,8 @@
                                                         <form id="printAdminForm" action="" method="POST"
                                                             target="_blank">
                                                             @csrf
-                                                            <input type="hidden" name="cycle_id"
-                                                                value="{{ $cycle->id }}">
+                                                            <input type="hidden" name="cycle_id" id="cycle_id"
+                                                                value="">
                                                             <input type="hidden" name="center_name" id="center_id"
                                                                 value="">
 
@@ -627,29 +610,45 @@
                                         </div>
 
                                         <script>
-                                            function workerReport(reportType, cycleId) {
+                                            function workerReport(reportType, cycleId = null) {
                                                 let printCDWForm = document.getElementById('printCDWForm');
                                                 let centerInput = document.getElementById('center_name');
                                                 let centerHiddenInput = document.getElementById('center_id');
                                                 let cycleHiddenInput = document.getElementById('cycle_id');
 
+                                                cycleId = localStorage.getItem('selected_cycle_id');
                                                 centerHiddenInput.value = centerInput.value;
 
-                                                printCDWForm.action = `/reports/${cycleId}/print/${reportType}`;
+                                                if (cycleHiddenInput) {
+                                                    cycleHiddenInput.value = cycleId;
+                                                } else {
+                                                    console.error("Hidden input #cycle_id not found.");
+                                                }
 
+                                                printCDWForm.action = `/reports/print/${reportType}`;
                                                 printCDWForm.target = "_blank";
                                                 printCDWForm.submit();
                                             }
+
 
                                             function focalReport(reportType, cycleId) {
                                                 let printFocalForm = document.getElementById('printFocalForm');
                                                 let centerInput = document.getElementById('center_name');
                                                 let centerHiddenInput = document.getElementById('center_id');
-                                                let cycleHiddenInput = document.getElementById('cycle_id');
+                                                let cycleHiddenInput = document.getElementById('cycle_id2');
 
+                                                console.log(localStorage.getItem('selected_cycle_id'));
+
+                                                cycleId = localStorage.getItem('selected_cycle_id');
                                                 centerHiddenInput.value = centerInput.value;
 
-                                                printFocalForm.action = `/reports/${cycleId}/print/${reportType}`;
+                                                if (cycleHiddenInput) {
+                                                    cycleHiddenInput.value = cycleId;
+                                                } else {
+                                                    console.error("Hidden input #cycle_id not found.");
+                                                }
+
+                                                printFocalForm.action = `/reports/print/${reportType}`;
 
                                                 printFocalForm.target = "_blank";
                                                 printFocalForm.submit();

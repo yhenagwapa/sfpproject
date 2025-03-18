@@ -69,7 +69,7 @@ class ChildController extends Controller
                     ->whereHas('sex', function ($query) {
                         $query->where('name', 'Female');
                     })->paginate(5);
-                    
+
             } else {
                 $centerId = ChildCenter::where('child_development_center_id', $cdcId)->first();
 
@@ -212,8 +212,6 @@ class ChildController extends Controller
 
         $step = $request->input('step', 1);
 
-
-
         if ($step == 1) {
             $validatedData = $request->validated();
 
@@ -243,14 +241,12 @@ class ChildController extends Controller
             $step1Data['brgy_name'] = PSGC::where('brgy_psgc', $request->brgy_psgc ?? null)->value('brgy_name');
 
             session()->put('step1Data', $step1Data);
-            session()->put('step', 2); // Move to step 2
+            session()->put('step', 2);
             session()->save();
 
-            // dd($step1Data);
 
 
             return redirect()->back();
-
         }
 
         if ($step == 2) {
@@ -259,6 +255,7 @@ class ChildController extends Controller
             if ($request->input('action') === 'prev') {
                 session()->put('step', 1);
                 return redirect()->back();
+
             } else {
                 $step2Data = $validatedData;
 
@@ -267,11 +264,11 @@ class ChildController extends Controller
                 $step2Data['milk_feeding_name'] = Implementation::where('id', $request->milk_feeding_id)->value('name');
 
                 session()->put('step2Data', $step2Data);
-                session()->put('step', 3); // Move to step 2
+                session()->put('step', 3);
                 session()->save();
-
-                
             }
+
+            dd($step2Data);
 
             return redirect()->back();
         }
@@ -338,8 +335,8 @@ class ChildController extends Controller
                     'status' => 'active',
                     'funded' => $funded
                 ]);
-            } elseif (!empty($finalData['implementation_id'])) {  
-                
+            } elseif (!empty($finalData['implementation_id'])) {
+
                 ChildCenter::create([
                     'child_id' => $newChild->id,
                     'child_development_center_id' => $finalData['child_development_center_id'],
@@ -349,10 +346,6 @@ class ChildController extends Controller
                 ]);
             }
 
-            
-            
-
-            // Clear session and complete
             session()->forget(['step', 'step1Data', 'step2Data']);
 
             return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
@@ -365,14 +358,14 @@ class ChildController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Implementation $cycle, $id)
+    public function show(Request $request)
     {
         $this->authorize('edit-child');
 
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
         $milkFeeding = Implementation::where('status', 'active')->where('type', 'milk')->first();
 
-        $child = Child::findOrFail($id);
+        $child = Child::findOrFail($request->child_id);
 
         $centers = ChildDevelopmentCenter::all();
 

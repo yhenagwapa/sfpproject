@@ -44,7 +44,7 @@
             border: 1px solid rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
         }
-    
+
         .footer-table {
             width: 100%;
             font-family: 'Arial', sans-serif;
@@ -71,7 +71,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
-        <p>{{ $cycleImplementation->cycle_name}} ( SY {{ $cycleImplementation->cycle_school_year }} )</p>
+        <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
         <p><b>Summary of Undernourished Children, Ethnicity, $Ps, Deworming & Vitamin A</b></p>
         <p><i>After 120 Feedings</i></p>
         <br>
@@ -87,7 +87,7 @@
             </tr>
         </table>
     </div>
-    
+
     <table id='undernourished-after-120-table' class="table datatable undernourished-after-120-table w-full">
         <thead class="border bg-gray-200">
             <tr>
@@ -139,30 +139,44 @@
             @foreach ($centers as $center)
                 <tr>
                     <td>{{ $center->center_name }}</td>
-                    <td>{{ $center->user->full_name }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['female'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['3_years_old']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['3_years_old']['female'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['4_years_old']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['4_years_old']['female'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['female'] ?? 0 }}</td>
-                    
-                    <td>{{ $ageGroupsPerCenter[$center->id]['indigenous_people']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['indigenous_people']['female'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['pantawid']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['pantawid']['female'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['pwd']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['pwd']['female'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['lactose_intolerant']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['lactose_intolerant']['female'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['child_of_solo_parent']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['child_of_solo_parent']['female'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['dewormed']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['dewormed']['female'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a ']['female'] ?? 0 }}</td>
+                    <td>
+                        @php
+                            $users = $center->users->filter(function ($user) {
+                                return $user->roles->contains('name', 'child development worker');
+                            });
+                        @endphp
+
+                        @if ($users->isNotEmpty())
+                            @foreach ($users as $user)
+                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
+                            @endforeach
+                        @else
+                            No Nurse Assigned
+                        @endif
+                    </td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['2_years_old']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['2_years_old']['female'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['3_years_old']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['3_years_old']['female'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['4_years_old']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['4_years_old']['female'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['5_years_old']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['5_years_old']['female'] ?? 0 }}</td>
+
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['indigenous_people']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['indigenous_people']['female'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['pantawid']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['pantawid']['female'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['pwd']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['pwd']['female'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['lactose_intolerant']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['lactose_intolerant']['female'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['child_of_solo_parent']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['child_of_solo_parent']['female'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['dewormed']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['dewormed']['female'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['vitamin_a']['male'] ?? 0 }}</td>
+                    <td>{{ $exitAgeGroupsPerCenter[$center->id]['vitamin_a ']['female'] ?? 0 }}</td>
                 </tr>
             @endforeach
             @if (count($centers) <= 0)
@@ -176,7 +190,7 @@
             @endif
         </tbody>
     </table>
-    
+
     <div class="footer-section">
         <table class="footer-table">
             <tr></tr>
@@ -207,6 +221,6 @@
     <footer>
 
     </footer>
-    
+
 </body>
 </html>

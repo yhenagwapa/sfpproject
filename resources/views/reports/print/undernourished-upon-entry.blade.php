@@ -139,8 +139,21 @@
             @foreach ($centerNames as $center)
                 <tr>
                     <td>{{ $center->center_name }}</td>
-                    <td></td>
-                    {{-- {{ $center->user->full_name }} --}}
+                    <td>
+                        @php
+                            $users = $center->users->filter(function ($user) {
+                                return $user->roles->contains('name', 'child development worker');
+                            });
+                        @endphp
+
+                        @if ($users->isNotEmpty())
+                            @foreach ($users as $user)
+                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
+                            @endforeach
+                        @else
+                            No Nurse Assigned
+                        @endif
+                    </td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['male'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['female'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['3_years_old']['male'] ?? 0 }}</td>
@@ -163,7 +176,7 @@
                     <td>{{ $ageGroupsPerCenter[$center->id]['dewormed']['male'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['dewormed']['female'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a']['male'] ?? 0 }}</td>
-                    <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a ']['female'] ?? 0 }}</td>
+                    <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a']['female'] ?? 0 }}</td>
                 </tr>
             @endforeach
             {{-- @if (count($centers) <= 0)

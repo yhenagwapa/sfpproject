@@ -404,6 +404,127 @@
                                     {{-- <div class="col-md-12 mt-4 text-right">
                                         <button type="submit" id='nextBtn' class="text-white bg-blue-600 rounded px-3 min-h-9" onclick="nextStep()">Next</button>
                                     </div> --}}
+
+                                    <!-- {{-- pantawid and pwd additional details --}} -->
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            function toggleAdditionalDetails(radioName, additionalDetailsId) {
+                                                const radios = document.getElementsByName(radioName);
+                                                const additionalDetailsSelect = document.getElementById(additionalDetailsId);
+
+                                                radios.forEach(radio => {
+                                                    radio.addEventListener('change', function() {
+                                                        if (radio.value === '1' && radio.checked) {
+                                                            additionalDetailsSelect.disabled = false;
+                                                            additionalDetailsElement.setAttribute('required', 'required');
+                                                        } else if (radio.value === '0' && radio.checked) {
+                                                            additionalDetailsSelect.disabled = true;
+                                                            additionalDetailsElement.removeAttribute('required');
+                                                        }
+                                                    });
+                                                });
+
+                                            }
+
+                                            toggleAdditionalDetails('is_pantawid', 'pantawid_details');
+                                            toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
+
+                                        });
+                                    </script>
+
+                                    {{-- city and barangay  --}}
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const locations = {
+                                                provinces: @json($provinces),
+                                                cities: @json($cities),
+                                                barangays: @json($barangays)
+                                            };
+
+                                            const provinceSelect = document.getElementById('province');
+                                            const citySelect = document.getElementById('city');
+                                            const barangaySelect = document.getElementById('barangay');
+
+                                            // ✅ Get saved session values
+                                            const selectedCity = "{{ session('step1Data.city_name_psgc') }}";
+                                            const selectedBarangay = "{{ session('step1Data.brgy_psgc') }}";
+
+                                            function filterCities() {
+                                                const provincePsgc = provinceSelect.value;
+                                                citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+                                                barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+                                                if (provincePsgc && locations.cities[provincePsgc]) {
+                                                    locations.cities[provincePsgc].forEach(city => {
+                                                        const option = document.createElement('option');
+                                                        option.value = city.psgc;
+                                                        option.text = city.name;
+                                                        citySelect.appendChild(option);
+                                                    });
+
+                                                    citySelect.style.display = 'block';
+
+                                                    // ✅ Set selected city AFTER the dropdown is populated
+                                                    setTimeout(() => {
+                                                        if (selectedCity && citySelect.querySelector(`option[value="${selectedCity}"]`)) {
+                                                            citySelect.value = selectedCity;
+                                                            filterBarangays(); // Load barangays
+                                                        }
+                                                    }, 100);
+                                                } else {
+                                                    citySelect.style.display = 'none';
+                                                }
+
+                                                barangaySelect.value = '';
+                                            }
+
+                                            function filterBarangays() {
+                                                const cityPsgc = citySelect.value;
+                                                barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+                                                if (cityPsgc && locations.barangays[cityPsgc]) {
+                                                    locations.barangays[cityPsgc].forEach(barangay => {
+                                                        const option = document.createElement('option');
+                                                        option.value = barangay.psgc;
+                                                        option.text = barangay.name;
+                                                        barangaySelect.appendChild(option);
+                                                    });
+
+                                                    barangaySelect.style.display = 'block';
+
+                                                    // ✅ Set selected barangay AFTER the dropdown is populated
+                                                    setTimeout(() => {
+                                                        if (selectedBarangay && barangaySelect.querySelector(
+                                                                `option[value="${selectedBarangay}"]`)) {
+                                                            barangaySelect.value = selectedBarangay;
+                                                        }
+                                                    }, 100);
+                                                } else {
+                                                    barangaySelect.style.display = 'none';
+                                                }
+                                            }
+
+                                            // ✅ Automatically detect and set the province from selected city
+                                            setTimeout(() => {
+                                                if (selectedCity) {
+                                                    const provincePsgc = Object.keys(locations.cities).find(province =>
+                                                        locations.cities[province].some(city => city.psgc == selectedCity)
+                                                    );
+
+                                                    if (provincePsgc) {
+                                                        provinceSelect.value = provincePsgc;
+                                                        filterCities();
+                                                    } else {
+                                                        console.warn("⚠️ Province not found for selected city!");
+                                                    }
+                                                }
+                                            }, 200);
+
+                                            // ✅ Event Listeners
+                                            provinceSelect.addEventListener('change', filterCities);
+                                            citySelect.addEventListener('change', filterBarangays);
+                                        });
+                                    </script>
                                 </div>
                             @elseif(session('step') == 2)
                                 <div id="step2" class="row step">
@@ -415,14 +536,15 @@
                                             id="child_development_center_id" name='child_development_center_id'>
                                             <option value="" disabled selected>Select CDC or SNP</option>
                                             @foreach ($centerNames as $center)
-                                                <option
-                                                    value="{{ $center->id }}" {{ $center->id == old('child_development_center_id', session('step2Data.child_development_center_id')) ? 'selected' : '' }}>
+                                                <option value="{{ $center->id }}"
+                                                    {{ $center->id == old('child_development_center_id', session('step2Data.child_development_center_id')) ? 'selected' : '' }}>
                                                     {{ $center->center_name }}
                                                 </option>
                                             @endforeach
                                         </select>
                                         @if ($errors->has('child_development_center_id'))
-                                            <span class="text-xs text-red-600">{{ $errors->first('child_development_center_id') }}</span>
+                                            <span
+                                                class="text-xs text-red-600">{{ $errors->first('child_development_center_id') }}</span>
                                         @endif
                                     </div>
                                     <div class="col-md-6 mt-3 text-sm">
@@ -431,8 +553,8 @@
                                             name='implementation_id'>
                                             <option value="" selected>Not Applicable</option>
                                             @foreach ($cycleImplementations as $cycle)
-                                                <option
-                                                    value="{{ $cycle->id }}" {{ $cycle->id == old('implementation_id', session('step2Data.implementation_id')) ? 'selected' : '' }}>
+                                                <option value="{{ $cycle->id }}"
+                                                    {{ $cycle->id == old('implementation_id', session('step2Data.implementation_id')) ? 'selected' : '' }}>
                                                     {{ $cycle->name }}
                                                 </option>
                                             @endforeach
@@ -444,8 +566,8 @@
                                             name='milk_feeding_id'>
                                             <option value="" selected>Not Applicable</option>
                                             @foreach ($milkFeedings as $milkFeeding)
-                                                <option
-                                                    value="{{ $milkFeeding->id }}" {{ $milkFeeding->id == old('milk_feeding_id', session('step2Data.milk_feeding_id')) ? 'selected' : '' }}>
+                                                <option value="{{ $milkFeeding->id }}"
+                                                    {{ $milkFeeding->id == old('milk_feeding_id', session('step2Data.milk_feeding_id')) ? 'selected' : '' }}>
                                                     {{ $milkFeeding->name }}
                                                 </option>
                                             @endforeach
@@ -461,144 +583,154 @@
                                     <div class='col-md-6 mt-3 text-gray-400 text-xs'>Personal Information</div>
                                     <div class='col-md-6 mt-3 text-gray-400 text-xs'>Address</div>
 
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>First Name:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='firstname'
-                                                value="{{session('step1Data.firstname') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Region:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='region_psgc'
-                                                value="{{ session('step1Data.region_name') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Middle Name:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='middlename'
-                                                value="{{session('step1Data.middlename') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Province:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='province_psgc'
-                                                value="{{session('step1Data.province_name') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Last Name:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='lastname'
-                                                value="{{session('step1Data.lastname') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>City/Municpality:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='city_name_psgc'
-                                                value="{{session('step1Data.city_name') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Extension Name:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" id="extension_name" name="extension_name"
-                                                value="{{ session('step1Data.extension_name') ?? '' }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Barangay:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='brgy_psgc'
-                                                value="{{session('step1Data.brgy_name') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Date of birth:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='date_of_birth'
-                                                value="{{session('step1Data.date_of_birth') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Address:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='address'
-                                                value="{{session('step1Data.address') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Sex:</label>
-                                        </div>
-                                        <div class="col-md-10 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='sex_name'
-                                                value="{{session('step1Data.sex_name') }}" disabled>
-                                        </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>First Name:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='firstname'
+                                            value="{{ session('step1Data.firstname') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Region:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='region_psgc'
+                                            value="{{ session('step1Data.region_name') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Middle Name:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='middlename'
+                                            value="{{ session('step1Data.middlename') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Province:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='province_psgc'
+                                            value="{{ session('step1Data.province_name') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Last Name:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='lastname'
+                                            value="{{ session('step1Data.lastname') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>City/Municpality:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='city_name_psgc'
+                                            value="{{ session('step1Data.city_name') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Extension Name:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" id="extension_name"
+                                            name="extension_name" value="{{ session('step1Data.extension_name') ?? '' }}"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Barangay:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='brgy_psgc'
+                                            value="{{ session('step1Data.brgy_name') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Date of birth:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='date_of_birth'
+                                            value="{{ session('step1Data.date_of_birth') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Address:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='address'
+                                            value="{{ session('step1Data.address') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Sex:</label>
+                                    </div>
+                                    <div class="col-md-10 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='sex_name'
+                                            value="{{ session('step1Data.sex_name') }}" disabled>
+                                    </div>
 
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Pantawid Member:</label>
-                                        </div>
-                                        <div class="col-md-10 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='pantawid_details'
-                                                value="{{session('step1Data.pantawid_details') ? session('step1Data.pantawid_details') : 'No'}}" disabled>
-                                        </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Pantawid Member:</label>
+                                    </div>
+                                    <div class="col-md-10 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='pantawid_details'
+                                            value="{{ session('step1Data.pantawid_details') ? session('step1Data.pantawid_details') : 'No' }}"
+                                            disabled>
+                                    </div>
 
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Person with Disability:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='person_with_disability_details'
-                                                value="{{session('step1Data.person_with_disability_details') ? session('step1Data.person_with_disability_details') : 'No'}}" disabled>
-                                        </div>
-                                        <div class='col-md-6 mt-3 text-gray-400 text-xs'>Center Information</div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Person with Disability:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300"
+                                            name='person_with_disability_details'
+                                            value="{{ session('step1Data.person_with_disability_details') ? session('step1Data.person_with_disability_details') : 'No' }}"
+                                            disabled>
+                                    </div>
+                                    <div class='col-md-6 mt-3 text-gray-400 text-xs'>Center Information</div>
 
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Indigenous People:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='is_indigenous_people'
-                                                value="{{session('step1Data.is_indigenous_people') ? 'Yes' : 'No' }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>CDC/SNP:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='child_development_center_id'
-                                                value="{{session('step2Data.center_name') }}" disabled>
-                                        </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Indigenous People:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='is_indigenous_people'
+                                            value="{{ session('step1Data.is_indigenous_people') ? 'Yes' : 'No' }}"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>CDC/SNP:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300"
+                                            name='child_development_center_id'
+                                            value="{{ session('step2Data.center_name') }}" disabled>
+                                    </div>
 
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Child of Solo Parent:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='is_child_of_soloparent'
-                                                value="{{session('step1Data.is_child_of_soloparent') ? 'Yes' : 'No' }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Cycle Implementation:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='implementation_id'
-                                                value="{{session('step2Data.implementation_name') }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Lactose Intolerant:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='is_lactose_intolerant'
-                                                value="{{session('step1Data.is_lactose_intolerant') ? 'Yes' : 'No' }}" disabled>
-                                        </div>
-                                        <div class="col-md-2 mt-3 text-sm">
-                                            <label>Milk Feeding:</label>
-                                        </div>
-                                        <div class="col-md-4 mt-1 text-sm">
-                                            <input type="text" class="rounded border-gray-300" name='milk_feeding_id'
-                                                value="{{session('step2Data.milk_feeding_name') }}" disabled>
-                                        </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Child of Solo Parent:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300"
+                                            name='is_child_of_soloparent'
+                                            value="{{ session('step1Data.is_child_of_soloparent') ? 'Yes' : 'No' }}"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Cycle Implementation:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='implementation_id'
+                                            value="{{ session('step2Data.implementation_name') }}" disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Lactose Intolerant:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300"
+                                            name='is_lactose_intolerant'
+                                            value="{{ session('step1Data.is_lactose_intolerant') ? 'Yes' : 'No' }}"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-2 mt-3 text-sm">
+                                        <label>Milk Feeding:</label>
+                                    </div>
+                                    <div class="col-md-4 mt-1 text-sm">
+                                        <input type="text" class="rounded border-gray-300" name='milk_feeding_id'
+                                            value="{{ session('step2Data.milk_feeding_name') }}" disabled>
+                                    </div>
 
 
                                     {{-- <div class="col-md-12 mt-4 text-right">
@@ -653,192 +785,4 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
-
-
-    <!-- {{-- pantawid and pwd additional details --}} -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function toggleAdditionalDetails(radioName, additionalDetailsId) {
-                const radios = document.getElementsByName(radioName);
-                const additionalDetailsSelect = document.getElementById(additionalDetailsId);
-
-                radios.forEach(radio => {
-                    radio.addEventListener('change', function() {
-                        if (radio.value === '1' && radio.checked) {
-                            additionalDetailsSelect.disabled = false;
-                            additionalDetailsElement.setAttribute('required', 'required');
-                        } else if (radio.value === '0' && radio.checked) {
-                            additionalDetailsSelect.disabled = true;
-                            additionalDetailsElement.removeAttribute('required');
-                        }
-                    });
-                });
-
-            }
-
-            toggleAdditionalDetails('is_pantawid', 'pantawid_details');
-            toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
-
-        });
-    </script>
-
-    {{-- city and barangay  --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const locations = {
-                provinces: @json($provinces),
-                cities: @json($cities),
-                barangays: @json($barangays)
-            };
-
-            const provinceSelect = document.getElementById('province');
-            const citySelect = document.getElementById('city');
-            const barangaySelect = document.getElementById('barangay');
-
-            // ✅ Get saved session values
-            const selectedCity = "{{ session('step1Data.city_name_psgc') }}";
-            const selectedBarangay = "{{ session('step1Data.brgy_psgc') }}";
-
-            function filterCities() {
-                const provincePsgc = provinceSelect.value;
-                citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
-                barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-
-                if (provincePsgc && locations.cities[provincePsgc]) {
-                    locations.cities[provincePsgc].forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city.psgc;
-                        option.text = city.name;
-                        citySelect.appendChild(option);
-                    });
-
-                    citySelect.style.display = 'block';
-
-                    // ✅ Set selected city AFTER the dropdown is populated
-                    setTimeout(() => {
-                        if (selectedCity && citySelect.querySelector(`option[value="${selectedCity}"]`)) {
-                            citySelect.value = selectedCity;
-                            filterBarangays(); // Load barangays
-                        }
-                    }, 100);
-                } else {
-                    citySelect.style.display = 'none';
-                }
-
-                barangaySelect.value = '';
-            }
-
-            function filterBarangays() {
-                const cityPsgc = citySelect.value;
-                barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-
-                if (cityPsgc && locations.barangays[cityPsgc]) {
-                    locations.barangays[cityPsgc].forEach(barangay => {
-                        const option = document.createElement('option');
-                        option.value = barangay.psgc;
-                        option.text = barangay.name;
-                        barangaySelect.appendChild(option);
-                    });
-
-                    barangaySelect.style.display = 'block';
-
-                    // ✅ Set selected barangay AFTER the dropdown is populated
-                    setTimeout(() => {
-                        if (selectedBarangay && barangaySelect.querySelector(
-                                `option[value="${selectedBarangay}"]`)) {
-                            barangaySelect.value = selectedBarangay;
-                        }
-                    }, 100);
-                } else {
-                    barangaySelect.style.display = 'none';
-                }
-            }
-
-            // ✅ Automatically detect and set the province from selected city
-            setTimeout(() => {
-                if (selectedCity) {
-                    const provincePsgc = Object.keys(locations.cities).find(province =>
-                        locations.cities[province].some(city => city.psgc == selectedCity)
-                    );
-
-                    if (provincePsgc) {
-                        provinceSelect.value = provincePsgc;
-                        filterCities();
-                    } else {
-                        console.warn("⚠️ Province not found for selected city!");
-                    }
-                }
-            }, 200);
-
-            // ✅ Event Listeners
-            provinceSelect.addEventListener('change', filterCities);
-            citySelect.addEventListener('change', filterBarangays);
-        });
-    </script>
-
-    {{-- <script>
-        document.addEventListener("DOMContentLoaded", function () {
-    console.log("Page loaded");
-
-    let currentStep = 1;
-    const totalSteps = 3;
-
-    function showStep(step) {
-        console.log(`Showing step: ${step}`);
-
-        let activeStep = document.getElementById(`step${step}`);
-        let prevBtn = document.getElementById("prevBtn");
-        let nextBtn = document.getElementById("nextBtn");
-
-        // Ensure activeStep exists
-        if (!activeStep) {
-            console.error(`Step ${step} not found!`);
-            return;
-        }
-
-        // Hide all steps first
-        document.querySelectorAll(".step").forEach(stepDiv => {
-            stepDiv.classList.add("d-none");
-        });
-
-        // Show only the active step
-        activeStep.classList.remove("d-none");
-        currentStep = step;
-
-        // Hide Prev button on Step 1, show otherwise
-        if (prevBtn) {
-            prevBtn.style.display = step === 1 ? "none" : "inline-block";
-        }
-
-        // Hide Next button on last step, show otherwise
-        if (nextBtn) {
-            nextBtn.style.display = step === totalSteps ? "none" : "inline-block";
-        }
-    }
-
-    function nextStep() {
-        if (currentStep < totalSteps) {
-            showStep(currentStep + 1);
-        }
-    }
-
-    function prevStep() {
-        if (currentStep > 1) {
-            showStep(currentStep - 1);
-        }
-    }
-
-    // Attach event listeners to buttons
-    let prevBtn = document.getElementById("prevBtn");
-    let nextBtn = document.getElementById("nextBtn");
-
-    if (prevBtn) prevBtn.addEventListener("click", prevStep);
-    if (nextBtn) nextBtn.addEventListener("click", nextStep);
-
-    // Initialize step 1
-    showStep(1);
-});
-
-    </script> --}}
-
 @endsection
