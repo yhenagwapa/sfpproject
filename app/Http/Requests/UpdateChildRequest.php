@@ -22,10 +22,10 @@ class UpdateChildRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'firstname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'middlename' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
+            'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+            'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+            'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+            'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
             'date_of_birth' => ['required', 'date'],
             'sex_id' => ['required', 'string'],
             'province_psgc' => ['required'],
@@ -46,10 +46,10 @@ class UpdateChildRequest extends FormRequest
     {
         return [
             'lastname.required' => 'Please fill in this field.',
-            'lastname.regex' => 'Invalid entry.',
+            'lastname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
             'firstname.required' => 'Please fill in this field.',
-            'firstname.regex' => 'Invalid entry.',
-            'middlename.regex' => 'Invalid entry.',
+            'firstname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
+            'middlename.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
             'date_of_birth.required' => 'Please fill in this field.',
             'sex_id.required' => 'Please fill in this field.',
 

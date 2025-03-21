@@ -39,8 +39,7 @@ class ChildController extends Controller
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
 
-        $maleChildrenQuery = clone $fundedChildren;
-        $femaleChildrenQuery = clone $fundedChildren;
+        $childrenQuery = clone $fundedChildren;
 
         $userID = auth()->id();
 
@@ -50,49 +49,27 @@ class ChildController extends Controller
             $centerNames = ChildDevelopmentCenter::all()->keyBy('id');
 
             if ($cdcId == 'all_center') {
-                $maleChildren = $maleChildrenQuery->whereHas('records', function ($query) use ($centerIds) {
+                $children = $childrenQuery->whereHas('records', function ($query) use ($centerIds) {
                     $query->whereIn('child_development_center_id', $centerIds)
                         ->where('status', 'active')
                         ->where('funded', 1)
                         ->groupBy('child_id');
-                })
-                    ->whereHas('sex', function ($query) {
-                        $query->where('name', 'Male');
-                    })->paginate(5);
-
-                $femaleChildren = $femaleChildrenQuery->whereHas('records', function ($query) use ($centerIds) {
-                    $query->whereIn('child_development_center_id', $centerIds)
-                        ->where('status', 'active')
-                        ->where('funded', 1)
-                        ->groupBy('child_id');
-                })
-                    ->whereHas('sex', function ($query) {
-                        $query->where('name', 'Female');
-                    })->paginate(5);
+                    })
+                    ->whereHas('sex')
+                    ->orderBy('sex_id', 'asc')
+                    ->paginate(5);
 
             } else {
                 $centerId = ChildCenter::where('child_development_center_id', $cdcId)->first();
 
-                $maleChildren = $maleChildrenQuery->whereHas('records', function ($query) use ($cdcId) {
+                $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
                         ->where('status', 'active')
                         ->where('funded', 1)
                         ->groupBy('child_id');
-                })
-                    ->whereHas('sex', function ($query) {
-                        $query->where('name', 'Male');
                     })
-                    ->paginate(5);
-
-                $femaleChildren = $femaleChildrenQuery->whereHas('records', function ($query) use ($cdcId) {
-                    $query->where('child_development_center_id', $cdcId)
-                        ->where('status', 'active')
-                        ->where('funded', 1)
-                        ->groupBy('child_id');
-                })
-                    ->whereHas('sex', function ($query) {
-                        $query->where('name', 'Female');
-                    })
+                    ->whereHas('sex')
+                    ->orderBy('sex_id', 'asc')
                     ->paginate(5);
             }
 
@@ -103,54 +80,30 @@ class ChildController extends Controller
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId == 'all_center') {
-                $maleChildren = $maleChildrenQuery->whereHas('records', function ($query) use ($centerIDs) {
+                $children = $childrenQuery->whereHas('records', function ($query) use ($centerIDs) {
                     $query->whereIn('child_development_center_id', $centerIDs)
                         ->where('status', 'active')
                         ->where('funded', 1)
                         ->groupBy('child_id');
-                })
-                    ->whereHas('sex', function ($query) {
-                        $query->where('name', 'Male');
                     })
-                    ->paginate(5);
-
-                $femaleChildren = $femaleChildrenQuery->whereHas('records', function ($query) use ($centerIDs) {
-                    $query->whereIn('child_development_center_id', $centerIDs)
-                        ->where('status', 'active')
-                        ->where('funded', 1)
-                        ->groupBy('child_id');
-                })
-                    ->whereHas('sex', function ($query) {
-                        $query->where('name', 'Female');
-                    })
+                    ->whereHas('sex')
+                    ->orderBy('sex_id', 'asc')
                     ->paginate(5);
 
             } else {
-                $maleChildren = $maleChildrenQuery->whereHas('records', function ($query) use ($cdcId) {
+                $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
                         ->where('status', 'active')
                         ->where('funded', 1)
                         ->groupBy('child_id');
-                })
-                    ->whereHas('sex', function ($query) {
-                        $query->where('name', 'Male');
                     })
-                    ->paginate(5);
-
-                $femaleChildren = $femaleChildrenQuery->whereHas('records', function ($query) use ($cdcId) {
-                    $query->where('child_development_center_id', $cdcId)
-                        ->where('status', 'active')
-                        ->where('funded', 1)
-                        ->groupBy('child_id');
-                })
-                    ->whereHas('sex', function ($query) {
-                        $query->where('name', 'Female');
-                    })
+                    ->whereHas('sex')
+                    ->orderBy('sex_id', 'asc')
                     ->paginate(5);
             }
         }
 
-        return view('child.index', compact('maleChildren', 'femaleChildren', 'centerNames', 'centers', 'cdcId'));
+        return view('child.index', compact('children', 'centerNames', 'centers', 'cdcId'));
     }
 
     /**
@@ -240,43 +193,37 @@ class ChildController extends Controller
             $step1Data['city_name'] = PSGC::where('city_name_psgc', $request->city_name_psgc ?? null)->value('city_name');
             $step1Data['brgy_name'] = PSGC::where('brgy_psgc', $request->brgy_psgc ?? null)->value('brgy_name');
 
-            session()->put('step1Data', $step1Data);
+            session()->put('step1Data', array_merge(session()->get('step1Data', []), $step1Data));
             session()->put('step', 2);
-            session()->save();
-
 
 
             return redirect()->back();
         }
 
         if ($step == 2) {
-            $validatedData = $request->validated();
+            $validatedData2 = $request->validated();
 
             if ($request->input('action') === 'prev') {
                 session()->put('step', 1);
                 return redirect()->back();
 
             } else {
-                $step2Data = $validatedData;
+                $step2Data = $validatedData2;
 
                 $step2Data['center_name'] = ChildDevelopmentCenter::where('id', $request->child_development_center_id)->value('center_name');
                 $step2Data['implementation_name'] = Implementation::where('id', $request->implementation_id)->value('name');
                 $step2Data['milk_feeding_name'] = Implementation::where('id', $request->milk_feeding_id)->value('name');
 
-                session()->put('step2Data', $step2Data);
+                session()->put('step2Data', array_merge(session()->get('step2Data', []), $step2Data));
                 session()->put('step', 3);
-                session()->save();
             }
-
-            dd($step2Data);
 
             return redirect()->back();
         }
 
         if ($step == 3) {
             if ($request->input('action') === 'prev') {
-                $step = max(1, session('step', 1) - 1); // Ensure step doesn't go below 1
-                session()->put('step', $step);
+                session()->put('step', 2);
                 return redirect()->back();
             }
             // Final step - process data
@@ -284,6 +231,8 @@ class ChildController extends Controller
                 session()->get('step1Data', []),
                 session()->get('step2Data', [])
             );
+
+
 
             $psgc = Psgc::where('region_psgc', $finalData['region_psgc'])
                 ->where('province_psgc', $finalData['province_psgc'])

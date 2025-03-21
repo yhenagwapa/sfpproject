@@ -6,7 +6,7 @@
     <div class="pagetitle">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-3 p-0">
-                <li class="breadcrumb-item active"><a href="#">Child Development Centers</a></li>
+                <li class="breadcrumb-item active">Child Development Centers</li>
             </ol>
         </nav>
     </div>
@@ -28,7 +28,7 @@
         });
     </script>
 
-    
+
 
     <div class="wrapper">
         <section class="section">
@@ -37,7 +37,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Child Development Centers and Supervised Neighborhood Play</h5>
-                            
+
                             <!-- Add Center Button -->
                             <div class="row">
                                 <div class="col-6 mt-4 d-flex align-items-center">
@@ -50,7 +50,7 @@
                             </div>
 
                             <!-- Centers Table -->
-                            <div class="col-md-12" id="centers-table">
+                            <div class="table-responsive" id="centers-table">
                                 @include('centers.partials.table', ['centersWithRoles' => $centersWithRoles])
                             </div>
                         </div>

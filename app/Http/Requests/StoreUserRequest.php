@@ -24,10 +24,10 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'firstname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'middlename' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-            'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
+            'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+            'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+            'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+            'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
             'contact_number' => ['required', 'regex:/^09\d{9}$/'],
             'address' => ['required', 'string'],
             'province_psgc' => ['required'],

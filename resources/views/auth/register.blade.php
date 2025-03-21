@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="base-url" content="{{ url('https://172.31.176.49/sfpproject/public') }}">
 
     <title>SFP Onse</title>
 
@@ -17,7 +18,7 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('../img/SFP-LOGO-2024.png') }}" rel="icon">
+    <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -26,10 +27,8 @@
     <!-- Fonts and Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-    
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="{{ asset('js/main.js') }}" defer></script>
 
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -60,24 +59,12 @@
                         <div class="w-full md:w-full">
                             <div class="card">
                                 <div class="card-body">
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    @endif
+
                                     <h5 class="card-title">Register</h5>
                                     <form class="row" method="post" action="{{ route('register') }}">
                                         @csrf
                                         <div class="flex flex-wrap">
-                                            <div class='w-full md:w-2/12 px-3 mt-2 text-gray-400 text-xs'>Personal Information</div>
-                                            <div class='w-full md:w-10/12 px-3 mt-3 text-gray-400 text-xs'>
-                                                <hr>
-                                            </div>
+                                            <div class='w-full px-3 mt-2 text-gray-400 text-xs'>Personal Information<hr></div>
                                         </div>
                                         <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
@@ -144,20 +131,27 @@
 
                                         <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <label for="contact_no">Contact Number<b class="text-red-600">*</b></label>
+                                                <label for="contact_number">Contact Number<b class="text-red-600">*</b></label>
                                                 <input type="text"
                                                     class="form-control rounded border-gray-300"
-                                                    id="contact_no" name='contact_no' value="{{ old('contact_no') }}" maxlength="11" >
-                                                @error('contact_no')
+                                                    id="contact_number" name='contact_number' value="{{ old('contact_number') }}" maxlength="11" >
+                                                @error('contact_number')
                                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
-                                        
+
+                                        <div class="flex flex-wrap mt-4">
+                                            <div class='w-full px-3 mt-2 text-gray-400 text-xs'>Address<hr></div>
+                                        </div>
+
                                         <div class="flex flex-wrap">
-                                            <div class='w-full md:w-2/12 px-3 mt-4 text-gray-400 text-xs'>Address</div>
-                                            <div class='w-full md:w-10/12 px-3 mt-8 text-gray-400 text-xs'>
-                                                <hr>
+                                            <div class="w-full px-3 mt-3 text-sm">
+                                                <label for="address">Address<b class="text-red-600">*</b></label>
+                                                <input name="address" type="text" class="form-control rounded border-gray-300 w-full" id="address" value="{{ old('address') }}">
+                                                @error('address')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
 
@@ -167,23 +161,25 @@
                                                     class="text-red-600">*</label>
                                                 <select
                                                     class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                    id="region" disabled>
+                                                    id="region_psgc" name="region_psgc" disabled>
                                                     <option value="110000000" selected>Region XI</option>
                                                 </select>
                                             </div>
 
+                                            <input type="hidden" name="region_psgc" value="110000000">
+
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
                                                 <label for="province">Province</label><label for="province"
                                                     class="text-red-600">*</label>
-                                                <select class="form-control" id="province" name="province_psgc">
-                                                    <option value="" selected>Select Province</option>
-                                                    @foreach ($provinces as $psgc => $name)
-                                                    <option value="{{ $psgc }}"
-                                                        {{ old('province_psgc') == $psgc ? 'selected' : '' }}>
-                                                        {{ $name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
+                                                    <select class="form-control" id="province" name="province_psgc">
+                                                        <option value="" selected>Select Province</option>
+                                                        @foreach ($provinces as $psgc => $name)
+                                                            <option value="{{ $psgc }}"
+                                                                {{ old('province_psgc', session('step1Data.province_psgc')) == $psgc ? 'selected' : '' }}>
+                                                                {{ $name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 @error('province_psgc')
                                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                                 @enderror
@@ -193,62 +189,42 @@
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
                                                 <label for="city">City/Municipality</label><label for="city"
                                                     class="text-red-600">*</label>
-                                                <select class="form-control" id="city" name="city_name_psgc">
-                                                    <option value="" selected>Select City/Municipality</option>
-                                                    @foreach ($cities as $psgc => $name)
-                                                    <option value="{{ $psgc }}"
-                                                        {{ old('city_name_psgc') == $psgc ? 'selected' : '' }}>
-                                                        {{ $name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
+                                                    <select class="form-control" id="city" name="city_name_psgc">
+                                                        <option value="" selected>Select City/Municipality</option>
+                                                        @foreach ($cities as $psgc => $name)
+                                                            <option value="{{ $psgc }}"
+                                                                {{ old('city_name_psgc', session('step1Data.city_name_psgc')) == $psgc ? 'selected' : '' }}>
+                                                                {{ $name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 @error('city_name_psgc')
                                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                        
+
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
                                                 <label for="barangay">Barangay</label><label for="barangay"
                                                     class="text-red-600">*</label>
-                                                <select class="form-control" id="barangay" name="brgy_psgc">
-                                                    <option value="" selected>Select Barangay</option>
-                                                    @foreach ($barangays as $psgc => $name)
-                                                    <option value="{{ $psgc }}"
-                                                        {{ old('brgy_psgc') == $psgc ? 'selected' : '' }}>
-                                                        {{ $name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
+                                                    <select class="form-control" id="barangay" name="brgy_psgc">
+                                                        <option value="" selected>Select Barangay</option>
+                                                        @foreach ($barangays as $psgc => $name)
+                                                            <option value="{{ $psgc }}"
+                                                                {{ old('brgy_psgc', session('step1Data.brgy_psgc')) == $psgc ? 'selected' : '' }}>
+                                                                {{ $name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 @error('brgy_psgc')
                                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-wrap">
-                                            <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <label for="address">Address<b class="text-red-600">*</b></label>
-                                                <input name="address" type="text" class="form-control rounded border-gray-300 w-full" id="address" value="{{ old('address') }}">
-                                                @error('address')
-                                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                       
 
-                                            <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <label for="zip_code">Zip Code<b class="text-red-600">*</b></label>
-                                                <input name="zip_code" type="text" class="form-control rounded border-gray-300 w-full" id="zip_code" value="{{ old('zip_code') }}" maxlength="4">
-                                                @error('zip_code')
-                                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
 
-                                        <div class="flex flex-wrap">
-                                            <div class='w-full md:w-2/12 px-3 mt-4 text-gray-400 text-xs'>Account Information</div>
-                                            <div class='w-full md:w-10/12 px-3 mt-8 text-gray-400 text-xs'>
-                                                <hr>
-                                            </div>
+                                        <div class="flex flex-wrap mt-4">
+                                            <div class='w-full px-3 mt-2 text-gray-400 text-xs'>Account Information<hr></div>
                                         </div>
 
                                         <div class="flex flex-wrap">
@@ -259,38 +235,22 @@
                                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                        
-
-                                            {{-- <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <label for="role_id">Role<b class="text-red-600">*</b></label>
-                                                <select class="form-control rounded border-gray-300 w-full" id="role_id" name="role_id">
-                                                    <option value="" disabled selected>Select role</option>
-                                                    @foreach ($roles as $role)
-                                                        <option value="{{ $role->id }}" {{ old('role_id') == $role->id}}>
-                                                            {{ $role->name }}
-                                                        </option>    
-                                                    @endforeach
-                                                </select>
-                                                @error('role_id')
-                                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                                @enderror
-                                            </div> --}}
                                         </div>
 
                                         <div class="flex flex-wrap">
                                             <!-- Password Field -->
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm relative">
                                                 <label for="password">Password<b class="text-red-600">*</b></label>
-                                                <input 
-                                                    name="password" 
-                                                    type="password" 
-                                                    class="password form-control rounded border-gray-300 w-full pr-10" 
-                                                    id="password" 
+                                                <input
+                                                    name="password"
+                                                    type="password"
+                                                    class="password form-control rounded border-gray-300 w-full pr-10"
+                                                    id="password"
                                                     value="{{ old('password') }}">
                                                 <!-- Toggle Button for Password -->
-                                                <button 
-                                                    type="button" 
-                                                    class="absolute top-7 right-5 text-gray-500" 
+                                                <button
+                                                    type="button"
+                                                    class="absolute top-7 right-5 text-gray-500"
                                                     onclick="togglePassword('password', this)">
                                                     <span class="icon">
                                                         <!-- Default: Closed Eye Icon -->
@@ -312,20 +272,20 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                        
+
                                             <!-- Confirm Password Field -->
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm relative">
                                                 <label for="password_confirmation">Confirm Password<b class="text-red-600">*</b></label>
-                                                <input 
-                                                    name="password_confirmation" 
-                                                    type="password" 
-                                                    class="password form-control rounded border-gray-300 w-full pr-10" 
-                                                    id="password_confirmation" 
+                                                <input
+                                                    name="password_confirmation"
+                                                    type="password"
+                                                    class="password form-control rounded border-gray-300 w-full pr-10"
+                                                    id="password_confirmation"
                                                     value="{{ old('password_confirmation') }}">
                                                 <!-- Toggle Button for Confirm Password -->
-                                                <button 
-                                                    type="button" 
-                                                    class="absolute top-7 right-5 text-gray-500" 
+                                                <button
+                                                    type="button"
+                                                    class="absolute top-7 right-5 text-gray-500"
                                                     onclick="togglePassword('password_confirmation', this)">
                                                     <span class="icon">
                                                         <!-- Default: Closed Eye Icon -->
@@ -339,18 +299,16 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        
-                                        
+
+
 
                                         <div class="flex flex-wrap justify-end w-full md:w-full">
                                             <div class="mt-4">
-                                                <button type="submit"
+                                                <button type="button"
                                                     class="text-white bg-blue-600 rounded px-3 min-h-9" data-bs-toggle="modal" data-bs-target="#verticalycentered">Register</button>
-                                                <button type="reset"
-                                                    class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
                                             </div>
                                         </div>
-    
+
                                         <div class="modal fade" id="verticalycentered" tabindex="-1">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
@@ -378,65 +336,89 @@
             </div>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
+                    // Get dropdown elements
+                    const provinceSelect = document.getElementById('province');
+                    const citySelect = document.getElementById('city');
+                    const barangaySelect = document.getElementById('barangay');
+
+                    // Convert PHP arrays to JSON for JavaScript use
                     const locations = {
                         provinces: @json($provinces),
                         cities: @json($cities),
                         barangays: @json($barangays)
                     };
-        
-                    const provinceSelect = document.getElementById('province');
-                    const citySelect = document.getElementById('city');
-                    const barangaySelect = document.getElementById('barangay');
-        
-                    function filterCities() {
-                        const provincePsgc = provinceSelect.value;
-        
-                        citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
-                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-        
-                        if (provincePsgc) {
-                            citySelect.style.display = 'block';
-                            if (locations.cities[provincePsgc]) {
-                                locations.cities[provincePsgc].forEach(city => {
-                                    const option = document.createElement('option');
-                                    option.value = city.psgc;
-                                    option.text = city.name;
-                                    citySelect.appendChild(option);
-                                });
-                            }
-                        } else {
-                            citySelect.style.display = 'disabled';
-                        }
 
-                        citySelect.value = '';
-                        barangaySelect.value = '';
-                        barangaySelect.style.display = 'disabled';
-                    }
-        
-                    function filterBarangays() {
-                        const cityPsgc = citySelect.value;
-        
-                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-        
-                        if (cityPsgc) {
-                            barangaySelect.style.display = 'block'; 
-                            if (locations.barangays[cityPsgc]) {
-                                locations.barangays[cityPsgc].forEach(barangay => {
-                                    const option = document.createElement('option');
-                                    option.value = barangay.psgc;
-                                    option.text = barangay.name;
-                                    barangaySelect.appendChild(option);
-                                });
+                    // Get old selected values (from Laravel session)
+                    let selectedProvince = @json(old('province_psgc', ''));
+                    let selectedCity = @json(old('city_name_psgc', ''));
+                    let selectedBarangay = @json(old('brgy_psgc', ''));
+
+                    // Function to reset and populate cities when province changes
+                    function populateCities(provincePsgc) {
+                        citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // ✅ Ensure barangay is reset
+
+                        if (provincePsgc && locations.cities[provincePsgc]) {
+                            locations.cities[provincePsgc].forEach(city => {
+                                const option = document.createElement('option');
+                                option.value = city.psgc;
+                                option.text = city.name;
+                                citySelect.appendChild(option);
+                            });
+
+                            // Restore selected city after error submission
+                            if (selectedCity && locations.cities[provincePsgc].some(city => city.psgc == selectedCity)) {
+                                citySelect.value = selectedCity;
+                                populateBarangays(selectedCity); // Load barangays for selected city
+                            } else {
+                                selectedCity = ''; // Reset city selection if it doesn't match the new province
                             }
-                        } else {
-                            barangaySelect.style.display = 'disabled';
                         }
                     }
-        
-                    provinceSelect.addEventListener('change', filterCities);
-                    citySelect.addEventListener('change', filterBarangays);
+
+                    // Function to reset and populate barangays when city changes
+                    function populateBarangays(cityPsgc) {
+                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // ✅ Always clear barangay
+
+                        if (cityPsgc && locations.barangays[cityPsgc]) {
+                            locations.barangays[cityPsgc].forEach(barangay => {
+                                const option = document.createElement('option');
+                                option.value = barangay.psgc;
+                                option.text = barangay.name;
+                                barangaySelect.appendChild(option);
+                            });
+
+                            // Restore selected barangay after error submission
+                            if (selectedBarangay && locations.barangays[cityPsgc].some(barangay => barangay.psgc == selectedBarangay)) {
+                                barangaySelect.value = selectedBarangay;
+                            } else {
+                                selectedBarangay = ''; // Reset barangay selection if city changed
+                            }
+                        }
+                    }
+
+                    // Load old selections if they exist (for validation errors)
+                    if (selectedProvince) {
+                        provinceSelect.value = selectedProvince;
+                        populateCities(selectedProvince);
+                    }
+
+                    // Event Listeners
+                    provinceSelect.addEventListener('change', function() {
+                        selectedProvince = this.value;
+                        selectedCity = ''; // Reset city when province changes
+                        selectedBarangay = ''; // ✅ Reset barangay when province changes
+                        populateCities(this.value);
+                    });
+
+                    citySelect.addEventListener('change', function() {
+                        selectedCity = this.value;
+                        selectedBarangay = ''; // ✅ Reset barangay when city changes
+                        populateBarangays(this.value);
+                    });
                 });
             </script>
+
 
             <script>
                 function togglePassword(fieldId, button) {
@@ -463,10 +445,10 @@
                     }
                 }
             </script>
-            
-            
+
+
         </main>
-        
+
 
         {{-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a> --}}
 
@@ -476,6 +458,9 @@
         @vite(['resources/js/app.js'])
     </div>
     <footer id="register-footer" class="register-footer">
+        <div class="footer-dswd">
+            &copy; 2025 Department of Social Welfare and Development.
+        </div>
         <div class="copyright">
             &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
         </div>

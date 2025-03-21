@@ -25,10 +25,10 @@ class StoreChildRequest extends FormRequest
 
         if ($step == 1) {
             return [
-                'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-                'firstname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-                'middlename' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
-                'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
+                'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+                'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+                'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+                'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'date_of_birth' => ['required', 'date'],
                 'sex_id' => ['required', 'exists:sexes,id'],
                 'region_psgc' => ['required'],
@@ -61,10 +61,10 @@ class StoreChildRequest extends FormRequest
             return [
 
                 'firstname.required' => 'Please fill in first name.',
-                'firstname.regex' => 'Invalid entry.',
-                'middlename.regex' => 'Invalid entry.',
+                'firstname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
+                'middlename.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
                 'lastname.required' => 'Please fill in last name.',
-                'lastname.regex' => 'Invalid entry.',
+                'lastname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
                 'date_of_birth.required' => 'Please select date of birth.',
                 'sex_id.required' => 'Please select sex.',
 

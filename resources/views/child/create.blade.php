@@ -56,10 +56,10 @@
 
                         <form class="row" method="post" action="{{ route('child.store') }} ">
                             @csrf
-
+{{--
                             <input type="hidden" name="step" value="{{ session('step', 1) }}">
 
-                            @if (session('step', 1) == 1)
+                            @if (session('step', 1) == 1) --}}
                                 <div id="step1" class="row">
                                     <h5 class="card-title ml-3">Personal Details</h5>
                                     <div class='col-md-2 mt-3 text-gray-400 text-xs'>Personal Information</div>
@@ -500,7 +500,7 @@
                                                         }
                                                     }, 100);
                                                 } else {
-                                                    barangaySelect.style.display = 'none';
+                                                    barangaySelect..value = '';
                                                 }
                                             }
 
@@ -525,9 +525,10 @@
                                             citySelect.addEventListener('change', filterBarangays);
                                         });
                                     </script>
+                                <button type="button" onclick="nextStep(2)">Next</button>
                                 </div>
-                            @elseif(session('step') == 2)
-                                <div id="step2" class="row step">
+                            {{-- @elseif(session('step') == 2) --}}
+                                <div id="step2" class="row step" style="display: none;">
                                     <h5 class="card-title ml-3">Child Development Center Details</h5>
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="child_development_center_id">CDC or SNP <span
@@ -573,11 +574,11 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-
+                                    <button type="button" onclick="prevStep(1)">Previous</button>
+                                    <button type="button" onclick="nextStep(3)">Next</button>
                                 </div>
-                            @elseif(session('step') == 3)
-                                <div id="step3" class="row step">
+                            {{-- @elseif(session('step') == 3) --}}
+                                <div id="step3" class="row step" style="display: none;">
                                     <h5 class="card-title ml-3">Summary</h5>
 
                                     <div class='col-md-6 mt-3 text-gray-400 text-xs'>Personal Information</div>
@@ -731,58 +732,102 @@
                                         <input type="text" class="rounded border-gray-300" name='milk_feeding_id'
                                             value="{{ session('step2Data.milk_feeding_name') }}" disabled>
                                     </div>
-
-
-                                    {{-- <div class="col-md-12 mt-4 text-right">
-                                        <button type="submit" id="prevBtnn" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="prevStep()">Previous</button>
-
-                                    </div> --}}
+                                    <button type="button" onclick="prevStep(2)">Previous</button>
+                                    <button type="button" onclick="submitForm()">Submit</button>
                                 </div>
-                            @endif
+                            {{-- @endif --}}
 
-                            <div class="col-md-12 mt-4 text-right">
-                                @if (session('step', 1) > 1)
-                                    <button type="submit" name="action" value="prev"
-                                        class="text-white bg-gray-600 rounded px-3 min-h-9">Previous</button>
-                                @endif
 
-                                @if (session('step', 1) < 3)
-                                    <button type="submit" name="action" value="next"
-                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Next</button>
-                                @else
-                                    <button type="submit" name="action" value="submit"
-                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Submit</button>
-                                @endif
-                            </div>
-                            {{-- <div class="modal fade" id="confirmModal" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-red-600">Confirmation</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to save these details?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit"
-                                                class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                            <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                                data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
+
+
+
+
 
                         </form><!-- End floating Labels Form -->
+
+
                     </div>
                 </div>
             </div>
-    </div>
+        </section>
     </div>
 
-    </section>
-    </div>
+    <script>
+
+        let currentStep = localStorage.getItem("currentStep") || 1; // Get saved step or default to 1
+        showStep(currentStep);
+
+        const firstname = document.getElementById("firstname");
+        const middlename = document.getElementById("middlename");
+        const lastname = document.getElementById("lastname");
+        const extension_name = document.getElementById("extension_name");
+        const date_of_birth = document.getElementById("date_of_birth");
+        const sex_id = document.getElementById("sex_id");
+        const pantawid_details = document.getElementById("pantawid_details");
+        const disability_details = document.getElementById("disability_details");
+        const is_indigenous_people = document.getElementById("is_indigenous_people");
+        const is_child_of_soloparent = document.getElementById("is_child_of_soloparent");
+        const is_lactose_intolerant = document.getElementById("is_lactose_intolerant");
+        const province_psgc = document.getElementById("province_psgc");
+        const city_name_psgc = document.getElementById("city_name_psgc");
+        const brgy_psgc = document.getElementById("brgy_psgc");
+        const address = document.getElementById("address");
+
+        const child_development_center_id = document.getElementById("child_development_center_id");
+        const implementation_id = document.getElementById("implementation_id");
+        const milk_feeding_id = document.getElementById("milk_feeding_id");
+
+        const nextButton = document.getElementById("nextButton");
+
+        // Load saved data
+        document.getElementById("firstname").value = localStorage.getItem("firstname") || "";
+        document.getElementById("middlename").value = localStorage.getItem("middlename") || "";
+        document.getElementById("lastname").value = localStorage.getItem("lastname") || "";
+        document.getElementById("extension_name").value = localStorage.getItem("extension_name") || "";
+        document.getElementById("date_of_birth").value = localStorage.getItem("date_of_birth") || "";
+        document.getElementById("sex_id").value = localStorage.getItem("sex_id") || "";
+        document.getElementById("pantawid_details").value = localStorage.getItem("pantawid_details") || "";
+        document.getElementById("disability_details").value = localStorage.getItem("disability_details") || "";
+        document.getElementById("is_indigenous_people").value = localStorage.getItem("is_indigenous_people") || "";
+        document.getElementById("is_child_of_soloparent").value = localStorage.getItem("is_child_of_soloparent") || "";
+        document.getElementById("is_lactose_intolerant").value = localStorage.getItem("is_lactose_intolerant") || "";
+        document.getElementById("province_psgc").value = localStorage.getItem("province_psgc") || "";
+        document.getElementById("city_name_psgc").value = localStorage.getItem("city_name_psgc") || "";
+        document.getElementById("brgy_psgc").value = localStorage.getItem("brgy_psgc") || "";
+        document.getElementById("address").value = localStorage.getItem("address") || "";
+
+        document.getElementById("child_development_center_id").value = localStorage.getItem("child_development_center_id") || "";
+        document.getElementById("implementation_id").value = localStorage.getItem("implementation_id") || "";
+        document.getElementById("milk_feeding_id").value = localStorage.getItem("milk_feeding_id") || "";
+
+
+        // Show the correct step
+        function showStep(step) {
+            document.querySelectorAll(".step").forEach((div) => div.style.display = "none");
+            document.getElementById(`step${step}`).style.display = "flex";
+            localStorage.setItem("currentStep", step); // Save step in localStorage
+        }
+
+        // Move to the next step
+        function nextStep(step) {
+            localStorage.setItem("name", document.getElementById("name").value);
+            localStorage.setItem("age", document.getElementById("age").value);
+            showStep(step);
+        }
+
+        // Move to the previous step
+        function prevStep(step) {
+            showStep(step);
+        }
+
+        // Final submission (just displaying stored data here)
+        function submitForm() {
+            document.getElementById("summary").innerHTML =
+                `Name: ${localStorage.getItem("name") || "N/A"}<br>Age: ${localStorage.getItem("age") || "N/A"}`;
+
+            localStorage.removeItem("currentStep");
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
 @endsection

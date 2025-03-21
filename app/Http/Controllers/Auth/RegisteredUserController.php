@@ -27,13 +27,13 @@ class RegisteredUserController extends Controller
         $psgc = new Psgc();
 
         $provinces = $psgc->getProvinces();
-        $cities = $psgc->allCities();      
-        $barangays = $psgc->allBarangays(); 
+        $cities = $psgc->allCities();
+        $barangays = $psgc->allBarangays();
 
 
         return view('auth.register', compact('roles', 'provinces', 'cities', 'barangays'));
     }
-    
+
     /**
      * Handle an incoming registration request.
      *
@@ -43,7 +43,8 @@ class RegisteredUserController extends Controller
     {
         $request->validated();
 
-        $psgc = Psgc::where('province_psgc', $request->input('province_psgc'))
+        $psgc = Psgc::where('region_psgc', $request->input('region_psgc'))
+            ->where('province_psgc', $request->input('province_psgc'))
             ->where('city_name_psgc', $request->input('city_name_psgc'))
             ->where('brgy_psgc', $request->input('brgy_psgc'))
             ->first();
@@ -53,10 +54,9 @@ class RegisteredUserController extends Controller
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
             'extension_name' => $request->extension_name,
-            'contact_no' => $request->contact_no,
+            'contact_number' => $request->contact_number,
             'psgc_id' => $psgc->psgc_id,
             'address' => $request->address,
-            'zip_code' => $request->zip_code,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);

@@ -31,6 +31,7 @@ class ReportsController extends Controller
 
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
+        $childCount = null;
 
         $fundedChildren = Child::with('records','nutritionalStatus', 'sex');
 
@@ -49,6 +50,8 @@ class ReportsController extends Controller
                 })
                 ->paginate(5);
 
+                $childCount = $isFunded->count();
+
             } else {
 
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($request, $cycle) {
@@ -61,6 +64,7 @@ class ReportsController extends Controller
                 })
                 ->paginate(5);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
+                $childCount = $isFunded->count();
             }
 
         } else {
@@ -82,9 +86,10 @@ class ReportsController extends Controller
                     $query->where('implementation_id', $cycle->id);
                 })
                 ->paginate(5);
+
+                $childCount = $isFunded->count();
             } else {
 
-        // dd($cdcId);
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                         $query->where('child_development_center_id', $cdcId)
                                 ->where('implementation_id', $cycle->id)
@@ -96,11 +101,12 @@ class ReportsController extends Controller
                 })
                 ->paginate(5);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
+                $childCount = $isFunded->count();
             }
 
         }
 
-        return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames'));
+        return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames', 'childCount'));
     }
 
     public function create()

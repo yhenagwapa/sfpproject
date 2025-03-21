@@ -52,7 +52,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Cycle: <b>{{ $cycle->cycle_name }}</b><br>Total No. of Children: </b></b>
+                            <h5 class="card-title">Cycle: <b>{{ $cycle->name }}</b><br>Total No. of Children: <b>{{ $childCount }}</b></b>
                             </h5>
                             <div id="report-content">
                                 @if (auth()->user()->hasRole('admin') ||
@@ -90,7 +90,7 @@
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
                                                                                 href="#"
-                                                                                onclick="workerReport('masterlist', '{{ $cycle->id }}'); return false;">
+                                                                                onclick="workerReport('masterlist', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -127,7 +127,7 @@
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
                                                                                 href="#"
-                                                                                onclick="workerReport('age-bracket-upon-entry', '{{ $cycle->id }}'); return false;">
+                                                                                onclick="workerReport('age-bracket-upon-entry', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -145,7 +145,7 @@
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
                                                                                 href="#"
-                                                                                onclick="workerReport('age-bracket-after-120', '{{ $cycle->id }}'); return false;">
+                                                                                onclick="workerReport('age-bracket-after-120', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -163,7 +163,7 @@
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
                                                                                 href="#"
-                                                                                onclick="workerReport('monitoring', '{{ $cycle->id }}'); return false;">
+                                                                                onclick="workerReport('monitoring', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -181,7 +181,7 @@
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
                                                                                 href="#"
-                                                                                onclick="workerReport('unfunded', '{{ $cycle->id }}'); return false;">
+                                                                                onclick="workerReport('unfunded', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -366,7 +366,7 @@
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
                                                                                     href="#"
-                                                                                    onclick="focalReport('weight-for-age-upon-entry', '{{ $cycle->id }}'); return false;">
+                                                                                    onclick="focalReport('weight-for-age-upon-entry', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -385,7 +385,7 @@
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
                                                                                     href="#"
-                                                                                    onclick="focalReport('weight-for-age-after-120', '{{ $cycle->id }}'); return false;">
+                                                                                    onclick="focalReport('weight-for-age-after-120', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -425,7 +425,7 @@
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
                                                                                     href="#"
-                                                                                    onclick="focalReport('weight-for-height-upon-entry', '{{ $cycle->id }}'); return false;">
+                                                                                    onclick="focalReport('weight-for-height-upon-entry', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -444,7 +444,7 @@
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
                                                                                     href="#"
-                                                                                    onclick="focalReport('weight-for-height-after-120', '{{ $cycle->id }}'); return false;">
+                                                                                    onclick="focalReport('weight-for-height-after-120', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -484,7 +484,7 @@
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
                                                                                     href="#"
-                                                                                    onclick="focalReport('height-for-age-upon-entry', '{{ $cycle->id }}'); return false;">
+                                                                                    onclick="focalReport('height-for-age-upon-entry', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -503,7 +503,7 @@
                                                                             <li>
                                                                                 <a class="dropdown-item d-flex align-items-center ml-3"
                                                                                     href="#"
-                                                                                    onclick="focalReport('height-for-age-after-120', '{{ $cycle->id }}'); return false;">
+                                                                                    onclick="focalReport('height-for-age-after-120', localStorage.getItem('selected_cycle_id')); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
                                                                                         stroke-width="2"
@@ -525,7 +525,7 @@
                                                             </ul>
                                                         </form>
                                                     @endif
-                                                    @if (auth()->user()->hasRole('admin'))
+                                                    {{-- @if (auth()->user()->hasRole('admin'))
                                                         <form id="printAdminForm" action="" method="POST"
                                                             target="_blank">
                                                             @csrf
@@ -573,7 +573,7 @@
                                                                 </li>
                                                             </ul>
                                                         </form>
-                                                    @endif
+                                                    @endif --}}
                                                 </nav>
                                             </div>
                                             <div class="col-md-6 mt-2 mb-5 text-sm">
@@ -679,4 +679,6 @@
             </div>
         </section>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/js/app.js'])
 @endsection

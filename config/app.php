@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://172.31.176.49/sfpproject/public'),
 
     'asset_url' => env('ASSET_URL', '/'),
 

@@ -43,14 +43,18 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="table-responsive" id="users-content">
-                                <h5 class="card-title">Users</h5>
+                            <h5 class="card-title">Users</h5>
+
+                            <div class="table-responsive" id="users-table">
                                 @include('users.partials.users-table', ['users' => $users])
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/js/app.js'])
 @endsection

@@ -6,7 +6,7 @@
     <div class="pagetitle">
         <nav style="--bs-breadcrumb-divider: '>'; margin-bottom: 1rem;">
             <ol class="breadcrumb p-0">
-                <li class="breadcrumb-item active"><a href="#">Children</a></li>
+                <li class="breadcrumb-item active">Children</li>
             </ol>
         </nav>
     </div>
@@ -29,9 +29,6 @@
             }
         });
     </script>
-
-
-
     <div class="wrapper">
         <section class="section">
             <div class="row">
@@ -47,10 +44,10 @@
                                         </button>
                                     </a>
                                     {{-- <a href="{{ route('child.create') }}">
-                                            <button type="button" class="bg-yellow-600 text-white rounded px-3 min-h-9">
-                                                <i class="bi bi-plus-circle"></i> Import
-                                            </button>
-                                        </a> --}}
+                                                <button type="button" class="bg-yellow-600 text-white rounded px-3 min-h-9">
+                                                    <i class="bi bi-plus-circle"></i> Import
+                                                </button>
+                                            </a> --}}
                                 @endcan
                             </div>
                             <div class="row">
@@ -75,10 +72,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                @include('child.partials.children-table', [
-                                    'maleChildren' => $maleChildren,
-                                    'femaleChildren' => $femaleChildren,
-                                ])
+                                @include('child.partials.children-table', ['children' => $children])
                             </div>
                         </div>
                     </div>

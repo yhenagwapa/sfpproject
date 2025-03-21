@@ -1,14 +1,17 @@
-/**
-* Template Name: NiceAdmin
-* Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-* Updated: Apr 20 2024 with Bootstrap v5.3.3
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
+// /**
+// * Template Name: NiceAdmin
+// * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+// * Updated: Apr 20 2024 with Bootstrap v5.3.3
+// * Author: BootstrapMade.com
+// * License: https://bootstrapmade.com/license/
+// */
+
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-bs5';
 
 (function() {
     "use strict";
-  
+
     /**
      * Easy selector helper function
      */
@@ -20,7 +23,7 @@
         return document.querySelector(el)
       }
     }
-  
+
     /**
      * Easy event listener function
      */
@@ -31,14 +34,14 @@
         select(el, all).addEventListener(type, listener)
       }
     }
-  
+
     /**
-     * Easy on scroll event listener 
+     * Easy on scroll event listener
      */
     const onscroll = (el, listener) => {
       el.addEventListener('scroll', listener)
     }
-  
+
     /**
      * Sidebar toggle
      */
@@ -47,7 +50,7 @@
         select('body').classList.toggle('toggle-sidebar')
       })
     }
-  
+
     /**
      * Search bar toggle
      */
@@ -56,7 +59,7 @@
         select('.search-bar').classList.toggle('search-bar-show')
       })
     }
-  
+
     /**
      * Navbar links active state on scroll
      */
@@ -76,7 +79,7 @@
     }
     window.addEventListener('load', navbarlinksActive)
     onscroll(document, navbarlinksActive)
-  
+
     /**
      * Toggle .header-scrolled class to #header when page is scrolled
      */
@@ -92,7 +95,7 @@
       window.addEventListener('load', headerScrolled)
       onscroll(document, headerScrolled)
     }
-  
+
     /**
      * Back to top button
      */
@@ -108,7 +111,7 @@
       window.addEventListener('load', toggleBacktotop)
       onscroll(document, toggleBacktotop)
     }
-  
+
     /**
      * Initiate tooltips
      */
@@ -116,7 +119,7 @@
     var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
     })
-  
+
     /**
      * Initiate quill editors
      */
@@ -125,13 +128,13 @@
         theme: 'snow'
       });
     }
-  
+
     if (select('.quill-editor-bubble')) {
       new Quill('.quill-editor-bubble', {
         theme: 'bubble'
       });
     }
-  
+
     if (select('.quill-editor-full')) {
       new Quill(".quill-editor-full", {
         modules: {
@@ -179,21 +182,21 @@
         theme: "snow"
       });
     }
-  
+
     /**
      * Initiate TinyMCE Editor
      */
-  
+
     const useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isSmallScreen = window.matchMedia('(max-width: 1023.5px)').matches;
-  
-    
-  
+
+
+
     /**
      * Initiate Bootstrap validation check
      */
     var needsValidation = document.querySelectorAll('.needs-validation')
-  
+
     Array.prototype.slice.call(needsValidation)
       .forEach(function(form) {
         form.addEventListener('submit', function(event) {
@@ -201,45 +204,34 @@
             event.preventDefault()
             event.stopPropagation()
           }
-  
+
           form.classList.add('was-validated')
         }, false)
       })
-  
+
     /**
      * Initiate Datatables
      */
-    // main.js
+    $(document).ready(function () {
+        $('.datatable').each(function () {
+            if (!$.fn.DataTable.isDataTable(this)) {
+                $(this).DataTable({
+                    pageLength: 10,
+                    lengthChange: false,
+                    searching: true,
+                    order: [['asc']],
+                    columnDefs: [
+                        {
+                            targets: 2,
+                            orderSequence: ["desc", "asc"]
+                        },
+                    ],
+                    info: false
+                });
+            }
+        });
+    });
 
-$(document).ready(function() {
-      $('.datatable').DataTable({
-          pageLength: 10,
-          lengthChange: false,
-          columnDefs: [
-              {
-                  targets: 2, 
-                  orderSequence: ["desc", "asc"]
-              },
-          ]
-      });
-
-      if ($.fn.DataTable.isDataTable('#activitylogs-table')) {
-          $('#activitylogs-table').DataTable().destroy();
-      }
-
-      $('#activitylogs-table').DataTable({
-          pageLength: 10,
-          lengthChange: false,
-          order: [[1, 'desc']],
-          columnDefs: [
-              {
-                  targets: 2, 
-                  orderSequence: ["desc", "asc"]
-              },
-          ]
-      });
-  });
-  
     /**
      * Autoresize echart charts
      */
@@ -255,43 +247,43 @@ $(document).ready(function() {
     }
 
 
-    //pantawid and disability detail
+//     //pantawid and disability detail
 
-    // let additionalDetailsElement = document.getElementById('additional-details');
+//     // let additionalDetailsElement = document.getElementById('additional-details');
 
-    // document.addEventListener('DOMContentLoaded', function() {
-    //   // Function to toggle additional details based on radio button selection
-    //   function toggleAdditionalDetails(radioName, additionalDetailsId) {
-    //     const radios = document.getElementsByName(radioName);
-    //     const additionalDetailsSelect = document.getElementById(additionalDetailsId);
-    
-    //     // Ensure additionalDetailsSelect exists
-    //     if (!additionalDetailsSelect) {
-    //       console.error(`Element with ID ${additionalDetailsId} not found.`);
-    //       return;
-    //     }
-    
-    //     radios.forEach(radio => {
-    //       radio.addEventListener('change', function() {
-    //         if (radio.value === '1' && radio.checked) {
-    //           additionalDetailsSelect.disabled = false;
-    //           additionalDetailsSelect.setAttribute('required', 'required');  // Use the local variable
-    //         } else if (radio.value === '0' && radio.checked) {
-    //           additionalDetailsSelect.disabled = true;
-    //           additionalDetailsSelect.removeAttribute('required');  // Use the local variable
-    //         }
-    //       });
-    //     });
-    //   }
-    
-    //   // Apply the function to each set of radio buttons and additional details
-    //   toggleAdditionalDetails('is_pantawid', 'pantawid_details');
-    //   toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
-    // });
-    
+//     // document.addEventListener('DOMContentLoaded', function() {
+//     //   // Function to toggle additional details based on radio button selection
+//     //   function toggleAdditionalDetails(radioName, additionalDetailsId) {
+//     //     const radios = document.getElementsByName(radioName);
+//     //     const additionalDetailsSelect = document.getElementById(additionalDetailsId);
+
+//     //     // Ensure additionalDetailsSelect exists
+//     //     if (!additionalDetailsSelect) {
+//     //       console.error(`Element with ID ${additionalDetailsId} not found.`);
+//     //       return;
+//     //     }
+
+//     //     radios.forEach(radio => {
+//     //       radio.addEventListener('change', function() {
+//     //         if (radio.value === '1' && radio.checked) {
+//     //           additionalDetailsSelect.disabled = false;
+//     //           additionalDetailsSelect.setAttribute('required', 'required');  // Use the local variable
+//     //         } else if (radio.value === '0' && radio.checked) {
+//     //           additionalDetailsSelect.disabled = true;
+//     //           additionalDetailsSelect.removeAttribute('required');  // Use the local variable
+//     //         }
+//     //       });
+//     //     });
+//     //   }
+
+//     //   // Apply the function to each set of radio buttons and additional details
+//     //   toggleAdditionalDetails('is_pantawid', 'pantawid_details');
+//     //   toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
+//     // });
 
 
-    // province, city and barangay
 
-  
+//     // province, city and barangay
+
+
   })();

@@ -37,8 +37,8 @@ class UserController extends Controller
         $authUser = auth()->user();
 
         if($authUser->hasRole('admin')){
-            $users = User::paginate(25);
-            
+            $users = User::all();
+
         } elseif($authUser->hasRole('lgu focal')){
             $authFocalCenters = auth()->user()->focal->pluck('id')->toArray();
 
@@ -48,7 +48,7 @@ class UserController extends Controller
                     })
                     ->orWhereHas('worker', function ($query) use ($authFocalCenters) {
                         $query->whereIn('id', $authFocalCenters);
-                    })->paginate(25);
+                    })->paginate(10);
             }
         }
 
@@ -115,13 +115,13 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $input = $request->all();
- 
+
         if(!empty($request->password)){
             $input['password'] = Hash::make($request->password);
         }else{
             $input = $request->except('password');
         }
-        
+
         $user->update($input);
 
         $user->syncRoles($request->roles);
@@ -135,7 +135,7 @@ class UserController extends Controller
         $request->validate([
             'status' => 'required|string|in:inactive,active,deactivated',
         ]);
-    
+
         $user->update([
             'status' => $request->status,
         ]);
@@ -149,7 +149,7 @@ class UserController extends Controller
         $request->validate([
             'role_id' => 'required|exists:roles,id',
         ]);
-    
+
         $role = Role::find($request->role_id);
 
         if ($role) {
