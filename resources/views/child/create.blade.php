@@ -56,16 +56,14 @@
 
                         <form class="row" method="post" action="{{ route('child.store') }} ">
                             @csrf
-{{--
+
                             <input type="hidden" name="step" value="{{ session('step', 1) }}">
 
-                            @if (session('step', 1) == 1) --}}
+                            @if (session('step', 1) == 1)
                                 <div id="step1" class="row">
                                     <h5 class="card-title ml-3">Personal Details</h5>
-                                    <div class='col-md-2 mt-3 text-gray-400 text-xs'>Personal Information</div>
-                                    <div class='col-md-10 mt-6 text-gray-400 text-xs'>
-                                        <hr>
-                                    </div>
+                                    <div class='col-md-12 mt-3 text-gray-400 text-xs'>Personal Information<hr></div>
+
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="firstname">First Name</label><label for="firstname"
                                             class="text-red-600">*</label>
@@ -105,51 +103,51 @@
                                             id="extension_name" name='extension_name'>
                                             <option value="" disabled selected></option>
                                             <option value="Jr"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'jr' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'Jr' ? 'selected' : '' }}>
                                                 Jr
                                             </option>
                                             <option value="Sr"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'sr' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'Sr' ? 'selected' : '' }}>
                                                 Sr
                                             </option>
                                             <option value="I"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'i' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'I' ? 'selected' : '' }}>
                                                 I
                                             </option>
                                             <option value="II"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'ii' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'II' ? 'selected' : '' }}>
                                                 II
                                             </option>
                                             <option value="III"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'iii' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'III' ? 'selected' : '' }}>
                                                 III
                                             </option>
                                             <option value="IV"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'iv' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'IV' ? 'selected' : '' }}>
                                                 IV
                                             </option>
                                             <option value="V"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'v' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'V' ? 'selected' : '' }}>
                                                 V
                                             </option>
                                             <option value="VI"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'vi' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'VI' ? 'selected' : '' }}>
                                                 VI
                                             </option>
                                             <option value="VII"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'vii' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'VII' ? 'selected' : '' }}>
                                                 VII
                                             </option>
                                             <option value="VIII"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'viii' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'VIII' ? 'selected' : '' }}>
                                                 VIII
                                             </option>
                                             <option value="IX"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'ix' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'IX' ? 'selected' : '' }}>
                                                 IX
                                             </option>
                                             <option value="X"
-                                                {{ old('extension_name', session('step1Data.extension_name')) == 'x' ? 'selected' : '' }}>
+                                                {{ old('extension_name', session('step1Data.extension_name')) === 'X' ? 'selected' : '' }}>
                                                 X
                                             </option>
                                         </select>
@@ -193,13 +191,12 @@
                                     </div>
                                     <div class="col-md-1 mt-4 text-sm">
                                         <input type="radio" id="is_pantawid_yes" name="is_pantawid" value="1"
-                                            {{ old('is_pantawid', session('step1Data.is_pantawid')) == '1' ? 'checked' : '' }}>
+                                            {{ old('is_pantawid', session('step1Data.is_pantawid')) === '1' ? 'checked' : '' }}>
                                         <label for="is_pantawid_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-4 text-sm">
                                         <input type="radio" id="is_pantawid_no" name="is_pantawid" value="0"
-                                            {{ old('is_pantawid', session('step1Data.is_pantawid', '0')) == '0' ? 'checked' : '' }}
-                                            checked>
+                                            {{ old('is_pantawid', session('step1Data.is_pantawid')) === '0' ? 'checked' : '' }}>
                                         <label for="is_pantawid_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-4 text-sm additional-details">
@@ -207,10 +204,10 @@
                                             name="pantawid_details" placeholder="Please specify if RCCT or MCCT" disabled>
                                             <option value="" disabled selected>Select an option</option>
                                             <option value="rcct"
-                                                {{ old('pantawid_details', session('step1Data.pantawid_details')) == 'rcct' ? 'selected' : '' }}>
+                                                {{ old('pantawid_details', session('step1Data.pantawid_details')) === 'rcct' ? 'selected' : '' }}>
                                                 RCCT</option>
                                             <option value="mcct"
-                                                {{ old('pantawid_details', session('step1Data.pantawid_details')) == 'mcct' ? 'selected' : '' }}>
+                                                {{ old('pantawid_details', session('step1Data.pantawid_details')) === 'mcct' ? 'selected' : '' }}>
                                                 MCCT</option>
                                         </select>
                                         @if ($errors->has('pantawid_details'))
@@ -227,14 +224,13 @@
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" id="is_person_with_disability_yes"
                                             name="is_person_with_disability" value="1"
-                                            {{ old('is_person_with_disability', session('step1Data.is_person_with_disability')) == '1' ? 'checked' : '' }}>
+                                            {{ old('is_person_with_disability', session('step1Data.is_person_with_disability')) === '1' ? 'checked' : '' }}>
                                         <label for="is_person_with_disability_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" id="is_person_with_disability_no"
                                             name="is_person_with_disability" value="0"
-                                            {{ old('is_person_with_disability', session('step1Data.is_person_with_disability')) == '0' ? 'checked' : '' }}
-                                            checked>
+                                            {{ old('is_person_with_disability', session('step1Data.is_person_with_disability')) === '0' ? 'checked' : '' }}>
                                         <label for="is_person_with_disability_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm additional-details">
@@ -254,14 +250,13 @@
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_indigenous_people" id="is_indigenous_people_yes"
                                             value="1"
-                                            {{ old('is_indigenous_people', session('step1Data.is_indigenous_people')) == '1' ? 'checked' : '' }}>
+                                            {{ old('is_indigenous_people', session('step1Data.is_indigenous_people')) === '1' ? 'checked' : '' }}>
                                         <label for="is_indigenous_people_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_indigenous_people" id="is_indigenous_people_no"
                                             value="0"
-                                            {{ old('is_indigenous_people', session('step1Data.is_indigenous_people')) == '0' ? 'checked' : '' }}
-                                            checked>
+                                            {{ old('is_indigenous_people', session('step1Data.is_indigenous_people')) === '0' ? 'checked' : '' }}>
                                         <label for="is_indigenous_people_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
@@ -276,14 +271,13 @@
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_child_of_soloparent"
                                             id="is_child_of_soloparent_yes" value="1"
-                                            {{ old('is_child_of_soloparent', session('step1Data.is_child_of_soloparent')) == '1' ? 'checked' : '' }}>
+                                            {{ old('is_child_of_soloparent', session('step1Data.is_child_of_soloparent')) === '1' ? 'checked' : '' }}>
                                         <label for="is_child_of_soloparent_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_child_of_soloparent"
                                             id="is_child_of_soloparent_no" value="0"
-                                            {{ old('is_child_of_soloparent', session('step1Data.is_child_of_soloparent')) == '0' ? 'checked' : '' }}
-                                            checked>
+                                            {{ old('is_child_of_soloparent', session('step1Data.is_child_of_soloparent')) === '0' ? 'checked' : '' }}>
                                         <label for="is_child_of_soloparent_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
@@ -298,14 +292,13 @@
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_yes"
                                             value="1"
-                                            {{ old('is_lactose_intolerant', session('step1Data.is_lactose_intolerant')) == '1' ? 'checked' : '' }}>
+                                            {{ old('is_lactose_intolerant', session('step1Data.is_lactose_intolerant')) === '1' ? 'checked' : '' }}>
                                         <label for="is_lactose_intolerant_yes">Yes</label>
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_no"
                                             value="0"
-                                            {{ old('is_lactose_intolerant', session('step1Data.is_lactose_intolerant')) == '0' ? 'checked' : '' }}
-                                            checked>
+                                            {{ old('is_lactose_intolerant', session('step1Data.is_lactose_intolerant')) === '0' ? 'checked' : '' }}>
                                         <label for="is_lactose_intolerant_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
@@ -314,10 +307,7 @@
                                             name="spaceonly">
                                     </div>
 
-                                    <div class='col-md-1 mt-4 text-gray-400 text-xs'>Address</div>
-                                    <div class='col-md-11 mt-8 text-gray-400 text-xs'>
-                                        <hr>
-                                    </div>
+                                    <div class='col-md-12 mt-4 text-gray-400 text-xs'>Address<hr></div>
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="region">Region</label><label for="region"
@@ -398,139 +388,19 @@
                                     </div>
 
                                     <input type="hidden" id="psgc_id" name="psgc_id" value="">
-
-                                    {{-- @dd(session('step1Data')) --}}
-
-                                    {{-- <div class="col-md-12 mt-4 text-right">
-                                        <button type="submit" id='nextBtn' class="text-white bg-blue-600 rounded px-3 min-h-9" onclick="nextStep()">Next</button>
-                                    </div> --}}
-
-                                    <!-- {{-- pantawid and pwd additional details --}} -->
-                                    <script>
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            function toggleAdditionalDetails(radioName, additionalDetailsId) {
-                                                const radios = document.getElementsByName(radioName);
-                                                const additionalDetailsSelect = document.getElementById(additionalDetailsId);
-
-                                                radios.forEach(radio => {
-                                                    radio.addEventListener('change', function() {
-                                                        if (radio.value === '1' && radio.checked) {
-                                                            additionalDetailsSelect.disabled = false;
-                                                            additionalDetailsElement.setAttribute('required', 'required');
-                                                        } else if (radio.value === '0' && radio.checked) {
-                                                            additionalDetailsSelect.disabled = true;
-                                                            additionalDetailsElement.removeAttribute('required');
-                                                        }
-                                                    });
-                                                });
-
-                                            }
-
-                                            toggleAdditionalDetails('is_pantawid', 'pantawid_details');
-                                            toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
-
-                                        });
-                                    </script>
-
-                                    {{-- city and barangay  --}}
-                                    <script>
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            const locations = {
-                                                provinces: @json($provinces),
-                                                cities: @json($cities),
-                                                barangays: @json($barangays)
-                                            };
-
-                                            const provinceSelect = document.getElementById('province');
-                                            const citySelect = document.getElementById('city');
-                                            const barangaySelect = document.getElementById('barangay');
-
-                                            // ✅ Get saved session values
-                                            const selectedCity = "{{ session('step1Data.city_name_psgc') }}";
-                                            const selectedBarangay = "{{ session('step1Data.brgy_psgc') }}";
-
-                                            function filterCities() {
-                                                const provincePsgc = provinceSelect.value;
-                                                citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
-                                                barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-
-                                                if (provincePsgc && locations.cities[provincePsgc]) {
-                                                    locations.cities[provincePsgc].forEach(city => {
-                                                        const option = document.createElement('option');
-                                                        option.value = city.psgc;
-                                                        option.text = city.name;
-                                                        citySelect.appendChild(option);
-                                                    });
-
-                                                    citySelect.style.display = 'block';
-
-                                                    // ✅ Set selected city AFTER the dropdown is populated
-                                                    setTimeout(() => {
-                                                        if (selectedCity && citySelect.querySelector(`option[value="${selectedCity}"]`)) {
-                                                            citySelect.value = selectedCity;
-                                                            filterBarangays(); // Load barangays
-                                                        }
-                                                    }, 100);
-                                                } else {
-                                                    citySelect.style.display = 'none';
-                                                }
-
-                                                barangaySelect.value = '';
-                                            }
-
-                                            function filterBarangays() {
-                                                const cityPsgc = citySelect.value;
-                                                barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-
-                                                if (cityPsgc && locations.barangays[cityPsgc]) {
-                                                    locations.barangays[cityPsgc].forEach(barangay => {
-                                                        const option = document.createElement('option');
-                                                        option.value = barangay.psgc;
-                                                        option.text = barangay.name;
-                                                        barangaySelect.appendChild(option);
-                                                    });
-
-                                                    barangaySelect.style.display = 'block';
-
-                                                    // ✅ Set selected barangay AFTER the dropdown is populated
-                                                    setTimeout(() => {
-                                                        if (selectedBarangay && barangaySelect.querySelector(
-                                                                `option[value="${selectedBarangay}"]`)) {
-                                                            barangaySelect.value = selectedBarangay;
-                                                        }
-                                                    }, 100);
-                                                } else {
-                                                    barangaySelect..value = '';
-                                                }
-                                            }
-
-                                            // ✅ Automatically detect and set the province from selected city
-                                            setTimeout(() => {
-                                                if (selectedCity) {
-                                                    const provincePsgc = Object.keys(locations.cities).find(province =>
-                                                        locations.cities[province].some(city => city.psgc == selectedCity)
-                                                    );
-
-                                                    if (provincePsgc) {
-                                                        provinceSelect.value = provincePsgc;
-                                                        filterCities();
-                                                    } else {
-                                                        console.warn("⚠️ Province not found for selected city!");
-                                                    }
-                                                }
-                                            }, 200);
-
-                                            // ✅ Event Listeners
-                                            provinceSelect.addEventListener('change', filterCities);
-                                            citySelect.addEventListener('change', filterBarangays);
-                                        });
-                                    </script>
-                                <button type="button" onclick="nextStep(2)">Next</button>
                                 </div>
-                            {{-- @elseif(session('step') == 2) --}}
-                                <div id="step2" class="row step" style="display: none;">
-                                    <h5 class="card-title ml-3">Child Development Center Details</h5>
-                                    <div class="col-md-6 mt-3 text-sm">
+
+                            @elseif(session('step') == 2)
+                                <div id="step2" class="row step">
+                                    <h5 class="card-title">Center and Implement Details</h5>
+
+                                    {{-- <div class='col-md-12 mt-4 text-gray-400 text-xs'>Child Development Center/Supervise Neighborhood Play<hr></div> --}}
+
+                                    <div class="flex flex-wrap">
+                                        <div class='w-full px-3 mt-2 text-gray-400 text-xs'>Personal Information<hr></div>
+                                    </div>
+
+                                    <div class="col-md-12 mt-3 text-sm">
                                         <label for="child_development_center_id">CDC or SNP <span
                                                 class="text-red-600">*</span></label>
                                         <select class="form-control rounded border-gray-300"
@@ -548,6 +418,9 @@
                                                 class="text-xs text-red-600">{{ $errors->first('child_development_center_id') }}</span>
                                         @endif
                                     </div>
+
+                                    <div class='col-md-12 mt-4 text-gray-400 text-xs'>Implementation<hr></div>
+
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="implementation_id">Cycle Implementation</label>
                                         <select class="form-control rounded border-gray-300" id="implementation_id"
@@ -574,11 +447,9 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <button type="button" onclick="prevStep(1)">Previous</button>
-                                    <button type="button" onclick="nextStep(3)">Next</button>
                                 </div>
-                            {{-- @elseif(session('step') == 3) --}}
-                                <div id="step3" class="row step" style="display: none;">
+                            @elseif(session('step') == 3)
+                                <div id="step3" class="row step">
                                     <h5 class="card-title ml-3">Summary</h5>
 
                                     <div class='col-md-6 mt-3 text-gray-400 text-xs'>Personal Information</div>
@@ -732,16 +603,22 @@
                                         <input type="text" class="rounded border-gray-300" name='milk_feeding_id'
                                             value="{{ session('step2Data.milk_feeding_name') }}" disabled>
                                     </div>
-                                    <button type="button" onclick="prevStep(2)">Previous</button>
-                                    <button type="button" onclick="submitForm()">Submit</button>
                                 </div>
-                            {{-- @endif --}}
+                            @endif
+                            <div class="col-md-12 mt-4 text-right">
+                                @if (session('step', 1) > 1)
+                                    <button type="submit" name="action" value="prev"
+                                        class="text-white bg-gray-600 rounded px-3 min-h-9">Previous</button>
+                                @endif
 
-
-
-
-
-
+                                @if (session('step', 1) < 3)
+                                    <button type="submit" name="action" value="next"
+                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Next</button>
+                                @else
+                                    <button type="submit" name="action" value="submit"
+                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Submit</button>
+                                @endif
+                            </div>
 
                         </form><!-- End floating Labels Form -->
 
@@ -752,82 +629,137 @@
         </section>
     </div>
 
-    <script>
-
-        let currentStep = localStorage.getItem("currentStep") || 1; // Get saved step or default to 1
-        showStep(currentStep);
-
-        const firstname = document.getElementById("firstname");
-        const middlename = document.getElementById("middlename");
-        const lastname = document.getElementById("lastname");
-        const extension_name = document.getElementById("extension_name");
-        const date_of_birth = document.getElementById("date_of_birth");
-        const sex_id = document.getElementById("sex_id");
-        const pantawid_details = document.getElementById("pantawid_details");
-        const disability_details = document.getElementById("disability_details");
-        const is_indigenous_people = document.getElementById("is_indigenous_people");
-        const is_child_of_soloparent = document.getElementById("is_child_of_soloparent");
-        const is_lactose_intolerant = document.getElementById("is_lactose_intolerant");
-        const province_psgc = document.getElementById("province_psgc");
-        const city_name_psgc = document.getElementById("city_name_psgc");
-        const brgy_psgc = document.getElementById("brgy_psgc");
-        const address = document.getElementById("address");
-
-        const child_development_center_id = document.getElementById("child_development_center_id");
-        const implementation_id = document.getElementById("implementation_id");
-        const milk_feeding_id = document.getElementById("milk_feeding_id");
-
-        const nextButton = document.getElementById("nextButton");
-
-        // Load saved data
-        document.getElementById("firstname").value = localStorage.getItem("firstname") || "";
-        document.getElementById("middlename").value = localStorage.getItem("middlename") || "";
-        document.getElementById("lastname").value = localStorage.getItem("lastname") || "";
-        document.getElementById("extension_name").value = localStorage.getItem("extension_name") || "";
-        document.getElementById("date_of_birth").value = localStorage.getItem("date_of_birth") || "";
-        document.getElementById("sex_id").value = localStorage.getItem("sex_id") || "";
-        document.getElementById("pantawid_details").value = localStorage.getItem("pantawid_details") || "";
-        document.getElementById("disability_details").value = localStorage.getItem("disability_details") || "";
-        document.getElementById("is_indigenous_people").value = localStorage.getItem("is_indigenous_people") || "";
-        document.getElementById("is_child_of_soloparent").value = localStorage.getItem("is_child_of_soloparent") || "";
-        document.getElementById("is_lactose_intolerant").value = localStorage.getItem("is_lactose_intolerant") || "";
-        document.getElementById("province_psgc").value = localStorage.getItem("province_psgc") || "";
-        document.getElementById("city_name_psgc").value = localStorage.getItem("city_name_psgc") || "";
-        document.getElementById("brgy_psgc").value = localStorage.getItem("brgy_psgc") || "";
-        document.getElementById("address").value = localStorage.getItem("address") || "";
-
-        document.getElementById("child_development_center_id").value = localStorage.getItem("child_development_center_id") || "";
-        document.getElementById("implementation_id").value = localStorage.getItem("implementation_id") || "";
-        document.getElementById("milk_feeding_id").value = localStorage.getItem("milk_feeding_id") || "";
-
-
-        // Show the correct step
-        function showStep(step) {
-            document.querySelectorAll(".step").forEach((div) => div.style.display = "none");
-            document.getElementById(`step${step}`).style.display = "flex";
-            localStorage.setItem("currentStep", step); // Save step in localStorage
-        }
-
-        // Move to the next step
-        function nextStep(step) {
-            localStorage.setItem("name", document.getElementById("name").value);
-            localStorage.setItem("age", document.getElementById("age").value);
-            showStep(step);
-        }
-
-        // Move to the previous step
-        function prevStep(step) {
-            showStep(step);
-        }
-
-        // Final submission (just displaying stored data here)
-        function submitForm() {
-            document.getElementById("summary").innerHTML =
-                `Name: ${localStorage.getItem("name") || "N/A"}<br>Age: ${localStorage.getItem("age") || "N/A"}`;
-
-            localStorage.removeItem("currentStep");
-        }
-    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
+
+    <!-- {{-- pantawid and pwd additional details --}} -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function toggleAdditionalDetails(radioName, additionalDetailsId) {
+                const radios = document.getElementsByName(radioName);
+                const additionalDetailsSelect = document.getElementById(additionalDetailsId);
+
+                function updateFieldState() {
+                const selectedRadio = document.querySelector(`input[name="${radioName}"]:checked`);
+
+                if (selectedRadio && selectedRadio.value === '1') {
+                    additionalDetailsSelect.disabled = false;
+                    additionalDetailsSelect.setAttribute('required', 'required');
+                } else {
+                    additionalDetailsSelect.disabled = true;
+                    additionalDetailsSelect.removeAttribute('required');
+                    additionalDetailsSelect.value = '';
+                }
+            }
+
+            // Run on page load to preserve state when going back
+            updateFieldState();
+
+            // Add event listener to update when selection changes
+            radios.forEach(radio => {
+                radio.addEventListener('change', updateFieldState);
+            });
+
+            }
+
+            toggleAdditionalDetails('is_pantawid', 'pantawid_details');
+            toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
+
+        });
+    </script>
+
+    {{-- city and barangay  --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get dropdown elements
+            const provinceSelect = document.getElementById('province');
+            const citySelect = document.getElementById('city');
+            const barangaySelect = document.getElementById('barangay');
+
+            // Convert PHP arrays to JSON for JavaScript use
+            const locations = {
+                provinces: @json($provinces),
+                cities: {!! json_encode($cities, JSON_UNESCAPED_UNICODE) !!},
+                barangays: {!! json_encode($barangays, JSON_UNESCAPED_UNICODE) !!}
+            };
+
+            // Get old selected values (from Laravel session for form validation)
+            let selectedProvince = @json(old('province_psgc', session('step1Data.province_psgc')));
+            let selectedCity = @json(old('city_name_psgc', session('step1Data.city_name_psgc')));
+            let selectedBarangay = @json(old('brgy_psgc', session('step1Data.brgy_psgc')));
+
+            // Disable city and barangay initially
+            citySelect.disabled = true;
+            barangaySelect.disabled = true;
+
+            // Function to reset and populate cities when province changes
+            function populateCities(provincePsgc) {
+                citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+                barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Reset barangay
+
+                citySelect.disabled = !provincePsgc; // Enable only if a province is selected
+                barangaySelect.disabled = true; // Always reset barangay when province changes
+
+                if (provincePsgc && locations.cities[provincePsgc]) {
+                    locations.cities[provincePsgc].forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.psgc;
+                        option.text = city.name;
+                        citySelect.appendChild(option);
+                    });
+
+                    // Restore selected city after validation error
+                    if (selectedCity && locations.cities[provincePsgc].some(city => city.psgc == selectedCity)) {
+                        citySelect.value = selectedCity;
+                        populateBarangays(selectedCity); // Load barangays for selected city
+                    } else {
+                        selectedCity = ''; // Reset if no match
+                    }
+                }
+            }
+
+            // Function to reset and populate barangays when city changes
+            function populateBarangays(cityPsgc) {
+                barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Always clear barangay
+
+                barangaySelect.disabled = !cityPsgc; // Enable only if a city is selected
+
+                if (cityPsgc && locations.barangays[cityPsgc]) {
+                    locations.barangays[cityPsgc].forEach(barangay => {
+                        const option = document.createElement('option');
+                        option.value = barangay.psgc;
+                        option.text = barangay.name;
+                        barangaySelect.appendChild(option);
+                    });
+
+                    // Restore selected barangay after validation error
+                    if (selectedBarangay && locations.barangays[cityPsgc].some(barangay => barangay.psgc == selectedBarangay)) {
+                        barangaySelect.value = selectedBarangay;
+                    } else {
+                        selectedBarangay = ''; // Reset if no match
+                    }
+                }
+            }
+
+            // Load old selections if they exist (for validation errors)
+            if (selectedProvince) {
+                provinceSelect.value = selectedProvince;
+                populateCities(selectedProvince);
+            }
+
+            // Event Listeners
+            provinceSelect.addEventListener('change', function() {
+                selectedProvince = this.value;
+                selectedCity = ''; // Reset city when province changes
+                selectedBarangay = ''; // Reset barangay when province changes
+                populateCities(this.value);
+            });
+
+            citySelect.addEventListener('change', function() {
+                selectedCity = this.value;
+                selectedBarangay = ''; // Reset barangay when city changes
+                populateBarangays(this.value);
+            });
+        });
+    </script>
 @endsection

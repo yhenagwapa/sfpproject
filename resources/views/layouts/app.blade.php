@@ -71,7 +71,7 @@
             <nav class="header-nav ml-auto align-items-center justify-end">
                 <ul class="d-flex list-unstyled mt-2">
                     <li class="nav-item dropdown pe-3">
-                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                        <button type="button" class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                             data-bs-toggle="dropdown">
                             @auth
                                 @php
@@ -80,7 +80,7 @@
                                 @endphp
                                 <span class="d-none d-md-block dropdown-toggle ps-2">{{ $fullName }}</span>
                             @endauth
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             {{-- <li>
                                 <a class="dropdown-item d-flex align-items-center" href="{{ route('users.edit', auth()->user()->id) }}">
@@ -240,26 +240,41 @@
         <!-- Bootstrap Bundle (includes Popper.js) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-
-
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         @vite(['resources/js/app.js'])
+
+        <form id="clear-session-form" action="{{ route('clear.child.session') }}" method="POST">
+            @csrf
+            <input type="hidden" name="redirect_url" id="redirect_url">
+        </form>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.addEventListener("click", function (event) {
+                    let link = event.target.closest("a"); // Detect if a link is clicked
+                    if (link && !window.location.pathname.includes('/child/create')) {
+                        event.preventDefault(); // Stop normal navigation
+
+                        // Set the redirect URL
+                        document.getElementById("redirect_url").value = link.href;
+
+                        // Submit the form (this clears the session first, then redirects)
+                        document.getElementById("clear-session-form").submit();
+                    }
+                });
+            });
+        </script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 if (!window.location.pathname.includes('/reports')) {
                     localStorage.removeItem('selected_cycle_id');
                 }
-
-                if (!window.location.pathname.includes('/child/create')) {
-                    sessionStorage.removeItem('step');
-                    sessionStorage.removeItem('step1Data');
-                    sessionStorage.removeItem('step2Data');
-                }
             });
         </script>
+
 
 </body>
 

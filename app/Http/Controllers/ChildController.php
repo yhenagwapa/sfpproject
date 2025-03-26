@@ -57,7 +57,7 @@ class ChildController extends Controller
                     })
                     ->whereHas('sex')
                     ->orderBy('sex_id', 'asc')
-                    ->paginate(5);
+                    ->paginate(10);
 
             } else {
                 $centerId = ChildCenter::where('child_development_center_id', $cdcId)->first();
@@ -70,7 +70,7 @@ class ChildController extends Controller
                     })
                     ->whereHas('sex')
                     ->orderBy('sex_id', 'asc')
-                    ->paginate(5);
+                    ->paginate(10);
             }
 
         } else {
@@ -88,7 +88,7 @@ class ChildController extends Controller
                     })
                     ->whereHas('sex')
                     ->orderBy('sex_id', 'asc')
-                    ->paginate(5);
+                    ->paginate(10);
 
             } else {
                 $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
@@ -99,7 +99,7 @@ class ChildController extends Controller
                     })
                     ->whereHas('sex')
                     ->orderBy('sex_id', 'asc')
-                    ->paginate(5);
+                    ->paginate(10);
             }
         }
 
@@ -188,6 +188,9 @@ class ChildController extends Controller
             $step1Data = $validatedData;
             $step1Data['sex_name'] = Sex::where('id', $request->sex_id)->value('name');
 
+            $step1Data['is_pantawid'] = $request->is_pantawid;
+            $step1Data['is_person_with_disability'] = $request->is_person_with_disability;
+
             $step1Data['region_name'] = PSGC::where('region_psgc', $request->region_psgc ?? null)->value('region_name');
             $step1Data['province_name'] = PSGC::where('province_psgc', $request->province_psgc ?? null)->value('province_name');
             $step1Data['city_name'] = PSGC::where('city_name_psgc', $request->city_name_psgc ?? null)->value('city_name');
@@ -196,6 +199,7 @@ class ChildController extends Controller
             session()->put('step1Data', array_merge(session()->get('step1Data', []), $step1Data));
             session()->put('step', 2);
 
+            // dd($step1Data);
 
             return redirect()->back();
         }
@@ -309,12 +313,24 @@ class ChildController extends Controller
      */
     public function show(Request $request)
     {
+
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+
+
+    public function edit(Request $request)
+    {
         $this->authorize('edit-child');
+
+        $childID = $request->input('child_id');
 
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
         $milkFeeding = Implementation::where('status', 'active')->where('type', 'milk')->first();
 
-        $child = Child::findOrFail($request->child_id);
+        $child = Child::findOrFail($childID);
 
         $centers = ChildDevelopmentCenter::all();
 
@@ -343,18 +359,18 @@ class ChildController extends Controller
         $sexOptions = Sex::all();
 
         $extNameOptions = [
-            'jr' => 'Jr',
-            'sr' => 'Sr',
-            'i' => 'I',
-            'ii' => 'II',
-            'iii' => 'III',
-            'iv' => 'IV',
-            'v' => 'V',
-            'vi' => 'VI',
-            'vii' => 'VII',
-            'viii' => 'VIII',
-            'ix' => 'IX',
-            'x' => 'X',
+            'Jr' => 'Jr',
+            'Sr' => 'Sr',
+            'I' => 'I',
+            'II' => 'II',
+            'III' => 'III',
+            'IV' => 'IV',
+            'V' => 'V',
+            'VI' => 'VI',
+            'VII' => 'VII',
+            'VIII' => 'VIII',
+            'IX' => 'IX',
+            'X' => 'X',
         ];
 
         $pantawidDetails = [
@@ -412,20 +428,11 @@ class ChildController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-
-
-    public function edit($id)
-    {
-
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateChildRequest $request, Child $child)
     {
+        $child = Child::findOrFail($request->input('child_id'));
         $validatedData = $request->validated();
 
         $query = Child::where('firstname', $validatedData['firstname'])
@@ -472,8 +479,12 @@ class ChildController extends Controller
             'updated_by_user_id' => auth()->id(),
         ]);
 
+
+
         $currentChildCenter = ChildCenter::where('child_id', $child->id)
             ->where('status', 'active')->first();
+
+
 
         if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
             ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);

@@ -16,11 +16,11 @@ class ClearCreateChildStepsSession
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->is('child/create')) {
-            session()->forget(['step', 'step1Data', 'step2Data']);
-        }
+        // if (!$request->is('child/create')) {
+        //     session()->forget(['step', 'step1Data', 'step2Data']);
+        // }
 
-        return $next($request);
+        // return $next($request);
     }
 
 }

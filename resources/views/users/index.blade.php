@@ -48,7 +48,9 @@
                             <div class="table-responsive" id="users-table">
                                 @include('users.partials.users-table', ['users' => $users])
                             </div>
-
+                            <div class="pagination-links">
+                                {{ $users->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>

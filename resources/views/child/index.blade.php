@@ -71,8 +71,11 @@
                                 </div>
                             </div>
 
-                            <div class="table-responsive">
+                            <div class="table-responsive" id='children-table'>
                                 @include('child.partials.children-table', ['children' => $children])
+                            </div>
+                            <div class="pagination-links">
+                                {{ $children->links() }}
                             </div>
                         </div>
                     </div>
@@ -81,4 +84,5 @@
         </section>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/js/app.js'])
 @endsection <!-- End section -->

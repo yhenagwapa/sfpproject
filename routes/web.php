@@ -59,14 +59,21 @@ require __DIR__.'/auth.php';
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/child', [ChildController::class, 'index'])->name('child.index');
+    Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');
+    Route::post('/child/store', [ChildController::class, 'store'])->name('child.store');
+    Route::post('/child/edit', [ChildController::class, 'edit'])->name('child.edit');
+    Route::patch('/child/update', [ChildController::class, 'update'])->name('child.update');
+
     Route::resources([
         'roles' => RoleController::class,
         'users' => UserController::class,
-        'child' => ChildController::class,
     ]);
 
-    Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');
-    Route::post('/child/show', [ChildController::class, 'show'])->name('child.show');
+    Route::post('/clear-child-session', function (\Illuminate\Http\Request $request) {
+        session()->forget(['step', 'step1Data', 'step2Data']);
+        return redirect(request('redirect_url', '/'));
+    })->name('clear.child.session');
 
     Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
@@ -119,21 +126,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/reports/print/unfunded', [PDFController::class, 'printUnfunded'])->name('reports.print.unfunded');
 
     Route::post('/milkfeedings/report/{milkfeeding}', [MilkFeedingController::class, 'reportIndex'])->name('milkfeedings.report');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/masterlist', [MilkFeedingController::class, 'printMasterlist'])->name('milkfeedings.print.masterlist');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/malnourish', [MilkFeedingController::class, 'printMalnourish'])->name('milkfeedings.print.malnourished');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/disabilities', [MilkFeedingController::class, 'printDisabilities'])->name('milkfeedings.print.disabilities');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/monitoring', [MilkFeedingController::class, 'printMonitoring'])->name('milkfeedings.print.monitoring');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/undernourished-upon-entry', [MilkFeedingController::class, 'printUndernourishedUponEntry'])->name('milkfeedings.print.undernourished-upon-entry');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/undernourished-after-120', [MilkFeedingController::class, 'printUndernourishedAfter120'])->name('milkfeedings.print.undernourished-after-120');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/age-bracket-upon-entry', [MilkFeedingController::class, 'printEntryAgeBracket'])->name('milkfeedings.print.age-bracket-upon-entry');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/age-bracket-after-120', [MilkFeedingController::class, 'printAfter120AgeBracket'])->name('milkfeedings.print.age-bracket-after-120');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/weight-for-age-upon-entry', [MilkFeedingController::class, 'printWeightForAgeUponEntry'])->name('milkfeedings.print.weight-for-age-upon-entry');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/weight-for-age-after-120', [MilkFeedingController::class, 'printWeightForAgeAfter120'])->name('milkfeedings.print.weight-for-age-after-120');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/weight-for-height-upon-entry', [MilkFeedingController::class, 'printWeightForHeightUponEntry'])->name('milkfeedings.print.weight-for-height-upon-entry');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/weight-for-height-after-120', [MilkFeedingController::class, 'printWeightForHeightAfter120'])->name('milkfeedings.print.weight-for-height-after-120');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/height-for-age-upon-entry', [MilkFeedingController::class, 'printHeightForAgeUponEntry'])->name('milkfeedings.print.height-for-age-upon-entry');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/height-for-age-after-120', [MilkFeedingController::class, 'printHeightForAgeAfter120'])->name('milkfeedings.print.height-for-age-after-120');
-    Route::get('/milkfeedings/report/{milkfeeding}/print/unfunded', [MilkFeedingController::class, 'printUnfunded'])->name('reports.print.unfunded');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/masterlist', [MilkFeedingController::class, 'printMasterlist'])->name('milkfeedings.print.masterlist');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/malnourish', [MilkFeedingController::class, 'printMalnourish'])->name('milkfeedings.print.malnourished');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/disabilities', [MilkFeedingController::class, 'printDisabilities'])->name('milkfeedings.print.disabilities');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/monitoring', [MilkFeedingController::class, 'printMonitoring'])->name('milkfeedings.print.monitoring');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/undernourished-upon-entry', [MilkFeedingController::class, 'printUndernourishedUponEntry'])->name('milkfeedings.print.undernourished-upon-entry');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/undernourished-after-120', [MilkFeedingController::class, 'printUndernourishedAfter120'])->name('milkfeedings.print.undernourished-after-120');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/age-bracket-upon-entry', [MilkFeedingController::class, 'printEntryAgeBracket'])->name('milkfeedings.print.age-bracket-upon-entry');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/age-bracket-after-120', [MilkFeedingController::class, 'printAfter120AgeBracket'])->name('milkfeedings.print.age-bracket-after-120');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/weight-for-age-upon-entry', [MilkFeedingController::class, 'printWeightForAgeUponEntry'])->name('milkfeedings.print.weight-for-age-upon-entry');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/weight-for-age-after-120', [MilkFeedingController::class, 'printWeightForAgeAfter120'])->name('milkfeedings.print.weight-for-age-after-120');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/weight-for-height-upon-entry', [MilkFeedingController::class, 'printWeightForHeightUponEntry'])->name('milkfeedings.print.weight-for-height-upon-entry');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/weight-for-height-after-120', [MilkFeedingController::class, 'printWeightForHeightAfter120'])->name('milkfeedings.print.weight-for-height-after-120');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/height-for-age-upon-entry', [MilkFeedingController::class, 'printHeightForAgeUponEntry'])->name('milkfeedings.print.height-for-age-upon-entry');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/height-for-age-after-120', [MilkFeedingController::class, 'printHeightForAgeAfter120'])->name('milkfeedings.print.height-for-age-after-120');
+    // Route::get('/milkfeedings/report/{milkfeeding}/print/unfunded', [MilkFeedingController::class, 'printUnfunded'])->name('reports.print.unfunded');
 
     Route::get('/activitylogs', [ActivityLogController::class, 'index'])->name('activitylogs.index');
 });

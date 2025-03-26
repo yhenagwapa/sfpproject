@@ -216,10 +216,10 @@ import 'datatables.net-bs5';
         $('.datatable').each(function () {
             if (!$.fn.DataTable.isDataTable(this)) {
                 $(this).DataTable({
-                    pageLength: 10,
+                    paging: false,
                     lengthChange: false,
                     searching: true,
-                    order: [['asc']],
+                    order: [[0,'asc']],
                     columnDefs: [
                         {
                             targets: 2,

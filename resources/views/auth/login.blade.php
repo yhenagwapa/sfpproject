@@ -68,7 +68,7 @@
                                             setTimeout(function() {
                                                     var bsAlert = new bootstrap.Alert(alert);
                                                     bsAlert.close();
-                                                }
+                                                },
                                                 5000);
                                         }
                                     });

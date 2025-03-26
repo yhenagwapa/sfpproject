@@ -37,7 +37,7 @@ class UserController extends Controller
         $authUser = auth()->user();
 
         if($authUser->hasRole('admin')){
-            $users = User::all();
+            $users = User::paginate( 10);
 
         } elseif($authUser->hasRole('lgu focal')){
             $authFocalCenters = auth()->user()->focal->pluck('id')->toArray();

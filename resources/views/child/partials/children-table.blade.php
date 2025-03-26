@@ -1,194 +1,118 @@
-<table id='children-table' class="table datatable mt-3 text-center">
+<table id='children-table' class="table datatable mt-3 text-left">
     <thead class="text-base">
         <tr>
-	    <th>#</th>
+            <th>No.</th>
             <th>Child Name</th>
             <th>Sex</th>
             <th data-type="date" data-format="MM/DD/YYYY">Date of Birth</th>
             <th>Weight for Age</th>
             <th>Weight for Height</th>
             <th>Height for Age</th>
-	    <th>Action</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
 
-            @forelse ($children as $child)
-                <tr>
-		    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $child->full_name }}</td>
-                    <td>{{ $child->sex->name }}</td>
-                    <td>{{ \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') }}</td>
-                    <td>{{ optional($child->nutritionalStatus->first())->weight_for_age }}</td>
-                    <td>{{ optional($child->nutritionalStatus->first())->weight_for_height }}</td>
-                    <td>{{ optional($child->nutritionalStatus->first())->height_for_age }}</td>
+        @forelse ($children as $child)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $child->full_name }}</td>
+                <td>{{ $child->sex->name }}</td>
+                <td>{{ \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') }}</td>
+                <td>{{ optional($child->nutritionalStatus->first())->weight_for_age }}</td>
+                <td>{{ optional($child->nutritionalStatus->first())->weight_for_height }}</td>
+                <td>{{ optional($child->nutritionalStatus->first())->height_for_age }}</td>
 
-                    <td class="inline-flex items-center justify-center">
-                        <div class="flex space-x-3">
-                            @can(['edit-child'])
-                            <form id="editChild{{ $child->id }}" action="{{ route('child.show') }}" method="POST">
+                <td class="inline-flex">
+                    <div class="flex space-x-3">
+                        @can(['edit-child'])
+                            <form action="{{ route('child.edit') }}" method="POST" class="inline">
                                 @csrf
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">
-
-                            <a href="#" class="relative inline-flex items-center justify-center" onclick="document.getElementById('editChild{{ $child->id }}').submit();">
+                                <button type="submit" class="flex edit-child-btn" onclick="saveAndSubmit('{{ $child->id }}')" >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="#3968d2" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                     </svg>
-                                    <span class="font-semibold text-sm" style="color: #3968d2;">
-                                        Edit
-                                    </span>
-                                </a>
+                                    <span class="font-semibold text-sm" style="color: #3968d2;"> Edit </span>
+                                </button>
                             </form>
-                            @endcan
 
-                            @can(['create-nutritional-status'])
-                                <a href="{{ route('nutritionalstatus.index', $child->id) }}" class="relative inline-flex items-center justify-center">
+                        @endcan
+
+                        @can(['create-nutritional-status'])
+                            <a href="{{ route('nutritionalstatus.index', $child->id) }}"
+                                class="relative inline-flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="#1e9730" class="w-5 h-5">
+                                    <path
+                                        d="M3 17L8 12L11 15L17 9M17 9H13M17 9V13M6 21H18C19.6569 21 21 19.6569 21 18V6C21 4.34315 19.6569 3 18 3H6C4.34315 3 3 4.34315 3 6V18C3 19.6569 4.34315 21 6 21Z">
+                                    </path>
+                                </svg>
+                                <span class="font-semibold text-sm" style="color: #1e9730;">
+                                    Nutritional Status
+                                </span>
+                            </a>
+                        @endcan
+                        @can(['edit-nutritional-status'])
+                            @if ($child->nutritionalStatus->isNotEmpty())
+                                <a href="{{ route('nutritionalstatus.edit', $child->id) }}"
+                                    class="relative inline-flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="#1e9730" class="w-5 h-5">
-                                        <path d="M3 17L8 12L11 15L17 9M17 9H13M17 9V13M6 21H18C19.6569 21 21 19.6569 21 18V6C21 4.34315 19.6569 3 18 3H6C4.34315 3 3 4.34315 3 6V18C3 19.6569 4.34315 21 6 21Z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                     </svg>
                                     <span class="font-semibold text-sm" style="color: #1e9730;">
-                                        Nutritional Status
+                                        Edit NS
                                     </span>
                                 </a>
-                            @endcan
-                            @can(['edit-nutritional-status'])
-                                @if($child->nutritionalStatus->isNotEmpty())
-                                    <a href="{{ route('nutritionalstatus.edit', $child->id) }}" class="relative inline-flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="#1e9730" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
-                                        </svg>
-                                        <span class="font-semibold text-sm" style="color: #1e9730;">
-                                            Edit NS
-                                        </span>
-                                    </a>
-                                @endif
-                            @endcan
+                            @endif
+                        @endcan
 
-                            @can('add-attendance')
-                                <a href="{{ route('attendance.index', $child->id) }}" class="relative inline-flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="#eead30" class="w-5 h-5">
-                                        <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 5H7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2V7a2 2 0 0 0 -2 -2h-2" />  <rect x="9" y="3" width="6" height="4" rx="2" />  <path d="M9 14l2 2l4 -4" />
-                                    </svg>
-                                    <span class="font-semibold text-sm" style="color: #eead30;">
-                                        Attendance
-                                    </span>
-                                </a>
-                            @endcan
-                        </div>
-                    </td>
-                </tr>
-           @empty
-            	<tr class="d-none">
-               	    <td class="text-center">No children found.</td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-            	</tr>
-           @endforelse
+                        @can('add-attendance')
+                            <a href="{{ route('attendance.index', $child->id) }}"
+                                class="relative inline-flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="#eead30" class="w-5 h-5">
+                                    <path stroke="none" d="M0 0h24v24H0z" />
+                                    <path
+                                        d="M9 5H7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2V7a2 2 0 0 0 -2 -2h-2" />
+                                    <rect x="9" y="3" width="6" height="4" rx="2" />
+                                    <path d="M9 14l2 2l4 -4" />
+                                </svg>
+                                <span class="font-semibold text-sm" style="color: #eead30;">
+                                    Attendance
+                                </span>
+                            </a>
+                        @endcan
+                    </div>
+                </td>
+            </tr>
+        @empty
+            <tr>
+                <td class="text-center">No children found.</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+            </tr>
+        @endforelse
+        <script>
+            function saveAndSubmit(childID) {
+                // Save cycle_id in localStorage
+                localStorage.setItem('child_id', childID);
 
-            {{-- @forelse ($fechildren as $femaleChild)
-                <tr>
-		    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $femaleChild->full_name }}</td>
-                    <td>{{ $femaleChild->sex->name }}</td>
-                    <td>{{ Carbon\Carbon::parse($femaleChild->date_of_birth)->format('m-d-Y') }}</td>
-                    <td>{{ optional($femaleChild->nutritionalStatus->first())->weight_for_age }}</td>
-                    <td>{{ optional($femaleChild->nutritionalStatus->first())->weight_for_height }}</td>
-                    <td>{{ optional($femaleChild->nutritionalStatus->first())->height_for_age }}</td>
+                // Set hidden input value (in case it needs to be refreshed)
+                document.getElementById('child_id_' + cycleId).value = childID;
 
-                    <td class="inline-flex items-center justify-center">
-                        <div class="flex space-x-3">
-                            @can(['edit-child'])
-                            <form id="editChild{{ $femaleChild->id }}" action="{{ route('child.show') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="child_id" value="{{ $femaleChild->id }}">
-
-                            <a href="#" class="relative inline-flex items-center justify-center" onclick="document.getElementById('editChild{{ $femaleChild->id }}').submit();">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="#3968d2" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                    </svg>
-
-                                    <span class="font-semibold text-sm" style="color: #3968d2;">
-                                        Edit
-                                    </span>
-                                </a>
-                            </form>
-                            @endcan
-
-                            @can(['create-nutritional-status'])
-                                <a href="{{ route('nutritionalstatus.index', $femaleChild->id) }}" class="relative inline-flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="#1e9730" class="w-5 h-5">
-                                            <path d="M3 17L8 12L11 15L17 9M17 9H13M17 9V13M6 21H18C19.6569 21 21 19.6569 21 18V6C21 4.34315 19.6569 3 18 3H6C4.34315 3 3 4.34315 3 6V18C3 19.6569 4.34315 21 6 21Z"></path>
-                                        </svg>
-                                    </button>
-                                    <span class="font-semibold text-sm" style="color: #1e9730;">
-                                        Nutritional Status
-                                    </span>
-                                </a>
-                            @endcan
-                            @can(['edit-nutritional-status'])
-                                @if($femaleChild->nutritionalStatus->isNotEmpty())
-                                    <a href="{{ route('nutritionalstatus.edit', $femaleChild->id) }}" class="relative inline-flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="#1e9730" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
-                                        </svg>
-                                        <span class="font-semibold text-sm" style="color: #1e9730;">
-                                            Edit NS
-                                        </span>
-                                    </a>
-                                @endif
-                            @endcan
-
-                            @can('add-attendance')
-                                <a href="{{ route('attendance.index', $femaleChild->id) }}" class="relative inline-flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="#eead30" class="w-5 h-5">
-                                        <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 5H7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2V7a2 2 0 0 0 -2 -2h-2" />  <rect x="9" y="3" width="6" height="4" rx="2" />  <path d="M9 14l2 2l4 -4" />
-                                    </svg>
-                                    <span class="font-semibold text-sm" style="color: #eead30;">
-                                        Attendance
-                                    </span>
-                                </a>
-                            @endcan
-                        </div>
-                    </td>
-                </tr>
-            @empty
-            	<tr class="d-none">
-               	    <td class="text-center">No female children found.</td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-		    <td class="text-center"></td>
-            	</tr>
-           @endforelse --}}
-
-
+                // Submit the form
+                document.getElementById('editChild-' + childID).submit();
+            }
+        </script>
     </tbody>
-    <script>
-        function saveAndSubmit(child_id) {
-            localStorage.setItem('child_id', child_id);
-
-            document.getElementById('child_id' + child_id).value = child_id;
-
-            document.getElementById('editChild').href = "child.show";
-            document.getElementById('editChild').submit();
-        }
-    </script>
 </table>
