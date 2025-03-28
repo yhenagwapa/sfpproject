@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 
 use App\Models\ChildCenter;
-use App\Models\CycleImplementation;
 use App\Models\NutritionalStatus;
 use App\Models\cgs_wfa_girls;
 use App\Models\cgs_wfa_boys;
@@ -14,7 +13,7 @@ use App\Models\cgs_wfh_girls;
 use App\Models\cgs_wfh_boys;
 use App\Http\Requests\StoreNutritionalStatusRequest;
 use App\Http\Requests\UpdateNutritionalStatusRequest;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use App\Models\Child;
 use App\Models\Sex;
 use Carbon\Carbon;
@@ -27,15 +26,17 @@ class NutritionalStatusController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:create-nutritional-status', ['only' => ['index', 'storeUponEntryDetails', 'storeExitDetails']]);
+        $this->middleware('permission:create-nutritional-status', ['only' => ['storeUponEntryDetails', 'storeExitDetails']]);
         $this->middleware('permission:edit-nutritional-status', ['only' => ['edit', 'updateUponEntryDetails', 'updateAfter120Details' ]]);
     }
 
-    public function index($id)
+    public function index(Request $request)
     {
-        $child = Child::findOrFail($id);
+        $childID = $request->input('child_id');
 
-        $entryData = NutritionalStatus::where('child_id', $id)
+        $child = Child::findOrFail($childID);
+
+        $entryData = NutritionalStatus::where('child_id', $childID)
             ->whereNotNull('weight')
             ->whereNotNull('height')
             ->whereNotNull('actual_weighing_date')
@@ -119,7 +120,10 @@ class NutritionalStatusController extends Controller
                 $entryWeightForAge = 'Normal';
             } elseif ((float) $request->weight > (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Overweight';
+            } else {
+                $entryWeightForAge = 'Not Applicable';
             }
+
         } else {
             $getAge = cgs_wfa_girls::where('age_month', $entryAgeInMonths)->first();
 
@@ -131,6 +135,8 @@ class NutritionalStatusController extends Controller
                 $entryWeightForAge = 'Normal';
             } elseif ((float) $request->weight > (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Overweight';
+            } else {
+                $entryWeightForAge = 'Not Applicable';
             }
         }
 
@@ -146,6 +152,8 @@ class NutritionalStatusController extends Controller
                 $entryHeightForAge = 'Normal';
             } elseif ((float) $getAge->tall <= (float) $request->height) {
                 $entryHeightForAge = 'Tall';
+            } else {
+                $entryHeightForAge = 'Not Applicable';
             }
         } else {
             $getAge = cgs_hfa_girls::where('age_month', $entryAgeInMonths)->first();
@@ -158,6 +166,8 @@ class NutritionalStatusController extends Controller
                 $entryHeightForAge = 'Normal';
             } elseif ((float) $getAge->tall <= (float) $request->height) {
                 $entryHeightForAge = 'Tall';
+            } else {
+                $entryHeightForAge = 'Not Applicable';
             }
         }
 
@@ -175,6 +185,8 @@ class NutritionalStatusController extends Controller
                 $entryWeightForHeight = 'Overweight';
             } elseif ((float) $getHeight->obese <= (float) $request->weight) {
                 $entryWeightForHeight = 'Obese';
+            } else {
+                $entryWeightForHeight = 'Not Applicable';
             }
         } else {
             $getHeight = cgs_wfh_girls::where('length_in_cm', $request->height)->first();
@@ -189,6 +201,8 @@ class NutritionalStatusController extends Controller
                 $entryWeightForHeight = 'Overweight';
             } elseif ((float) $getHeight->obese <= (float) $request->weight) {
                 $entryWeightForHeight = 'Obese';
+            } else {
+                $entryWeightForHeight = 'Not Applicable';
             }
 
         }
@@ -479,6 +493,8 @@ class NutritionalStatusController extends Controller
                 $entryWeightForAge = 'Normal';
             } elseif ((float) $request->weight > (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Overweight';
+            } else {
+                $entryWeightForAge = 'Not Applicable';
             }
         } else {
             $getAge = cgs_wfa_girls::where('age_month', $entryAgeInMonths)->first();
@@ -491,6 +507,8 @@ class NutritionalStatusController extends Controller
                 $entryWeightForAge = 'Normal';
             } elseif ((float) $request->weight > (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Overweight';
+            } else {
+                $entryWeightForAge = 'Not Applicable';
             }
         }
 
@@ -506,6 +524,8 @@ class NutritionalStatusController extends Controller
                 $entryHeightForAge = 'Normal';
             } elseif ((float) $getAge->tall <= (float) $request->height) {
                 $entryHeightForAge = 'Tall';
+            } else {
+                $entryHeightForAge = 'Not Applicable';
             }
         } else {
             $getAge = cgs_hfa_girls::where('age_month', $entryAgeInMonths)->first();
@@ -518,6 +538,8 @@ class NutritionalStatusController extends Controller
                 $entryHeightForAge = 'Normal';
             } elseif ((float) $getAge->tall <= (float) $request->height) {
                 $entryHeightForAge = 'Tall';
+            } else {
+                $entryHeightForAge = 'Not Applicable';
             }
         }
 
@@ -535,6 +557,8 @@ class NutritionalStatusController extends Controller
                 $entryWeightForHeight = 'Overweight';
             } elseif ((float) $getHeight->obese <= (float) $request->weight) {
                 $entryWeightForHeight = 'Obese';
+            } else {
+                $entryWeightForHeight = 'Not Applicable';
             }
         } else {
             $getHeight = cgs_wfh_girls::where('length_in_cm', $request->height)->first();
@@ -549,6 +573,8 @@ class NutritionalStatusController extends Controller
                 $entryWeightForHeight = 'Overweight';
             } elseif ((float) $getHeight->obese <= (float) $request->weight) {
                 $entryWeightForHeight = 'Obese';
+            } else {
+                $entryWeightForHeight = 'Not Applicable';
             }
 
         }
@@ -631,6 +657,8 @@ class NutritionalStatusController extends Controller
                     $exitWeightForAge = 'Normal';
                 } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Overweight';
+                } else {
+                    $exitWeightForAge = 'Not Applicable';
                 }
             } else {
                 $getAge = cgs_wfa_girls::where('age_month', $exitAgeInMonths)->first();
@@ -643,6 +671,8 @@ class NutritionalStatusController extends Controller
                     $exitWeightForAge = 'Normal';
                 } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Overweight';
+                } else {
+                    $exitWeightForAge = 'Not Applicable';
                 }
             }
 
@@ -658,6 +688,8 @@ class NutritionalStatusController extends Controller
                     $exitHeightForAge = 'Normal';
                 } elseif ((float) $getAge->tall <= (float) $request->exitheight) {
                     $exitHeightForAge = 'Tall';
+                } else {
+                    $exitHeightForAge = 'Not Applicable';
                 }
             } else {
                 $getAge = cgs_hfa_girls::where('age_month', $exitAgeInMonths)->first();
@@ -670,6 +702,8 @@ class NutritionalStatusController extends Controller
                     $exitHeightForAge = 'Normal';
                 } elseif ((float) $getAge->tall <= (float) $request->exitheight) {
                     $exitHeightForAge = 'Tall';
+                } else {
+                    $exitHeightForAge = 'Not Applicable';
                 }
             }
 
@@ -687,6 +721,8 @@ class NutritionalStatusController extends Controller
                     $exitWeightForHeight = 'Overweight';
                 } elseif ((float) $getHeight->obese <= (float) $request->exitweight) {
                     $exitWeightForHeight = 'Obese';
+                } else {
+                    $exitWeightForHeight = 'Not Applicable';
                 }
             } else {
                 $getHeight = cgs_wfh_girls::where('length_in_cm', $request->exitheight)->first();
@@ -701,6 +737,8 @@ class NutritionalStatusController extends Controller
                     $exitWeightForHeight = 'Overweight';
                 } elseif ((float) $getHeight->obese <= (float) $request->exitweight) {
                     $exitWeightForHeight = 'Obese';
+                } else {
+                    $exitWeightForHeight = 'Not Applicable';
                 }
 
             }

@@ -26,10 +26,10 @@
                 <td class="inline-flex">
                     <div class="flex space-x-3">
                         @can(['edit-child'])
-                            <form action="{{ route('child.edit') }}" method="POST" class="inline">
+                            <form id="editChild-{{ $child->id }}" action="{{ route('child.edit') }}" method="POST" class="inline">
                                 @csrf
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">
-                                <button type="submit" class="flex edit-child-btn" onclick="saveAndSubmit('{{ $child->id }}')" >
+                                <button type="submit" class="flex edit-child-btn" onclick="ediChild('{{ $child->id }}')" >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="#3968d2" class="w-5 h-5">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -38,24 +38,26 @@
                                     <span class="font-semibold text-sm" style="color: #3968d2;"> Edit </span>
                                 </button>
                             </form>
-
                         @endcan
 
-                        @can(['create-nutritional-status'])
-                            <a href="{{ route('nutritionalstatus.index', $child->id) }}"
-                                class="relative inline-flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="#1e9730" class="w-5 h-5">
-                                    <path
-                                        d="M3 17L8 12L11 15L17 9M17 9H13M17 9V13M6 21H18C19.6569 21 21 19.6569 21 18V6C21 4.34315 19.6569 3 18 3H6C4.34315 3 3 4.34315 3 6V18C3 19.6569 4.34315 21 6 21Z">
-                                    </path>
-                                </svg>
-                                <span class="font-semibold text-sm" style="color: #1e9730;">
-                                    Nutritional Status
-                                </span>
-                            </a>
-                        @endcan
-                        @can(['edit-nutritional-status'])
+                        {{-- @canany(['create-nutritional-status', 'edit-nutritional-status']) --}}
+                            <form id="childNS-{{ $child->id }}" action="{{ route('nutritionalstatus.index') }}" method="POST" class="inline">
+                                @csrf
+                                <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                <button type="submit" class="flex child-ns-btn" onclick="childNS('{{ $child->id }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="#1e9730" class="w-5 h-5">
+                                        <path
+                                            d="M3 17L8 12L11 15L17 9M17 9H13M17 9V13M6 21H18C19.6569 21 21 19.6569 21 18V6C21 4.34315 19.6569 3 18 3H6C4.34315 3 3 4.34315 3 6V18C3 19.6569 4.34315 21 6 21Z">
+                                        </path>
+                                    </svg>
+                                    <span class="font-semibold text-sm" style="color: #1e9730;">
+                                        Nutritional Status
+                                    </span>
+                                </button>
+                            </form>
+                        {{-- @endcanany --}}
+                        {{-- @can(['edit-nutritional-status'])
                             @if ($child->nutritionalStatus->isNotEmpty())
                                 <a href="{{ route('nutritionalstatus.edit', $child->id) }}"
                                     class="relative inline-flex items-center justify-center">
@@ -69,7 +71,7 @@
                                     </span>
                                 </a>
                             @endif
-                        @endcan
+                        @endcan --}}
 
                         @can('add-attendance')
                             <a href="{{ route('attendance.index', $child->id) }}"
@@ -103,15 +105,20 @@
             </tr>
         @endforelse
         <script>
-            function saveAndSubmit(childID) {
-                // Save cycle_id in localStorage
+            function editChild(childID) {
                 localStorage.setItem('child_id', childID);
 
-                // Set hidden input value (in case it needs to be refreshed)
-                document.getElementById('child_id_' + cycleId).value = childID;
+                document.getElementById('child_id_' + childID).value = childID;
 
-                // Submit the form
                 document.getElementById('editChild-' + childID).submit();
+            }
+
+            function childNS(childID) {
+                localStorage.setItem('ns_child_id', childID);
+
+                document.getElementById('ns_child_id_' + childID).value = childID;
+
+                document.getElementById('childNS-' + childID).submit();
             }
         </script>
     </tbody>

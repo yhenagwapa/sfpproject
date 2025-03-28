@@ -159,9 +159,7 @@ class ChildController extends Controller
     {
         $this->authorize('create-child');
 
-        $implementation = Implementation::where('id', $request->implementation_id)
-            ->where('status', 'active')
-            ->first();
+        $currentCycle = Implementation::where('status', 'active')->first();
 
         $step = $request->input('step', 1);
 
@@ -181,9 +179,23 @@ class ChildController extends Controller
 
             $existingChild = $child->first();
 
+
             if ($existingChild) {
-                return redirect()->back()->with('error', 'Child already exists.');
+                $getChildStatus = ChildCenter::where('child_id', $existingChild->id)
+                    ->where('status', 'active')
+                    ->first();
+
+                    if($getChildStatus){
+                        $childStatus = $getChildStatus->status;
+                        $childCycle = $getChildStatus->implementation_id;
+
+                        if($childStatus === 'active' && $childCycle === $currentCycle){
+                            return redirect()->back()->with('error', 'Child already in current .');
+                        }
+                    }
             }
+
+
 
             $step1Data = $validatedData;
             $step1Data['sex_name'] = Sex::where('id', $request->sex_id)->value('name');
@@ -236,8 +248,6 @@ class ChildController extends Controller
                 session()->get('step2Data', [])
             );
 
-
-
             $psgc = Psgc::where('region_psgc', $finalData['region_psgc'])
                 ->where('province_psgc', $finalData['province_psgc'])
                 ->where('city_name_psgc', $finalData['city_name_psgc'])
@@ -250,60 +260,110 @@ class ChildController extends Controller
                 return redirect()->back()->withErrors(['msg' => 'Location not found']);
             }
 
-            // dd($finalData);
-            // Create a new child record
-            $newChild = Child::create([
+            $child = Child::where([
                 'firstname' => $finalData['firstname'],
-                'middlename' => $finalData['middlename'] ?? null,
+                'middlename' => $finalData['middlename'],
                 'lastname' => $finalData['lastname'],
-                'extension_name' => $finalData['extension_name'] ?? null,
-                'date_of_birth' => $finalData['date_of_birth'],
-                'sex_id' => $finalData['sex_id'],
-                'address' => $finalData['address'],
-                'psgc_id' => $psgc_id,
-                'pantawid_details' => $finalData['pantawid_details'] ?? null,
-                'person_with_disability_details' => $finalData['person_with_disability_details'] ?? null,
-                'is_indigenous_people' => $finalData['is_indigenous_people'] ?? false,
-                'is_child_of_soloparent' => $finalData['is_child_of_soloparent'] ?? false,
-                'is_lactose_intolerant' => $finalData['is_lactose_intolerant'] ?? false,
-                'created_by_user_id' => auth()->id(),
+                'date_of_birth' => $finalData['date_of_birth']
             ]);
 
-            $funded = $finalData['implementation_id'] ? true : false;
-
-            if (!empty($finalData['implementation_id']) && !empty($finalData['milk_feeding_id'])){
-
-                ChildCenter::create([
-                    'child_id' => $newChild->id,
-                    'child_development_center_id' => $finalData['child_development_center_id'],
-                    'implementation_id' => $finalData['implementation_id'],
-                    'status' => 'active',
-                    'funded' => $funded
-                ]);
-
-                ChildCenter::create([
-                    'child_id' => $newChild->id,
-                    'child_development_center_id' => $finalData['child_development_center_id'],
-                    'implementation_id' => $finalData['milk_feeding_id'],
-                    'status' => 'active',
-                    'funded' => $funded
-                ]);
-            } elseif (!empty($finalData['implementation_id'])) {
-
-                ChildCenter::create([
-                    'child_id' => $newChild->id,
-                    'child_development_center_id' => $finalData['child_development_center_id'],
-                    'implementation_id' => $finalData['implementation_id'],
-                    'status' => 'active',
-                    'funded' => $funded
-                ]);
+            if (isset($finalData['extension_name'])) {
+                $child->where('extension_name', $finalData['extension_name']);
             }
 
-            session()->forget(['step', 'step1Data', 'step2Data']);
+            $existsInChildTable = $child->first();
 
-            return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
+            // dd($existsInChildTable);
+
+
+            if ($existsInChildTable) {
+                $funded = $finalData['implementation_id'] ? true : false;
+
+                if (!empty($finalData['implementation_id']) && !empty($finalData['milk_feeding_id'])){
+
+                    ChildCenter::create([
+                        'child_id' => $existsInChildTable->id,
+                        'child_development_center_id' => $finalData['child_development_center_id'],
+                        'implementation_id' => $finalData['implementation_id'],
+                        'status' => 'active',
+                        'funded' => $funded
+                    ]);
+
+                    ChildCenter::create([
+                        'child_id' => $existsInChildTable->id,
+                        'child_development_center_id' => $finalData['child_development_center_id'],
+                        'implementation_id' => $finalData['milk_feeding_id'],
+                        'status' => 'active',
+                        'funded' => $funded
+                    ]);
+                } elseif (!empty($finalData['implementation_id'])) {
+
+                    ChildCenter::create([
+                        'child_id' => $existsInChildTable->id,
+                        'child_development_center_id' => $finalData['child_development_center_id'],
+                        'implementation_id' => $finalData['implementation_id'],
+                        'status' => 'active',
+                        'funded' => $funded
+                    ]);
+                }
+
+                session()->forget(['step', 'step1Data', 'step2Data']);
+
+                return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
+            } else {
+                $newChild = Child::create([
+                    'firstname' => $finalData['firstname'],
+                    'middlename' => $finalData['middlename'] ?? null,
+                    'lastname' => $finalData['lastname'],
+                    'extension_name' => $finalData['extension_name'] ?? null,
+                    'date_of_birth' => $finalData['date_of_birth'],
+                    'sex_id' => $finalData['sex_id'],
+                    'address' => $finalData['address'],
+                    'psgc_id' => $psgc_id,
+                    'pantawid_details' => $finalData['pantawid_details'] ?? null,
+                    'person_with_disability_details' => $finalData['person_with_disability_details'] ?? null,
+                    'is_indigenous_people' => $finalData['is_indigenous_people'] ?? false,
+                    'is_child_of_soloparent' => $finalData['is_child_of_soloparent'] ?? false,
+                    'is_lactose_intolerant' => $finalData['is_lactose_intolerant'] ?? false,
+                    'created_by_user_id' => auth()->id(),
+                ]);
+
+                $funded = $finalData['implementation_id'] ? true : false;
+
+                if (!empty($finalData['implementation_id']) && !empty($finalData['milk_feeding_id'])){
+
+                    ChildCenter::create([
+                        'child_id' => $newChild->id,
+                        'child_development_center_id' => $finalData['child_development_center_id'],
+                        'implementation_id' => $finalData['implementation_id'],
+                        'status' => 'active',
+                        'funded' => $funded
+                    ]);
+
+                    ChildCenter::create([
+                        'child_id' => $newChild->id,
+                        'child_development_center_id' => $finalData['child_development_center_id'],
+                        'implementation_id' => $finalData['milk_feeding_id'],
+                        'status' => 'active',
+                        'funded' => $funded
+                    ]);
+                } elseif (!empty($finalData['implementation_id'])) {
+
+                    ChildCenter::create([
+                        'child_id' => $newChild->id,
+                        'child_development_center_id' => $finalData['child_development_center_id'],
+                        'implementation_id' => $finalData['implementation_id'],
+                        'status' => 'active',
+                        'funded' => $funded
+                    ]);
+                }
+
+                session()->forget(['step', 'step1Data', 'step2Data']);
+
+                return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
+            }
+
         }
-
 
     }
 

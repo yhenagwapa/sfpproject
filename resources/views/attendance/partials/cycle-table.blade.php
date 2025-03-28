@@ -6,11 +6,16 @@
         </tr>
     </thead>
     <tbody id="cycle-attendance-table">
-        @foreach ($cycleAttendances as $cycleAttendance)
+        @forelse ($cycleAttendances as $cycleAttendance)
             <tr>
                 <td>{{ $cycleAttendance->attendance_no }}</td>
                 <td>{{ $cycleAttendance->attendance_date }}</td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td>No data available</td>
+                <td></td>
+            </tr>
+        @endforelse
     </tbody>
 </table>

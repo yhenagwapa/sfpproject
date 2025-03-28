@@ -33,41 +33,28 @@
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
                     bsAlert1.close();
-                }, 2000);
+                }, 5000);
             }
             if (alert2) {
                 // Automatically close the alert after 3 seconds (3000 milliseconds)
                 setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
-                }, 2000);
+                }, 5000);
             }
         });
     </script>
 
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-
-
-
     <section class="section">
         <div class="row">
             <div class="col-lg-3">
-                @if (!$hasUponEntryData)
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h5 class='col-md-12'>Upon entry details</h5>
-                            </div>
-
-                            @can(['create-nutritional-status'])
+                @can(['create-nutritional-status'])
+                    @if (!$hasUponEntryData)
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h5 class='col-md-12'>Upon entry details</h5>
+                                </div>
                                 <form method="post" action="{{ route('nutritionalstatus.storeUponEntryDetails') }}">
                                     @csrf
 
@@ -75,25 +62,20 @@
                                     <input type="hidden" name="form_type" value="entry">
 
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="deworming_date">Deworming Date:<b
-                                                class="text-red-600">*</b></label>
-                                        <input type="date" class="form-control rounded border-gray-300"
-                                            id="deworming_date" name='deworming_date'
-                                            value="{{ old('deworming_date') }}" max="{{ date('Y-m-d') }}">
+                                        <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
+                                        <input type="date" class="form-control rounded border-gray-300" id="deworming_date"
+                                            name='deworming_date' value="{{ old('deworming_date') }}" max="{{ date('Y-m-d') }}">
                                         @if ($errors->has('deworming_date'))
-                                            <span
-                                                class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
+                                            <span class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
                                         @endif
                                     </div>
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="vitamin_a_date">Vitamin A Date:<b
-                                                class="text-red-600">*</b></label>
-                                        <input type="date" class="form-control rounded border-gray-300"
-                                            id="vitamin_a_date" name='vitamin_a_date'
-                                            value="{{ old('vitamin_a_date') }}" max="{{ date('Y-m-d') }}">
+                                        <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
+                                        <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date"
+                                            name='vitamin_a_date' value="{{ old('vitamin_a_date') }}"
+                                            max="{{ date('Y-m-d') }}">
                                         @if ($errors->has('vitamin_a_date'))
-                                            <span
-                                                class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
+                                            <span class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
                                         @endif
                                     </div>
                                     <div class="col-md-12 mt-2 text-sm">
@@ -153,19 +135,18 @@
                                         </div>
                                     </div>
                                 </form>
-                            @endcan
-                        </div>
-                    </div>
-                @endif
 
-                @if ($hasUponEntryData && !$hasUponExitData)
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h5 class='col-md-12'>After 120 Feedings</h5>
                             </div>
-
-                            @can(['create-nutritional-status'])
+                        </div>
+                    @endif
+                @endcan
+                @can(['create-nutritional-status'])
+                    @if ($hasUponEntryData && !$hasUponExitData)
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h5 class='col-md-12'>After 120 Feedings</h5>
+                                </div>
                                 <form method="post" action="{{ route('nutritionalstatus.storeExitDetails') }}">
                                     @csrf
 
@@ -230,12 +211,12 @@
                                         </div>
                                     </div>
                                 </form>
-                            @endcan
+                            </div>
                         </div>
-                    </div>
-                @endif
+                    @endif
+                @endcan
             </div>
-            <div class="{{ $hasUponExitData ? 'col-lg-12' : 'col-lg-9' }}">
+            <div class="{{ $hasUponExitData || auth()->user()->hasRole('admin') ? 'col-lg-12' : 'col-lg-9' }}">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" style="text-transform: uppercase;">{{ $child->full_name }} <span>| Date of
@@ -249,6 +230,6 @@
             </div>
         </div>
     </section>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
 @endsection
