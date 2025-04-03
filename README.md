@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
@@ -71,17 +70,3 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 
 ##### Last move here
-
-psgc issue RESOLVED but create:267 Uncaught ReferenceError: filterCities is not defined
-    at HTMLSelectElement.onchange (create:267:71)
-
-
-attendance need to count 120 feedings
-ns to follow weight for age, weight for height and height for age calculation
-reports is urgent!
-
-child development center create
-=======
-# sfpproject
-SFP Onse Project
->>>>>>> 494f8c36628075d786b87f65f58bedbc35f24060

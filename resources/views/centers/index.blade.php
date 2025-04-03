@@ -30,7 +30,7 @@
 
 
 
-    <div class="wrapper">
+    {{-- <div class="wrapper"> --}}
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </section>
-    </div>
+    {{-- </div> --}}
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

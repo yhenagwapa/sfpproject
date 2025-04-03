@@ -29,7 +29,7 @@
             }
         });
     </script>
-    <div class="wrapper">
+
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
@@ -82,7 +82,7 @@
                 </div>
             </div>
         </section>
-    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
 @endsection <!-- End section -->

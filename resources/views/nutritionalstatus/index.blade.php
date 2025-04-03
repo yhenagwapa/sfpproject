@@ -24,6 +24,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var alert1 = document.getElementById('success-alert');
@@ -150,7 +151,7 @@
                                 <form method="post" action="{{ route('nutritionalstatus.storeExitDetails') }}">
                                     @csrf
 
-                                    <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
+                                    <input type="hidden" name="child_id" value="{{ $child->id }}">
                                     <input type="hidden" name="form_type" value="exit">
 
                                     <div class="col-md-12 mt-2 text-sm">
@@ -222,6 +223,26 @@
                         <h5 class="card-title" style="text-transform: uppercase;">{{ $child->full_name }} <span>| Date of
                                 Birth: {{ $child->date_of_birth }} | {{ $child->sex->name }}</span></h5>
 
+                        <div class="col-md-6">
+                            @can('edit-nutritional-status')
+                                @if ($child->nutritionalStatus->isNotEmpty())
+                                    <form action="{{ route('nutritionalstatus.edit') }}" method="POST" class="inline">
+                                        @csrf
+                                        <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                        <button type="submit" class="flex bg-blue-600 text-white rounded px-3 min-h-9 items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="#ffffff" class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                            </svg>
+                                            <span class="font-semibold text-sm ml-1">
+                                                Edit Details
+                                            </span>
+                                        </button>
+                                    </form>
+                                @endif
+                            @endcan
+                        </div>
                         <div class='table-responsive'>
                             @include('nutritionalstatus.partials.ns-table')
                         </div>
@@ -232,4 +253,7 @@
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
+    <script>
+        localStorage.setItem('child_id', '{{ $child->id }}');
+    </script>
 @endsection

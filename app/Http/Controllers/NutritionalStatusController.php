@@ -238,7 +238,7 @@ class NutritionalStatusController extends Controller
             'updated_by_user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('nutritionalstatus.index', ['id' => $request->child_id])->with('success', 'Upon entry details saved successfully.');
+        return redirect()->route('nutritionalstatus.index')->with('success', 'Upon entry details saved successfully.');
     }
     public function storeExitDetails(StoreNutritionalStatusRequest $request)
     {
@@ -406,7 +406,7 @@ class NutritionalStatusController extends Controller
             ]);
         }
 
-        return redirect()->route('nutritionalstatus.index', ['id' => $request->exitchild_id])->with('success', 'After 120 feeding days details saved successfully.');
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('child_id'));
     }
 
 
@@ -421,20 +421,21 @@ class NutritionalStatusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $child = Child::findOrFail($id);
+        $childID = $request->input('child_id');
 
-        $entryData = NutritionalStatus::where('child_id', $id)
+        $child = Child::findOrFail($childID);
+
+        $entryData = NutritionalStatus::where('child_id', $childID)
             ->whereNotNull('weight')
             ->whereNotNull('height')
             ->whereNotNull('actual_weighing_date')
             ->get();
 
-
         $hasUponEntryData = false;
-        $hasUponExitData = false;
         $entryDetails = null;
+        $hasUponExitData = false;
         $exitDetails = null;
 
         $count = $entryData->count();
@@ -443,20 +444,23 @@ class NutritionalStatusController extends Controller
             $hasUponEntryData = true;
             $entryDetails = $entryData[0];
 
+            $hasUponExitData = false;
+
         } elseif ($count === 2) {
             $hasUponEntryData = true;
-            $hasUponExitData = true;
             $entryDetails = $entryData[0];
+
+            $hasUponExitData = true;
             $exitDetails = $entryData[1];
         }
 
-        return view('nutritionalstatus.edit', compact('child', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData'));
+        return view('nutritionalstatus.edit', compact('child', 'entryDetails', 'hasUponEntryData', 'exitDetails', 'hasUponExitData'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function updateUponEntryDetails(UpdateNutritionalStatusRequest $request, NutritionalStatus $nutritionalStatus)
+    public function updateUponEntryDetails(UpdateNutritionalStatusRequest $request)
     {
         $validatedData = $request->validated();
 
@@ -612,13 +616,12 @@ class NutritionalStatusController extends Controller
             ]);
         }
 
-        return redirect()->route('child.index')->with('success', 'Child nutritional status updated successfully.');
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('child_id'));
 
     }
 
     public function updateAfter120Details(UpdateNutritionalStatusRequest $request)
     {
-
         $validatedData = $request->validated();
 
             $exitWeightForAge = null;
@@ -761,23 +764,22 @@ class NutritionalStatusController extends Controller
                 ->take(1)
                 ->first();
 
-                $nutritionalStatus->update([
-                    'child_id' => $request->exitchild_id,
-                    'weight' => $request->exitweight,
-                    'height' => $request->exitheight,
-                    'weighing_date' => $request->exitweighing_date,
-                    'age_in_months' => $exitAgeInMonths,
-                    'age_in_years' => $exitAgeInYears,
-                    'weight_for_age' => $exitWeightForAge,
-                    'height_for_age' => $exitHeightForAge,
-                    'weight_for_height' => $exitWeightForHeight,
-                    'is_malnourish' => $exitIsMalnourished,
-                    'is_undernourish' => $exitIsUndernourished,
-                    'updated_by_user_id' => auth()->id(),
-                ]);
+            $nutritionalStatus->update([
+                'child_id' => $request->exitchild_id,
+                'weight' => $request->exitweight,
+                'height' => $request->exitheight,
+                'weighing_date' => $request->exitweighing_date,
+                'age_in_months' => $exitAgeInMonths,
+                'age_in_years' => $exitAgeInYears,
+                'weight_for_age' => $exitWeightForAge,
+                'height_for_age' => $exitHeightForAge,
+                'weight_for_height' => $exitWeightForHeight,
+                'is_malnourish' => $exitIsMalnourished,
+                'is_undernourish' => $exitIsUndernourished,
+                'updated_by_user_id' => auth()->id(),
+            ]);
 
-
-                return redirect()->back()->with('success', 'After 120 details updated successfully.');
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('exitchild_id'));
     }
 
     /**

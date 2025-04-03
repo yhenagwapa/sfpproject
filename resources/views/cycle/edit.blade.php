@@ -43,7 +43,7 @@
 
 
     <!-- Cycle Implementation Form -->
-    <div class="wrapper">
+
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
@@ -117,7 +117,7 @@
                                         <label for="cycle_status">Status<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_status"
                                                name="cycle_status" value="{{ old('cycle_status', $cycle->status) }}" disabled>
-                                        
+
                                     </div>
                                 </div>
 
@@ -152,6 +152,5 @@
                 </div>
             </div>
         </section>
-    </div>
 
 @endsection

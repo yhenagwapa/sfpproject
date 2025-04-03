@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <!-- Page Title -->
     <div class="pagetitle">
 
@@ -27,20 +26,20 @@
         </div>
     @endif
 
-     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             var alert1 = document.getElementById('success-alert');
             var alert2 = document.getElementById('danger-alert');
             if (alert1) {
                 // Automatically close the alert after 3 seconds (3000 milliseconds)
-                setTimeout(function () {
+                setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
                     bsAlert1.close();
                 }, 2000);
             }
             if (alert2) {
                 // Automatically close the alert after 3 seconds (3000 milliseconds)
-                setTimeout(function () {
+                setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
                 }, 2000);
@@ -49,7 +48,6 @@
     </script>
 
     <!-- Center Details Form -->
-    <div class="wrapper">
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
@@ -69,22 +67,21 @@
                                 <div class="col-md-12 mt-3 text-sm">
                                     <label for="center_name">Center Name<b class="text-red-600">*</b></label>
                                     <input type="text" class="form-control rounded border-gray-300" id="center_name"
-                                        name="center_name" value="{{ old('center_name', $center->center_name) }}"
-                                        autofocus>
+                                        name="center_name" value="{{ old('center_name', $center->center_name) }}" autofocus>
                                     @error('center_name')
                                         <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-6 mt-3 text-sm">
-                                    <label for="assigned_user_id">Assigned LGU Focal<b
-                                            class='text-red-600'>*</b></label>
+                                    <label for="assigned_user_id">Assigned LGU Focal<b class='text-red-600'>*</b></label>
                                     <select class="form-control rounded border-gray-300" id="assigned_focal_user_id"
                                         name="assigned_focal_user_id">
                                         <option value="" selected>Select LGU Focal</option>
                                         @foreach ($focals as $focal)
-                                            <option value="{{ $focal->id }}" {{ old('assigned_focal_user_id', $center->assigned_focal_user_id) == $focal->id ? 'selected' : '' }}>
-                                                {{ $focal->full_name }} 
+                                            <option value="{{ $focal->id }}"
+                                                {{ old('assigned_focal_user_id', $center->assigned_focal_user_id) == $focal->id ? 'selected' : '' }}>
+                                                {{ $focal->full_name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -100,8 +97,9 @@
                                         name="assigned_worker_user_id">
                                         <option value="" selected>Select Worker</option>
                                         @foreach ($workers as $worker)
-                                            <option value="{{ $worker->id }}" {{ old('assigned_worker_worker_id', $center->assigned_worker_user_id) == $worker->id ? 'selected' : '' }}>
-                                                {{ $worker->full_name }} 
+                                            <option value="{{ $worker->id }}"
+                                                {{ old('assigned_worker_worker_id', $center->assigned_worker_user_id) == $worker->id ? 'selected' : '' }}>
+                                                {{ $worker->full_name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -132,7 +130,8 @@
                                         name="province_psgc">
                                         <option value="" selected>Select Province</option>
                                         @foreach ($provinces as $psgc => $name)
-                                            <option value="{{ $psgc }}" {{ old('province_psgc', $psgcRecord->province_psgc) == $psgc ? 'selected' : '' }}>
+                                            <option value="{{ $psgc }}"
+                                                {{ old('province_psgc', $psgcRecord->province_psgc) == $psgc ? 'selected' : '' }}>
                                                 {{ $name }}
                                             </option>
                                         @endforeach
@@ -148,7 +147,8 @@
                                         name="city_name_psgc">
                                         <option value="">Select City/Municipality</option>
                                         @foreach ($cities as $psgc => $name)
-                                            <option value="{{ $psgc }}" {{ old('city_name_psgc', $psgcRecord->city_name_psgc) == $psgc ? 'selected' : '' }}>
+                                            <option value="{{ $psgc }}"
+                                                {{ old('city_name_psgc', $psgcRecord->city_name_psgc) == $psgc ? 'selected' : '' }}>
                                                 {{ $name }}
                                             </option>
                                         @endforeach
@@ -163,7 +163,8 @@
                                     <select class="form-control rounded border-gray-300" id="barangay" name="brgy_psgc">
                                         <option value="">Select Barangay</option>
                                         @foreach ($barangays as $psgc => $name)
-                                            <option value="{{ $psgc }}" {{ old('brgy_psgc', $psgcRecord->brgy_psgc) == $psgc ? 'selected' : '' }}>
+                                            <option value="{{ $psgc }}"
+                                                {{ old('brgy_psgc', $psgcRecord->brgy_psgc) == $psgc ? 'selected' : '' }}>
                                                 {{ $name }}
                                             </option>
                                         @endforeach
@@ -235,8 +236,7 @@
                                             <div class="modal-footer">
                                                 <button type="submit"
                                                     class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                                <button type="button"
-                                                    class="text-white bg-gray-600 rounded px-3 min-h-9"
+                                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
                                                     data-bs-dismiss="modal">Close</button>
                                             </div>
                                         </div>
@@ -244,16 +244,15 @@
                                 </div>
                         </div>
                         </form><!-- End floating Labels Form -->
-                        </div>
                     </div>
                 </div>
             </div>
         </section>
     <!-- Location Scripts -->
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const locations = {
                 provinces: @json($provinces),
                 cities: @json($cities),
@@ -270,7 +269,7 @@
                 let provincePsgc = provinceSelect.value;
 
                 if (provincePsgc && locations.cities[provincePsgc]) {
-                    
+
                     Object.entries(locations.cities[provincePsgc]).forEach(([psgc, name]) => {
                         const option = document.createElement('option');
                         option.value = psgc;
@@ -287,7 +286,7 @@
                 let cityPsgc = citySelect.value;
 
                 if (cityPsgc && locations.barangays[cityPsgc]) {
-                    
+
                     Object.entries(locations.barangays[cityPsgc]).forEach(([psgc, name]) => {
                         const option = document.createElement('option');
                         option.value = psgc;
@@ -295,7 +294,7 @@
                         barangaySelect.appendChild(option);
                     });
 
-                    
+
                     barangaySelect.value = '{{ old('brgy_psgc', $psgcRecord->brgy_psgc) }}';
                 }
             }
@@ -305,7 +304,7 @@
         });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
 
             const newlocations = {
                 changedCities: @json($changedCities),
@@ -333,7 +332,7 @@
                         });
                     }
                 }
-                
+
                 newCitySelect.value = '';
                 newBarangaySelect.value = '';
 
@@ -362,5 +361,4 @@
 
         });
     </script>
-
 @endsection

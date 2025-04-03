@@ -84,13 +84,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/attendance/{child_id}/store-cycle-attendance', [AttendanceController::class, 'storeCycleAttendance'])->name('attendance.storeCycleAttendance');
     Route::post('/attendance/{child_id}/store-milk-attendance', [AttendanceController::class, 'storeMilkAttendance'])->name('attendance.storeMilkAttendance');
 
+    Route::get('/nutritionalstatus/redirect', function () {
+        return view('nutritionalstatus.redirect');
+    })->name('nutritionalstatus.redirect');
+
     Route::post('nutritionalstatus', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
     Route::post('nutritionalstatus/store-entry', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
     Route::post('nutritionalstatus/store-exit', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
 
-    Route::get('nutritionalstatus/{id}/edit', [NutritionalStatusController::class, 'edit'])->name('nutritionalstatus.edit');
-    Route::put('nutritionalstatus/{id}/edit-upon-entry', [NutritionalStatusController::class, 'updateUponEntryDetails'])->name('nutritionalstatus.updateUponEntryDetails');
-    Route::put('nutritionalstatus/{id}/edit-after-120', [NutritionalStatusController::class, 'updateAfter120Details'])->name('nutritionalstatus.updateAfter120Details');
+    Route::post('nutritionalstatus/edit', [NutritionalStatusController::class, 'edit'])->name('nutritionalstatus.edit');
+
+    Route::patch('nutritionalstatus/updateUponEntryDetails', [NutritionalStatusController::class, 'updateUponEntryDetails'])->name('nutritionalstatus.updateUponEntryDetails');
+    Route::patch('nutritionalstatus/updateAfter120Details', [NutritionalStatusController::class, 'updateAfter120Details'])->name('nutritionalstatus.updateAfter120Details');
 
     Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
     Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');

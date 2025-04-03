@@ -44,7 +44,7 @@
                             <form id="childNS-{{ $child->id }}" action="{{ route('nutritionalstatus.index') }}" method="POST" class="inline">
                                 @csrf
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">
-                                <button type="submit" class="flex child-ns-btn" onclick="childNS('{{ $child->id }}')">
+                                <button type="submit" class="flex child-ns-btn" onclick="ediChild('{{ $child->id }}')">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="#1e9730" class="w-5 h-5">
                                         <path
@@ -111,14 +111,6 @@
                 document.getElementById('child_id_' + childID).value = childID;
 
                 document.getElementById('editChild-' + childID).submit();
-            }
-
-            function childNS(childID) {
-                localStorage.setItem('ns_child_id', childID);
-
-                document.getElementById('ns_child_id_' + childID).value = childID;
-
-                document.getElementById('childNS-' + childID).submit();
             }
         </script>
     </tbody>

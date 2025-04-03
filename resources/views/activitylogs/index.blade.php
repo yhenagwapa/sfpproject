@@ -39,7 +39,6 @@
         });
     </script>
 
-    <div class="wrapper">
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
@@ -49,12 +48,14 @@
                             <div id="activitylogs" class="table-responsive">
                                 @include('activitylogs.partials.activitylogs-table', ['groupedActivities' => $groupedActivities])
                             </div>
+                            <div class="pagination-links">
+                                {{ $activities->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    </div>
 
 
 @endsection

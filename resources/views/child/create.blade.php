@@ -47,7 +47,7 @@
         });
     </script>
 
-    <div class="wrapper">
+
         <section class="section">
 
             <div class="col-lg-12">
@@ -627,7 +627,7 @@
                 </div>
             </div>
         </section>
-    </div>
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
