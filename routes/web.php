@@ -107,9 +107,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/cycle', [ImplementationController::class, 'index'])->name(name: 'cycle.index');
     Route::get('/cycle/create', [ImplementationController::class, 'create'])->name(name: 'cycle.create');
     Route::post('/cycle/store', [ImplementationController::class, 'store'])->name(name: 'cycle.store');
-    Route::get('/cycle/{id}/edit', [ImplementationController::class, 'edit'])->name(name: 'cycle.edit');
-    Route::put('/cycle/{cycle}/update', [ImplementationController::class, 'update'])->name(name: 'cycle.update');
-    Route::put('/cycle/{cycle}/update-status', [ImplementationController::class, 'updateStatus'])->name(name: 'cycle.update-status');
+    Route::post('/cycle/edit', [ImplementationController::class, 'edit'])->name(name: 'cycle.edit');
+    Route::patch('/cycle/update', [ImplementationController::class, 'update'])->name(name: 'cycle.update');
+    Route::patch('/cycle/update-cycle-status', [ImplementationController::class, 'updateCycleStatus'])->name(name: 'cycle.update-cycle-status');
+    Route::patch('/cycle/update-milkfeeding-status', [ImplementationController::class, 'updateMilkFeedingStatus'])->name(name: 'cycle.update-milkfeeding-status');
 
     Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::post('/reports/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');

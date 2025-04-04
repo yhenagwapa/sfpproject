@@ -110,9 +110,8 @@
 
                                     <div class="col-md-12 mt-4 text-right">
                                         <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                            data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
-                                        <button type="reset"
-                                            class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
+                                            data-bs-toggle="modal" data-bs-target="#verticalycentered">Save</button>
+
                                     </div>
 
                                     <div class="modal fade" id="verticalycentered" tabindex="-1">
@@ -130,7 +129,7 @@
                                                     <button type="submit"
                                                         class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
                                                     <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                                        data-bs-dismiss="modal">Close</button>
+                                                        data-bs-dismiss="modal">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -151,7 +150,7 @@
                                 <form method="post" action="{{ route('nutritionalstatus.storeExitDetails') }}">
                                     @csrf
 
-                                    <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                    <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
                                     <input type="hidden" name="form_type" value="exit">
 
                                     <div class="col-md-12 mt-2 text-sm">
@@ -186,12 +185,10 @@
 
                                     <div class="col-md-12 mt-4 text-right">
                                         <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                            data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
-                                        <button type="reset"
-                                            class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
+                                            data-bs-toggle="modal" data-bs-target="#verticalycentered1">Save</button>
                                     </div>
 
-                                    <div class="modal fade" id="verticalycentered" tabindex="-1">
+                                    <div class="modal fade" id="verticalycentered1" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -206,7 +203,7 @@
                                                     <button type="submit"
                                                         class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
                                                     <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                                        data-bs-dismiss="modal">Close</button>
+                                                        data-bs-dismiss="modal">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>

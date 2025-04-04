@@ -238,7 +238,7 @@ class NutritionalStatusController extends Controller
             'updated_by_user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('nutritionalstatus.index')->with('success', 'Upon entry details saved successfully.');
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
     }
     public function storeExitDetails(StoreNutritionalStatusRequest $request)
     {
@@ -406,7 +406,7 @@ class NutritionalStatusController extends Controller
             ]);
         }
 
-        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('child_id'));
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('exitchild_id'));
     }
 
 
@@ -616,7 +616,7 @@ class NutritionalStatusController extends Controller
             ]);
         }
 
-        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('child_id'));
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
 
     }
 
@@ -779,7 +779,7 @@ class NutritionalStatusController extends Controller
                 'updated_by_user_id' => auth()->id(),
             ]);
 
-        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('exitchild_id'));
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('exitchild_id'));
     }
 
     /**

@@ -33,7 +33,9 @@ class Child extends Model
         'updated_by_user_id'
     ];
 
-    
+    protected $casts = [
+        'date_of_birth' => 'date',
+    ];
 
     public function getActivitylogOptions(): LogOptions
     {

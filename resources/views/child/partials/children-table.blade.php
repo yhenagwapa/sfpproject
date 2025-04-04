@@ -73,7 +73,7 @@
                             @endif
                         @endcan --}}
 
-                        @can('add-attendance')
+                        {{-- @can('add-attendance')
                             <a href="{{ route('attendance.index', $child->id) }}"
                                 class="relative inline-flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -88,7 +88,7 @@
                                     Attendance
                                 </span>
                             </a>
-                        @endcan
+                        @endcan --}}
                     </div>
                 </td>
             </tr>
