@@ -1,0 +1,126 @@
+<?php
+
+namespace App\Http\Controllers\PDF;
+
+use App\Models\Child;
+use App\Models\ChildCenter;
+use App\Models\ChildDevelopmentCenter;
+use App\Models\Implementation;
+use App\Models\NutritionalStatus;
+use App\Models\Psgc;
+use App\Models\UserCenter;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+trait NutritionalStatusReport
+{
+
+    public function printNutritionalStatusAfter120(Request $request)
+    {
+
+        // define variables
+        $report = [];
+
+        // define implementation_id (cycle_id)
+        $implementationId = $request->cycle_id2;
+        $cycle = Implementation::where('id', $implementationId)->first();
+
+        // get all child development centers under the cycle
+        $cc = ChildCenter::where('implementation_id', $implementationId)->get();
+        $cdc = ChildDevelopmentCenter::whereIn('id', $cc->pluck('child_development_center_id'))->get();
+
+        $categoriesHFA = ['normal', 'stunted', 'severely stunted', 'tall', 'total'];
+        $categoriesWFA = ['normal', 'underweight', 'severely underweight', 'overweight', 'total'];
+        $categoriesWFH = ['normal', 'wasted', 'severely wasted', 'overweight', 'obese', 'total'];
+
+        foreach ($cdc as $c) {
+            $report['height_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $implementationId, 'height_for_age', $categoriesHFA);
+            $report['weight_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $implementationId, 'weight_for_age', $categoriesWFA);
+            $report['weight_for_height'][$c->id] = $this->nutritionalStatusAfter120($c, $implementationId, 'weight_for_height', $categoriesWFH);
+        }
+
+        // additional values for PDF
+        $centers = UserCenter::where('user_id', auth()->id())->get();
+        $getPsgc = $centers->pluck('psgc_id');
+        $province = Psgc::whereIn('psgc_id', $getPsgc)->pluck('province_name')->unique();
+        $city = Psgc::whereIn('psgc_id', $getPsgc)->pluck('city_name')->unique();
+
+        $pdf = PDF::loadView('reports.print.nutritional-status.after120',
+            compact('report', 'cycle', 'province', 'city',
+            'cc', 'categoriesHFA', 'categoriesWFA', 'categoriesWFH'))
+            ->setPaper('folio', 'landscape')
+            ->setOptions([
+                'margin-top' => 0.5,
+                'margin-right' => 0.5,
+                'margin-bottom' => 0.5,
+                'margin-left' => 0.5
+            ]);
+
+        return $pdf->stream($cycle->name . ' Nutritional Status After 120.pdf');
+    }
+
+    public function printNutritionalStatusUponEntry(Request $request)
+    {
+
+        $pdf = PDF::loadView('reports.print.nutritional-status.upon-entry', compact('cycle', 'centerNames', 'ageGroupsPerCenter', 'province', 'city'))
+            ->setPaper('folio', 'landscape')
+            ->setOptions([
+                'margin-top' => 0.5,
+                'margin-right' => 1,
+                'margin-bottom' => 0.5,
+                'margin-left' => 1
+            ]);
+
+        return $pdf->stream($cycle->name . ' Nutritional Status Upon Entry.pdf');
+    }
+
+    private function nutritionalStatusAfter120($cdc, $implementationId, $categoryType, $categories)
+    {
+        $center['center_id'] = $cdc->id;
+        $center['cdc_name'] = $cdc->center_name;
+        $center['worker_name'] = ''; // TODO get Name of Child Development Worker
+
+        $genders = ['male', 'female'];
+        $ages = ['2', '3', '4', '5'];
+
+        // initialize
+        foreach ($categories as $category) {
+            foreach ($genders as $gender) {
+                foreach ($ages as $age) {
+                    $center[$category][$gender][$age] = 0;
+                }
+            }
+        }
+
+        $cc = ChildCenter::where('child_development_center_id', $cdc->id)->where('implementation_id', $implementationId)->get();
+
+        // for height for age
+        foreach ($cc as $child) {
+            $ns = DB::table('nutritional_statuses')->select('nutritional_statuses.*', 'sexes.name as gender')
+                ->leftJoin('children', 'children.id', '=', 'nutritional_statuses.child_id')
+                ->leftJoin('sexes', 'sexes.id', '=', 'children.sex_id')
+                ->where('child_id', $child->id)
+                ->where('implementation_id', $implementationId)
+                ->get();
+
+            if ($ns->isNotEmpty()) {
+                foreach ($ns as $n) {
+
+                    foreach ($categories as $category) {
+                        foreach ($genders as $gender) {
+                            foreach ($ages as $age) {
+                                if (strtolower($n->$categoryType) == $category && strtolower($n->gender) == strtolower($gender) && $n->age_in_years == $age) {
+                                    $center[$category][$gender][$age]++;
+                                    $center['total'][$gender][$age]++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $center;
+    }
+}

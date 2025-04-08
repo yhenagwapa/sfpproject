@@ -105,7 +105,7 @@
                             <form id="reportForm-{{ $cycle->id }}" action="{{ route('reports.index') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="cycle_id" id="cycle_id_{{ $cycle->id }}" value="{{ $cycle->id }}">
-                                <a class="relative inline-flex items-center" href="#" onclick="saveAndSubmit('{{ $cycle->id }}')">
+                                <button class="relative inline-flex items-center" onclick="saveAndSubmit({{ $cycle->id }})">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="#3968d2" class="w-5 h-5">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -116,7 +116,7 @@
                                     <span class="font-semibold text-sm" style="color: #3968d2;">
                                         Reports
                                     </span>
-                                </a>
+                                </button>
                             </form>
                         @endcan
                     </div>
@@ -145,6 +145,7 @@
 
                 // Submit the form
                 document.getElementById('reportForm-' + cycleId).submit();
+
             }
         </script>
     </tbody>

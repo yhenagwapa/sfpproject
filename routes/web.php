@@ -117,8 +117,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/reports/print/disabilities', [PDFController::class, 'printDisabilities'])->name('reports.print.disabilities');
     Route::post('/reports/print/undernourished-upon-entry', [PDFController::class, 'printUndernourishedUponEntry'])->name('reports.print.undernourished-upon-entry');
     Route::post('/reports/print/undernourished-after-120', [PDFController::class, 'printUndernourishedAfter120'])->name('reports.print.undernourished-after-120');
-    Route::post('/reports/print/{reportType}', [PDFController::class, 'nutritionalStatusReport'])
-    ->name('reports.print');
+    // Route::post('/reports/print/{reportType}', [PDFController::class, 'nutritionalStatusReport'])->name('reports.print');
 
     Route::post('/reports/print/weight-for-age-after-120', [PDFController::class, 'printWeightForAgeAfter120'])->name('reports.print.weight-for-age-after-120');
     // Route::post('/reports/print/weight-for-height-upon-entry', [PDFController::class, 'nutritionalStatusReport'])->name('reports.print.weight-for-height-upon-entry');
@@ -129,6 +128,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/reports/print/age-bracket-after-120', [PDFController::class, 'printAgeBracketAfter120'])->name('reports.print.age-bracket-after-120');
     Route::post('/reports/print/monitoring', [PDFController::class, 'printMonitoring'])->name('reports.print.monitoring');
     Route::post('/reports/print/unfunded', [PDFController::class, 'printUnfunded'])->name('reports.print.unfunded');
+
+    Route::post('/reports/print/nutritional-status-after-120', [PDFController::class, 'printNutritionalStatusAfter120'])->name('reports.print.nutritional-status-after-120');
+    Route::post('/reports/print/nutritional-status-upon-entry', [PDFController::class, 'printNutritionalStatusUponEntry'])->name('reports.print.nutritional-status-upon-entry');
 
     Route::post('/milkfeedings/report/{milkfeeding}', [MilkFeedingController::class, 'reportIndex'])->name('milkfeedings.report');
     // Route::get('/milkfeedings/report/{milkfeeding}/print/masterlist', [MilkFeedingController::class, 'printMasterlist'])->name('milkfeedings.print.masterlist');

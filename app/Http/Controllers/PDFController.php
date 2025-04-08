@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\PDF\NutritionalStatusReport;
 use App\Models\ChildCenter;
 use Illuminate\Http\Request;
 use App\Models\ChildDevelopmentCenter;
@@ -14,6 +15,8 @@ use App\Models\Implementation;
 
 class PDFController extends Controller
 {
+    use NutritionalStatusReport;
+
     public function printMasterlist(Request $request)
     {
         $cycle = Implementation::where('id', $request->cycle_id)->first();
