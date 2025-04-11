@@ -23,9 +23,10 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
     {
         return [
             'center_name' => ['required', 'string', 'max:255'],
+            'assigned_pdo_user_id' => ['required', 'exists:users,id'],
             'assigned_focal_user_id' => ['required', 'exists:users,id'],
             'assigned_worker_user_id' => ['required', 'exists:users,id'],
-            'assigned_encoder_user_id' => ['exists:users,id'],
+            'assigned_encoder_user_id' => ['nullable','exists:users,id'],
             'province_psgc' => ['required'],
             'city_name_psgc' => ['required'],
             'brgy_psgc' => ['required'],
@@ -37,6 +38,7 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
         return [
             'center_name.required' => 'Please fill in the name of the child development center.',
             'center_name.string' => 'Invalid entry for center name.',
+            'assigned_pdo_user_id.required' => 'Please select an assigned PDO.',
             'assigned_focal_user_id.required' => 'Please select an assigned LGU Focal.',
             'assigned_worker_user_id.required' => 'Please select an assigned worker.',
             'province_psgc.required' => 'Please select a province.',

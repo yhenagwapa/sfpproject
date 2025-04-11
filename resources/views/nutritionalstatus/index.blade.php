@@ -30,18 +30,16 @@
             var alert1 = document.getElementById('success-alert');
             var alert2 = document.getElementById('danger-alert');
             if (alert1) {
-                // Automatically close the alert after 3 seconds (3000 milliseconds)
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
                     bsAlert1.close();
-                }, 5000);
+                }, 3000);
             }
             if (alert2) {
-                // Automatically close the alert after 3 seconds (3000 milliseconds)
                 setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
-                }, 5000);
+                }, 3000);
             }
         });
     </script>
@@ -65,7 +63,8 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300" id="deworming_date"
-                                            name='deworming_date' value="{{ old('deworming_date') }}" max="{{ date('Y-m-d') }}">
+                                            name='deworming_date' value="{{ old('deworming_date') }}"
+                                            min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                                         @if ($errors->has('deworming_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
                                         @endif
@@ -74,7 +73,7 @@
                                         <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date"
                                             name='vitamin_a_date' value="{{ old('vitamin_a_date') }}"
-                                            max="{{ date('Y-m-d') }}">
+                                            min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                                         @if ($errors->has('vitamin_a_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
                                         @endif
@@ -101,17 +100,12 @@
                                                 class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300"
                                             id="actual_weighing_date" name='actual_weighing_date'
-                                            value="{{ old('actual_weighing_date') }}" max="{{ date('Y-m-d') }}">
+                                            value="{{ old('actual_weighing_date') }}"
+                                            min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                                         @if ($errors->has('actual_weighing_date'))
                                             <span
                                                 class="text-xs text-red-600">{{ $errors->first('actual_weighing_date') }}</span>
                                         @endif
-                                    </div>
-
-                                    <div class="col-md-12 mt-4 text-right">
-                                        <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                            data-bs-toggle="modal" data-bs-target="#verticalycentered">Save</button>
-
                                     </div>
 
                                     <div class="modal fade" id="verticalycentered" tabindex="-1">
@@ -135,6 +129,18 @@
                                         </div>
                                     </div>
                                 </form>
+
+                                <div class="col-md-12 flex mt-4 justify-end text-right">
+                                    <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
+                                        data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
+
+                                    <form id="cancel-form" method="GET" action="{{ route('child.index') }}">
+                                    </form>
+
+                                    <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                        Cancel
+                                    </button>
+                                </div>
 
                             </div>
                         </div>
@@ -176,16 +182,12 @@
                                                 class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300"
                                             id="exitweighing_date" name='exitweighing_date'
-                                            value="{{ old('exitweighing_date') }}" max="{{ date('Y-m-d') }}">
+                                            value="{{ old('exitweighing_date') }}"
+                                            min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                                         @if ($errors->has('exitweighing_date'))
                                             <span
                                                 class="text-xs text-red-600">{{ $errors->first('exitweighing_date') }}</span>
                                         @endif
-                                    </div>
-
-                                    <div class="col-md-12 mt-4 text-right">
-                                        <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                            data-bs-toggle="modal" data-bs-target="#verticalycentered1">Save</button>
                                     </div>
 
                                     <div class="modal fade" id="verticalycentered1" tabindex="-1">
@@ -209,6 +211,18 @@
                                         </div>
                                     </div>
                                 </form>
+
+                                <div class="col-md-12 flex mt-4 justify-end text-right">
+                                    <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
+                                        data-bs-toggle="modal" data-bs-target="#verticalycentered1">Save Changes</button>
+
+                                    <form id="cancel-form" method="GET" action="{{ route('child.index') }}">
+                                    </form>
+
+                                    <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -218,7 +232,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" style="text-transform: uppercase;">{{ $child->full_name }} <span>| Date of
-                                Birth: {{ $child->date_of_birth }} | {{ $child->sex->name }}</span></h5>
+                                Birth: {{ $child->date_of_birth->format('Y-m-d') }} | {{ $child->sex->name }}</span></h5>
 
                         <div class="col-md-6">
                             @can('edit-nutritional-status')

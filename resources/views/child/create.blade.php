@@ -35,14 +35,14 @@
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
                     bsAlert1.close();
-                }, 5000);
+                }, 3000);
             }
             if (alert2) {
                 // Automatically close the alert after 3 seconds (3000 milliseconds)
                 setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
-                }, 5000);
+                }, 3000);
             }
         });
     </script>
@@ -152,18 +152,35 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="col-md-6 mt-2 text-sm">
+
+                                    <div class="col-md-6 mt-2 text-sm" x-data="dateFilter()" x-init="setDateRange()">
                                         <label for="date_of_birth">Date of Birth</label><label for="date_of_birth"
                                             class="text-red-600">*</label>
-                                        <input type="date"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="date_of_birth" name='date_of_birth'
-                                            value="{{ old('date_of_birth', session('step1Data.date_of_birth')) }}"
-                                            max="{{ date('Y-m-d') }}">
+                                        <input type="date" class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                        id="date_of_birth" name='date_of_birth'
+                                        value="{{ old('date_of_birth', session('step1Data.date_of_birth')) }}" x-bind:min="minDate" x-bind:max="maxDate">
                                         @if ($errors->has('date_of_birth'))
                                             <span class="text-xs text-red-600">{{ $errors->first('date_of_birth') }}</span>
                                         @endif
                                     </div>
+
+                                    <script>
+                                        function dateFilter() {
+                                            return {
+                                                minDate: '',
+                                                maxDate: '',
+                                                setDateRange() {
+                                                    const today = new Date();
+
+                                                    const max = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
+                                                    const min = new Date(today.getFullYear() - 6, today.getMonth(), today.getDate() + 2);
+
+                                                    this.minDate = min.toISOString().split('T')[0];
+                                                    this.maxDate = max.toISOString().split('T')[0];
+                                                }
+                                            }
+                                        }
+                                    </script>
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="sex">Sex</label><label for="sex"
                                             class="text-red-600">*</label>
@@ -188,6 +205,10 @@
                                     <div class="col-md-4 mt-4 text-sm">
                                         <label for="is_pantawid">Pantawid Member:</label><label for="is_pantawid"
                                             class="text-red-600">*</label>
+                                        @if ($errors->has('is_pantawid'))
+                                            <span
+                                            class="text-xs text-red-600">{{ $errors->first('is_pantawid') }}</span>
+                                        @endif
                                     </div>
                                     <div class="col-md-1 mt-4 text-sm">
                                         <input type="radio" id="is_pantawid_yes" name="is_pantawid" value="1"
@@ -200,9 +221,10 @@
                                         <label for="is_pantawid_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-4 text-sm additional-details">
-                                        <select class="form-control rounded border-gray-300" id="pantawid_details"
-                                            name="pantawid_details" placeholder="Please specify if RCCT or MCCT" disabled>
-                                            <option value="" disabled selected>Select an option</option>
+                                        <label for="pantawid_details">Pantawid Details:</label><b
+                                            class="text-red-600">*</b>
+                                        <select class="form-control rounded border-gray-300" id="pantawid_details" name="pantawid_details" placeholder="Please specify if RCCT or MCCT" disabled>
+                                            <option value="" selected disabled>SELECT DETAILS</option>
                                             <option value="rcct"
                                                 {{ old('pantawid_details', session('step1Data.pantawid_details')) === 'rcct' ? 'selected' : '' }}>
                                                 RCCT</option>
@@ -211,8 +233,7 @@
                                                 MCCT</option>
                                         </select>
                                         @if ($errors->has('pantawid_details'))
-                                            <span
-                                                class="text-xs text-red-600">{{ $errors->first('pantawid_details') }}</span>
+                                            <span class="text-xs text-red-600">{{ $errors->first('pantawid_details') }}</span>
                                         @endif
                                     </div>
 
@@ -220,6 +241,10 @@
                                     <div class="col-md-4 mt-2 text-sm">
                                         <label for="is_person_with_disability">Person with Disability:</label><label
                                             for="is_person_with_disability" class="text-red-600">*</label>
+                                        @if ($errors->has('is_person_with_disability'))
+                                        <span
+                                            class="text-xs text-red-600">{{ $errors->first('is_person_with_disability') }}</span>
+                                        @endif
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" id="is_person_with_disability_yes"
@@ -234,6 +259,8 @@
                                         <label for="is_person_with_disability_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm additional-details">
+                                        <label for="person_with_disability_details">Disability Details:</label><b
+                                        class="text-red-600">*</b>
                                         <input type="text" class="form-control rounded border-gray-300"
                                             id="person_with_disability_details" name="person_with_disability_details"
                                             placeholder="Please specify" disabled
@@ -245,7 +272,12 @@
                                     </div>
 
                                     <div class="col-md-4 mt-2 text-sm">
-                                        <label for="is_indigenous_people">Indigenous People (IP):</label>
+                                        <label for="is_indigenous_people">Indigenous People (IP):</label><b
+                                        class="text-red-600">*</b>
+                                        @if ($errors->has('is_indigenous_people'))
+                                            <span
+                                                class="text-xs text-red-600">{{ $errors->first('is_indigenous_people') }}</span>
+                                        @endif
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_indigenous_people" id="is_indigenous_people_yes"
@@ -266,7 +298,12 @@
                                     </div>
 
                                     <div class="col-md-4 mt-2 text-sm">
-                                        <label for="is_child_of_soloparent">Child of Solo Parent:</label>
+                                        <label for="is_child_of_soloparent">Child of Solo Parent:</label><b
+                                        class="text-red-600">*</b>
+                                        @if ($errors->has('is_child_of_soloparent'))
+                                            <span
+                                                class="text-xs text-red-600">{{ $errors->first('is_child_of_soloparent') }}</span>
+                                        @endif
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_child_of_soloparent"
@@ -287,7 +324,12 @@
                                     </div>
 
                                     <div class="col-md-4 mt-2 text-sm">
-                                        <label for="is_lactose_intolerant">Lactose Intolerant:</label>
+                                        <label for="is_lactose_intolerant">Lactose Intolerant:</label><b
+                                        class="text-red-600">*</b>
+                                        @if ($errors->has('is_lactose_intolerant'))
+                                            <span
+                                                class="text-xs text-red-600">{{ $errors->first('is_lactose_intolerant') }}</span>
+                                        @endif
                                     </div>
                                     <div class="col-md-1 mt-2 text-sm">
                                         <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_yes"
@@ -644,10 +686,8 @@
 
                 if (selectedRadio && selectedRadio.value === '1') {
                     additionalDetailsSelect.disabled = false;
-                    additionalDetailsSelect.setAttribute('required', 'required');
                 } else {
                     additionalDetailsSelect.disabled = true;
-                    additionalDetailsSelect.removeAttribute('required');
                     additionalDetailsSelect.value = '';
                 }
             }

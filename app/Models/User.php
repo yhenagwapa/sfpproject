@@ -118,9 +118,7 @@ class User extends Authenticatable
 
     public function centers()
     {
-        return $this->belongsToMany(ChildDevelopmentCenter::class);
+        return $this->belongsToMany(ChildDevelopmentCenter::class, 'user_center', 'user_id', 'child_development_center_id')->withTimestamps();
     }
-
-
 
 }

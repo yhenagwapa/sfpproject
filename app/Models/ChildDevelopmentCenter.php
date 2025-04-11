@@ -34,9 +34,9 @@ class ChildDevelopmentCenter extends Model
         return "{$this->address}, {$this->psgc->getBrgyCityProvince()}";
     }
     public function users()
-{
-    return $this->belongsToMany(User::class, 'user_centers', 'child_development_center_id', 'user_id');
-}
+    {
+        return $this->belongsToMany(User::class, 'user_centers', 'child_development_center_id', 'user_id')->withTimestamps();
+    }
 
 
 

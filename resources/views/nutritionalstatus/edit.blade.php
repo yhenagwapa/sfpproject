@@ -34,14 +34,14 @@
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
                     bsAlert1.close();
-                }, 5000);
+                }, 3000);
             }
             if (alert2) {
 
                 setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
-                }, 5000);
+                }, 3000);
             }
         });
     </script>
@@ -114,22 +114,6 @@
                                     @endif
                                 </div>
 
-                                <div class="col-md-12 mt-4 text-right">
-                                    <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                        data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
-
-                                    <form id="cancel-form" method="POST" action="{{ route('nutritionalstatus.index') }}">
-                                        @csrf
-                                        <input type="hidden" name="child_id" value="{{ $child->id }}">
-                                    </form>
-
-                                    <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
-                                        Cancel
-                                    </button>
-                                </div>
-
-
-
                                 <div class="modal fade" id="verticalycentered" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
@@ -151,6 +135,19 @@
                                     </div>
                                 </div>
                             </form>
+                            <div class="col-md-12 flex mt-4 justify-end text-right">
+                                <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
+                                    data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
+
+                                <form id="cancel-form" method="POST" action="{{ route('nutritionalstatus.index') }}">
+                                    @csrf
+                                    <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                </form>
+
+                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     </div>
                     @if($hasUponExitData)
@@ -199,17 +196,6 @@
                                         @endif
                                     </div>
 
-                                    <div class="col-md-12 mt-4 text-right">
-                                        <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                            data-bs-toggle="modal" data-bs-target="#verticalycentered1">Save Changes</button>
-                                        <form method="POST"
-                                            action="{{ route('nutritionalstatus.index') }}">
-                                            @csrf
-                                            <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                            data-bs-toggle="modal" data-bs-target="#verticalycentered1">Cancel</button>
-                                        </form>
-                                    </div>
-
                                     <div class="modal fade" id="verticalycentered1" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
@@ -231,6 +217,20 @@
                                         </div>
                                     </div>
                                 </form>
+
+                                <div class="col-md-12 flex mt-4 justify-end text-right">
+                                    <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
+                                        data-bs-toggle="modal" data-bs-target="#verticalycentered1">Save Changes</button>
+
+                                    <form id="cancel-form" method="POST" action="{{ route('nutritionalstatus.index') }}">
+                                        @csrf
+                                        <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                    </form>
+
+                                    <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -239,9 +239,8 @@
             <div class="col-lg-9">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" style="text-transform: uppercase;">{{ $child->full_name }}</h5>
-                        <p class="text-sm">Date of Birth: {{ $child->date_of_birth }}</p>
-                        <p class="text-sm" style="text-transform: uppercase;">Sex: {{ $child->sex->name }}</p>
+                        <h5 class="card-title" style="text-transform: uppercase;">{{ $child->full_name }} <span>| Date of
+                            Birth: {{ $child->date_of_birth->format('Y-m-d') }} | {{ $child->sex->name }}</span></h5>
                         <div class="table-responsive">
                             @include('nutritionalstatus.partials.ns-table')
                         </div>
@@ -252,17 +251,4 @@
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
-
-    <script>
-        function submitCancelForm() {
-        var cancelForm = document.getElementById('cancel-form');
-
-        // Ensure the form exists before submitting
-        if (cancelForm) {
-            cancelForm.submit();
-        } else {
-            console.error('Form not found!');
-        }
-    }
-    </script>
 @endsection

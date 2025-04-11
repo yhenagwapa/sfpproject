@@ -215,13 +215,15 @@ import 'datatables.net-bs5';
     $(document).ready(function () {
         $('.datatable').each(function () {
             if (!$.fn.DataTable.isDataTable(this)) {
+                let isAttendanceTable = $(this).hasClass('cycle-attendance-table'); // Check if it's the attendance table
+
                 $(this).DataTable({
-                    pageLength: 10,
+                    paging: isAttendanceTable,
                     lengthChange: false,
-                    order: [[1, 'desc']],
+                    searching: false,
+                    order: [[0, 'asc']],
                     columnDefs: [
                         {
-                            targets: 2,
                             orderSequence: ["desc", "asc"]
                         },
                     ],

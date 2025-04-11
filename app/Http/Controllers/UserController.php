@@ -31,28 +31,24 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $roles = Role::all();
-        $authUser = auth()->user();
 
-        if($authUser->hasRole('admin')){
-            $users = User::paginate( 10);
+        $search = $request->get('search');
 
-        } elseif($authUser->hasRole('lgu focal')){
-            $authFocalCenters = auth()->user()->focal->pluck('id')->toArray();
+        $query = User::query();
 
-            if (!empty($authFocalCenters)) {
-                $users = User::whereHas('focal', function ($query) use ($authFocalCenters) {
-                    $query->whereIn('id', $authFocalCenters);
-                    })
-                    ->orWhereHas('worker', function ($query) use ($authFocalCenters) {
-                        $query->whereIn('id', $authFocalCenters);
-                    })->paginate(10);
-            }
+        if ($search) {
+            $query->where('firstname', 'like', "%{$search}%")
+                ->orWhere('middlename', 'like', "%{$search}%")
+                ->orWhere('lastname', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%$search%");
         }
 
-        return view('users.index', compact('users', 'roles'));
+        $users = $query->paginate(10);
+
+        return view('users.index', compact('users', 'roles', 'search'));
     }
 
     /**

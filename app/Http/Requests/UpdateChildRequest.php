@@ -58,8 +58,13 @@ class UpdateChildRequest extends FormRequest
             'barangay.required' => 'Please select a barangay.',
             'address.required' => 'Please fill in this field.',
 
-            'pantawid_details.required_if' => 'Please specify.',
-            'person_with_disability_.required_if' => 'Please fill in this field.',
+            'is_pantawid.required' => 'Please select yes or no.',
+            'is_person_with_disability.required' => 'Please select yes or no.',
+            'pantawid_details.required_if' => 'Please specify pantawid details.',
+            'person_with_disability_details.required_if' => 'Please fill in disability details.',
+            'is_indigenous_people.required' => 'Please select yes or no.',
+            'is_child_of_soloparent.required' => 'Please select yes or no.',
+            'is_lactose_intolerant.required' => 'Please select yes or no.',
 
             'child_development_center_id.required' => 'Please select a CDC or SNP.'
         ];

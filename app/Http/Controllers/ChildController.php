@@ -34,7 +34,7 @@ class ChildController extends Controller
     public function index(Request $request, Implementation $cycle)
     {
         $cycle = Implementation::where('status', 'active')->first();
-
+        $search = $request->get('search');
         $cdcId = $request->input('center_name', 'all_center');
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
@@ -48,7 +48,23 @@ class ChildController extends Controller
             $centerIds = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::all()->keyBy('id');
 
-            if ($cdcId == 'all_center') {
+            if ($cdcId === 'all_center') {
+                if($search){
+                    $children = $childrenQuery->whereHas('records', function ($query) use ($centerIds) {
+                        $query->whereIn('child_development_center_id', $centerIds)
+                            ->where('status', 'active')
+                            ->where('funded', 1)
+                            ->groupBy('child_id');
+                        })
+                        ->whereHas('sex')
+                        ->where('firstname', 'like', "%{$search}%")
+                        ->orWhere('middlename', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%")
+                        ->orderBy('sex_id', 'asc')
+                        ->paginate('10');
+
+                }
+
                 $children = $childrenQuery->whereHas('records', function ($query) use ($centerIds) {
                     $query->whereIn('child_development_center_id', $centerIds)
                         ->where('status', 'active')
@@ -57,10 +73,23 @@ class ChildController extends Controller
                     })
                     ->whereHas('sex')
                     ->orderBy('sex_id', 'asc')
-                    ->paginate(10);
+                    ->paginate('10');
 
             } else {
-                $centerId = ChildCenter::where('child_development_center_id', $cdcId)->first();
+                if($search){
+                    $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
+                        $query->where('child_development_center_id', $cdcId)
+                            ->where('status', 'active')
+                            ->where('funded', 1)
+                            ->groupBy('child_id');
+                        })
+                        ->whereHas('sex')
+                        ->where('firstname', 'like', "%{$search}%")
+                        ->orWhere('middlename', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%")
+                        ->orderBy('sex_id', 'asc')
+                        ->paginate(10);
+                }
 
                 $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
@@ -79,7 +108,22 @@ class ChildController extends Controller
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId == 'all_center') {
+            if ($cdcId === 'all_center') {
+                if($search){
+                    $children = $childrenQuery->whereHas('records', function ($query) use ($centerIDs) {
+                        $query->whereIn('child_development_center_id', $centerIDs)
+                            ->where('status', 'active')
+                            ->where('funded', 1)
+                            ->groupBy('child_id');
+                        })
+                        ->whereHas('sex')
+                        ->where('firstname', 'like', "%{$search}%")
+                        ->orWhere('middlename', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%")
+                        ->orderBy('sex_id', 'asc')
+                        ->paginate(10);
+                }
+
                 $children = $childrenQuery->whereHas('records', function ($query) use ($centerIDs) {
                     $query->whereIn('child_development_center_id', $centerIDs)
                         ->where('status', 'active')
@@ -90,7 +134,22 @@ class ChildController extends Controller
                     ->orderBy('sex_id', 'asc')
                     ->paginate(10);
 
+
             } else {
+                if($search){
+                    $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
+                        $query->where('child_development_center_id', $cdcId)
+                            ->where('status', 'active')
+                            ->where('funded', 1)
+                            ->groupBy('child_id');
+                        })
+                        ->whereHas('sex')
+                        ->where('firstname', 'like', "%{$search}%")
+                        ->orWhere('middlename', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%")
+                        ->orderBy('sex_id', 'asc')
+                        ->paginate(10);
+                }
                 $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
                         ->where('status', 'active')
@@ -103,7 +162,7 @@ class ChildController extends Controller
             }
         }
 
-        return view('child.index', compact('children', 'centerNames', 'centers', 'cdcId'));
+        return view('child.index', compact('children', 'centerNames', 'centers', 'cdcId', 'search'));
     }
 
     /**
@@ -398,13 +457,9 @@ class ChildController extends Controller
 
         $psgcRecord = Psgc::where('psgc_id', $child->psgc_id)->first();
 
-        $provinces = $psgc->getByProvinces();
-        $cities = Psgc::getCitiesByProvince($psgcRecord->province_psgc);
-        $barangays = Psgc::getBarangaysByCity($psgcRecord->city_name_psgc);
-
-        $provinceChange = $psgc->getProvinces();
-        $cityChange = $psgc->allCities();
-        $barangayChange = $psgc->allBarangays();
+        $provinces = $psgc->getProvinces();
+        $cities = $psgc->allCities();
+        $barangays = $psgc->allBarangays();
 
         if ($request->has('province_psgc') && !empty($request->input('province_psgc'))) {
             $province_psgc = $request->input('province_psgc');
@@ -476,9 +531,6 @@ class ChildController extends Controller
                 'provinces',
                 'cities',
                 'barangays',
-                'provinceChange',
-                'cityChange',
-                'barangayChange',
                 'isChildPantawid',
                 'isChildPWD',
                 'childCenterId',
@@ -490,10 +542,14 @@ class ChildController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChildRequest $request, Child $child)
+    public function update(UpdateChildRequest $request)
     {
-        $child = Child::findOrFail($request->input('child_id'));
         $validatedData = $request->validated();
+
+        $childID = $request->input('child_id');
+
+        $child = Child::findOrFail($childID);
+
 
         $query = Child::where('firstname', $validatedData['firstname'])
             ->where('middlename', $validatedData['middlename'])
@@ -539,12 +595,8 @@ class ChildController extends Controller
             'updated_by_user_id' => auth()->id(),
         ]);
 
-
-
         $currentChildCenter = ChildCenter::where('child_id', $child->id)
             ->where('status', 'active')->first();
-
-
 
         if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
             ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
