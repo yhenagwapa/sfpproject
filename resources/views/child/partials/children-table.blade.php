@@ -1,3 +1,37 @@
+<div class="row">
+    <form class="row" id="search-form" action="{{ route('child.index') }}" method="GET">
+        <div class="col-md-6 text-sm flex">
+            <label for="center_name" class="text-base mt-2 mr-2">CDC/SNP:</label>
+            <select class="form-control" name="center_name" id="center_name" onchange="clearSearchAndSubmit(this)">
+                <option value="all_center" {{ request('cdcId') == 'all_center' ? 'selected' : '' }}>Select a Child Development Center</option>
+                @foreach ($centerNames as $center)
+                    <option value="{{ $center->id }}"
+                        {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                        {{ $center->center_name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4 flex">
+            <label for="q-input" class="text-base mt-2 mr-2">Search:</label>
+            <input type="text" name="search" id="q-input" value="{{ request('search') }}" placeholder="Search" class="form-control rounded border-gray-300"
+            autocomplete="off">
+        </div>
+    </form>
+</div>
+
+<script>
+    function clearSearchAndSubmit(selectElement) {
+        const form = selectElement.form;
+        const searchInput = form.querySelector('input[name="search"]');
+        if (searchInput) searchInput.value = '';
+        form.submit();
+    }
+</script>
+
+
 <table id='children-table' class="table datatable mt-3 text-left">
     <thead class="text-base">
         <tr>
@@ -73,7 +107,7 @@
                             @endif
                         @endcan --}}
 
-                        @can('add-attendance')
+                        {{-- @can('add-attendance')
                             <a href="{{ route('attendance.index', $child->id) }}"
                                 class="relative inline-flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -88,7 +122,7 @@
                                     Attendance
                                 </span>
                             </a>
-                        @endcan
+                        @endcan --}}
                     </div>
                 </td>
             </tr>
@@ -115,3 +149,7 @@
         </script>
     </tbody>
 </table>
+
+<div>
+    {{ $children->links() }}
+</div>

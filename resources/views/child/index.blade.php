@@ -51,32 +51,15 @@
                                 @endcan
                             </div>
                             <div class="row">
-                                <div class="col-md-1 mt-4">
-                                    <label for="center_name" class="form-label text-sm">Filter Children:</label>
-                                </div>
-                                <div class="col-md-5 mt-3">
-                                    <form action="{{ route('child.index') }}" method="GET" class="ro">
-                                        @csrf
-                                        <select class="form-control" name="center_name" id="center_name"
-                                            onchange="this.form.submit()">
-                                            <option value="all_center" selected>Select a Child Development Center</option>
-                                            @foreach ($centerNames as $center)
-                                                <option value="{{ $center->id }}"
-                                                    {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
-                                                    {{ $center->center_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </form>
+                                <div class="col-md-6 mt-4 flex w-full">
+
                                 </div>
                             </div>
 
                             <div class="table-responsive" id='children-table'>
                                 @include('child.partials.children-table', ['children' => $children])
                             </div>
-                            <div class="pagination-links">
-                                {{ $children->links() }}
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -85,4 +68,16 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
+
+    <script>
+        (function(){
+          let timer;
+          $('#q-input').on('keyup', function(){
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+              $('#search-form').submit();
+            }, 300);
+          });
+        })();
+    </script>
 @endsection <!-- End section -->

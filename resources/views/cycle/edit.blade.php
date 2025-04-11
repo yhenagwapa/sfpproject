@@ -34,15 +34,12 @@
                 if (alert) {
                     setTimeout(() => {
                         new bootstrap.Alert(alert).close();
-                    }, 2000);
+                    }, 5000);
                 }
             });
         });
     </script>
 
-
-
-    <!-- Cycle Implementation Form -->
 
         <section class="section">
             <div class="row">
@@ -50,14 +47,15 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Implementation</h5>
-                            <form class="row" method="post" action="{{ route('cycle.update', $cycle->id) }}">
+                            <form class="row" method="post" action="{{ route('cycle.update') }}">
                                 @csrf
-                                @method('put')
+                                @method('patch')
+
+                                <input type="hidden" name="cycle_id" value="{{ $cycle->id }}">
 
                                 <!-- Cycle Information -->
-                                <div class='col-md-3 mt-2 text-gray-400 text-xs'>Implementation Information
-                                </div>
-                                <div class='col-md-9 mt-3 text-gray-400 text-xs'>
+                                <div class='col-md-12 text-gray-400 text-xs'>
+                                    Implementation Information
                                     <hr>
                                 </div>
 

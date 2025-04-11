@@ -20,12 +20,12 @@
                 @endif
                 <td class="w-40">
                     <select id="statusSelect-{{ $cycle->status }}" name="cycle_status" class="form-control w-40 border-none" @if ($cycle->status === 'closed') disabled @endif>
-                        <option value="active" {{ $cycle->status == 'active' ? 'selected' : '' }}>
-                            Active
-                        </option>
-                        <option value="closed" {{ $cycle->status == 'closed' ? 'selected' : '' }}>
-                            Closed
-                        </option>
+                        @foreach ($cycleStatuses as $cycleStatus)
+                            <option value="{{ $cycleStatus->value }}"
+                                {{ $cycleStatus->value == $cycle->status ? 'selected' : '' }}>
+                                {{ $cycleStatus->name }}
+                            </option>
+                        @endforeach
                     </select>
                 </td>
 
@@ -39,7 +39,7 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                Are you sure you want to change close the status of this implementation? This cannot be undone.
+                                Are you sure you want to change close the status of this implementation?
                             </div>
                             <div class="modal-footer">
                                 <button id="confirmStatusChange-{{ $cycle->status }}" type="button"
@@ -52,11 +52,10 @@
                     </div>
                 </div>
 
-                <form id="statusForm-{{ $cycle->status }}" method="POST"
-                    action="{{ route('cycle.update-status', $cycle->status) }}">
+                <form id="statusForm-{{ $cycle->status }}" method="POST" action="{{ route('cycle.update-cycle-status') }}">
                     @csrf
 
-                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="_method" value="PATCH">
                     <input type="hidden" id="statusValue-{{ $cycle->status }}" name="cycle_status" value="">
                     <input type="hidden" id="cycle_id" name="cycle_id" value="{{ $cycle->id }}">
                 </form>
@@ -87,8 +86,10 @@
                         @can('edit-cycle-implementation')
 
                         @if($cycle->status !== 'closed')
-                            <form>
-                                <a href="{{ route('cycle.edit', $cycle->id) }}" class="relative inline-flex items-center">
+                            <form id="editCycle-{{ $cycle->id }}" action="{{ route('cycle.edit') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="cycle_id" id="cycle_id_{{ $cycle->id }}" value="{{ $cycle->id }}">
+                                <button class="relative inline-flex items-center" href="#" onclick="saveAndSubmit('{{ $cycle->id }}', 'editCycle')">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="#3968d2" class="w-5 h-5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -97,7 +98,7 @@
                                     <span class="font-semibold text-sm" style="color: #3968d2;">
                                         Edit
                                     </span>
-                                </a>
+                                </button>
                             </form>
                         @endif
                         @endcan
@@ -136,15 +137,18 @@
         @endif
 
         <script>
-            function saveAndSubmit(cycleId) {
-                // Save cycle_id in localStorage
+            function saveAndSubmit(cycleId, formType = 'reportForm') {
                 localStorage.setItem('selected_cycle_id', cycleId);
 
-                // Set hidden input value (in case it needs to be refreshed)
-                document.getElementById('cycle_id_' + cycleId).value = cycleId;
+                const cycleInput = document.getElementById('cycle_id_' + cycleId);
+                if (cycleInput) {
+                    cycleInput.value = cycleId;
+                }
 
-                // Submit the form
-                document.getElementById('reportForm-' + cycleId).submit();
+                const form = document.getElementById(formType + '-' + cycleId);
+                if (form) {
+                    form.submit();
+                }
             }
         </script>
     </tbody>

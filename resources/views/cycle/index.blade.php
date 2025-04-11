@@ -10,8 +10,13 @@
         </nav>
     </div>
 
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" id="danger-alert" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-    <!-- Success Alert -->
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" id="success-alert" role="alert">
             {{ session('success') }}
@@ -20,25 +25,17 @@
     @endif
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const alert = document.getElementById('success-alert');
-            if (alert) {
-                setTimeout(() => {
-                    new bootstrap.Alert(alert).close();
-                }, 2000);
-            }
+        document.addEventListener('DOMContentLoaded', function () {
+            ['success-alert', 'danger-alert'].forEach(id => {
+                const alert = document.getElementById(id);
+                if (alert) {
+                    setTimeout(() => {
+                        new bootstrap.Alert(alert).close();
+                    }, 5000);
+                }
+            });
         });
     </script>
-
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
 
     <!-- Content Wrapper -->
 

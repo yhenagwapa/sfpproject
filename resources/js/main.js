@@ -220,7 +220,7 @@ import 'datatables.net-bs5';
                 $(this).DataTable({
                     paging: false,
                     lengthChange: false,
-                    searching: !isAttendanceTable, // Disable searching if it's the attendance table
+                    searching: false,
                     order: [[0, 'asc']],
                     columnDefs: [
                         {

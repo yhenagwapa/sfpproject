@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\ChildCenter;
+use App\Models\Implementation;
 use App\Models\NutritionalStatus;
 use App\Models\cgs_wfa_girls;
 use App\Models\cgs_wfa_boys;
@@ -238,7 +239,7 @@ class NutritionalStatusController extends Controller
             'updated_by_user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('nutritionalstatus.index')->with('success', 'Upon entry details saved successfully.');
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
     }
     public function storeExitDetails(StoreNutritionalStatusRequest $request)
     {
@@ -406,7 +407,7 @@ class NutritionalStatusController extends Controller
             ]);
         }
 
-        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('child_id'));
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('exitchild_id'));
     }
 
 
@@ -424,6 +425,8 @@ class NutritionalStatusController extends Controller
     public function edit(Request $request)
     {
         $childID = $request->input('child_id');
+
+        $implementation = NutritionalStatus::with('implementation')->first();
 
         $child = Child::findOrFail($childID);
 
@@ -454,7 +457,7 @@ class NutritionalStatusController extends Controller
             $exitDetails = $entryData[1];
         }
 
-        return view('nutritionalstatus.edit', compact('child', 'entryDetails', 'hasUponEntryData', 'exitDetails', 'hasUponExitData'));
+        return view('nutritionalstatus.edit', compact('implementation', 'child', 'entryDetails', 'hasUponEntryData', 'exitDetails', 'hasUponExitData'));
     }
 
     /**
@@ -583,16 +586,16 @@ class NutritionalStatusController extends Controller
 
         }
 
-        if ($entryWeightForAge != 'Normal' || $entryHeightForAge != 'Normal' || $entryHeightForAge == 'Tall' || $entryWeightForHeight != 'Normal') {
-            $entryIsMalnourished = true;
-        } else {
+        if ($entryWeightForAge == 'Normal' || $entryHeightForAge == 'Normal' || $entryHeightForAge == 'Tall' || $entryWeightForHeight == 'Normal') {
             $entryIsMalnourished = false;
+        } else {
+            $entryIsMalnourished = true;
         }
 
-        if ($entryWeightForAge != 'Normal' || $entryWeightForAge != 'Overweight' || $entryHeightForAge != 'Tall' || $entryHeightForAge != 'Normal' || $entryWeightForHeight != 'Normal' || $entryWeightForHeight != 'Overweight' || $entryWeightForHeight != 'Obese') {
-            $entryIsUndernourished = true;
-        } else {
+        if ($entryWeightForAge == 'Normal' || $entryWeightForAge == 'Overweight' || $entryHeightForAge == 'Tall' || $entryHeightForAge == 'Normal' || $entryWeightForHeight == 'Normal' || $entryWeightForHeight == 'Overweight' || $entryWeightForHeight == 'Obese') {
             $entryIsUndernourished = false;
+        } else {
+            $entryIsUndernourished = true;
         }
 
         $nutritionalStatus = NutritionalStatus::where('child_id', $request->child_id)->first();
@@ -616,7 +619,7 @@ class NutritionalStatusController extends Controller
             ]);
         }
 
-        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('child_id'));
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
 
     }
 
@@ -746,16 +749,16 @@ class NutritionalStatusController extends Controller
 
             }
 
-            if ($exitWeightForAge != 'Normal' || $exitHeightForAge != 'Normal' || $exitHeightForAge == 'Tall' || $exitWeightForHeight != 'Normal') {
-                $exitIsMalnourished = true;
-            } else {
+            if ($exitWeightForAge == 'Normal' || $exitHeightForAge == 'Normal' || $exitHeightForAge == 'Tall' || $exitWeightForHeight == 'Normal') {
                 $exitIsMalnourished = false;
+            } else {
+                $exitIsMalnourished = true;
             }
 
-            if ($exitWeightForAge != 'Normal' || $exitWeightForAge != 'Overweight' || $exitHeightForAge != 'Tall' || $exitHeightForAge != 'Normal' || $exitWeightForHeight != 'Normal' || $exitWeightForHeight != 'Overweight' || $exitWeightForHeight != 'Obese') {
-                $exitIsUndernourished = true;
-            } else {
+            if ($exitWeightForAge == 'Normal' || $exitWeightForAge == 'Overweight' || $exitHeightForAge == 'Tall' || $exitHeightForAge == 'Normal' || $exitWeightForHeight == 'Normal' || $exitWeightForHeight == 'Overweight' || $exitWeightForHeight == 'Obese') {
                 $exitIsUndernourished = false;
+            } else {
+                $exitIsUndernourished = true;
             }
 
             $nutritionalStatus = NutritionalStatus::where('child_id', $request->exitchild_id)
@@ -763,6 +766,8 @@ class NutritionalStatusController extends Controller
                 ->skip(1)
                 ->take(1)
                 ->first();
+
+                // dd($exitIsUndernourished);
 
             $nutritionalStatus->update([
                 'child_id' => $request->exitchild_id,
@@ -779,7 +784,7 @@ class NutritionalStatusController extends Controller
                 'updated_by_user_id' => auth()->id(),
             ]);
 
-        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('exitchild_id'));
+        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('exitchild_id'));
     }
 
     /**

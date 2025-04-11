@@ -257,25 +257,27 @@
                     if (link && !window.location.pathname.includes('/child/create')) {
                         event.preventDefault(); // Stop normal navigation
 
-                        // Set the redirect URL
                         document.getElementById("redirect_url").value = link.href;
 
-                        // Submit the form (this clears the session first, then redirects)
                         document.getElementById("clear-session-form").submit();
                     }
                 });
-            });
-        </script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
                 if (!window.location.pathname.includes('/reports')) {
                     localStorage.removeItem('selected_cycle_id');
                 }
+
+                window.submitCancelForm = function () {
+                    var cancelForm = document.getElementById('cancel-form');
+
+                    if (cancelForm) {
+                        cancelForm.submit();
+                    } else {
+                        console.error('Form not found!');
+                    }
+                };
             });
         </script>
-
-
 </body>
 
 </html>
