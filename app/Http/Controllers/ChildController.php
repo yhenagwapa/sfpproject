@@ -269,8 +269,11 @@ class ChildController extends Controller
             $step1Data['city_name'] = PSGC::where('city_name_psgc', $request->city_name_psgc ?? null)->value('city_name');
             $step1Data['brgy_name'] = PSGC::where('brgy_psgc', $request->brgy_psgc ?? null)->value('brgy_name');
 
+            session()->regenerate();
+
             session()->put('step1Data', array_merge(session()->get('step1Data', []), $step1Data));
             session()->put('step', 2);
+            session()->save();
 
             // dd($step1Data);
 
@@ -290,9 +293,12 @@ class ChildController extends Controller
                 $step2Data['center_name'] = ChildDevelopmentCenter::where('id', $request->child_development_center_id)->value('center_name');
                 $step2Data['implementation_name'] = Implementation::where('id', $request->implementation_id)->value('name');
                 $step2Data['milk_feeding_name'] = Implementation::where('id', $request->milk_feeding_id)->value('name');
+                
+                session()->regenerate();
 
                 session()->put('step2Data', array_merge(session()->get('step2Data', []), $step2Data));
                 session()->put('step', 3);
+                session()->save();
             }
 
             return redirect()->back();
@@ -303,7 +309,9 @@ class ChildController extends Controller
                 session()->put('step', 2);
                 return redirect()->back();
             }
-            // Final step - process data
+
+            session()->regenerate();
+
             $finalData = array_merge(
                 session()->get('step1Data', []),
                 session()->get('step2Data', [])

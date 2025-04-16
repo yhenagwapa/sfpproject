@@ -62,8 +62,10 @@
                             @if (session('step', 1) == 1)
                                 <div id="step1" class="row">
                                     <h5 class="card-title ml-3">Personal Details</h5>
-                                    <div class='col-md-12 mt-3 text-gray-400 text-xs'>Personal Information<hr></div>
-
+                                    <div class='col-md-2 mt-3 text-gray-400 text-xs'>Personal Information</div>
+                                    <div class='col-md-10 mt-6 text-gray-400 text-xs'>
+                                        <hr>
+                                    </div>
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="firstname">First Name</label><label for="firstname"
                                             class="text-red-600">*</label>
@@ -430,19 +432,139 @@
                                     </div>
 
                                     <input type="hidden" id="psgc_id" name="psgc_id" value="">
+
+                                    {{-- @dd(session('step1Data')) --}}
+
+                                    {{-- <div class="col-md-12 mt-4 text-right">
+                                        <button type="submit" id='nextBtn' class="text-white bg-blue-600 rounded px-3 min-h-9" onclick="nextStep()">Next</button>
+                                    </div> --}}
+
+                                    <!-- {{-- pantawid and pwd additional details --}} -->
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            function toggleAdditionalDetails(radioName, additionalDetailsId) {
+                                                const radios = document.getElementsByName(radioName);
+                                                const additionalDetailsSelect = document.getElementById(additionalDetailsId);
+
+                                                radios.forEach(radio => {
+                                                    radio.addEventListener('change', function() {
+                                                        if (radio.value === '1' && radio.checked) {
+                                                            additionalDetailsSelect.disabled = false;
+                                                            additionalDetailsElement.setAttribute('required', 'required');
+                                                        } else if (radio.value === '0' && radio.checked) {
+                                                            additionalDetailsSelect.disabled = true;
+                                                            additionalDetailsElement.removeAttribute('required');
+                                                        }
+                                                    });
+                                                });
+
+                                            }
+
+                                            toggleAdditionalDetails('is_pantawid', 'pantawid_details');
+                                            toggleAdditionalDetails('is_person_with_disability', 'person_with_disability_details');
+
+                                        });
+                                    </script>
+
+                                    {{-- city and barangay  --}}
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const locations = {
+                                                provinces: @json($provinces),
+                                                cities: @json($cities),
+                                                barangays: @json($barangays)
+                                            };
+
+                                            const provinceSelect = document.getElementById('province');
+                                            const citySelect = document.getElementById('city');
+                                            const barangaySelect = document.getElementById('barangay');
+
+                                            // ✅ Get saved session values
+                                            const selectedCity = "{{ session('step1Data.city_name_psgc') }}";
+                                            const selectedBarangay = "{{ session('step1Data.brgy_psgc') }}";
+
+                                            function filterCities() {
+                                                const provincePsgc = provinceSelect.value;
+                                                citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+                                                barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+                                                if (provincePsgc && locations.cities[provincePsgc]) {
+                                                    locations.cities[provincePsgc].forEach(city => {
+                                                        const option = document.createElement('option');
+                                                        option.value = city.psgc;
+                                                        option.text = city.name;
+                                                        citySelect.appendChild(option);
+                                                    });
+
+                                                    citySelect.style.display = 'block';
+
+                                                    // ✅ Set selected city AFTER the dropdown is populated
+                                                    setTimeout(() => {
+                                                        if (selectedCity && citySelect.querySelector(`option[value="${selectedCity}"]`)) {
+                                                            citySelect.value = selectedCity;
+                                                            filterBarangays(); // Load barangays
+                                                        }
+                                                    }, 100);
+                                                } else {
+                                                    citySelect.style.display = 'none';
+                                                }
+
+                                                barangaySelect.value = '';
+                                            }
+
+                                            function filterBarangays() {
+                                                const cityPsgc = citySelect.value;
+                                                barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+                                                if (cityPsgc && locations.barangays[cityPsgc]) {
+                                                    locations.barangays[cityPsgc].forEach(barangay => {
+                                                        const option = document.createElement('option');
+                                                        option.value = barangay.psgc;
+                                                        option.text = barangay.name;
+                                                        barangaySelect.appendChild(option);
+                                                    });
+
+                                                    barangaySelect.style.display = 'block';
+
+                                                    // ✅ Set selected barangay AFTER the dropdown is populated
+                                                    setTimeout(() => {
+                                                        if (selectedBarangay && barangaySelect.querySelector(
+                                                                `option[value="${selectedBarangay}"]`)) {
+                                                            barangaySelect.value = selectedBarangay;
+                                                        }
+                                                    }, 100);
+                                                } else {
+                                                    barangaySelect..value = '';
+                                                }
+                                            }
+
+                                            // ✅ Automatically detect and set the province from selected city
+                                            setTimeout(() => {
+                                                if (selectedCity) {
+                                                    const provincePsgc = Object.keys(locations.cities).find(province =>
+                                                        locations.cities[province].some(city => city.psgc == selectedCity)
+                                                    );
+
+                                                    if (provincePsgc) {
+                                                        provinceSelect.value = provincePsgc;
+                                                        filterCities();
+                                                    } else {
+                                                        console.warn("⚠️ Province not found for selected city!");
+                                                    }
+                                                }
+                                            }, 200);
+
+                                            // ✅ Event Listeners
+                                            provinceSelect.addEventListener('change', filterCities);
+                                            citySelect.addEventListener('change', filterBarangays);
+                                        });
+                                    </script>
+                                <button type="button" onclick="nextStep(2)">Next</button>
                                 </div>
-
-                            @elseif(session('step') == 2)
-                                <div id="step2" class="row step">
-                                    <h5 class="card-title">Center and Implement Details</h5>
-
-                                    {{-- <div class='col-md-12 mt-4 text-gray-400 text-xs'>Child Development Center/Supervise Neighborhood Play<hr></div> --}}
-
-                                    <div class="flex flex-wrap">
-                                        <div class='w-full px-3 mt-2 text-gray-400 text-xs'>Personal Information<hr></div>
-                                    </div>
-
-                                    <div class="col-md-12 mt-3 text-sm">
+                            {{-- @elseif(session('step') == 2) --}}
+                                <div id="step2" class="row step" style="display: none;">
+                                    <h5 class="card-title ml-3">Child Development Center Details</h5>
+                                    <div class="col-md-6 mt-3 text-sm">
                                         <label for="child_development_center_id">CDC or SNP <span
                                                 class="text-red-600">*</span></label>
                                         <select class="form-control rounded border-gray-300"
@@ -489,9 +611,11 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <button type="button" onclick="prevStep(1)">Previous</button>
+                                    <button type="button" onclick="nextStep(3)">Next</button>
                                 </div>
-                            @elseif(session('step') == 3)
-                                <div id="step3" class="row step">
+                            {{-- @elseif(session('step') == 3) --}}
+                                <div id="step3" class="row step" style="display: none;">
                                     <h5 class="card-title ml-3">Summary</h5>
 
                                     <div class='col-md-6 mt-3 text-gray-400 text-xs'>Personal Information</div>
@@ -646,21 +770,13 @@
                                             value="{{ session('step2Data.milk_feeding_name') }}" disabled>
                                     </div>
                                 </div>
-                            @endif
-                            <div class="col-md-12 mt-4 text-right">
-                                @if (session('step', 1) > 1)
-                                    <button type="submit" name="action" value="prev"
-                                        class="text-white bg-gray-600 rounded px-3 min-h-9">Previous</button>
-                                @endif
+                            {{-- @endif --}}
 
-                                @if (session('step', 1) < 3)
-                                    <button type="submit" name="action" value="next"
-                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Next</button>
-                                @else
-                                    <button type="submit" name="action" value="submit"
-                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Submit</button>
-                                @endif
-                            </div>
+
+
+
+
+
 
                         </form><!-- End floating Labels Form -->
 
@@ -802,4 +918,6 @@
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
 @endsection
