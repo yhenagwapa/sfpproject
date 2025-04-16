@@ -344,19 +344,26 @@
                     // Convert PHP arrays to JSON for JavaScript use
                     const locations = {
                         provinces: @json($provinces),
-                        cities: @json($cities),
-                        barangays: @json($barangays)
+                        cities: {!! json_encode($cities, JSON_UNESCAPED_UNICODE) !!},
+                        barangays: {!! json_encode($barangays, JSON_UNESCAPED_UNICODE) !!}
                     };
 
-                    // Get old selected values (from Laravel session)
-                    let selectedProvince = @json(old('province_psgc', ''));
-                    let selectedCity = @json(old('city_name_psgc', ''));
-                    let selectedBarangay = @json(old('brgy_psgc', ''));
+                    // Get old selected values (from Laravel session for form validation)
+                    let selectedProvince = @json(old('province_psgc', session('step1Data.province_psgc')));
+                    let selectedCity = @json(old('city_name_psgc', session('step1Data.city_name_psgc')));
+                    let selectedBarangay = @json(old('brgy_psgc', session('step1Data.brgy_psgc')));
+
+                    // Disable city and barangay initially
+                    citySelect.disabled = true;
+                    barangaySelect.disabled = true;
 
                     // Function to reset and populate cities when province changes
                     function populateCities(provincePsgc) {
                         citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
-                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // ✅ Ensure barangay is reset
+                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Reset barangay
+
+                        citySelect.disabled = !provincePsgc; // Enable only if a province is selected
+                        barangaySelect.disabled = true; // Always reset barangay when province changes
 
                         if (provincePsgc && locations.cities[provincePsgc]) {
                             locations.cities[provincePsgc].forEach(city => {
@@ -366,19 +373,21 @@
                                 citySelect.appendChild(option);
                             });
 
-                            // Restore selected city after error submission
+                            // Restore selected city after validation error
                             if (selectedCity && locations.cities[provincePsgc].some(city => city.psgc == selectedCity)) {
                                 citySelect.value = selectedCity;
                                 populateBarangays(selectedCity); // Load barangays for selected city
                             } else {
-                                selectedCity = ''; // Reset city selection if it doesn't match the new province
+                                selectedCity = ''; // Reset if no match
                             }
                         }
                     }
 
                     // Function to reset and populate barangays when city changes
                     function populateBarangays(cityPsgc) {
-                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // ✅ Always clear barangay
+                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Always clear barangay
+
+                        barangaySelect.disabled = !cityPsgc; // Enable only if a city is selected
 
                         if (cityPsgc && locations.barangays[cityPsgc]) {
                             locations.barangays[cityPsgc].forEach(barangay => {
@@ -388,11 +397,11 @@
                                 barangaySelect.appendChild(option);
                             });
 
-                            // Restore selected barangay after error submission
+                            // Restore selected barangay after validation error
                             if (selectedBarangay && locations.barangays[cityPsgc].some(barangay => barangay.psgc == selectedBarangay)) {
                                 barangaySelect.value = selectedBarangay;
                             } else {
-                                selectedBarangay = ''; // Reset barangay selection if city changed
+                                selectedBarangay = ''; // Reset if no match
                             }
                         }
                     }
@@ -407,13 +416,13 @@
                     provinceSelect.addEventListener('change', function() {
                         selectedProvince = this.value;
                         selectedCity = ''; // Reset city when province changes
-                        selectedBarangay = ''; // ✅ Reset barangay when province changes
+                        selectedBarangay = ''; // Reset barangay when province changes
                         populateCities(this.value);
                     });
 
                     citySelect.addEventListener('change', function() {
                         selectedCity = this.value;
-                        selectedBarangay = ''; // ✅ Reset barangay when city changes
+                        selectedBarangay = ''; // Reset barangay when city changes
                         populateBarangays(this.value);
                     });
                 });

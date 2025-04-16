@@ -17,6 +17,7 @@ use Yajra\DataTables\DataTables;
 use App\Models\Implementation;
 use App\Models\ChildCenter;
 use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 
 class ChildController extends Controller
 {
@@ -105,7 +106,6 @@ class ChildController extends Controller
         } else {
             $centers = UserCenter::where('user_id', $userID)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
-
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId === 'all_center') {
@@ -188,6 +188,8 @@ class ChildController extends Controller
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
         }
 
+        $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
+        $maxDate = Carbon::now()->subYears(2)->startOfYear()->format('Y-m-d');
 
         $sexOptions = Sex::all();
 
@@ -208,7 +210,7 @@ class ChildController extends Controller
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('child.create', compact('cycleImplementations', 'milkFeedings', 'centerNames', 'sexOptions', 'provinces', 'cities', 'barangays'));
+        return view('child.create', compact('cycleImplementations', 'milkFeedings', 'centerNames', 'minDate', 'maxDate','sexOptions', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -432,7 +434,9 @@ class ChildController extends Controller
      */
     public function show(Request $request)
     {
+        session(['editing_child_id' => $request->input('child_id')]);
 
+        return redirect()->route('child.edit');
     }
 
     /**
@@ -444,7 +448,7 @@ class ChildController extends Controller
     {
         $this->authorize('edit-child');
 
-        $childID = $request->input('child_id');
+        $childID = session('editing_child_id');
 
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
         $milkFeeding = Implementation::where('status', 'active')->where('type', 'milk')->first();
@@ -471,6 +475,10 @@ class ChildController extends Controller
             $city_psgc = $request->input('city_name_psgc');
             $barangays = $psgc->getBarangays($city_psgc);
         }
+
+        $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
+        $maxDate = Carbon::now()->subYears(2)->startOfYear()->format('Y-m-d');
+
         $sexOptions = Sex::all();
 
         $extNameOptions = [
@@ -524,6 +532,8 @@ class ChildController extends Controller
                 'cycle',
                 'milkFeeding',
                 'centers',
+                'minDate',
+                'maxDate',
                 'sexOptions',
                 'extNameOptions',
                 'pantawidDetails',

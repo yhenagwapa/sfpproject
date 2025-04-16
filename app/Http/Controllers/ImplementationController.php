@@ -36,15 +36,13 @@ class ImplementationController extends Controller
      */
     public function create()
     {
-        $cycleStatuses = CycleStatus::cases();
-
-        return view('cycle.create', compact('cycleStatuses'));
+        return view('cycle.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreImplementationRequest $request)
+    public function checkActiveStatus(StoreImplementationRequest $request)
     {
         $validatedData = $request->validated();
 
@@ -55,9 +53,53 @@ class ImplementationController extends Controller
             return redirect()->back()->with('error', 'Cycle already exists.');
         }
 
-        $cycle = Implementation::create([
+        if($request->cycle_status == 'active'){
+            $activeCyle = Implementation::where('status', 'active')
+                        ->where('type', $request->cycle_type)
+                        ->first();
+
+            if($activeCyle){
+                return redirect()->route('cycle.create')
+                    ->with('exists', true)
+                    ->with('message', 'An active implementation exists. Do you want to close it?')
+                    ->with('active_cycle_id', $activeCyle->id)
+                    ->withInput();
+            }
+        }
+        return $this->store($request);
+    }
+
+    public function store(Request $request)
+    {
+        if($request->active_cycle_id){
+            $closeCycle = Implementation::findOrFail($request->active_cycle_id);
+
+            $closeCycle->update([
+                'status' => 'closed'
+            ]);
+
+            ChildCenter::where('status', 'active')
+                ->where('implementation_id', $closeCycle->id)
+                ->update(['status' => 'inactive']);
+
+            Implementation::create([
+                'name' => $request->cycle_name,
+                'school_year_from' => $request->cycle_school_year_from,
+                'school_year_to' => $request->cycle_school_year_to,
+                'target' => $request->cycle_target,
+                'allocation' => $request->cycle_allocation,
+                'type' => $request->cycle_type,
+                'status' => $request->cycle_status,
+                'created_by_user_id' => auth()->id(),
+            ]);
+
+            return redirect()->route('cycle.index')->with('success', 'Cycle implementation saved successfully');
+        }
+
+        Implementation::create([
             'name' => $request->cycle_name,
-            'school_year' => $request->cycle_school_year,
+            'school_year_from' => $request->cycle_school_year_from,
+            'school_year_to' => $request->cycle_school_year_to,
             'target' => $request->cycle_target,
             'allocation' => $request->cycle_allocation,
             'type' => $request->cycle_type,
@@ -71,9 +113,11 @@ class ImplementationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Implementation $Implementation)
+    public function show(Request $request)
     {
-        //
+        session(['editing_cycle_id' => $request->input('cycle_id')]);
+
+        return redirect()->route('cycle.edit');
     }
 
     /**
@@ -81,7 +125,7 @@ class ImplementationController extends Controller
      */
     public function edit(Request $request)
     {
-        $cycleID = $request->input('cycle_id');
+        $cycleID = session('editing_cycle_id');
 
         $cycle = Implementation::findOrFail($cycleID);
         $cycleStatuses = CycleStatus::cases();
@@ -107,7 +151,8 @@ class ImplementationController extends Controller
 
         $cycle->update([
             'name' => $validatedData['cycle_name'],
-            'school_year' => $validatedData['cycle_school_year'],
+            'school_year_from' => $validatedData['cycle_school_year_from'],
+            'school_year_to' => $validatedData['cycle_school_year_to'],
             'target' => $validatedData['cycle_target'],
             'allocation' => $validatedData['cycle_allocation'],
             'type' => $validatedData['cycle_type'],

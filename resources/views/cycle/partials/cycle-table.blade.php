@@ -19,7 +19,7 @@
                     <td>{{ number_format($cycle->allocation,2) }}</td>
                 @endif
                 <td class="w-40">
-                    <select id="statusSelect-{{ $cycle->status }}" name="cycle_status" class="form-control w-40 border-none" @if ($cycle->status === 'closed') disabled @endif>
+                    <select id="statusSelect-{{ $cycle->status }}" name="cycle_status" class="form-control w-40 border-none" @if ($cycle->status === 'closed' && !auth()->user()->hasRole('admin')) disabled @endif>
                         @foreach ($cycleStatuses as $cycleStatus)
                             <option value="{{ $cycleStatus->value }}"
                                 {{ $cycleStatus->value == $cycle->status ? 'selected' : '' }}>
@@ -86,7 +86,7 @@
                         @can('edit-cycle-implementation')
 
                         @if($cycle->status !== 'closed')
-                            <form id="editCycle-{{ $cycle->id }}" action="{{ route('cycle.edit') }}" method="POST">
+                            <form id="editCycle-{{ $cycle->id }}" action="{{ route('cycle.show') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="cycle_id" id="cycle_id_{{ $cycle->id }}" value="{{ $cycle->id }}">
                                 <button class="relative inline-flex items-center" href="#" onclick="saveAndSubmit('{{ $cycle->id }}', 'editCycle')">

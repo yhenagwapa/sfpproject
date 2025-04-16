@@ -158,13 +158,13 @@
                                             class="text-red-600">*</label>
                                         <input type="date" class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                         id="date_of_birth" name='date_of_birth'
-                                        value="{{ old('date_of_birth', session('step1Data.date_of_birth')) }}" x-bind:min="minDate" x-bind:max="maxDate">
+                                        value="{{ old('date_of_birth', session('step1Data.date_of_birth')) }}">
                                         @if ($errors->has('date_of_birth'))
                                             <span class="text-xs text-red-600">{{ $errors->first('date_of_birth') }}</span>
                                         @endif
                                     </div>
 
-                                    <script>
+                                    {{-- <script>
                                         function dateFilter() {
                                             return {
                                                 minDate: '',
@@ -180,7 +180,7 @@
                                                 }
                                             }
                                         }
-                                    </script>
+                                    </script> --}}
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="sex">Sex</label><label for="sex"
                                             class="text-red-600">*</label>

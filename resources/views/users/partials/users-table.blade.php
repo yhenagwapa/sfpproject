@@ -19,6 +19,7 @@
 <table id='users-table' class="table datatable mt-3 text-sm">
     <thead>
         <tr>
+            <th>No.</th>
             <th class="text-left" scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Roles</th>
@@ -31,6 +32,7 @@
     <tbody class='users-table'>
         @forelse ($users as $user)
             <tr>
+                <td>{{ $loop->iteration }}</td>
                 <td class="text-left">{{ $user->full_name }}</td>
                 <td>{{ $user->email }}</td>
 

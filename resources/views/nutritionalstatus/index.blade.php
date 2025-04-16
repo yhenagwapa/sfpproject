@@ -100,8 +100,7 @@
                                                 class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300"
                                             id="actual_weighing_date" name='actual_weighing_date'
-                                            value="{{ old('actual_weighing_date') }}"
-                                            min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                            value="{{ old('actual_weighing_date') }}">
                                         @if ($errors->has('actual_weighing_date'))
                                             <span
                                                 class="text-xs text-red-600">{{ $errors->first('actual_weighing_date') }}</span>
@@ -182,8 +181,7 @@
                                                 class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300"
                                             id="exitweighing_date" name='exitweighing_date'
-                                            value="{{ old('exitweighing_date') }}"
-                                            min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                            value="{{ old('exitweighing_date') }}">
                                         @if ($errors->has('exitweighing_date'))
                                             <span
                                                 class="text-xs text-red-600">{{ $errors->first('exitweighing_date') }}</span>
@@ -231,6 +229,19 @@
             <div class="{{ $hasUponExitData || auth()->user()->hasRole('admin') ? 'col-lg-12' : 'col-lg-9' }}">
                 <div class="card">
                     <div class="card-body">
+                        @if ($hasUponEntryData && $hasUponExitData)
+                            <div class="col-md-12 flex text-right">
+                                <a href={{ route('child.index') }} class="flex italic" style="text-decoration: none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e9730" class="mr-1 mt-1 size-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                                    </svg>
+                                    <span class="text-green-600">
+                                        Back
+                                    </span>
+                                </a>
+                            </div>
+                        @endif
+
                         <h5 class="card-title" style="text-transform: uppercase;">{{ $child->full_name }} <span>| Date of
                                 Birth: {{ $child->date_of_birth->format('Y-m-d') }} | {{ $child->sex->name }}</span></h5>
 
@@ -264,7 +275,34 @@
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
+
     <script>
-        localStorage.setItem('child_id', '{{ $child->id }}');
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const schoolYearStart = @json($cycle->school_year_from);
+            const schoolYearEnd = @json($cycle->school_year_to);
+            const entryWeighing = @json( $entryWeighingDate);
+            const weighingDate = document.getElementById('actual_weighing_date');
+            const exitWeighingDate = document.getElementById('exitweighing_date');
+
+            function entryDateLimits() {
+
+                if (schoolYearStart && schoolYearEnd) {
+                    weighingDate.min = `${schoolYearStart}-01-01`;
+                    weighingDate.max = `${schoolYearEnd}-12-31`;
+                }
+            }
+
+            function exitDateLimits() {
+
+                if (schoolYearStart && schoolYearEnd) {
+                    weighingDate.min = entryWeighing;
+                    weighingDate.max = `${schoolYearEnd}-12-31`;
+                }
+            }
+
+            entryDateLimits();
+            exitDateLimits();
+        });
     </script>
 @endsection

@@ -107,8 +107,7 @@
                                     <input type="date"
                                         class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                         id="actual_weighing_date" name='actual_weighing_date'
-                                        value="{{ old('actual_weighing_date', $entryDetails->actual_weighing_date) }}"
-                                        min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                        value="{{ old('actual_weighing_date', $entryDetails->actual_weighing_date) }}">
                                     @if ($errors->has('actual_weighing_date'))
                                         <span class="text-xs text-red-600">{{ $errors->first('actual_weighing_date') }}</span>
                                     @endif
@@ -189,8 +188,7 @@
                                         <input type="date"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                             id="exitweighing_date" name='exitweighing_date'
-                                            value="{{ old('exitweighing_date', $exitDetails->actual_weighing_date) }}"
-                                            min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                            value="{{ old('exitweighing_date', $exitDetails->actual_weighing_date) }}">
                                         @if ($errors->has('exitweighing_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('exitweighing_date') }}</span>
                                         @endif
@@ -251,4 +249,33 @@
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const schoolYearStart = @json($cycle->school_year_from);
+            const schoolYearEnd = @json($cycle->school_year_to);
+            const weighingDate = document.getElementById('actual_weighing_date');
+            const exitWeighingDate = document.getElementById('exitweighing_date');
+
+            function entryDateLimits() {
+
+                if (schoolYearStart && schoolYearEnd) {
+                    weighingDate.min = `${schoolYearStart}-01-01`;
+                    weighingDate.max = `${schoolYearEnd}-12-31`;
+                }
+            }
+
+            function exitDateLimits() {
+
+                if (schoolYearStart && schoolYearEnd) {
+                    weighingDate.min = `${schoolYearStart}-01-01`;
+                    weighingDate.max = `${schoolYearEnd}-12-31`;
+                }
+            }
+
+            entryDateLimits();
+            exitDateLimits();
+        });
+    </script>
 @endsection

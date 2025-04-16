@@ -25,7 +25,8 @@ class StoreImplementationRequest extends FormRequest
             'cycle_name' => ['required','string:255'],
             'cycle_target' => ['required','numeric'],
             'cycle_allocation' => ['required', 'regex:/^\d{1,12}(\.\d{2})?$/'],
-            'cycle_school_year' => ['required','string:9'],
+            'cycle_school_year_from' => ['required', 'digits:4', 'integer', 'min:2025', 'max:' . date('Y')],
+            'cycle_school_year_to' => ['required', 'digits:4', 'integer'],
             'cycle_type' => ['required','string:255'],
             'cycle_status' => ['required','string:255'],
         ];
@@ -39,7 +40,8 @@ class StoreImplementationRequest extends FormRequest
             'cycle_target.numeric' => 'Invalid entry.',
             'cycle_allocation.required' => 'Please fill in allocation',
             'cycle_allocation.regex' => 'Invalid entry.',
-            'cycle_school_year.required' => 'Please fill in school year.',
+            'cycle_school_from.required' => 'Please fill in school year from.',
+            'cycle_school_to.required' => 'Please fill in school year to.',
             'cycle_type.required' => 'Please select type.',
             'cycle_status.required' => 'Please select a status.'
         ];

@@ -57,12 +57,13 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'temp.edit'])->group(function () {
 
     Route::get('/child', [ChildController::class, 'index'])->name('child.index');
     Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');
     Route::post('/child/store', [ChildController::class, 'store'])->name('child.store');
-    Route::post('/child/edit', [ChildController::class, 'edit'])->name('child.edit');
+    Route::post('/child/show', [ChildController::class, 'show'])->name('child.show');
+    Route::get('/child/edit', [ChildController::class, 'edit'])->name('child.edit');
     Route::patch('/child/update', [ChildController::class, 'update'])->name('child.update');
 
     Route::resources([
@@ -100,13 +101,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
     Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');
     Route::post('/centers/store', [ChildDevelopmentCenterController::class, 'store'])->name(name: 'centers.store');
-    Route::post('/centers/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
+    Route::post('/centers/show', [ChildDevelopmentCenterController::class, 'show'])->name(name: 'centers.show');
+    Route::get('/centers/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
     Route::patch('/centers/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
 
     Route::get('/cycle', [ImplementationController::class, 'index'])->name(name: 'cycle.index');
     Route::get('/cycle/create', [ImplementationController::class, 'create'])->name(name: 'cycle.create');
+    Route::post('/cycle/checkActiveStatus', [ImplementationController::class, 'checkActiveStatus'])->name(name: 'cycle.checkActiveStatus');
     Route::post('/cycle/store', [ImplementationController::class, 'store'])->name(name: 'cycle.store');
-    Route::post('/cycle/edit', [ImplementationController::class, 'edit'])->name(name: 'cycle.edit');
+    Route::post('/cycle/show', [ImplementationController::class, 'show'])->name(name: 'cycle.show');
+    Route::get('/cycle/edit', [ImplementationController::class, 'edit'])->name(name: 'cycle.edit');
     Route::patch('/cycle/update', [ImplementationController::class, 'update'])->name(name: 'cycle.update');
     Route::patch('/cycle/update-cycle-status', [ImplementationController::class, 'updateCycleStatus'])->name(name: 'cycle.update-cycle-status');
     Route::patch('/cycle/update-milkfeeding-status', [ImplementationController::class, 'updateMilkFeedingStatus'])->name(name: 'cycle.update-milkfeeding-status');

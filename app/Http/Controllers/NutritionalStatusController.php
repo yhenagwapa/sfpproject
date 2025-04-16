@@ -35,6 +35,8 @@ class NutritionalStatusController extends Controller
     {
         $childID = $request->input('child_id');
 
+        $cycle = Implementation::where('status', 'active')->first();
+
         $child = Child::findOrFail($childID);
 
         $entryData = NutritionalStatus::where('child_id', $childID)
@@ -47,11 +49,13 @@ class NutritionalStatusController extends Controller
         $hasUponExitData = false;
         $entryDetails = null;
         $exitDetails = null;
+        $entryWeighingDate = null;
 
         $count = $entryData->count();
 
         if ($count === 1) {
             $hasUponEntryData = true;
+            $weighingDate = $entryData->actual_weighing_date;
             $entryDetails = $entryData[0];
 
         } elseif ($count === 2) {
@@ -62,7 +66,7 @@ class NutritionalStatusController extends Controller
         }
 
 
-        return view('nutritionalstatus.index', compact('child', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData'));
+        return view('nutritionalstatus.index', compact('child', 'cycle', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData'));
     }
 
 
@@ -113,13 +117,13 @@ class NutritionalStatusController extends Controller
         if ($childSex == '1') {
             $getAge = cgs_wfa_boys::where('age_month', $entryAgeInMonths)->first();
 
-            if ((float) $getAge->severly_underweight >= (float) $request->weight) {
+            if ((float) $request->weight <=(float) $getAge->severly_underweight) {
                 $entryWeightForAge = 'Severely Underweight';
-            } elseif ((float) $getAge->underweight_from <= (float) $request->weight && (float) $getAge->underweight_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getAge->underweight_from && (float) $request->weight <= (float) $getAge->underweight_to) {
                 $entryWeightForAge = 'Underweight';
-            } elseif ((float) $getAge->normal_from <= (float) $request->weight && (float) $getAge->normal_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getAge->normal_from && (float) $request->weight <= (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Normal';
-            } elseif ((float) $request->weight > (float) $getAge->normal_to) {
+            } elseif ((float) $request->weight >= (float) $request->weight) {
                 $entryWeightForAge = 'Overweight';
             } else {
                 $entryWeightForAge = 'Not Applicable';
@@ -128,13 +132,13 @@ class NutritionalStatusController extends Controller
         } else {
             $getAge = cgs_wfa_girls::where('age_month', $entryAgeInMonths)->first();
 
-            if ((float) $getAge->severly_underweight >= (float) $request->weight) {
+            if ((float) $request->weight <=(float) $getAge->severly_underweight) {
                 $entryWeightForAge = 'Severely Underweight';
-            } elseif ((float) $getAge->underweight_from <= (float) $request->weight && (float) $getAge->underweight_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getAge->underweight_from && (float) $request->weight <= (float) $getAge->underweight_to) {
                 $entryWeightForAge = 'Underweight';
-            } elseif ((float) $getAge->normal_from <= (float) $request->weight && (float) $getAge->normal_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getAge->normal_from && (float) $request->weight <= (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Normal';
-            } elseif ((float) $request->weight > (float) $getAge->normal_to) {
+            } elseif ((float) $request->weight >= (float) $request->weight) {
                 $entryWeightForAge = 'Overweight';
             } else {
                 $entryWeightForAge = 'Not Applicable';
@@ -145,27 +149,28 @@ class NutritionalStatusController extends Controller
         if ($childSex == '1') {
             $getAge = cgs_hfa_boys::where('age_month', $entryAgeInMonths)->first();
 
-            if ((float) $getAge->severly_stunted >= (float) $request->height) {
+            if ((float) $request->height <= (float) $getAge->severly_stunted) {
                 $entryHeightForAge = 'Severely Stunted';
-            } elseif ((float) $getAge->stunted_from <= (float) $request->height && (float) $getAge->stunted_to >= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->stunted_from && (float) $request->height <= (float) $getAge->stunted_to) {
                 $entryHeightForAge = 'Stunted';
-            } elseif ((float) $getAge->normal_from <= (float) $request->height && (float) $getAge->normal_to >= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->normal_from && (float) $request->height <= (float) $getAge->normal_to) {
                 $entryHeightForAge = 'Normal';
-            } elseif ((float) $getAge->tall <= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->tall) {
                 $entryHeightForAge = 'Tall';
             } else {
                 $entryHeightForAge = 'Not Applicable';
             }
+
         } else {
             $getAge = cgs_hfa_girls::where('age_month', $entryAgeInMonths)->first();
 
-            if ((float) $getAge->severly_stunted >= (float) $request->height) {
+            if ((float) $request->height <= (float) $getAge->severly_stunted) {
                 $entryHeightForAge = 'Severely Stunted';
-            } elseif ((float) $getAge->stunted_from <= (float) $request->height && (float) $getAge->stunted_to >= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->stunted_from && (float) $request->height <= (float) $getAge->stunted_to) {
                 $entryHeightForAge = 'Stunted';
-            } elseif ((float) $getAge->normal_from <= (float) $request->height && (float) $getAge->normal_to >= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->normal_from && (float) $request->height <= (float) $getAge->normal_to) {
                 $entryHeightForAge = 'Normal';
-            } elseif ((float) $getAge->tall <= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->tall) {
                 $entryHeightForAge = 'Tall';
             } else {
                 $entryHeightForAge = 'Not Applicable';
@@ -176,31 +181,32 @@ class NutritionalStatusController extends Controller
         if ($childSex == '1') {
             $getHeight = cgs_wfh_boys::where('length_in_cm', $request->height)->first();
 
-            if ((float) $getHeight->severly_wasted >= (float) $request->weight) {
+            if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
                 $entryWeightForHeight = 'Severely Wasted';
-            } elseif ((float) $getHeight->wasted_from <= (float) $request->weight && (float) $getHeight->wasted_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->wasted_from && (float) $request->weight <= (float) $getHeight->wasted_to) {
                 $entryWeightForHeight = 'Wasted';
-            } elseif ((float) $getHeight->normal_from <= (float) $request->weight && (float) $getHeight->normal_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->normal_from && (float) $request->weight <= (float) $getHeight->normal_to) {
                 $entryWeightForHeight = 'Normal';
-            } elseif ((float) $getHeight->overweight_from <= (float) $request->weight && (float) $getHeight->overweight_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->overweight_from && (float) (float) $request->weight <= $getHeight->overweight_to) {
                 $entryWeightForHeight = 'Overweight';
-            } elseif ((float) $getHeight->obese <= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->obese) {
                 $entryWeightForHeight = 'Obese';
             } else {
                 $entryWeightForHeight = 'Not Applicable';
             }
+
         } else {
             $getHeight = cgs_wfh_girls::where('length_in_cm', $request->height)->first();
 
-            if ((float) $getHeight->severly_wasted >= (float) $request->weight) {
+            if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
                 $entryWeightForHeight = 'Severely Wasted';
-            } elseif ((float) $getHeight->wasted_from <= (float) $request->weight && (float) $getHeight->wasted_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->wasted_from && (float) $request->weight <= (float) $getHeight->wasted_to) {
                 $entryWeightForHeight = 'Wasted';
-            } elseif ((float) $getHeight->normal_from <= (float) $request->weight && (float) $getHeight->normal_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->normal_from && (float) $request->weight <= (float) $getHeight->normal_to) {
                 $entryWeightForHeight = 'Normal';
-            } elseif ((float) $getHeight->overweight_from <= (float) $request->weight && (float) $getHeight->overweight_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->overweight_from && (float) (float) $request->weight <= $getHeight->overweight_to) {
                 $entryWeightForHeight = 'Overweight';
-            } elseif ((float) $getHeight->obese <= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->obese) {
                 $entryWeightForHeight = 'Obese';
             } else {
                 $entryWeightForHeight = 'Not Applicable';
@@ -283,27 +289,28 @@ class NutritionalStatusController extends Controller
             if ($childSex == '1') {
                 $getAge = cgs_wfa_boys::where('age_month', $exitAgeInMonths)->first();
 
-                if ((float) $getAge->severly_underweight >= (float) $request->exitweight) {
+                if ((float) $request->exitweight <= (float) $getAge->severly_underweight) {
                     $exitWeightForAge = 'Severely Underweight';
-                } elseif ((float) $getAge->underweight_from <= (float) $request->exitweight && (float) $getAge->underweight_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getAge->underweight_from && (float) $request->exitweight <= (float) $getAge->underweight_to) {
                     $exitWeightForAge = 'Underweight';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exitweight && (float) $getAge->normal_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getAge->normal_from && (float) $request->exitweight <= (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Normal';
-                } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
+                } elseif ((float) $request->exitweight >= (float) $request->exitweight) {
                     $exitWeightForAge = 'Overweight';
                 } else {
                     $exitWeightForAge = 'Not Applicable';
                 }
+
             } else {
                 $getAge = cgs_wfa_girls::where('age_month', $exitAgeInMonths)->first();
 
-                if ((float) $getAge->severly_underweight >= (float) $request->exitweight) {
+                if ((float) $request->exitweight <= (float) $getAge->severly_underweight) {
                     $exitWeightForAge = 'Severely Underweight';
-                } elseif ((float) $getAge->underweight_from <= (float) $request->exitweight && (float) $getAge->underweight_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getAge->underweight_from && (float) $request->exitweight <= (float) $getAge->underweight_to) {
                     $exitWeightForAge = 'Underweight';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exitweight && (float) $getAge->normal_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getAge->normal_from && (float) $request->exitweight <= (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Normal';
-                } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
+                } elseif ((float) $request->exitweight >= (float) $request->exitweight) {
                     $exitWeightForAge = 'Overweight';
                 } else {
                     $exitWeightForAge = 'Not Applicable';
@@ -314,13 +321,13 @@ class NutritionalStatusController extends Controller
             if ($childSex == '1') {
                 $getAge = cgs_hfa_boys::where('age_month', $exitAgeInMonths)->first();
 
-                if ((float) $getAge->severly_stunted >= (float) $request->exitheight) {
+                if ((float) $request->exitheight <= (float) $getAge->severly_stunted) {
                     $exitHeightForAge = 'Severely Stunted';
-                } elseif ((float) $getAge->stunted_from <= (float) $request->exitheight && (float) $getAge->stunted_to >= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->stunted_from && (float) $request->exitheight <= (float) $getAge->stunted_to) {
                     $exitHeightForAge = 'Stunted';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exitheight && (float) $getAge->normal_to >= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->normal_from && (float) $request->exitheight <= (float) $getAge->normal_to) {
                     $exitHeightForAge = 'Normal';
-                } elseif ((float) $getAge->tall <= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->tall) {
                     $exitHeightForAge = 'Tall';
                 } else {
                     $exitHeightForAge = 'Not Applicable';
@@ -328,13 +335,13 @@ class NutritionalStatusController extends Controller
             } else {
                 $getAge = cgs_hfa_girls::where('age_month', $exitAgeInMonths)->first();
 
-                if ((float) $getAge->severly_stunted >= (float) $request->exitheight) {
+                if ((float) $request->exitheight <= (float) $getAge->severly_stunted) {
                     $exitHeightForAge = 'Severely Stunted';
-                } elseif ((float) $getAge->stunted_from <= (float) $request->exitheight && (float) $getAge->stunted_to >= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->stunted_from && (float) $request->exitheight <= (float) $getAge->stunted_to) {
                     $exitHeightForAge = 'Stunted';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exitheight && (float) $getAge->normal_to >= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->normal_from && (float) $request->exitheight <= (float) $getAge->normal_to) {
                     $exitHeightForAge = 'Normal';
-                } elseif ((float) $getAge->tall <= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->tall) {
                     $exitHeightForAge = 'Tall';
                 } else {
                     $exitHeightForAge = 'Not Applicable';
@@ -345,36 +352,36 @@ class NutritionalStatusController extends Controller
             if ($childSex == '1') {
                 $getHeight = cgs_wfh_boys::where('length_in_cm', $request->exitheight)->first();
 
-                if ((float) $getHeight->severly_wasted >= (float) $request->exitweight) {
+                if ((float) $request->exitweight <= (float) $getHeight->severly_wasted) {
                     $exitWeightForHeight = 'Severely Wasted';
-                } elseif ((float) $getHeight->wasted_from <= (float) $request->exitweight && (float) $getHeight->wasted_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->wasted_from && (float) $request->exitweight <= (float) $getHeight->wasted_to) {
                     $exitWeightForHeight = 'Wasted';
-                } elseif ((float) $getHeight->normal_from <= (float) $request->exitweight && (float) $getHeight->normal_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->normal_from && (float) $request->exitweight <= (float) $getHeight->normal_to) {
                     $exitWeightForHeight = 'Normal';
-                } elseif ((float) $getHeight->overweight_from <= (float) $request->exitweight && (float) $getHeight->overweight_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->overweight_from && (float) $request->exitweight <= (float) $getHeight->overweight_to) {
                     $exitWeightForHeight = 'Overweight';
-                } elseif ((float) $getHeight->obese <= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->obese) {
                     $exitWeightForHeight = 'Obese';
                 } else {
                     $exitWeightForHeight = 'Not Applicable';
                 }
+
             } else {
                 $getHeight = cgs_wfh_girls::where('length_in_cm', $request->exitheight)->first();
 
-                if ((float) $getHeight->severly_wasted >= (float) $request->exitweight) {
+                if ((float) $request->exitweight <= (float) $getHeight->severly_wasted) {
                     $exitWeightForHeight = 'Severely Wasted';
-                } elseif ((float) $getHeight->wasted_from <= (float) $request->exitweight && (float) $getHeight->wasted_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->wasted_from && (float) $request->exitweight <= (float) $getHeight->wasted_to) {
                     $exitWeightForHeight = 'Wasted';
-                } elseif ((float) $getHeight->normal_from <= (float) $request->exitweight && (float) $getHeight->normal_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->normal_from && (float) $request->exitweight <= (float) $getHeight->normal_to) {
                     $exitWeightForHeight = 'Normal';
-                } elseif ((float) $getHeight->overweight_from <= (float) $request->exitweight && (float) $getHeight->overweight_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->overweight_from && (float) $request->exitweight <= (float) $getHeight->overweight_to) {
                     $exitWeightForHeight = 'Overweight';
-                } elseif ((float) $getHeight->obese <= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->obese) {
                     $exitWeightForHeight = 'Obese';
                 } else {
                     $exitWeightForHeight = 'Not Applicable';
                 }
-
             }
 
             if ($exitWeightForAge != 'Normal' || $exitHeightForAge != 'Normal' || $exitHeightForAge == 'Tall' || $exitWeightForHeight != 'Normal') {
@@ -492,27 +499,28 @@ class NutritionalStatusController extends Controller
         if ($childSex == '1') {
             $getAge = cgs_wfa_boys::where('age_month', $entryAgeInMonths)->first();
 
-            if ((float) $getAge->severly_underweight >= (float) $request->weight) {
+            if ((float) $request->weight <=(float) $getAge->severly_underweight) {
                 $entryWeightForAge = 'Severely Underweight';
-            } elseif ((float) $getAge->underweight_from <= (float) $request->weight && (float) $getAge->underweight_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getAge->underweight_from && (float) $request->weight <= (float) $getAge->underweight_to) {
                 $entryWeightForAge = 'Underweight';
-            } elseif ((float) $getAge->normal_from <= (float) $request->weight && (float) $getAge->normal_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getAge->normal_from && (float) $request->weight <= (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Normal';
-            } elseif ((float) $request->weight > (float) $getAge->normal_to) {
+            } elseif ((float) $request->weight >= (float) $request->weight) {
                 $entryWeightForAge = 'Overweight';
             } else {
                 $entryWeightForAge = 'Not Applicable';
             }
+
         } else {
             $getAge = cgs_wfa_girls::where('age_month', $entryAgeInMonths)->first();
 
-            if ((float) $getAge->severly_underweight >= (float) $request->weight) {
+            if ((float) $request->weight <=(float) $getAge->severly_underweight) {
                 $entryWeightForAge = 'Severely Underweight';
-            } elseif ((float) $getAge->underweight_from <= (float) $request->weight && (float) $getAge->underweight_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getAge->underweight_from && (float) $request->weight <= (float) $getAge->underweight_to) {
                 $entryWeightForAge = 'Underweight';
-            } elseif ((float) $getAge->normal_from <= (float) $request->weight && (float) $getAge->normal_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getAge->normal_from && (float) $request->weight <= (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Normal';
-            } elseif ((float) $request->weight > (float) $getAge->normal_to) {
+            } elseif ((float) $request->weight >= (float) $request->weight) {
                 $entryWeightForAge = 'Overweight';
             } else {
                 $entryWeightForAge = 'Not Applicable';
@@ -523,27 +531,28 @@ class NutritionalStatusController extends Controller
         if ($childSex == '1') {
             $getAge = cgs_hfa_boys::where('age_month', $entryAgeInMonths)->first();
 
-            if ((float) $getAge->severly_stunted >= (float) $request->height) {
+            if ((float) $request->height <= (float) $getAge->severly_stunted) {
                 $entryHeightForAge = 'Severely Stunted';
-            } elseif ((float) $getAge->stunted_from <= (float) $request->height && (float) $getAge->stunted_to >= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->stunted_from && (float) $request->height <= (float) $getAge->stunted_to) {
                 $entryHeightForAge = 'Stunted';
-            } elseif ((float) $getAge->normal_from <= (float) $request->height && (float) $getAge->normal_to >= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->normal_from && (float) $request->height <= (float) $getAge->normal_to) {
                 $entryHeightForAge = 'Normal';
-            } elseif ((float) $getAge->tall <= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->tall) {
                 $entryHeightForAge = 'Tall';
             } else {
                 $entryHeightForAge = 'Not Applicable';
             }
+
         } else {
             $getAge = cgs_hfa_girls::where('age_month', $entryAgeInMonths)->first();
 
-            if ((float) $getAge->severly_stunted >= (float) $request->height) {
+            if ((float) $request->height <= (float) $getAge->severly_stunted) {
                 $entryHeightForAge = 'Severely Stunted';
-            } elseif ((float) $getAge->stunted_from <= (float) $request->height && (float) $getAge->stunted_to >= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->stunted_from && (float) $request->height <= (float) $getAge->stunted_to) {
                 $entryHeightForAge = 'Stunted';
-            } elseif ((float) $getAge->normal_from <= (float) $request->height && (float) $getAge->normal_to >= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->normal_from && (float) $request->height <= (float) $getAge->normal_to) {
                 $entryHeightForAge = 'Normal';
-            } elseif ((float) $getAge->tall <= (float) $request->height) {
+            } elseif ((float) $request->height >= (float) $getAge->tall) {
                 $entryHeightForAge = 'Tall';
             } else {
                 $entryHeightForAge = 'Not Applicable';
@@ -554,31 +563,32 @@ class NutritionalStatusController extends Controller
         if ($childSex == '1') {
             $getHeight = cgs_wfh_boys::where('length_in_cm', $request->height)->first();
 
-            if ((float) $getHeight->severly_wasted >= (float) $request->weight) {
+            if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
                 $entryWeightForHeight = 'Severely Wasted';
-            } elseif ((float) $getHeight->wasted_from <= (float) $request->weight && (float) $getHeight->wasted_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->wasted_from && (float) $request->weight <= (float) $getHeight->wasted_to) {
                 $entryWeightForHeight = 'Wasted';
-            } elseif ((float) $getHeight->normal_from <= (float) $request->weight && (float) $getHeight->normal_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->normal_from && (float) $request->weight <= (float) $getHeight->normal_to) {
                 $entryWeightForHeight = 'Normal';
-            } elseif ((float) $getHeight->overweight_from <= (float) $request->weight && (float) $getHeight->overweight_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->overweight_from && (float) (float) $request->weight <= $getHeight->overweight_to) {
                 $entryWeightForHeight = 'Overweight';
-            } elseif ((float) $getHeight->obese <= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->obese) {
                 $entryWeightForHeight = 'Obese';
             } else {
                 $entryWeightForHeight = 'Not Applicable';
             }
+
         } else {
             $getHeight = cgs_wfh_girls::where('length_in_cm', $request->height)->first();
 
-            if ((float) $getHeight->severly_wasted >= (float) $request->weight) {
+            if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
                 $entryWeightForHeight = 'Severely Wasted';
-            } elseif ((float) $getHeight->wasted_from <= (float) $request->weight && (float) $getHeight->wasted_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->wasted_from && (float) $request->weight <= (float) $getHeight->wasted_to) {
                 $entryWeightForHeight = 'Wasted';
-            } elseif ((float) $getHeight->normal_from <= (float) $request->weight && (float) $getHeight->normal_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->normal_from && (float) $request->weight <= (float) $getHeight->normal_to) {
                 $entryWeightForHeight = 'Normal';
-            } elseif ((float) $getHeight->overweight_from <= (float) $request->weight && (float) $getHeight->overweight_to >= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->overweight_from && (float) (float) $request->weight <= $getHeight->overweight_to) {
                 $entryWeightForHeight = 'Overweight';
-            } elseif ((float) $getHeight->obese <= (float) $request->weight) {
+            } elseif ((float) $request->weight >= (float) $getHeight->obese) {
                 $entryWeightForHeight = 'Obese';
             } else {
                 $entryWeightForHeight = 'Not Applicable';
@@ -652,30 +662,31 @@ class NutritionalStatusController extends Controller
             $exitAgeInYears = floor($exitAgeInMonths / 12);
 
             //weight for age
-            if ($childSex->id == '1') {
+            if ($childSex == '1') {
                 $getAge = cgs_wfa_boys::where('age_month', $exitAgeInMonths)->first();
 
-                if ((float) $getAge->severly_underweight >= (float) $request->exitweight) {
+                if ((float) $request->exitweight <= (float) $getAge->severly_underweight) {
                     $exitWeightForAge = 'Severely Underweight';
-                } elseif ((float) $getAge->underweight_from <= (float) $request->exitweight && (float) $getAge->underweight_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getAge->underweight_from && (float) $request->exitweight <= (float) $getAge->underweight_to) {
                     $exitWeightForAge = 'Underweight';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exitweight && (float) $getAge->normal_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getAge->normal_from && (float) $request->exitweight <= (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Normal';
-                } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
+                } elseif ((float) $request->exitweight >= (float) $request->exitweight) {
                     $exitWeightForAge = 'Overweight';
                 } else {
                     $exitWeightForAge = 'Not Applicable';
                 }
+
             } else {
                 $getAge = cgs_wfa_girls::where('age_month', $exitAgeInMonths)->first();
 
-                if ((float) $getAge->severly_underweight >= (float) $request->exitweight) {
+                if ((float) $request->exitweight <= (float) $getAge->severly_underweight) {
                     $exitWeightForAge = 'Severely Underweight';
-                } elseif ((float) $getAge->underweight_from <= (float) $request->exitweight && (float) $getAge->underweight_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getAge->underweight_from && (float) $request->exitweight <= (float) $getAge->underweight_to) {
                     $exitWeightForAge = 'Underweight';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exitweight && (float) $getAge->normal_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getAge->normal_from && (float) $request->exitweight <= (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Normal';
-                } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
+                } elseif ((float) $request->exitweight >= (float) $request->exitweight) {
                     $exitWeightForAge = 'Overweight';
                 } else {
                     $exitWeightForAge = 'Not Applicable';
@@ -683,16 +694,16 @@ class NutritionalStatusController extends Controller
             }
 
             //height for age
-            if ($childSex->id == '1') {
+            if ($childSex == '1') {
                 $getAge = cgs_hfa_boys::where('age_month', $exitAgeInMonths)->first();
 
-                if ((float) $getAge->severly_stunted >= (float) $request->exitheight) {
+                if ((float) $request->exitheight <= (float) $getAge->severly_stunted) {
                     $exitHeightForAge = 'Severely Stunted';
-                } elseif ((float) $getAge->stunted_from <= (float) $request->exitheight && (float) $getAge->stunted_to >= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->stunted_from && (float) $request->exitheight <= (float) $getAge->stunted_to) {
                     $exitHeightForAge = 'Stunted';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exitheight && (float) $getAge->normal_to >= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->normal_from && (float) $request->exitheight <= (float) $getAge->normal_to) {
                     $exitHeightForAge = 'Normal';
-                } elseif ((float) $getAge->tall <= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->tall) {
                     $exitHeightForAge = 'Tall';
                 } else {
                     $exitHeightForAge = 'Not Applicable';
@@ -700,13 +711,13 @@ class NutritionalStatusController extends Controller
             } else {
                 $getAge = cgs_hfa_girls::where('age_month', $exitAgeInMonths)->first();
 
-                if ((float) $getAge->severly_stunted >= (float) $request->exitheight) {
+                if ((float) $request->exitheight <= (float) $getAge->severly_stunted) {
                     $exitHeightForAge = 'Severely Stunted';
-                } elseif ((float) $getAge->stunted_from <= (float) $request->exitheight && (float) $getAge->stunted_to >= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->stunted_from && (float) $request->exitheight <= (float) $getAge->stunted_to) {
                     $exitHeightForAge = 'Stunted';
-                } elseif ((float) $getAge->normal_from <= (float) $request->exitheight && (float) $getAge->normal_to >= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->normal_from && (float) $request->exitheight <= (float) $getAge->normal_to) {
                     $exitHeightForAge = 'Normal';
-                } elseif ((float) $getAge->tall <= (float) $request->exitheight) {
+                } elseif ((float) $request->exitheight >= (float) $getAge->tall) {
                     $exitHeightForAge = 'Tall';
                 } else {
                     $exitHeightForAge = 'Not Applicable';
@@ -714,39 +725,39 @@ class NutritionalStatusController extends Controller
             }
 
             //weight for height
-            if ($childSex->id == '1') {
+            if ($childSex == '1') {
                 $getHeight = cgs_wfh_boys::where('length_in_cm', $request->exitheight)->first();
 
-                if ((float) $getHeight->severly_wasted >= (float) $request->exitweight) {
+                if ((float) $request->exitweight <= (float) $getHeight->severly_wasted) {
                     $exitWeightForHeight = 'Severely Wasted';
-                } elseif ((float) $getHeight->wasted_from <= (float) $request->exitweight && (float) $getHeight->wasted_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->wasted_from && (float) $request->exitweight <= (float) $getHeight->wasted_to) {
                     $exitWeightForHeight = 'Wasted';
-                } elseif ((float) $getHeight->normal_from <= (float) $request->exitweight && (float) $getHeight->normal_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->normal_from && (float) $request->exitweight <= (float) $getHeight->normal_to) {
                     $exitWeightForHeight = 'Normal';
-                } elseif ((float) $getHeight->overweight_from <= (float) $request->exitweight && (float) $getHeight->overweight_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->overweight_from && (float) $request->exitweight <= (float) $getHeight->overweight_to) {
                     $exitWeightForHeight = 'Overweight';
-                } elseif ((float) $getHeight->obese <= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->obese) {
                     $exitWeightForHeight = 'Obese';
                 } else {
                     $exitWeightForHeight = 'Not Applicable';
                 }
+
             } else {
                 $getHeight = cgs_wfh_girls::where('length_in_cm', $request->exitheight)->first();
 
-                if ((float) $getHeight->severly_wasted >= (float) $request->exitweight) {
+                if ((float) $request->exitweight <= (float) $getHeight->severly_wasted) {
                     $exitWeightForHeight = 'Severely Wasted';
-                } elseif ((float) $getHeight->wasted_from <= (float) $request->exitweight && (float) $getHeight->wasted_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->wasted_from && (float) $request->exitweight <= (float) $getHeight->wasted_to) {
                     $exitWeightForHeight = 'Wasted';
-                } elseif ((float) $getHeight->normal_from <= (float) $request->exitweight && (float) $getHeight->normal_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->normal_from && (float) $request->exitweight <= (float) $getHeight->normal_to) {
                     $exitWeightForHeight = 'Normal';
-                } elseif ((float) $getHeight->overweight_from <= (float) $request->exitweight && (float) $getHeight->overweight_to >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->overweight_from && (float) $request->exitweight <= (float) $getHeight->overweight_to) {
                     $exitWeightForHeight = 'Overweight';
-                } elseif ((float) $getHeight->obese <= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight >= (float) $getHeight->obese) {
                     $exitWeightForHeight = 'Obese';
                 } else {
                     $exitWeightForHeight = 'Not Applicable';
                 }
-
             }
 
             if ($exitWeightForAge == 'Normal' || $exitHeightForAge == 'Normal' || $exitHeightForAge == 'Tall' || $exitWeightForHeight == 'Normal') {

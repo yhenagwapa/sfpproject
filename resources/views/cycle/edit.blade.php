@@ -39,8 +39,6 @@
             });
         });
     </script>
-
-
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
@@ -69,19 +67,45 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-6 mt-3 text-sm">
-                                        <label for="cycle_school_year">School Year<b class="text-red-600">*</b></label>
-                                        <input type="text" class="form-control rounded border-gray-300" id="cycle_school_year"
-                                               name="cycle_school_year" value="{{ old('cycle_school_year', $cycle->school_year) }}" maxlength="9" style="text-transform: uppercase;">
-                                        @error('cycle_school_year')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
+                                    @php
+                                        $currentYear = date('Y');
+                                        $startYear = $currentYear + 1;
+                                        $endYear = $currentYear + 2;
+                                        $endYearForSYTo = $currentYear + 3;
+                                    @endphp
+
+                                    <div class="col-md-3 mt-3 text-sm">
+                                        <label for="cycle_school_year_from">School Year From<b class="text-red-600">*</b></label>
+                                        <select name="cycle_school_year_from" id="cycle_school_year_from" class="form-control rounded border-gray-300">
+                                            @for ($year = $currentYear; $year <= $endYear; $year++)
+                                                <option value="{{ $year }}" {{ old('cycle_school_year_from', $cycle->school_year_from) == $year ? 'selected' : '' }}>
+                                                    {{ $year }}
+                                                </option>
+                                            @endfor
+                                        </select>
+                                        @if ($errors->has('cycle_school_year_from'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('cycle_school_year_from') }}</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-md-3 mt-3 text-sm">
+                                        <label for="cycle_school_year_to">School Year To<b class="text-red-600">*</b></label>
+                                            <select name="cycle_school_year_to" id="cycle_school_year_to" class="form-control rounded border-gray-300">
+                                                @for ($year = $startYear; $year <= $endYearForSYTo; $year++)
+                                                    <option value="{{ $year }}" {{ old('cycle_school_year_to', $cycle->school_year_to) == $year ? 'selected' : '' }}>
+                                                        {{ $year }}
+                                                    </option>
+                                                @endfor
+                                            </select>
+                                        @if ($errors->has('cycle_school_year_to'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('cycle_school_year_to') }}</span>
+                                        @endif
                                     </div>
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_target">Target<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_target"
-                                               name="cycle_target" value="{{ (old('cycle_target', number_format($cycle->target))) }}" maxlength="12">
+                                               name="cycle_target" value="{{ (old('cycle_target', $cycle->target)) }}" maxlength="12">
                                         @error('cycle_target')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -90,16 +114,16 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_allocation">Allocation<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_allocation"
-                                               name="cycle_allocation" value="{{ (old('cycle_allocation', number_format((float) $cycle->allocation), 2)) }}">
+                                               name="cycle_allocation" value="{{ (old('cycle_allocation',  $cycle->allocation)) }}">
                                         @error('cycle_allocation')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
 
                                     <div class="col-md-6 mt-3 text-sm">
-                                        <label for="cycle_type">Status<b class="text-red-600">*</b></label>
+                                        <label for="cycle_type">Type<b class="text-red-600">*</b></label>
                                         <select class="form-control rounded border-gray-300" id="cycle_type" name="cycle_type">
-                                            <option value="" selected disabled>Select status</option>
+                                            <option value="" selected disabled>Select type</option>
                                             @foreach ($cycleType as $type => $name)
                                                 <option value="{{ $type }}" {{ old('cycle_type', $cycle->type) == $type ? 'selected' : '' }}>
                                                     {{ $name }}
@@ -114,15 +138,9 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_status">Status<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_status"
-                                               name="cycle_status" value="{{ old('cycle_status', $cycle->status) }}" disabled>
+                                               name="cycle_status" value="{{ old('cycle_status', $cycle->status) }}" readonly>
 
                                     </div>
-                                </div>
-
-                                <!-- Submit and Cancel Buttons -->
-                                <div class="col-md-12 mt-4 text-right">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Submit</button>
-                                    <button type="reset" class="btn btn-secondary">Cancel</button>
                                 </div>
 
                                 <!-- Confirmation Modal -->
@@ -143,8 +161,17 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </form>
+
+                            <!-- Submit and Cancel Buttons -->
+                            <div class="col-md-12 flex mt-4 justify-end text-right">
+                                <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9" data-bs-toggle="modal" data-bs-target="#confirmationModal">Save Changes</button>
+                                <form id="cancel-form" method="GET" action="{{ route('cycle.index') }}">
+                                </form>
+                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

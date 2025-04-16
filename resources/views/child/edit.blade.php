@@ -117,15 +117,16 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @php
-                                    $ref = \Carbon\Carbon::create(2025, 12, 31);
-                                    $min = $ref->copy()->subYears(5)->addDay()->format('Y-m-d');
-                                    $max = $ref->copy()->format('Y-m-d');
-                                @endphp
+                                {{-- @php
+                                    use Carbon\Carbon;
+
+                                    $min = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
+                                    $max = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
+                                @endphp --}}
                                 <div class="col-md-6 mt-2 text-sm">
                                     <label for="date_of_birth">Date of Birth<b class="text-red-600">*</b></label>
                                     <input type="date" class="form-control rounded border-gray-300" id="date_of_birth"
-                                        name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('Y-m-d')) }}" min="{{ $min }}" max="{{ $max}}">
+                                        name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('Y-m-d')) }}">
                                     @error('date_of_birth')
                                         <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror

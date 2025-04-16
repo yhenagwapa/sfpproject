@@ -55,7 +55,7 @@
             <div class="d-flex align-items-center justify-content-between">
                 <span class="logo d-flex align-items-center">
                     <img src="{{ asset('img/SFP-LOGO-2024.png') }}" alt="sfp_logo">
-                    <img src="{{ asset('img/[PNG] bagong pilipinas (1).png') }}" alt="bagongpilipinas">
+                    {{-- <img src="{{ asset('img/[PNG] bagong pilipinas (1).png') }}" alt="bagongpilipinas"> --}}
                 </span>
                 <i class="bi bi-list toggle-sidebar-btn"></i>
             </div>
@@ -215,7 +215,7 @@
                 <div class="footer-dswd">
                     &copy; 2025 Department of Social Welfare and Development.
                 </div>
-                <div class="credits mt-2 mb-0">
+                {{-- <div class="credits mt-2 mb-0">
                     &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
 
                     <!-- All the links in the footer should remain intact. -->
@@ -223,7 +223,7 @@
                     <!-- Licensing information: https://bootstrapmade.com/license/ -->
                     <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
                     Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                </div>
+                </div> --}}
             </footer><!-- End Footer -->
         </div>
 

@@ -215,7 +215,7 @@
                                     </div>
                                     <div class="col-md-12" id="input-container">
                                         <div class="input-group mb-2">
-                                            <input type="text" class="form-control rounded border-gray-300 rounded border-gray-300 mr-3"
+                                            <input type="text" class="form-control rounded border-gray-300 rounded border-gray-300 mr-3"` 
                                                 name="cdcname[]" value="{{ old('cdcname') }}" autofocus>
                                             <button type="button"
                                                 class="text-white bg-blue-600 rounded text-sm text-nowrap px-4 min-h-9 add-more">

@@ -157,9 +157,11 @@ class ChildDevelopmentCenterController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Request $request)
     {
+        session(['editing_center_id' => $request->input('center_id')]);
 
+        return redirect()->route('centers.edit');
     }
 
     /**
@@ -169,7 +171,8 @@ class ChildDevelopmentCenterController extends Controller
     {
         $this->authorize('edit-child-development-center');
 
-        $centerID = $request->input('center_id');
+        $centerID = session('editing_center_id');
+
         $center = ChildDevelopmentCenter::findOrFail($centerID);
 
         $workers = User::role('child development worker')->get();
@@ -216,7 +219,8 @@ class ChildDevelopmentCenterController extends Controller
     {
         $validatedData = $request->validated();
 
-        $centerID = $request->input('center_id');
+        $centerID = session('center_id');
+
         $center = ChildDevelopmentCenter::findOrFail($centerID);
 
         $query = ChildDevelopmentCenter::where('center_name', $validatedData['center_name'])

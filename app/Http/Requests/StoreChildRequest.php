@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon;
 
 class StoreChildRequest extends FormRequest
 {
@@ -23,13 +24,16 @@ class StoreChildRequest extends FormRequest
     {
         $step = $this->input('step', 1);
 
+        $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
+        $maxDate = Carbon::now()->subYears(2)->startOfYear()->format('Y-m-d');
+
         if ($step == 1) {
             return [
                 'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
-                'date_of_birth' => ['required', 'date'],
+                'date_of_birth' => ['required', 'date', 'after_or_equal:$minDate', 'before_or_equal:$maxDate'],
                 'sex_id' => ['required', 'exists:sexes,id'],
                 'region_psgc' => ['required'],
                 'province_psgc' => ['required'],
@@ -68,6 +72,8 @@ class StoreChildRequest extends FormRequest
                 'lastname.required' => 'Please fill in last name.',
                 'lastname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
                 'date_of_birth.required' => 'Please select date of birth.',
+                'date_of_birth.after_or_equal' => 'Invalid date.',
+                'date_of_birth.before_or_equal' => 'Invalid date.',
                 'sex_id.required' => 'Please select sex.',
 
                 'province_psgc.required' => 'Please select a province.',
