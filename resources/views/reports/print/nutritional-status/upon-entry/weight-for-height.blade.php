@@ -1,9 +1,7 @@
 <div class="header">
-    <p>Department of Social Welfare and Development, Field Office XI</p>
-    <p>Supplementary Feeding Program</p>
-    <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
-    <p><b>Summary of Undernourished Children, Ethnicity, 4Ps, Deworming & Vitamin A</b></p>
-    <p><i>Upon Entry</i></p>
+    @include('reports.print.nutritional-status.header')
+    <p><b>CONSOLIDATED NUTRITIONAL STATUS REPORT</b></p>
+    <p>Upon Entry <i><br />(Weight-for-Height)</i></p>
     <br>
 </div>
 
@@ -11,105 +9,64 @@
     <table class="table">
         <tr>
             <td>
-                <p>Province: <u>{{ $province ? $province->implode(', ') : 'All Provinces' }}</u></p>
-                <p>City / Municipality: <u>{{ $city ? $city->implode(', ') : 'All Cities' }}</u></p>
+                <p>Province: <u>{{ count($province) > 0 ? $province->implode(', ') : 'All Provinces' }}</u></p>
+                <p>City / Municipality: <u>{{ count($city) > 0 ? $city->implode(', ') : 'All Cities' }}</u></p>
             </td>
         </tr>
     </table>
 </div>
 
-<table id='undernourished-upon-entry-table' class="table datatable undernourished-upon-entry-table w-full">
-    <thead class="border bg-gray-200">
+<table id='after-120-hfa' class="table datatable nutritional-status w-full">
+
+    <thead class="border bg-gray-200 header-bg">
     <tr>
-        <th rowspan="3">Name of Child Development Center</th>
-        <th rowspan="3">Name of Child Development Worker</th>
-        <th colspan="8">Summary of Undernourished Children</th>
-        <th colspan="10">Beneficiaries Profile</th>
-        <th colspan="4">Deworming & Vitamin A Record</th>
+        <th rowspan="3">No.</th>
+        <th rowspan="3">Name of Child Development Center (CDC)</th>
+        <th rowspan="3">Name of Child Development Workers (Surname, First name, M.I)</th>
+        <th colspan="2">Total No. of CDCCh/SNP Served</th>
+        <th colspan="8">Normal (N)</th>
+        <th colspan="8">Wasted (W)</th>
+        <th colspan="8">Severely Wasted (SW)</th>
+        <th colspan="8">Overweight (OW)</th>
+        <th colspan="8">Obese (Ob)</th>
+        <th colspan="8">Total</th>
     </tr>
     <tr>
-        <th colspan="2">2 y/o</th>
-        <th colspan="2">3 y/o</th>
-        <th colspan="2">4 y/o</th>
-        <th colspan="2">5 y/o</th>
-        <th class="td-width" colspan="2">No. of Ethnic Children</th>
-        <th class="td-width" colspan="2">No. of 4Ps Children</th>
-        <th class="td-width" colspan="2">No. of PWD</th>
-        <th class="td-width" colspan="2">No. of Children with Lactose Intolerance</th>
-        <th class="td-width" colspan="2">No. of Children with Solo Parent</th>
-        <th class="td-width" colspan="2">No. of Dewormed Children</th>
-        <th class="td-width" colspan="2">No. of Children with Vit. A Supp.</th>
+        <th class="subheader-bg" rowspan="2">Male</th>
+        <th class="subheader-bg" rowspan="2">Female</th>
+        @for($i = 0; $i < 6; $i++)
+            <th colspan="4">Male</th>
+            <th colspan="4">Female</th>
+        @endfor
     </tr>
-    <tr>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
-        <th>M</th>
-        <th>F</th>
+    <tr class="subheader-bg">
+        @for($i = 0; $i < 12; $i++)
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+        @endfor
     </tr>
     </thead>
-    <tbody class="undernourished-upon-entry-table text-xs">
-    @foreach ($centerNames as $center)
+    <tbody class="nutritional-status text-xs ">
+    @php $i = 0; @endphp
+    @foreach ($report['weight_for_height'] as $key => $center)
         <tr>
-            <td>{{ $center->center_name }}</td>
-            <td>
-                @php
-                    $users = $center->users->filter(function ($user) {
-                        return $user->roles->contains('name', 'child development worker');
-                    });
-                @endphp
-
-                @if ($users->isNotEmpty())
-                    @foreach ($users as $user)
-                        {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
+            <td>{{ ++$i }}</td>
+            <td>{{ $center['cdc_name'] }}</td>
+            <td></td>
+            <td>0</td>
+            <td>0</td>
+            @foreach ($categoriesWFH as $category)
+                @foreach (['male', 'female'] as $gender)
+                    @foreach (['2', '3', '4', '5'] as $age)
+                        <td>{{ $center[$category][$gender][$age] }}</td>
                     @endforeach
-                @else
-                    No Nurse Assigned
-                @endif
-            </td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['female'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['3_years_old']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['3_years_old']['female'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['4_years_old']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['4_years_old']['female'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['5_years_old']['female'] ?? 0 }}</td>
-
-            <td>{{ $ageGroupsPerCenter[$center->id]['indigenous_people']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['indigenous_people']['female'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['pantawid']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['pantawid']['female'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['pwd']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['pwd']['female'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['lactose_intolerant']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['lactose_intolerant']['female'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['child_of_solo_parent']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['child_of_solo_parent']['female'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['dewormed']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['dewormed']['female'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a']['male'] ?? 0 }}</td>
-            <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a']['female'] ?? 0 }}</td>
+                @endforeach
+            @endforeach
         </tr>
     @endforeach
-    {{-- @if (count($centers) <= 0)
+    @if (count($report) <= 0)
         <tr>
             <td class="text-center" colspan="6">
                 @if (empty($search))
@@ -117,8 +74,30 @@
                 @endif
             </td>
         </tr>
-    @endif --}}
+    @endif
     </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="3" style="text-align: right; padding-right: 5px;">Total per Age Bracket &gt; </th>
+        <th rowspan="3">0</th>
+        @for($i = 0; $i <= 48; $i++)
+        <th>0</th>
+        @endfor
+    </tr>
+    <tr>
+        <th colspan="3" style="text-align: right; padding-right: 5px;">Total Male/Female &gt;</th>
+        <th rowspan="2" colspan="2">0</th>
+        @for($i = 0; $i < 12; $i++)
+        <th colspan="4">0</th>
+        @endfor
+    </tr>
+    <tr>
+        <th colspan="3" style="text-align: right; padding-right: 5px;">Total children beneficiaries &gt; </th>
+        @for($i = 0; $i < 6; $i++)
+        <th colspan="8">0</th>
+        @endfor
+    </tr>
+    </tfoot>
 </table>
 
 <div class="footer-section">
@@ -129,7 +108,7 @@
             <td>
                 <br>
                 <br>
-                <p>Prepared by:</p>
+                <p>Noted by:</p>
                 <br>
                 <br>
                 <p>______________________________________</p>
@@ -138,7 +117,7 @@
             <td>
                 <br>
                 <br>
-                <p>Noted by:</p>
+                <p>Approved by:</p>
                 <br>
                 <br>
                 <p>______________________________________</p>
@@ -147,7 +126,3 @@
         </tr>
     </table>
 </div>
-
-<footer>
-
-</footer>

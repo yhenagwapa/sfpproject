@@ -82,7 +82,10 @@
                                                                 </a>
                                                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                                                                     <li>
-                                                                        <a class="dropdown-item d-flex align-items-center" href="/reports/print/masterlist" target="_blank" {{--onclick="workerReport('masterlist', localStorage.getItem('selected_cycle_id')); return false;"--}}>
+                                                                        <a class="dropdown-item d-flex align-items-center"
+                                                                           href="{{ route('cycle.reports.print.masterlist', $cycle->id ) }}"
+                                                                           target="_blank"
+                                                                        >
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
                                                                                 stroke-width="2" stroke="currentColor"
@@ -118,8 +121,9 @@
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                            href="#"
-                                                                            onclick="workerReport('age-bracket-upon-entry', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                           href="{{ route('cycle.reports.print.age-bracket-upon-entry', $cycle->id) }}"
+                                                                           target="_blank"
+                                                                        >
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
                                                                                 stroke-width="2" stroke="currentColor"
@@ -136,8 +140,9 @@
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                            href="#"
-                                                                            onclick="workerReport('age-bracket-after-120', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                           href="{{ route('cycle.reports.print.age-bracket-after-120', $cycle->id) }}"
+                                                                           target="_blank"
+                                                                        >
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
                                                                                 stroke-width="2" stroke="currentColor"
@@ -154,8 +159,9 @@
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center"
-                                                                            href="#"
-                                                                            onclick="workerReport('monitoring', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                           href="{{ route('cycle.reports.print.monitoring', $cycle->id) }}"
+                                                                           target="_blank"
+                                                                        >
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
                                                                                 stroke-width="2" stroke="currentColor"
@@ -172,8 +178,9 @@
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center"
-                                                                            href="#"
-                                                                            onclick="workerReport('unfunded', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                           href="{{ route('cycle.reports.print.unfunded', $cycle->id) }}"
+                                                                           target="_blank"
+                                                                        >
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
                                                                                 stroke-width="2" stroke="currentColor"
@@ -212,8 +219,9 @@
                                                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
-                                                                                href="#"
-                                                                                onclick="focalReport('malnourished', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                               href="{{ route('cycle.reports.print.malnourished', $cycle->id) }}"
+                                                                               target="_blank"
+                                                                               >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -230,8 +238,9 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
-                                                                                href="#"
-                                                                                onclick="focalReport('disabilities', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                               href="{{ route('cycle.reports.print.disabilities', $cycle->id) }}"
+                                                                               target="_blank"
+                                                                            >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -268,8 +277,9 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                href="#"
-                                                                                onclick="focalReport('undernourished-upon-entry', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                               href="{{ route('cycle.reports.print.undernourished-upon-entry', $cycle->id) }}"
+                                                                               target="_blank"
+                                                                               >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -286,8 +296,9 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                href="#"
-                                                                                onclick="focalReport('undernourished-after-120', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                               href="{{ route('cycle.reports.print.undernourished-after-120', $cycle->id) }}"
+                                                                               target="_blank"
+                                                                            >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -323,8 +334,9 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                href="#"
-                                                                                onclick="focalReport('nutritional-status-upon-entry', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                               href="{{ route('cycle.reports.print.nutritional-status-upon-entry', $cycle->id) }}"
+                                                                               target="_blank"
+                                                                            >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -341,8 +353,9 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                                href="#"
-                                                                                onclick="focalReport('nutritional-status-after-120', localStorage.getItem('selected_cycle_id')); return false;">
+                                                                               href="{{ route('cycle.reports.print.nutritional-status-after-120', $cycle->id) }}"
+                                                                               target="_blank"
+                                                                            >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -445,64 +458,6 @@
                                         {{ $isFunded->links() }}
                                     </div>
 
-                                    <script>
-                                        function workerReport(reportType, cycleId = null) {
-                                            /*let printCDWForm = document.getElementById('printCDWForm');
-                                            let centerInput = document.getElementById('center_name');
-                                            let centerHiddenInput = document.getElementById('center_id');
-                                            let cycleHiddenInput = document.getElementById('cycle_id');
-
-                                            cycleId = localStorage.getItem('selected_cycle_id');
-                                            centerHiddenInput.value = centerInput.value;
-
-                                            if (cycleHiddenInput) {
-                                                cycleHiddenInput.value = cycleId;
-                                            } else {
-                                                console.error("Hidden input #cycle_id not found.");
-                                            }
-
-                                            printCDWForm.action = `/reports/print/${reportType}`;
-                                            printCDWForm.target = "_blank";
-                                            printCDWForm.submit();*/
-                                        }
-
-                                        function focalReport(reportType, cycleId) {
-                                            let printFocalForm = document.getElementById('printFocalForm');
-                                            let centerInput = document.getElementById('center_name');
-                                            let centerHiddenInput = document.getElementById('center_id');
-                                            let cycleHiddenInput = document.getElementById('cycle_id2');
-
-                                            console.log(localStorage.getItem('selected_cycle_id'));
-
-                                            cycleId = localStorage.getItem('selected_cycle_id');
-                                            centerHiddenInput.value = centerInput.value;
-
-                                            if (cycleHiddenInput) {
-                                                cycleHiddenInput.value = cycleId;
-                                            } else {
-                                                console.error("Hidden input #cycle_id not found.");
-                                            }
-
-                                            printFocalForm.action = `/reports/print/${reportType}`;
-
-                                            // printFocalForm.target = "_blank";
-                                            printFocalForm.submit();
-                                        }
-
-                                        function adminReport(reportType, cycleId) {
-                                            let printAdminForm = document.getElementById('printAdminForm');
-                                            let centerInput = document.getElementById('center_name');
-                                            let centerHiddenInput = document.getElementById('center_id');
-                                            let cycleHiddenInput = document.getElementById('cycle_id');
-
-                                            centerHiddenInput.value = centerInput.value;
-
-                                            printAdminForm.action = `/reports/${cycleId}/print/${reportType}`;
-
-                                            // printAdminForm.target = "_blank";
-                                            printAdminForm.submit();
-                                        }
-                                    </script>
                                 </div>
                             @endif
                         </div>

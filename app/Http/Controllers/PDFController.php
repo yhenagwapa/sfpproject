@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\PDF\FocalReports;
 use App\Http\Controllers\PDF\NutritionalStatusReport;
+use App\Http\Controllers\PDF\WorkerReports;
 use App\Models\ChildCenter;
 use Illuminate\Http\Request;
 use App\Models\ChildDevelopmentCenter;
@@ -15,7 +17,7 @@ use App\Models\Implementation;
 
 class PDFController extends Controller
 {
-    use NutritionalStatusReport;
+    use WorkerReports, NutritionalStatusReport, FocalReports;
 
     public function printMasterlist(Request $request)
     {
@@ -111,6 +113,7 @@ class PDFController extends Controller
 
         return $pdf->stream($cycle->name . ' Masterlist.pdf');
     }
+
     public function printMalnourish(Request $request)
     {
         $cycle = Implementation::where('id', $request->cycle_id2)->first();
@@ -3282,6 +3285,7 @@ class PDFController extends Controller
 
         return $pdf->stream($cycle->name . ' Age Bracket Upon Entry.pdf');
     }
+
     public function printAgeBracketAfter120(Request $request)
     {
         $cycle = Implementation::where('id', $request->cycle_id)->first();
@@ -3623,6 +3627,7 @@ class PDFController extends Controller
 
         return $pdf->stream($cycle->name . ' Age Bracket After 120 Feeding Days.pdf');
     }
+
     public function printMonitoring(Request $request)
     {
         $cycle = Implementation::where('id', $request->cycle_id)->first();

@@ -16,18 +16,16 @@ use Illuminate\Support\Facades\DB;
 trait NutritionalStatusReport
 {
 
-    public function printNutritionalStatusAfter120(Request $request)
+    public function printNutritionalStatusAfter120($cycleId, Request $request)
     {
-
         // define variables
         $report = [];
 
         // define implementation_id (cycle_id)
-        $implementationId = $request->cycle_id2;
-        $cycle = Implementation::where('id', $implementationId)->first();
+        $cycle = Implementation::where('id', $cycleId)->first();
 
         // get all child development centers under the cycle
-        $cc = ChildCenter::where('implementation_id', $implementationId)->get();
+        $cc = ChildCenter::where('implementation_id', $cycleId)->get();
         $cdc = ChildDevelopmentCenter::whereIn('id', $cc->pluck('child_development_center_id'))->get();
 
         $categoriesHFA = ['normal', 'stunted', 'severely stunted', 'tall', 'total'];
@@ -35,9 +33,9 @@ trait NutritionalStatusReport
         $categoriesWFH = ['normal', 'wasted', 'severely wasted', 'overweight', 'obese', 'total'];
 
         foreach ($cdc as $c) {
-            $report['height_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $implementationId, 'height_for_age', $categoriesHFA);
-            $report['weight_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $implementationId, 'weight_for_age', $categoriesWFA);
-            $report['weight_for_height'][$c->id] = $this->nutritionalStatusAfter120($c, $implementationId, 'weight_for_height', $categoriesWFH);
+            $report['height_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'height_for_age', $categoriesHFA);
+            $report['weight_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'weight_for_age', $categoriesWFA);
+            $report['weight_for_height'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'weight_for_height', $categoriesWFH);
         }
 
         // additional values for PDF
@@ -60,16 +58,42 @@ trait NutritionalStatusReport
         return $pdf->stream($cycle->name . ' Nutritional Status After 120.pdf');
     }
 
-    public function printNutritionalStatusUponEntry(Request $request)
+    public function printNutritionalStatusUponEntry($cycleId, Request $request)
     {
+        $report = [];
 
-        $pdf = PDF::loadView('reports.print.nutritional-status.upon-entry', compact('cycle', 'centerNames', 'ageGroupsPerCenter', 'province', 'city'))
+        // define implementation_id (cycle_id)
+        $cycle = Implementation::where('id', $cycleId)->first();
+
+        // get all child development centers under the cycle
+        $cc = ChildCenter::where('implementation_id', $cycleId)->get();
+        $cdc = ChildDevelopmentCenter::whereIn('id', $cc->pluck('child_development_center_id'))->get();
+
+        $categoriesHFA = ['normal', 'stunted', 'severely stunted', 'tall', 'total'];
+        $categoriesWFA = ['normal', 'underweight', 'severely underweight', 'overweight', 'total'];
+        $categoriesWFH = ['normal', 'wasted', 'severely wasted', 'overweight', 'obese', 'total'];
+
+        foreach ($cdc as $c) {
+            $report['height_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'height_for_age', $categoriesHFA);
+            $report['weight_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'weight_for_age', $categoriesWFA);
+            $report['weight_for_height'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'weight_for_height', $categoriesWFH);
+        }
+
+        // additional values for PDF
+        $centers = UserCenter::where('user_id', auth()->id())->get();
+        $getPsgc = $centers->pluck('psgc_id');
+        $province = Psgc::whereIn('psgc_id', $getPsgc)->pluck('province_name')->unique();
+        $city = Psgc::whereIn('psgc_id', $getPsgc)->pluck('city_name')->unique();
+
+        $pdf = PDF::loadView('reports.print.nutritional-status.upon-entry',
+            compact('report', 'cycle', 'province', 'city',
+                'cc', 'categoriesHFA', 'categoriesWFA', 'categoriesWFH'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
-                'margin-right' => 1,
+                'margin-right' => 0.5,
                 'margin-bottom' => 0.5,
-                'margin-left' => 1
+                'margin-left' => 0.5
             ]);
 
         return $pdf->stream($cycle->name . ' Nutritional Status Upon Entry.pdf');

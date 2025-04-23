@@ -13,6 +13,14 @@
             margin: 0 auto;
         }
 
+        .header-bg{
+            background-color: #ABC9B6;
+        }
+
+        .subheader-bg {
+            background-color: #c9abab;
+        }
+
         .table {
             width: 100%;
             font-family: 'Arial', sans-serif;
@@ -21,26 +29,27 @@
         }
 
         .table td {
-            padding: 10px;
+            padding: 6px;
             vertical-align: top;
         }
 
-        .td-width {
-            width: 30px;
+        .first {
+            width: 20%;
         }
 
         .p {
             margin: 5px 0;
         }
 
-        .undernourished-upon-entry-table {
+        .nutritional-status {
             font-size: 9px;
             font-family: 'Arial', sans-serif;
             text-align: center;
             border-collapse: collapse;
+            width: 100%;
         }
 
-        .undernourished-upon-entry-table th, .undernourished-upon-entry-table td {
+        .nutritional-status th, .nutritional-status td {
             border: 1px solid rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
         }
@@ -57,13 +66,14 @@
         }
 
         .footer-table td {
-            padding: 10px;
+            padding: 6px;
             vertical-align: top;
         }
 
         .no-wrap {
             white-space: nowrap;
         }
+
         .page-break {
             page-break-after: always;
         }
