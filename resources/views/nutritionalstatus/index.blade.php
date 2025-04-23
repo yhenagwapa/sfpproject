@@ -57,14 +57,15 @@
                                 <form method="post" action="{{ route('nutritionalstatus.storeUponEntryDetails') }}">
                                     @csrf
 
-                                    <input type="hidden" name="child_id" value="{{ $child->id }}">
                                     <input type="hidden" name="form_type" value="entry">
+                                    <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                    <input type="hidden" name="implementation_id" value="{{ $implementation->id }}">
 
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300" id="deworming_date"
                                             name='deworming_date' value="{{ old('deworming_date') }}"
-                                            min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                            >
                                         @if ($errors->has('deworming_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
                                         @endif
@@ -73,7 +74,7 @@
                                         <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date"
                                             name='vitamin_a_date' value="{{ old('vitamin_a_date') }}"
-                                            min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                            >
                                         @if ($errors->has('vitamin_a_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
                                         @endif
@@ -155,8 +156,10 @@
                                 <form method="post" action="{{ route('nutritionalstatus.storeExitDetails') }}">
                                     @csrf
 
-                                    <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
                                     <input type="hidden" name="form_type" value="exit">
+                                    <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
+                                    <input type="hidden" name="entryWeighing" value="{{ $entryDetails->actual_weighing_date }}">
+                                    <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
 
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="exitweight">Weight<b class="text-red-600">*</b></label>
@@ -226,10 +229,10 @@
                     @endif
                 @endcan
             </div>
-            <div class="{{ $hasUponExitData || auth()->user()->hasRole('admin') ? 'col-lg-12' : 'col-lg-9' }}">
+            <div class="{{ $hasUponExitData || auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') ? 'col-lg-12' : 'col-lg-9' }}">
                 <div class="card">
                     <div class="card-body">
-                        @if ($hasUponEntryData && $hasUponExitData)
+                        @if($hasUponEntryData || $hasUponExitData)
                             <div class="col-md-12 flex text-right">
                                 <a href={{ route('child.index') }} class="flex italic" style="text-decoration: none;">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e9730" class="mr-1 mt-1 size-4">
@@ -248,7 +251,7 @@
                         <div class="col-md-6">
                             @can('edit-nutritional-status')
                                 @if ($child->nutritionalStatus->isNotEmpty())
-                                    <form action="{{ route('nutritionalstatus.edit') }}" method="POST" class="inline">
+                                    <form action="{{ route('nutritionalstatus.show') }}" method="POST" class="inline">
                                         @csrf
                                         <input type="hidden" name="child_id" value="{{ $child->id }}">
                                         <button type="submit" class="flex bg-blue-600 text-white rounded px-3 min-h-9 items-center">
@@ -275,34 +278,4 @@
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const schoolYearStart = @json($cycle->school_year_from);
-            const schoolYearEnd = @json($cycle->school_year_to);
-            const entryWeighing = @json( $entryWeighingDate);
-            const weighingDate = document.getElementById('actual_weighing_date');
-            const exitWeighingDate = document.getElementById('exitweighing_date');
-
-            function entryDateLimits() {
-
-                if (schoolYearStart && schoolYearEnd) {
-                    weighingDate.min = `${schoolYearStart}-01-01`;
-                    weighingDate.max = `${schoolYearEnd}-12-31`;
-                }
-            }
-
-            function exitDateLimits() {
-
-                if (schoolYearStart && schoolYearEnd) {
-                    weighingDate.min = entryWeighing;
-                    weighingDate.max = `${schoolYearEnd}-12-31`;
-                }
-            }
-
-            entryDateLimits();
-            exitDateLimits();
-        });
-    </script>
 @endsection

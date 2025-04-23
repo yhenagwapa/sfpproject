@@ -166,23 +166,6 @@
                                         @endif
                                     </div>
 
-                                    {{-- <script>
-                                        function dateFilter() {
-                                            return {
-                                                minDate: '',
-                                                maxDate: '',
-                                                setDateRange() {
-                                                    const today = new Date();
-
-                                                    const max = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
-                                                    const min = new Date(today.getFullYear() - 6, today.getMonth(), today.getDate() + 2);
-
-                                                    this.minDate = min.toISOString().split('T')[0];
-                                                    this.maxDate = max.toISOString().split('T')[0];
-                                                }
-                                            }
-                                        }
-                                    </script> --}}
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="sex">Sex</label><label for="sex"
                                             class="text-red-600">*</label>
@@ -433,12 +416,6 @@
 
                                     <input type="hidden" id="psgc_id" name="psgc_id" value="">
 
-                                    {{-- @dd(session('step1Data')) --}}
-
-                                    {{-- <div class="col-md-12 mt-4 text-right">
-                                        <button type="submit" id='nextBtn' class="text-white bg-blue-600 rounded px-3 min-h-9" onclick="nextStep()">Next</button>
-                                    </div> --}}
-
                                     <!-- {{-- pantawid and pwd additional details --}} -->
                                     <script>
                                         document.addEventListener('DOMContentLoaded', function() {
@@ -559,10 +536,9 @@
                                             citySelect.addEventListener('change', filterBarangays);
                                         });
                                     </script>
-                                <button type="button" onclick="nextStep(2)">Next</button>
                                 </div>
-                            {{-- @elseif(session('step') == 2) --}}
-                                <div id="step2" class="row step" style="display: none;">
+                            @elseif(session('step') == 2)
+                                <div id="step2" class="row step">
                                     <h5 class="card-title ml-3">Child Development Center Details</h5>
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="child_development_center_id">CDC or SNP <span
@@ -611,11 +587,9 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <button type="button" onclick="prevStep(1)">Previous</button>
-                                    <button type="button" onclick="nextStep(3)">Next</button>
                                 </div>
-                            {{-- @elseif(session('step') == 3) --}}
-                                <div id="step3" class="row step" style="display: none;">
+                            @elseif(session('step') == 3)
+                                <div id="step3" class="row step">
                                     <h5 class="card-title ml-3">Summary</h5>
 
                                     <div class='col-md-6 mt-3 text-gray-400 text-xs'>Personal Information</div>
@@ -770,14 +744,21 @@
                                             value="{{ session('step2Data.milk_feeding_name') }}" disabled>
                                     </div>
                                 </div>
-                            {{-- @endif --}}
+                            @endif
+                            <div class="col-md-12 mt-4 text-right">
+                                @if (session('step', 1) > 1)
+                                    <button type="submit" name="action" value="prev"
+                                        class="text-white bg-gray-600 rounded px-3 min-h-9">Previous</button>
+                                @endif
 
-
-
-
-
-
-
+                                @if (session('step', 1) < 3)
+                                    <button type="submit" name="action" value="next"
+                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Next</button>
+                                @else
+                                    <button type="submit" name="action" value="submit"
+                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Submit</button>
+                                @endif
+                            </div>
                         </form><!-- End floating Labels Form -->
 
 

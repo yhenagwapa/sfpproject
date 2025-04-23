@@ -79,19 +79,44 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user): View
+    public function show(Request $request)
     {
-        return view('users.show', [
-            'user' => $user
-        ]);
+        session(['editing_user_id' => $request->input('user_id')]);
+
+        return redirect()->route('users.edit');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user): View
+    public function edit(Request $request)
     {
-        // Check Only Super Admin can update his own Profile
+        $userID = session('editing_user_id');
+
+        $user = User::findOrFail($userID);
+        $psgc = new Psgc();
+
+        $psgcRecord = Psgc::where('psgc_id', $user->psgc_id)->first();
+
+        $provinces = $psgc->getProvinces();
+        $cities = $psgc->allCities();
+        $barangays = $psgc->allBarangays();
+
+        $extNameOptions = [
+            'Jr' => 'Jr',
+            'Sr' => 'Sr',
+            'I' => 'I',
+            'II' => 'II',
+            'III' => 'III',
+            'IV' => 'IV',
+            'V' => 'V',
+            'VI' => 'VI',
+            'VII' => 'VII',
+            'VIII' => 'VIII',
+            'IX' => 'IX',
+            'X' => 'X',
+        ];
+
         if ($user->hasRole('admin')){
             if($user->id != auth()->user()->id){
                 abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
@@ -101,24 +126,59 @@ class UserController extends Controller
         return view('users.edit', [
             'user' => $user,
             'roles' => Role::pluck('name')->all(),
-            'userRoles' => $user->roles->pluck('name')->all()
+            'userRole' => $user->roles->pluck('name')->first(),
+            'psgcRecord' => $psgcRecord,
+            'provinces' => $provinces,
+            'cities' => $cities,
+            'barangays' => $barangays,
+            'extNameOptions' => $extNameOptions
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    public function update(UpdateUserRequest $request): RedirectResponse
     {
-        $input = $request->all();
+        $validatedData = $request->validated();
 
-        if(!empty($request->password)){
-            $input['password'] = Hash::make($request->password);
-        }else{
-            $input = $request->except('password');
+        $userID = session('editing_user_id');
+
+        $user = User::findOrFail($userID);
+
+        $query = User::where('firstname', $validatedData['firstname'])
+            ->where('middlename', $validatedData['middlename'])
+            ->where('lastname', $validatedData['lastname'])
+            ->where('id', '!=', $user->id);
+
+        if (isset($validatedData['extension_name'])) {
+            $query->where('extension_name', $validatedData['extension_name']);
         }
 
-        $user->update($input);
+        $existingChild = $query->first();
+
+        if ($existingChild) {
+            return redirect()->back()->with('error', 'User already exists.');
+        }
+
+        $psgc = Psgc::where('province_psgc', $request->province_psgc)
+            ->where('city_name_psgc', $request->city_name_psgc)
+            ->where('brgy_psgc', $request->brgy_psgc)
+            ->first();
+
+        if ($psgc) {
+            $validatedData['psgc_id'] = $psgc->psgc_id;
+        } else {
+            return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
+        }
+
+        if(!empty($request->password)){
+            $validatedData['password'] = Hash::make($request->password);
+        }else{
+            $validatedData = $request->except('password');
+        }
+
+        $user->update($validatedData);
 
         $user->syncRoles($request->roles);
 

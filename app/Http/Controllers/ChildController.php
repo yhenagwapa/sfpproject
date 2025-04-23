@@ -28,7 +28,7 @@ class ChildController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:create-child', ['only' => ['create', 'store', 'additionalInfo']]);
+        $this->middleware('permission:create-child', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-child', ['only' => ['edit', 'update']]);
         $this->middleware('permission:view-child', ['only' => ['index']]);
     }
@@ -293,7 +293,7 @@ class ChildController extends Controller
                 $step2Data['center_name'] = ChildDevelopmentCenter::where('id', $request->child_development_center_id)->value('center_name');
                 $step2Data['implementation_name'] = Implementation::where('id', $request->implementation_id)->value('name');
                 $step2Data['milk_feeding_name'] = Implementation::where('id', $request->milk_feeding_id)->value('name');
-                
+
                 session()->regenerate();
 
                 session()->put('step2Data', array_merge(session()->get('step2Data', []), $step2Data));
@@ -484,9 +484,6 @@ class ChildController extends Controller
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
-        $maxDate = Carbon::now()->subYears(2)->startOfYear()->format('Y-m-d');
-
         $sexOptions = Sex::all();
 
         $extNameOptions = [
@@ -540,8 +537,6 @@ class ChildController extends Controller
                 'cycle',
                 'milkFeeding',
                 'centers',
-                'minDate',
-                'maxDate',
                 'sexOptions',
                 'extNameOptions',
                 'pantawidDetails',
@@ -564,10 +559,9 @@ class ChildController extends Controller
     {
         $validatedData = $request->validated();
 
-        $childID = $request->input('child_id');
+        $childID = session('editing_child_id');
 
         $child = Child::findOrFail($childID);
-
 
         $query = Child::where('firstname', $validatedData['firstname'])
             ->where('middlename', $validatedData['middlename'])

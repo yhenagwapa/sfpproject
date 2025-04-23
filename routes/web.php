@@ -67,8 +67,8 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
     Route::patch('/child/update', [ChildController::class, 'update'])->name('child.update');
 
     Route::resources([
-        'roles' => RoleController::class,
-        'users' => UserController::class,
+        'roles' => RoleController::class
+        // 'users' => UserController::class,
     ]);
 
     Route::post('/clear-child-session', function (\Illuminate\Http\Request $request) {
@@ -76,6 +76,11 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
         return redirect(request('redirect_url', '/'));
     })->name('clear.child.session');
 
+    Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/show', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::patch('/users/update', [UserController::class, 'update'])->name('users.update');
+    Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
     Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
     Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
@@ -89,12 +94,12 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
         return view('nutritionalstatus.redirect');
     })->name('nutritionalstatus.redirect');
 
-    Route::post('nutritionalstatus', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
-    Route::post('nutritionalstatus/store-entry', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
-    Route::post('nutritionalstatus/store-exit', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
-
-    Route::post('nutritionalstatus/edit', [NutritionalStatusController::class, 'edit'])->name('nutritionalstatus.edit');
-
+    Route::post('/nutritionalstatus/create', [NutritionalStatusController::class, 'create'])->name('nutritionalstatus.create');
+    Route::get('/nutritionalstatus', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
+    Route::post('/nutritionalstatus/store-entry', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
+    Route::post('/nutritionalstatus/store-exit', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
+    Route::post('/nutritionalstatus/show', [NutritionalStatusController::class, 'show'])->name('nutritionalstatus.show');
+    Route::get('/nutritionalstatus/edit', [NutritionalStatusController::class, 'edit'])->name('nutritionalstatus.edit');
     Route::patch('nutritionalstatus/updateUponEntryDetails', [NutritionalStatusController::class, 'updateUponEntryDetails'])->name('nutritionalstatus.updateUponEntryDetails');
     Route::patch('nutritionalstatus/updateAfter120Details', [NutritionalStatusController::class, 'updateAfter120Details'])->name('nutritionalstatus.updateAfter120Details');
 
@@ -115,7 +120,8 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
     Route::patch('/cycle/update-cycle-status', [ImplementationController::class, 'updateCycleStatus'])->name(name: 'cycle.update-cycle-status');
     Route::patch('/cycle/update-milkfeeding-status', [ImplementationController::class, 'updateMilkFeedingStatus'])->name(name: 'cycle.update-milkfeeding-status');
 
-    Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::post('/reports/show', [ReportsController::class, 'show'])->name('reports.show');
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::post('/reports/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
     Route::post('/reports/print/malnourished', [PDFController::class, 'printMalnourish'])->name('reports.print.malnourished');
     Route::post('/reports/print/disabilities', [PDFController::class, 'printDisabilities'])->name('reports.print.disabilities');

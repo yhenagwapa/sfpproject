@@ -1,4 +1,4 @@
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-8 mt-3 text-sm">
     </div>
     <div class="col-md-4 mt-3 justify-end">
@@ -14,7 +14,7 @@
             autocomplete="off">
         </form>
     </div>
-</div>
+</div> --}}
 
 <table id='users-table' class="table datatable mt-3 text-sm">
     <thead>
@@ -218,6 +218,7 @@
         @empty
             <tr>
                 <td><strong>No User Found!</strong></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

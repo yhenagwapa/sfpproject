@@ -35,7 +35,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Children</h5>
+                            <h5 class="card-title text-blue-600">Children</h5>
                             <div class="col-md-6">
                                 @can('create-child')
                                     <a href="{{ route('child.create') }}">
@@ -50,11 +50,39 @@
                                             </a> --}}
                                 @endcan
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mt-4 flex w-full">
-
+                            {{-- <div class="row"> --}}
+                                <div class="col-md-12 mt-4">
+                                    <form class="row" id="search-form" action="{{ route('child.index') }}" method="GET">
+                                        <div class="col-md-6 text-sm flex">
+                                            <label for="center_name" class="text-base mt-2 mr-2">CDC/SNP:</label>
+                                            <select class="form-control" name="center_name" id="center_name" onchange="clearSearchAndSubmit(this)">
+                                                <option value="all_center" {{ request('cdcId') == 'all_center' ? 'selected' : '' }}>Select a Child Development Center</option>
+                                                @foreach ($centerNames as $center)
+                                                    <option value="{{ $center->id }}"
+                                                        {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
+                                                        {{ $center->center_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                        </div>
+                                        <div class="col-md-4 flex">
+                                            <label for="q-input" class="text-base mt-2 mr-2">Search:</label>
+                                            <input type="text" name="search" id="q-input" value="{{ request('search') }}" placeholder="Search" class="form-control rounded border-gray-300"
+                                            autocomplete="off">
+                                        </div>
+                                    </form>
                                 </div>
-                            </div>
+                                <script>
+                                    function clearSearchAndSubmit(selectElement) {
+                                        const form = selectElement.form;
+                                        const searchInput = form.querySelector('input[name="search"]');
+                                        if (searchInput) searchInput.value = '';
+                                        form.submit();
+                                    }
+                                </script>
+                            {{-- </div> --}}
 
                             <div class="table-responsive" id='children-table'>
                                 @include('child.partials.children-table', ['children' => $children])

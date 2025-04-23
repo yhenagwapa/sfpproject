@@ -23,14 +23,14 @@ class UpdateChildRequest extends FormRequest
     public function rules(): array
     {
         $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
-        $maxDate = Carbon::now()->subYears(2)->startOfYear()->format('Y-m-d');
+        $maxDate = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
 
         return [
             'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
             'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
             'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
             'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
-            'date_of_birth' => ['required', 'date', 'after_or_equal:$minDate', 'before_or_equal:$maxDate'],
+            'date_of_birth' => ['required', 'date', 'after_or_equal:' . $minDate, 'before_or_equal:' . $maxDate,],
             'sex_id' => ['required', 'string'],
             'province_psgc' => ['required'],
             'city_name_psgc' => ['required'],
@@ -48,6 +48,9 @@ class UpdateChildRequest extends FormRequest
 
     public function messages()
     {
+        $minDate = Carbon::now()->subYears(5)->startOfYear();
+        $maxDate = Carbon::now()->subYears(2)->endOfYear();
+
         return [
             'lastname.required' => 'Please fill in this field.',
             'lastname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
@@ -55,8 +58,8 @@ class UpdateChildRequest extends FormRequest
             'firstname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
             'middlename.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
             'date_of_birth.required' => 'Please fill in this field.',
-            'date_of_birth.after_or_equal' => 'Invalid date.',
-            'date_of_birth.before_or_equal' => 'Invalid date.',
+            'date_of_birth.after_or_equal' => 'Invalid date. Date of birth should be ' . $minDate->format('Y') . ' to ' . $maxDate->format('Y') . '.',
+            'date_of_birth.before_or_equal' => 'Invalid date. Date of birth should be ' . $minDate->format('Y') . ' to ' . $maxDate->format('Y') . '.',
             'sex_id.required' => 'Please fill in this field.',
 
             'province.required' => 'Please select a province.',

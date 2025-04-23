@@ -43,14 +43,14 @@
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
                     bsAlert1.close();
-                }, 2000);
+                }, 3000);
             }
             if (alert2) {
                 // Automatically close the alert after 3 seconds (3000 milliseconds)
                 setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
-                }, 2000);
+                }, 3000);
             }
         });
     </script>

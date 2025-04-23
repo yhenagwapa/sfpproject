@@ -16,5 +16,6 @@ class cgs_wfa_girls extends Model
         'underweight_to',
         'normal_from',
         'normal_to',
+        'overweight',
     ];
 }

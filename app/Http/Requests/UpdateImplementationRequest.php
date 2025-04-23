@@ -27,7 +27,7 @@ class UpdateImplementationRequest extends FormRequest
             'cycle_name' => ['required','string:255'],
             'cycle_target' => ['required','numeric'],
             'cycle_allocation' => ['required', 'regex:/^\d{1,12}(\.\d{2})?$/'],
-            'cycle_school_year_from' => ['required', 'digits:4', 'integer', 'min:2025', 'max:' . date('Y')],
+            'cycle_school_year_from' => ['required', 'digits:4', 'integer', 'min:2024', 'max:' . date('Y')],
             'cycle_school_year_to' => ['required', 'digits:4', 'integer'],
             'cycle_type' => ['required','string:255'],
             'cycle_status' => ['required','string:255'],

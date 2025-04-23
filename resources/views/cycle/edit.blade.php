@@ -68,16 +68,15 @@
                                     </div>
 
                                     @php
-                                        $currentYear = date('Y');
-                                        $startYear = $currentYear + 1;
-                                        $endYear = $currentYear + 2;
-                                        $endYearForSYTo = $currentYear + 3;
+                                        $startYear = $cycle->school_year_from + 1;
+                                        $endYear = $cycle->school_year_from + 2;
+                                        $endYearForSYTo = $cycle->school_year_from + 3;
                                     @endphp
 
                                     <div class="col-md-3 mt-3 text-sm">
                                         <label for="cycle_school_year_from">School Year From<b class="text-red-600">*</b></label>
                                         <select name="cycle_school_year_from" id="cycle_school_year_from" class="form-control rounded border-gray-300">
-                                            @for ($year = $currentYear; $year <= $endYear; $year++)
+                                            @for ($year = $cycle->school_year_from; $year <= $endYear; $year++)
                                                 <option value="{{ $year }}" {{ old('cycle_school_year_from', $cycle->school_year_from) == $year ? 'selected' : '' }}>
                                                     {{ $year }}
                                                 </option>
@@ -177,5 +176,26 @@
                 </div>
             </div>
         </section>
+
+        <script>
+            const startYearSelect = document.getElementById('cycle_school_year_from');
+            const endYearSelect = document.getElementById('cycle_school_year_to');
+
+            function updateEndYearOptions() {
+                const startYear = parseInt(startYearSelect.value);
+                const nextYear = startYear + 1;
+
+                Array.from(endYearSelect.options).forEach(option => {
+                    const year = parseInt(option.value);
+                    option.disabled = year !== nextYear;
+                });
+
+                // Set end year to next year
+                endYearSelect.value = nextYear;
+            }
+
+            startYearSelect.addEventListener('change', updateEndYearOptions);
+            window.addEventListener('DOMContentLoaded', updateEndYearOptions);
+        </script>
 
 @endsection

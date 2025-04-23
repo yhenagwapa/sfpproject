@@ -143,7 +143,7 @@ class ImplementationController extends Controller
      */
     public function update(UpdateImplementationRequest $request)
     {
-        $cycleID = $request->input('cycle_id');
+        $cycleID = session('editing_cycle_id');
 
         $cycle = Implementation::findOrFail($cycleID);
 

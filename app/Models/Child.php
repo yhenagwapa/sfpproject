@@ -29,6 +29,7 @@ class Child extends Model
         'is_indigenous_people',
         'is_child_of_soloparent',
         'is_lactose_intolerant',
+        'edit_counter',
         'created_by_user_id',
         'updated_by_user_id'
     ];

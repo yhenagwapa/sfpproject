@@ -45,6 +45,24 @@
                         <div class="card-body">
                             <h5 class="card-title">Users</h5>
 
+                            <div class="row">
+                                <div class="col-md-8 mt-3 text-sm">
+                                </div>
+                                <div class="col-md-4 mt-3 justify-end">
+                                    <form class="flex" id="search-form" method="GET" action="{{ route('users.index') }}">
+                                        <label for="q-input" class="text-base mt-2 mr-2">Search:</label>
+                                        <input
+                                        type="text"
+                                        name="search"
+                                        id="q-input"
+                                        value="{{ request('search') }}"
+                                        placeholder="Search"
+                                        class="form-control rounded border-gray-300"
+                                        autocomplete="off">
+                                    </form>
+                                </div>
+                            </div>
+
                             <div class="table-responsive" id="users-table">
                                 @include('users.partials.users-table', ['users' => $users])
                             </div>

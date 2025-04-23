@@ -11,6 +11,15 @@
         </nav>
     </div><!-- End Page Title -->
 
+    {{-- @dd(session()->all()) --}}
+
+    @error('ageError')
+        <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
+            {{ $message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @enderror
+
     @if (session('error'))
         <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
             {{ session('error') }}
@@ -63,12 +72,13 @@
 
                                 <input type="hidden" name="form_type" value="entry">
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
 
                                 <div class="col-md-12 mt-2 text-sm">
                                     <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
                                     <input type="date" class="form-control rounded border-gray-300" id="deworming_date"
                                         name='deworming_date' value="{{ old('deworming_date', $entryDetails->deworming_date) }}"
-                                        min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                        >
                                     @if ($errors->has('deworming_date'))
                                         <span class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
                                     @endif
@@ -77,7 +87,7 @@
                                     <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
                                     <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date"
                                         name='vitamin_a_date' value="{{ old('vitamin_a_date', $entryDetails->vitamin_a_date) }}"
-                                        min="{{ $child->date_of_birth->format('Y-m-d') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                        >
                                     @if ($errors->has('vitamin_a_date'))
                                         <span class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
                                     @endif
@@ -138,9 +148,7 @@
                                 <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
                                     data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
 
-                                <form id="cancel-form" method="POST" action="{{ route('nutritionalstatus.index') }}">
-                                    @csrf
-                                    <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                <form id="cancel-form" method="get" action="{{ route('nutritionalstatus.index') }}">
                                 </form>
 
                                 <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
@@ -162,6 +170,8 @@
 
                                     <input type="hidden" name="form_type" value="exit">
                                     <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
+                                    <input type="hidden" name="entryWeighing" value="{{ $entryDetails->actual_weighing_date }}">
+                                    <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
 
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="exitweight">Weight<b class="text-red-600">*</b></label>
@@ -220,9 +230,7 @@
                                     <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
                                         data-bs-toggle="modal" data-bs-target="#verticalycentered1">Save Changes</button>
 
-                                    <form id="cancel-form" method="POST" action="{{ route('nutritionalstatus.index') }}">
-                                        @csrf
-                                        <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                    <form id="cancel-form" method="GET" action="{{ route('nutritionalstatus.index') }}">
                                     </form>
 
                                     <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
@@ -249,33 +257,4 @@
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const schoolYearStart = @json($cycle->school_year_from);
-            const schoolYearEnd = @json($cycle->school_year_to);
-            const weighingDate = document.getElementById('actual_weighing_date');
-            const exitWeighingDate = document.getElementById('exitweighing_date');
-
-            function entryDateLimits() {
-
-                if (schoolYearStart && schoolYearEnd) {
-                    weighingDate.min = `${schoolYearStart}-01-01`;
-                    weighingDate.max = `${schoolYearEnd}-12-31`;
-                }
-            }
-
-            function exitDateLimits() {
-
-                if (schoolYearStart && schoolYearEnd) {
-                    weighingDate.min = `${schoolYearStart}-01-01`;
-                    weighingDate.max = `${schoolYearEnd}-12-31`;
-                }
-            }
-
-            entryDateLimits();
-            exitDateLimits();
-        });
-    </script>
 @endsection
