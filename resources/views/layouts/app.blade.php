@@ -43,7 +43,6 @@
 </head>
 
 <body class="font-sans antialiased">
-
         <header id="header" class="header fixed-top d-flex align-items-right">
             <div class="d-flex justify-center">
                 <a href="https://fo11.dswd.gov.ph/" class="logo d-flex align-items-center">
@@ -51,16 +50,14 @@
 
                 </a>
             </div>
-
             <div class="d-flex align-items-center justify-content-between">
                 <span class="logo d-flex align-items-center">
                     <img src="{{ asset('img/SFP-LOGO-2024.png') }}" alt="sfp_logo">
-                    <img src="{{ asset('img/[PNG] bagong pilipinas (1).png') }}" alt="bagongpilipinas">
+                    {{-- <img src="{{ asset('img/[PNG] bagong pilipinas (1).png') }}" alt="bagongpilipinas"> --}}
                 </span>
-                <i class="bi bi-list toggle-sidebar-btn"></i>
             </div>
-
             <div class="d-flex align-items-center justify-content-between">
+                <i class="bi bi-list toggle-sidebar-btn"></i>
                 <span class="header-title d-none d-lg-block">SFP ONSE</span>
             </div>
 
@@ -69,6 +66,7 @@
             <!-- End Logo -->
 
             <nav class="header-nav ml-auto align-items-center justify-end">
+
                 <ul class="d-flex list-unstyled mt-2">
                     <li class="nav-item dropdown pe-3">
                         <button type="button" class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
@@ -82,20 +80,23 @@
                             @endauth
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                            {{-- <li>
-                                <a class="dropdown-item d-flex align-items-center" href="{{ route('users.edit', auth()->user()->id) }}">
+                            <li>
+                                <form action="{{ route('users.show') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="user_id"  value="{{ auth()->user()->id }}">
+                                    <button class="dropdown-item d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="mr-2 size-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                        </svg>
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="mr-2 size-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                                    </svg>
-
-                                    <span class="text-sm">
-                                        Profile
-                                    </span>
-                                </a>
-                            </li> --}}
+                                        <span class="text-sm">
+                                            Profile
+                                        </span>
+                                    </button>
+                                </form>
+                            </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -121,6 +122,8 @@
         </header>
 
         <aside id="sidebar" class="sidebar">
+
+
             <ul class="sidebar-nav" id="sidebar-nav">
                 {{-- @if (!auth()->user()->hasRole('encoder'))
                     <li class="nav-item">
@@ -215,7 +218,7 @@
                 <div class="footer-dswd">
                     &copy; 2025 Department of Social Welfare and Development.
                 </div>
-                <div class="credits mt-2 mb-0">
+                {{-- <div class="credits mt-2 mb-0">
                     &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
 
                     <!-- All the links in the footer should remain intact. -->
@@ -223,7 +226,7 @@
                     <!-- Licensing information: https://bootstrapmade.com/license/ -->
                     <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
                     Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                </div>
+                </div> --}}
             </footer><!-- End Footer -->
         </div>
 
@@ -257,25 +260,27 @@
                     if (link && !window.location.pathname.includes('/child/create')) {
                         event.preventDefault(); // Stop normal navigation
 
-                        // Set the redirect URL
                         document.getElementById("redirect_url").value = link.href;
 
-                        // Submit the form (this clears the session first, then redirects)
                         document.getElementById("clear-session-form").submit();
                     }
                 });
-            });
-        </script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
                 if (!window.location.pathname.includes('/reports')) {
                     localStorage.removeItem('selected_cycle_id');
                 }
+
+                window.submitCancelForm = function () {
+                    var cancelForm = document.getElementById('cancel-form');
+
+                    if (cancelForm) {
+                        cancelForm.submit();
+                    } else {
+                        console.error('Form not found!');
+                    }
+                };
             });
         </script>
-
-
 </body>
 
 </html>

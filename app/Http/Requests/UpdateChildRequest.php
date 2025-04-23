@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon;
 
 class UpdateChildRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateChildRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return session('temp_can_edit') || $this->user()->can('edit-child');
     }
 
     /**
@@ -21,12 +22,15 @@ class UpdateChildRequest extends FormRequest
      */
     public function rules(): array
     {
+        $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
+        $maxDate = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
+
         return [
             'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
             'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
             'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
             'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
-            'date_of_birth' => ['required', 'date'],
+            'date_of_birth' => ['required', 'date', 'after_or_equal:' . $minDate, 'before_or_equal:' . $maxDate,],
             'sex_id' => ['required', 'string'],
             'province_psgc' => ['required'],
             'city_name_psgc' => ['required'],
@@ -44,6 +48,9 @@ class UpdateChildRequest extends FormRequest
 
     public function messages()
     {
+        $minDate = Carbon::now()->subYears(5)->startOfYear();
+        $maxDate = Carbon::now()->subYears(2)->endOfYear();
+
         return [
             'lastname.required' => 'Please fill in this field.',
             'lastname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
@@ -51,6 +58,8 @@ class UpdateChildRequest extends FormRequest
             'firstname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
             'middlename.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
             'date_of_birth.required' => 'Please fill in this field.',
+            'date_of_birth.after_or_equal' => 'Invalid date. Date of birth should be ' . $minDate->format('Y') . ' to ' . $maxDate->format('Y') . '.',
+            'date_of_birth.before_or_equal' => 'Invalid date. Date of birth should be ' . $minDate->format('Y') . ' to ' . $maxDate->format('Y') . '.',
             'sex_id.required' => 'Please fill in this field.',
 
             'province.required' => 'Please select a province.',
@@ -58,8 +67,13 @@ class UpdateChildRequest extends FormRequest
             'barangay.required' => 'Please select a barangay.',
             'address.required' => 'Please fill in this field.',
 
-            'pantawid_details.required_if' => 'Please specify.',
-            'person_with_disability_.required_if' => 'Please fill in this field.',
+            'is_pantawid.required' => 'Please select yes or no.',
+            'is_person_with_disability.required' => 'Please select yes or no.',
+            'pantawid_details.required_if' => 'Please specify pantawid details.',
+            'person_with_disability_details.required_if' => 'Please fill in disability details.',
+            'is_indigenous_people.required' => 'Please select yes or no.',
+            'is_child_of_soloparent.required' => 'Please select yes or no.',
+            'is_lactose_intolerant.required' => 'Please select yes or no.',
 
             'child_development_center_id.required' => 'Please select a CDC or SNP.'
         ];

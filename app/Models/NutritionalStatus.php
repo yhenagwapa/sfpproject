@@ -45,4 +45,9 @@ class NutritionalStatus extends Model
     {
         return $this->belongsTo(Child::class);
     }
+
+    public function implementation()
+    {
+        return $this->belongsTo(Implementation::class);
+    }
 }

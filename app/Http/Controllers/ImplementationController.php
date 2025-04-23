@@ -36,15 +36,13 @@ class ImplementationController extends Controller
      */
     public function create()
     {
-        $cycleStatuses = CycleStatus::cases();
-
-        return view('cycle.create', compact('cycleStatuses'));
+        return view('cycle.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreImplementationRequest $request)
+    public function checkActiveStatus(StoreImplementationRequest $request)
     {
         $validatedData = $request->validated();
 
@@ -55,9 +53,53 @@ class ImplementationController extends Controller
             return redirect()->back()->with('error', 'Cycle already exists.');
         }
 
-        $cycle = Implementation::create([
+        if($request->cycle_status == 'active'){
+            $activeCyle = Implementation::where('status', 'active')
+                        ->where('type', $request->cycle_type)
+                        ->first();
+
+            if($activeCyle){
+                return redirect()->route('cycle.create')
+                    ->with('exists', true)
+                    ->with('message', 'An active implementation exists. Do you want to close it?')
+                    ->with('active_cycle_id', $activeCyle->id)
+                    ->withInput();
+            }
+        }
+        return $this->store($request);
+    }
+
+    public function store(Request $request)
+    {
+        if($request->active_cycle_id){
+            $closeCycle = Implementation::findOrFail($request->active_cycle_id);
+
+            $closeCycle->update([
+                'status' => 'closed'
+            ]);
+
+            ChildCenter::where('status', 'active')
+                ->where('implementation_id', $closeCycle->id)
+                ->update(['status' => 'inactive']);
+
+            Implementation::create([
+                'name' => $request->cycle_name,
+                'school_year_from' => $request->cycle_school_year_from,
+                'school_year_to' => $request->cycle_school_year_to,
+                'target' => $request->cycle_target,
+                'allocation' => $request->cycle_allocation,
+                'type' => $request->cycle_type,
+                'status' => $request->cycle_status,
+                'created_by_user_id' => auth()->id(),
+            ]);
+
+            return redirect()->route('cycle.index')->with('success', 'Cycle implementation saved successfully');
+        }
+
+        Implementation::create([
             'name' => $request->cycle_name,
-            'school_year' => $request->cycle_school_year,
+            'school_year_from' => $request->cycle_school_year_from,
+            'school_year_to' => $request->cycle_school_year_to,
             'target' => $request->cycle_target,
             'allocation' => $request->cycle_allocation,
             'type' => $request->cycle_type,
@@ -71,17 +113,21 @@ class ImplementationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Implementation $Implementation)
+    public function show(Request $request)
     {
-        //
+        session(['editing_cycle_id' => $request->input('cycle_id')]);
+
+        return redirect()->route('cycle.edit');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Implementation $cycle, $id)
+    public function edit(Request $request)
     {
-        $cycle = Implementation::findOrFail($id);
+        $cycleID = session('editing_cycle_id');
+
+        $cycle = Implementation::findOrFail($cycleID);
         $cycleStatuses = CycleStatus::cases();
 
         $cycleType = [
@@ -95,15 +141,18 @@ class ImplementationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateImplementationRequest $request, $id)
+    public function update(UpdateImplementationRequest $request)
     {
-        $cycle = Implementation::findOrFail($id);
+        $cycleID = session('editing_cycle_id');
+
+        $cycle = Implementation::findOrFail($cycleID);
 
         $validatedData = $request->validated();
 
         $cycle->update([
             'name' => $validatedData['cycle_name'],
-            'school_year' => $validatedData['cycle_school_year'],
+            'school_year_from' => $validatedData['cycle_school_year_from'],
+            'school_year_to' => $validatedData['cycle_school_year_to'],
             'target' => $validatedData['cycle_target'],
             'allocation' => $validatedData['cycle_allocation'],
             'type' => $validatedData['cycle_type'],
@@ -114,23 +163,52 @@ class ImplementationController extends Controller
     }
 
 
-    public function updateStatus(Request $request, $implementation)
+    public function updateCycleStatus(Request $request)
     {
-        $implementation = Implementation::findOrFail($request->cycle_id);
+        $cycleID = $request->input('cycle_id');
+
+        $implementation = Implementation::findOrFail($cycleID);
 
         $request->validate([
-            'cycle_status' => 'required|string|in:active,closed',
+            'cycle_status' => 'required|string|in:active,inactive,closed',
         ]);
+
 
         $implementation->update([
             'status' => $request->cycle_status,
         ]);
 
-        ChildCenter::where('status', 'active')
-            ->where('implementation_id', $request->cycle_id)
+        if($request->cycle_status === 'closed'){
+            ChildCenter::where('status', 'active')
+            ->where('implementation_id', $cycleID)
             ->update(['status' => 'inactive']);
+        }
 
-        return redirect()->back()->with('success', 'Implementation closed.');
+        return redirect()->back()->with('success', 'Implementation successfully updated.');
+    }
+
+    public function updateMilkFeedingStatus(Request $request)
+    {
+        $milkFeedingID = $request->input('milkfeeding_id');
+
+        $implementation = Implementation::findOrFail($milkFeedingID);
+
+        $request->validate([
+            'milkfeeding_status' => 'required|string|in:active,inactive,closed',
+        ]);
+
+
+        $implementation->update([
+            'status' => $request->milkfeeding_status,
+        ]);
+
+        if($request->milkfeeding_status === 'closed'){
+            ChildCenter::where('status', 'active')
+            ->where('implementation_id', $milkFeedingID)
+            ->update(['status' => 'inactive']);
+        }
+
+        return redirect()->back()->with('success', 'Implementation successfully updated.');
     }
 
 

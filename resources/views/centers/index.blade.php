@@ -64,4 +64,16 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
 
+    <script>
+        (function(){
+          let timer;
+          $('#q-input').on('keyup', function(){
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+              $('#search-form').submit();
+            }, 300);
+          });
+        })();
+    </script>
+
 @endsection

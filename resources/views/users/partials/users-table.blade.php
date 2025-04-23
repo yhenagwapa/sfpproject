@@ -1,6 +1,25 @@
+{{-- <div class="row">
+    <div class="col-md-8 mt-3 text-sm">
+    </div>
+    <div class="col-md-4 mt-3 justify-end">
+        <form class="flex" id="search-form" method="GET" action="{{ route('users.index') }}">
+            <label for="q-input" class="text-base mt-2 mr-2">Search:</label>
+            <input
+            type="text"
+            name="search"
+            id="q-input"
+            value="{{ request('search') }}"
+            placeholder="Search"
+            class="form-control rounded border-gray-300"
+            autocomplete="off">
+        </form>
+    </div>
+</div> --}}
+
 <table id='users-table' class="table datatable mt-3 text-sm">
     <thead>
         <tr>
+            <th>No.</th>
             <th class="text-left" scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Roles</th>
@@ -13,6 +32,7 @@
     <tbody class='users-table'>
         @forelse ($users as $user)
             <tr>
+                <td>{{ $loop->iteration }}</td>
                 <td class="text-left">{{ $user->full_name }}</td>
                 <td>{{ $user->email }}</td>
 
@@ -202,7 +222,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
             </tr>
         @endforelse
     </tbody>
 </table>
+<div>
+    {{ $users->links() }}
+</div>

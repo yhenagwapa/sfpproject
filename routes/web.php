@@ -57,17 +57,18 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'temp.edit'])->group(function () {
 
     Route::get('/child', [ChildController::class, 'index'])->name('child.index');
     Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');
     Route::post('/child/store', [ChildController::class, 'store'])->name('child.store');
-    Route::post('/child/edit', [ChildController::class, 'edit'])->name('child.edit');
+    Route::post('/child/show', [ChildController::class, 'show'])->name('child.show');
+    Route::get('/child/edit', [ChildController::class, 'edit'])->name('child.edit');
     Route::patch('/child/update', [ChildController::class, 'update'])->name('child.update');
 
     Route::resources([
-        'roles' => RoleController::class,
-        'users' => UserController::class,
+        'roles' => RoleController::class
+        // 'users' => UserController::class,
     ]);
 
     Route::post('/clear-child-session', function (\Illuminate\Http\Request $request) {
@@ -75,6 +76,11 @@ Route::middleware('auth')->group(function () {
         return redirect(request('redirect_url', '/'));
     })->name('clear.child.session');
 
+    Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/show', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::patch('/users/update', [UserController::class, 'update'])->name('users.update');
+    Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
     Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
     Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
@@ -88,28 +94,31 @@ Route::middleware('auth')->group(function () {
         return view('nutritionalstatus.redirect');
     })->name('nutritionalstatus.redirect');
 
-    Route::post('nutritionalstatus', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
-    Route::post('nutritionalstatus/store-entry', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
-    Route::post('nutritionalstatus/store-exit', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
-
-    Route::post('nutritionalstatus/edit', [NutritionalStatusController::class, 'edit'])->name('nutritionalstatus.edit');
-
+    Route::post('/nutritionalstatus/create', [NutritionalStatusController::class, 'create'])->name('nutritionalstatus.create');
+    Route::get('/nutritionalstatus', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
+    Route::post('/nutritionalstatus/store-entry', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
+    Route::post('/nutritionalstatus/store-exit', [NutritionalStatusController::class, 'storeExitDetails'])->name('nutritionalstatus.storeExitDetails');
+    Route::post('/nutritionalstatus/show', [NutritionalStatusController::class, 'show'])->name('nutritionalstatus.show');
+    Route::get('/nutritionalstatus/edit', [NutritionalStatusController::class, 'edit'])->name('nutritionalstatus.edit');
     Route::patch('nutritionalstatus/updateUponEntryDetails', [NutritionalStatusController::class, 'updateUponEntryDetails'])->name('nutritionalstatus.updateUponEntryDetails');
     Route::patch('nutritionalstatus/updateAfter120Details', [NutritionalStatusController::class, 'updateAfter120Details'])->name('nutritionalstatus.updateAfter120Details');
 
     Route::get('/centers', [ChildDevelopmentCenterController::class, 'index'])->name(name: 'centers.index');
     Route::get('/centers/create', [ChildDevelopmentCenterController::class, 'create'])->name(name: 'centers.create');
     Route::post('/centers/store', [ChildDevelopmentCenterController::class, 'store'])->name(name: 'centers.store');
-
-    Route::get('/centers/{id}/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
-    Route::put('/centers/{center}/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
+    Route::post('/centers/show', [ChildDevelopmentCenterController::class, 'show'])->name(name: 'centers.show');
+    Route::get('/centers/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
+    Route::patch('/centers/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
 
     Route::get('/cycle', [ImplementationController::class, 'index'])->name(name: 'cycle.index');
     Route::get('/cycle/create', [ImplementationController::class, 'create'])->name(name: 'cycle.create');
+    Route::post('/cycle/checkActiveStatus', [ImplementationController::class, 'checkActiveStatus'])->name(name: 'cycle.checkActiveStatus');
     Route::post('/cycle/store', [ImplementationController::class, 'store'])->name(name: 'cycle.store');
-    Route::get('/cycle/{id}/edit', [ImplementationController::class, 'edit'])->name(name: 'cycle.edit');
-    Route::put('/cycle/{cycle}/update', [ImplementationController::class, 'update'])->name(name: 'cycle.update');
-    Route::put('/cycle/{cycle}/update-status', [ImplementationController::class, 'updateStatus'])->name(name: 'cycle.update-status');
+    Route::post('/cycle/show', [ImplementationController::class, 'show'])->name(name: 'cycle.show');
+    Route::get('/cycle/edit', [ImplementationController::class, 'edit'])->name(name: 'cycle.edit');
+    Route::patch('/cycle/update', [ImplementationController::class, 'update'])->name(name: 'cycle.update');
+    Route::patch('/cycle/update-cycle-status', [ImplementationController::class, 'updateCycleStatus'])->name(name: 'cycle.update-cycle-status');
+    Route::patch('/cycle/update-milkfeeding-status', [ImplementationController::class, 'updateMilkFeedingStatus'])->name(name: 'cycle.update-milkfeeding-status');
 
 
     //--------
@@ -127,7 +136,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/cycle/{id}/reports/print/nutritional-status-after-120', [PDFController::class, 'printNutritionalStatusAfter120'])->name('cycle.reports.print.nutritional-status-after-120');
     //--------
 
-    Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::post('/reports/show', [ReportsController::class, 'show'])->name('reports.show');
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::get('/reports/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
     Route::post('/reports/print/malnourished', [PDFController::class, 'printMalnourish'])->name('reports.print.malnourished');
     Route::post('/reports/print/disabilities', [PDFController::class, 'printDisabilities'])->name('reports.print.disabilities');

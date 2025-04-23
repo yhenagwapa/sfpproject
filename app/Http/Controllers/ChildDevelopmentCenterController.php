@@ -22,16 +22,27 @@ class ChildDevelopmentCenterController extends Controller
         $this->middleware('permission:edit-child-development-center', ['only' => ['edit', 'update']]);options:
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->get('search');
         $centersQuery = ChildDevelopmentCenter::query();
 
         if (auth()->user()->hasRole('admin')) {
-            $centers = $centersQuery->get();
+            if($search){
+                $centers = $centersQuery->where("center_name", "like", "%{$search}%")
+                    ->paginate('10');
+            }
+            $centers = $centersQuery->paginate('10');
         } else {
             $userCenters = UserCenter::where('user_id', auth()->id())->get();
             $centerIDs = $userCenters->pluck('child_development_center_id');
-            $centers = $centersQuery->whereIn('id', $centerIDs)->get();
+
+            if($search){
+                $centers = $centersQuery->whereIn('id', $centerIDs)
+                    ->where("center_name", "like", "%{$search}%")
+                    ->paginate('10');
+            }
+            $centers = $centersQuery->whereIn('id', $centerIDs)->paginate('10');
         }
 
         $centersWithRoles = [];
@@ -39,9 +50,9 @@ class ChildDevelopmentCenterController extends Controller
         foreach ($centers as $center) {
             $centerUsers = UserCenter::where('child_development_center_id', $center->id)
                 ->pluck('user_id');
-            
+
             $users = User::whereIn('id', $centerUsers)->get();
-            
+
             $worker = $users->firstWhere(fn($user) => $user->hasRole('child development worker'));
             $encoder = $users->firstWhere(fn($user) => $user->hasRole('encoder'));
             $focal = $users->firstWhere(fn($user) => $user->hasRole('lgu focal'));
@@ -58,7 +69,7 @@ class ChildDevelopmentCenterController extends Controller
             ];
         }
 
-        return view('centers.index', compact('centersWithRoles'));
+        return view('centers.index', compact('centersWithRoles', 'centers'));
 
     }
 
@@ -70,6 +81,7 @@ class ChildDevelopmentCenterController extends Controller
         $this->authorize('create-child-development-center');
 
         $centers = ChildDevelopmentCenter::all();
+        $pdos = User::role('pdo')->get();
         $workers = User::role('child development worker')->get();
         $focals = User::role('lgu focal')->get();
         $encoders = User::role('encoder')->get();
@@ -90,7 +102,7 @@ class ChildDevelopmentCenterController extends Controller
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('centers.create', compact('centers', 'workers', 'focals', 'encoders', 'provinces', 'cities', 'barangays'));
+        return view('centers.create', compact('centers', 'pdos','workers', 'focals', 'encoders', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -120,12 +132,23 @@ class ChildDevelopmentCenterController extends Controller
             return redirect()->back()->withErrors(['msg' => 'Location not found']);
         }
 
-        ChildDevelopmentCenter::create([
+        // dd($validatedData);
+
+        $center = ChildDevelopmentCenter::create([
             'center_name' => $request->center_name,
             'psgc_id' => $psgc_id,
             'address' => $request->address,
             'created_by_user_id' => auth()->id(),
         ]);
+
+        $userIds = array_filter([
+            $request->input('assigned_pdo_user_id'),
+            $request->input('assigned_focal_user_id'),
+            $request->input('assigned_worker_user_id'),
+            $request->input('assigned_encoder_user_id'),
+        ]);
+
+        $center->users()->sync($userIds);
 
         return redirect()->route('centers.index')->with('success', 'Child Development Center saved successfully');
     }
@@ -134,56 +157,109 @@ class ChildDevelopmentCenterController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Request $request)
     {
+        session(['editing_center_id' => $request->input('center_id')]);
 
+        return redirect()->route('centers.edit');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
         $this->authorize('edit-child-development-center');
 
-        $center = ChildDevelopmentCenter::findOrFail($id);
+        $centerID = session('editing_center_id');
+
+        $center = ChildDevelopmentCenter::findOrFail($centerID);
+
         $workers = User::role('child development worker')->get();
+        $assignedWorker = $center->users()->role('child development worker')->first();
+
         $focals = User::role('lgu focal')->get();
+        $assignedFocal = $center->users()->role('lgu focal')->first();
+
+        $encoders = User::role('encoder')->get();
+        $assignedEncoder = $center->users()->role('encoder')->first();
+
+        $pdos = User::role('pdo')->get();
+        $assignedPDO = $center->users()->role('pdo')->first();
+
         $psgc = new Psgc();
 
-        $psgcRecord = Psgc::find($center->psgc_id);
+        $psgcRecord = Psgc::where('psgc_id', $center->psgc_id)->first();
 
-        $provinces = $psgc->getProvinces();  // Assuming this returns associative array
-        $cities = $psgc->getCities($psgcRecord->province_psgc);
-        $barangays = $psgc->getBarangays($psgcRecord->city_name_psgc);
-        $changedCities = $psgc->allCities();      // Fetch all cities once
-        $changedBrgys = $psgc->allBarangays();
+        $provinces = $psgc->getProvinces();
+        $cities = $psgc->allCities();
+        $barangays = $psgc->allBarangays();
 
         return view('centers.edit', [
             'center' => $center,
             'focals' => $focals,
             'workers' => $workers,
+            'encoders' => $encoders,
+            'pdos' => $pdos,
+            'assignedWorker' => $assignedWorker,
+            'assignedFocal' => $assignedFocal,
+            'assignedEncoder' => $assignedEncoder,
+            'assignedPDO' => $assignedPDO,
             'psgcRecord' => $psgcRecord,
             'provinces' => $provinces,
             'cities' => $cities,
             'barangays' => $barangays,
-            'changedCities' => $changedCities,
-            'changedBrgys' => $changedBrgys,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChildDevelopmentCenterRequest $request, ChildDevelopmentCenter $center)
+    public function update(UpdateChildDevelopmentCenterRequest $request)
     {
         $validatedData = $request->validated();
 
-        $center->update(array_merge($validatedData, [
-            'updated_by_user_id' => auth()->id(),
-        ]));
+        $centerID = session('center_id');
 
-        return redirect()->route('centers.index')->with('success', 'Child development center record updated successfully.');
+        $center = ChildDevelopmentCenter::findOrFail($centerID);
+
+        $query = ChildDevelopmentCenter::where('center_name', $validatedData['center_name'])
+            ->where('id', '!=', $centerID);
+
+        $existingCenter = $query->first();
+
+        if ($existingCenter) {
+            return redirect()->back()->with('error', 'CDC/SNP already exists.');
+        }
+
+        $psgc = Psgc::where('province_psgc', $request->province_psgc)
+            ->where('city_name_psgc', $request->city_name_psgc)
+            ->where('brgy_psgc', $request->brgy_psgc)
+            ->first();
+
+        if ($psgc) {
+            $psgc_id = $psgc->psgc_id;
+        } else {
+            return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
+        }
+
+        $updated = $center->update([
+            'center_name' => $validatedData['center_name'],
+            'psgc_id' => $psgc_id,
+            'address' => $validatedData['address'],
+            'updated_by_user_id' => auth()->id(),
+        ]);
+
+        $userIds = array_filter([
+            $request->input('assigned_pdo_user_id'),
+            $request->input('assigned_focal_user_id'),
+            $request->input('assigned_worker_user_id'),
+            $request->input('assigned_encoder_user_id'),
+        ]);
+
+        $center->users()->sync($userIds);
+
+        return redirect()->route('centers.index')->with('success', 'CDC/SNP record updated successfully.');
     }
 
     /**

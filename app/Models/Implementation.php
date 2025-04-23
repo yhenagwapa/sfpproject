@@ -13,7 +13,8 @@ class Implementation extends Model
 
     protected $fillable = [
         'name',
-        'school_year',
+        'school_year_from',
+        'school_year_to',
         'target',
         'allocation',
         'type',

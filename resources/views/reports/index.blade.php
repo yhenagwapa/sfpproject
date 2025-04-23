@@ -413,8 +413,8 @@
                                             </nav>
                                         </div>
                                         <div class="col-md-6 mt-2 mb-5 text-sm">
-                                            <form action="{{ route('reports.index', ['cycle' => $cycle->id]) }}"
-                                                method="POST" id="filterForm">
+                                            <form action="{{ route('reports.index') }}"
+                                                method="GET" id="filterForm">
                                                 @csrf
                                                 <input type="hidden" name="cycle_id" value="{{ $cycle->id }}">
 

@@ -43,14 +43,14 @@
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
                     bsAlert1.close();
-                }, 2000);
+                }, 3000);
             }
             if (alert2) {
                 // Automatically close the alert after 3 seconds (3000 milliseconds)
                 setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
-                }, 2000);
+                }, 3000);
             }
         });
     </script>
@@ -117,10 +117,16 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                {{-- @php
+                                    use Carbon\Carbon;
+
+                                    $min = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
+                                    $max = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
+                                @endphp --}}
                                 <div class="col-md-6 mt-2 text-sm">
                                     <label for="date_of_birth">Date of Birth<b class="text-red-600">*</b></label>
                                     <input type="date" class="form-control rounded border-gray-300" id="date_of_birth"
-                                        name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth) }}">
+                                        name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('Y-m-d')) }}">
                                     @error('date_of_birth')
                                         <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
@@ -143,6 +149,10 @@
 
                                 <div class="col-md-4 mt-4">
                                     <label for="is_pantawid">Pantawid Member:<b class="text-red-600">*</b></label>
+                                    @if ($errors->has('is_pantawid'))
+                                            <span
+                                            class="text-xs text-red-600">{{ $errors->first('is_pantawid') }}</span>
+                                        @endif
                                 </div>
                                 <div class="col-md-1 mt-4">
                                     <input type="radio" id="is_pantawid_yes" name="is_pantawid" value="1"
@@ -155,10 +165,12 @@
                                     <label for="is_pantawid_no">No</label>
                                 </div>
                                 <div class="col-md-6 mt-4 additional-details">
+                                    <label for="pantawid_details">Pantawid Details:</label><b
+                                            class="text-red-600">*</b>
                                     <select class="form-control rounded border-gray-300" id="pantawid_details"
                                         name="pantawid_details"
                                         {{ old('pantawid_details', $child->pantawid_details) == null ? 'disabled' : '' }}>
-                                        <option value="" disabled selected>---</option>
+                                        <option value="" selected disabled>SELECT DETAILS</option>
                                         @foreach ($pantawidDetails as $value => $label)
                                             <option value="{{ $value }}"
                                                 {{ old('pantawid_details', $child->pantawid_details) == $value ? 'selected' : '' }}>
@@ -166,7 +178,6 @@
                                             </option>
                                         @endforeach
                                     </select>
-
                                     @error('pantawid_details')
                                         <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
@@ -175,6 +186,10 @@
                                 <div class="col-md-4 mt-2">
                                     <label for="is_person_with_disability">Person with
                                         Disability:<b class="text-red-600">*</b></label>
+                                        @if ($errors->has('is_person_with_disability'))
+                                        <span
+                                            class="text-xs text-red-600">{{ $errors->first('is_person_with_disability') }}</span>
+                                        @endif
                                 </div>
                                 <div class="col-md-1 mt-2">
                                     <input type="radio" id="is_person_with_disability_yes"
@@ -190,6 +205,8 @@
                                 </div>
                                 <div class="col-md-6 mt-2 additional-details"
                                     id="person_with_disability_additionalDetails">
+                                    <label for="person_with_disability_details">Disability Details:</label><b
+                                        class="text-red-600">*</b>
                                     <input type="text" class="form-control rounded border-gray-300"
                                         id="person_with_disability_details" name="person_with_disability_details"
                                         placeholder="Please specify"
@@ -200,7 +217,12 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-4 mt-2">
-                                    <label for="is_indigenous_people">Indigenous People (IP):</label>
+                                    <label for="is_indigenous_people">Indigenous People (IP):</label><b
+                                    class="text-red-600">*</b>
+                                    @if ($errors->has('is_indigenous_people'))
+                                            <span
+                                                class="text-xs text-red-600">{{ $errors->first('is_indigenous_people') }}</span>
+                                        @endif
                                 </div>
                                 <div class="col-md-1 mt-2">
                                     <input type="radio" name="is_indigenous_people" id="is_indigenous_people_yes"
@@ -218,7 +240,12 @@
                                     <input type="text" class="form-control rounded border-gray-300" name="spaceonly">
                                 </div>
                                 <div class="col-md-4 mt-2">
-                                    <label for="is_child_of_soloparent">Child of Solo Parent:</label>
+                                    <label for="is_child_of_soloparent">Child of Solo Parent:</label><b
+                                    class="text-red-600">*</b>
+                                    @if ($errors->has('is_child_of_soloparent'))
+                                            <span
+                                                class="text-xs text-red-600">{{ $errors->first('is_child_of_soloparent') }}</span>
+                                        @endif
                                 </div>
                                 <div class="col-md-1 mt-2">
                                     <input type="radio" name="is_child_of_soloparent" id="is_child_of_soloparent_yes"
@@ -236,7 +263,12 @@
                                     <input type="text" class="form-control rounded border-gray-300" name="spaceonly">
                                 </div>
                                 <div class="col-md-4 mt-2">
-                                    <label for="is_lactose_intolerant">Lactose Intolerant:</label>
+                                    <label for="is_lactose_intolerant">Lactose Intolerant:</label><b
+                                    class="text-red-600">*</b>
+                                    @if ($errors->has('is_lactose_intolerant'))
+                                            <span
+                                                class="text-xs text-red-600">{{ $errors->first('is_lactose_intolerant') }}</span>
+                                        @endif
                                 </div>
                                 <div class="col-md-1 mt-2">
                                     <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_yes"
@@ -254,9 +286,7 @@
                                     <input type="text" class="form-control rounded border-gray-300" name="spaceonly">
                                 </div>
 
-                                <div class='col-md-1 mt-4 text-gray-400 text-xs'>Address</div>
-                                <div class='col-md-11 mt-8 text-gray-400 text-xs'>
-                                    <hr>
+                                <div class='col-md-12 mt-4 text-gray-400 text-xs'>Address<hr>
                                 </div>
 
 
@@ -400,13 +430,6 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-12 mt-4 text-right">
-                                    <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                        data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
-                                    <button type="reset"
-                                        class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
-                                </div>
-
                                 <div class="modal fade" id="verticalycentered" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
@@ -434,6 +457,17 @@
                                     </div>
                                 </div>
                             </form><!-- End floating Labels Form -->
+
+                            <div class="col-md-12 flex mt-4 justify-end text-right">
+                                <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
+                                    data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
+                                    <form id="cancel-form" method="GET" action="{{ route('child.index') }}">
+                                    </form>
+
+                                    <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                        Cancel
+                                    </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -452,10 +486,8 @@
                     radio.addEventListener("change", function() {
                         if (radio.value === "1" && radio.checked) {
                             additionalDetailsElement.disabled = false;
-                            additionalDetailsElement.setAttribute("required", "required");
                         } else if (radio.value === "0" && radio.checked) {
                             additionalDetailsElement.disabled = true;
-                            additionalDetailsElement.removeAttribute("required");
                             additionalDetailsElement.value = '';
                         }
                     });
@@ -470,64 +502,101 @@
     {{-- city and barangay  --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const locations = {
-                provinces: @json($provinceChange),
-                cities: @json($cityChange),
-                barangays: @json($barangayChange)
-            };
-
+            // Get dropdown elements
             const provinceSelect = document.getElementById('province');
             const citySelect = document.getElementById('city');
             const barangaySelect = document.getElementById('barangay');
 
-            function filterCities() {
-                const provincePsgc = provinceSelect.value;
+            // Convert PHP arrays to JSON for JavaScript use
+            const locations = {
+                provinces: @json($provinces),
+                cities: {!! json_encode($cities, JSON_UNESCAPED_UNICODE) !!},
+                barangays: {!! json_encode($barangays, JSON_UNESCAPED_UNICODE) !!}
+            };
 
+            // Get old selected values (from Laravel session for form validation)
+            let selectedProvince = @json(old('province_psgc', $psgcRecord->province_psgc));
+            let selectedCity = @json(old('city_name_psgc', $psgcRecord->city_name_psgc));
+            let selectedBarangay = @json(old('brgy_psgc', $psgcRecord->brgy_psgc));
 
-                if (provincePsgc) {
-                    citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
-                    barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-                    citySelect.style.display = 'block';
+            // Function to reset and populate cities when province changes
+            function populateCities(provincePsgc) {
+                citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+                barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Reset barangay
 
-                    if (locations.cities[provincePsgc]) {
-                        locations.cities[provincePsgc].forEach(city => {
-                            const option = document.createElement('option');
-                            option.value = city.psgc;
-                            option.text = city.name;
-                            citySelect.appendChild(option);
-                        });
+                citySelect.disabled = !provincePsgc; // Enable only if a province is selected
+                barangaySelect.disabled = true; // Always reset barangay when province changes
+
+                if (provincePsgc && locations.cities[provincePsgc]) {
+                    locations.cities[provincePsgc].forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.psgc;
+                        option.text = city.name;
+                        citySelect.appendChild(option);
+                    });
+
+                    // Restore selected city after validation error
+                    if (selectedCity && locations.cities[provincePsgc].some(city => city.psgc == selectedCity)) {
+                        citySelect.value = selectedCity;
+                        populateBarangays(selectedCity); // Load barangays for selected city
+                    } else {
+                        selectedCity = ''; // Reset if no match
                     }
-                } else {
-                    citySelect.style.display = 'disabled';
-                }
-
-                citySelect.value = '';
-                barangaySelect.value = '';
-                barangaySelect.style.display = 'disabled';
-            }
-
-            function filterBarangays() {
-                const cityPsgc = citySelect.value;
-
-                barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-
-                if (cityPsgc) {
-                    barangaySelect.style.display = 'block';
-                    if (locations.barangays[cityPsgc]) {
-                        locations.barangays[cityPsgc].forEach(barangay => {
-                            const option = document.createElement('option');
-                            option.value = barangay.psgc;
-                            option.text = barangay.name;
-                            barangaySelect.appendChild(option);
-                        });
-                    }
-                } else {
-                    barangaySelect.style.display = 'disabled';
                 }
             }
 
-            provinceSelect.addEventListener('change', filterCities);
-            citySelect.addEventListener('change', filterBarangays);
+            // Function to reset and populate barangays when city changes
+            function populateBarangays(cityPsgc) {
+                barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Always clear barangay
+
+                barangaySelect.disabled = !cityPsgc; // Enable only if a city is selected
+
+                if (cityPsgc && locations.barangays[cityPsgc]) {
+                    locations.barangays[cityPsgc].forEach(barangay => {
+                        const option = document.createElement('option');
+                        option.value = barangay.psgc;
+                        option.text = barangay.name;
+                        barangaySelect.appendChild(option);
+                    });
+
+                    // Restore selected barangay after validation error
+                    if (selectedBarangay && locations.barangays[cityPsgc].some(barangay => barangay.psgc == selectedBarangay)) {
+                        barangaySelect.value = selectedBarangay;
+                    } else {
+                        selectedBarangay = ''; // Reset if no match
+                    }
+                }
+            }
+
+            // Load old selections if they exist (for validation errors)
+            if (selectedProvince) {
+                provinceSelect.value = selectedProvince;
+                populateCities(selectedProvince); // <-- This loads cities
+
+                // Delay populateBarangays until after cities are loaded
+                if (selectedCity) {
+                    citySelect.value = selectedCity;
+                    populateBarangays(selectedCity);
+
+                    if (selectedBarangay) {
+                        barangaySelect.value = selectedBarangay;
+                    }
+                }
+            }
+
+            // Event Listeners
+            provinceSelect.addEventListener('change', function() {
+                selectedProvince = this.value;
+                selectedCity = ''; // Reset city when province changes
+                selectedBarangay = ''; // Reset barangay when province changes
+                populateCities(this.value);
+            });
+
+            citySelect.addEventListener('change', function() {
+                selectedCity = this.value;
+                selectedBarangay = ''; // Reset barangay when city changes
+                populateBarangays(this.value);
+            });
         });
     </script>
 @endsection

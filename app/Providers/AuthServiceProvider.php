@@ -24,5 +24,9 @@ class AuthServiceProvider extends ServiceProvider
         // Gate::before(function ($user, $ability) {
         //     return $user->hasRole('admin') ? true : null;
         // });
+
+        Gate::define('edit-child', function ($user) {
+            return $user->hasPermissionTo('edit-child') || session('temp_can_edit');
+        });
     }
 }
