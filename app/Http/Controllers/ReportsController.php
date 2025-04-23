@@ -110,7 +110,7 @@ class ReportsController extends Controller
 
         }
 
-        return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames', 'childCount'));
+        return view('reports.index2', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames', 'childCount'));
     }
 
     public function index2($cycleId, Request $request)
