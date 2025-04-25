@@ -16,7 +16,7 @@
                 <td>{{ $milkfeeding->name }}</td>
                 @if(auth()->user()->hasRole('admin'))
                     <td>{{ number_format($milkfeeding->target) }}</td>
-                    <td>{{ number_format($milkfeeding->allocation, 2) }}</td>
+                    <td>P {{ number_format($milkfeeding->allocation, 2) }}</td>
                 @endif
                 <td class="w-40">
                     <select id="milkStatusSelect-{{ $milkfeeding->status }}" name="milkfeeding_status" class="form-control w-40 border-none"

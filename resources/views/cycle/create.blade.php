@@ -56,7 +56,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Implementation</h5>
-                                <form id="formData" class="row" method="post" action="{{ route('cycle.checkActiveStatus') }} ">
+                                <form id="cycleForm" class="row" method="post" action="{{ route('cycle.checkActiveStatus') }} ">
                                     @csrf
 
                                     <div class='col-md-12 mt-2 text-gray-400 text-xs'>
@@ -67,7 +67,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_name">Implementation Name<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_name"
-                                            name="cycle_name" value="{{ old('cycle_name') }}" style="text-transform: uppercase;" autofocus>
+                                            name="cycle_name" value="{{ old('cycle_name') }}" style="text-transform: uppercase;" required autofocus>
                                         @if ($errors->has('cycle_name'))
                                             <span class="text-xs text-red-600">{{ $errors->first('cycle_name') }}</span>
                                         @endif
@@ -82,7 +82,7 @@
 
                                     <div class="col-md-3 mt-3 text-sm">
                                         <label for="cycle_school_year_from">School Year From<b class="text-red-600">*</b></label>
-                                        <select name="cycle_school_year_from" id="cycle_school_year_from" class="form-control rounded border-gray-300">
+                                        <select name="cycle_school_year_from" id="cycle_school_year_from" class="form-control rounded border-gray-300" required>
                                             @for ($year = $currentYear; $year <= $endYear; $year++)
                                                 <option value="{{ $year }}" {{ old('cycle_school_year_from') == $year ? 'selected' : '' }}>
                                                     {{ $year }}
@@ -96,7 +96,7 @@
 
                                     <div class="col-md-3 mt-3 text-sm">
                                         <label for="cycle_school_year_to">School Year To<b class="text-red-600">*</b></label>
-                                            <select name="cycle_school_year_to" id="cycle_school_year_to" class="form-control rounded border-gray-300">
+                                            <select name="cycle_school_year_to" id="cycle_school_year_to" class="form-control rounded border-gray-300" required>
                                                 @for ($year = $startYear; $year <= $endYearForSYTo; $year++)
                                                     <option value="{{ $year }}" {{ old('cycle_school_year_to') == $year ? 'selected' : '' }}>
                                                         {{ $year }}
@@ -111,7 +111,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_target">Target<b class='text-red-600'>*</b></label>
                                         <input type="number" class="form-control rounded border-gray-300" id="cycle_target"
-                                            name="cycle_target" value="{{ old('cycle_target') }}" maxlength="12">
+                                            name="cycle_target" value="{{ old('cycle_target') }}" maxlength="12" required>
                                         @if ($errors->has('cycle_target'))
                                             <span class="text-xs text-red-600">{{ $errors->first('cycle_target') }}</span>
                                         @endif
@@ -121,7 +121,7 @@
                                         <label for="cycle_allocation">Allocation<b class="text-red-600">*</b></label>
                                         <input type="number" class="form-control rounded border-gray-300"
                                             id="cycle_allocation" name='cycle_allocation'
-                                            value="{{ old('cycle_allocation') }}" maxlength="12">
+                                            value="{{ old('cycle_allocation') }}" maxlength="12" required>
                                         @if ($errors->has('cycle_allocation'))
                                             <span class="text-xs text-red-600">{{ $errors->first('cycle_allocation') }}</span>
                                         @endif
@@ -130,7 +130,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_type">Type<b class="text-red-600">*</b></label>
                                         <select type="text" class="form-control rounded border-gray-300" id="cycle_type"
-                                            name='cycle_type'>
+                                            name='cycle_type' required>
                                             <option value="" selected disabled>Select Type</option>
                                                 <option value="regular" {{ old('cycle_type') }}>REGULAR</option>
                                                 <option value="milk" {{ old('cycle_type') }}>MILK</option>
@@ -143,7 +143,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_status">Status<b class="text-red-600">*</b></label>
                                         <select type="text" class="form-control rounded border-gray-300" id="cycle_status"
-                                            name='cycle_status'>
+                                            name='cycle_status' required>
                                             <option value="" selected disabled>Select status</option>
                                             <option value="active" {{ old('cycle_status') ? 'selected' : ''}}>Active</option>
                                             <option value="inactive" {{ old('cycle_status') ? 'selected' : ''}}>Inactive</option>
@@ -153,7 +153,7 @@
                                             <span class="text-xs text-red-600">{{ $errors->first('cycle_status') }}</span>
                                         @endif
                                     </div>
-                                    <div class="modal fade" id="verticalycentered" tabindex="-1">
+                                    <div class="modal fade" id="cycleConfirmationModal" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -178,7 +178,7 @@
 
                                 <div class="col-md-12 flex mt-4 justify-end text-right">
                                     <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
-                                        data-bs-toggle="modal" data-bs-target="#verticalycentered">Save</button>
+                                    onclick="checkFormBeforeModal()">Save</button>
                                     <form id="cancel-form" method="GET" action="{{ route('cycle.index') }}">
                                     </form>
                                     <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
@@ -244,6 +244,9 @@
 
                 startYearSelect.addEventListener('change', updateEndYearOptions);
                 window.addEventListener('DOMContentLoaded', updateEndYearOptions);
+
             </script>
+
+    @include('cycle.script')
 
 @endsection

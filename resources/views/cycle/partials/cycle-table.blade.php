@@ -16,7 +16,7 @@
                 <td>{{ $cycle->name }}</td>
                 @if(auth()->user()->hasRole('admin'))
                     <td>{{ number_format($cycle->target) }}</td>
-                    <td>{{ number_format($cycle->allocation,2) }}</td>
+                    <td>P {{ number_format($cycle->allocation,2) }}</td>
                 @endif
                 <td class="w-40">
                     <select id="statusSelect-{{ $cycle->status }}" name="cycle_status" class="form-control w-40 border-none" @if ($cycle->status === 'closed' && !auth()->user()->hasRole('admin')) disabled @endif>

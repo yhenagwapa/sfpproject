@@ -45,7 +45,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Implementation</h5>
-                            <form class="row" method="post" action="{{ route('cycle.update') }}">
+                            <form id="cycleForm" class="row" method="post" action="{{ route('cycle.update') }}">
                                 @csrf
                                 @method('patch')
 
@@ -61,23 +61,39 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_name">Implementation Name<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_name"
-                                               name="cycle_name" value="{{ old('cycle_name', $cycle->name) }}" style="text-transform: uppercase;" autofocus>
+                                               name="cycle_name" value="{{ old('cycle_name', $cycle->name) }}" style="text-transform: uppercase;" autofocus required>
                                         @error('cycle_name')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
 
                                     @php
-                                        $startYear = $cycle->school_year_from + 1;
-                                        $endYear = $cycle->school_year_from + 2;
-                                        $endYearForSYTo = $cycle->school_year_from + 3;
+
+                                        if ($cycle->school_year_from == null) {
+                                            $currentYear = date('Y');
+                                            $startYear = $currentYear + 1;
+                                        }
+                                        else {
+                                            $startYear = $cycle->school_year_from + 1;
+                                            $endYear = $cycle->school_year_from + 2;
+                                        }
+                                        if ($cycle->school_year_to == null) {
+                                            $currentYear = date('Y');
+                                            $endYear = $currentYear + 2;
+                                            $endYearForSYTo = $currentYear + 3;
+                                        }
+                                        else {
+                                            $endYear = $cycle->school_year_from + 2;
+                                            $endYearForSYTo = $cycle->school_year_from + 3;
+                                        }
                                     @endphp
 
                                     <div class="col-md-3 mt-3 text-sm">
                                         <label for="cycle_school_year_from">School Year From<b class="text-red-600">*</b></label>
-                                        <select name="cycle_school_year_from" id="cycle_school_year_from" class="form-control rounded border-gray-300">
-                                            @for ($year = $cycle->school_year_from; $year <= $endYear; $year++)
-                                                <option value="{{ $year }}" {{ old('cycle_school_year_from', $cycle->school_year_from) == $year ? 'selected' : '' }}>
+                                        <select name="cycle_school_year_from" id="cycle_school_year_from" class="form-control rounded border-gray-300" required>
+                                            <option value="">Select Year</option>
+                                            @for ($year = $currentYear; $year <= $endYear; $year++)
+                                                <option value="{{ $year }}" {{ old('cycle_school_year_from') == $year ? 'selected' : '' }}>
                                                     {{ $year }}
                                                 </option>
                                             @endfor
@@ -89,7 +105,8 @@
 
                                     <div class="col-md-3 mt-3 text-sm">
                                         <label for="cycle_school_year_to">School Year To<b class="text-red-600">*</b></label>
-                                            <select name="cycle_school_year_to" id="cycle_school_year_to" class="form-control rounded border-gray-300">
+                                            <select name="cycle_school_year_to" id="cycle_school_year_to" class="form-control rounded border-gray-300" required>
+                                                <option value="">Select Year</option>
                                                 @for ($year = $startYear; $year <= $endYearForSYTo; $year++)
                                                     <option value="{{ $year }}" {{ old('cycle_school_year_to', $cycle->school_year_to) == $year ? 'selected' : '' }}>
                                                         {{ $year }}
@@ -104,7 +121,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_target">Target<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_target"
-                                               name="cycle_target" value="{{ (old('cycle_target', $cycle->target)) }}" maxlength="12">
+                                               name="cycle_target" value="{{ (old('cycle_target', $cycle->target)) }}" maxlength="12" required>
                                         @error('cycle_target')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -113,7 +130,7 @@
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_allocation">Allocation<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300" id="cycle_allocation"
-                                               name="cycle_allocation" value="{{ (old('cycle_allocation',  $cycle->allocation)) }}">
+                                               name="cycle_allocation" value="{{ (old('cycle_allocation',  $cycle->allocation)) }}" required>
                                         @error('cycle_allocation')
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
@@ -121,7 +138,7 @@
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_type">Type<b class="text-red-600">*</b></label>
-                                        <select class="form-control rounded border-gray-300" id="cycle_type" name="cycle_type">
+                                        <select class="form-control rounded border-gray-300" id="cycle_type" name="cycle_type" required>
                                             <option value="" selected disabled>Select type</option>
                                             @foreach ($cycleType as $type => $name)
                                                 <option value="{{ $type }}" {{ old('cycle_type', $cycle->type) == $type ? 'selected' : '' }}>
@@ -143,7 +160,7 @@
                                 </div>
 
                                 <!-- Confirmation Modal -->
-                                <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="cycleConfirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -164,7 +181,8 @@
 
                             <!-- Submit and Cancel Buttons -->
                             <div class="col-md-12 flex mt-4 justify-end text-right">
-                                <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9" data-bs-toggle="modal" data-bs-target="#confirmationModal">Save Changes</button>
+                                <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
+                                        onclick="checkFormBeforeModal()">Save Changes</button>
                                 <form id="cancel-form" method="GET" action="{{ route('cycle.index') }}">
                                 </form>
                                 <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
@@ -197,5 +215,7 @@
             startYearSelect.addEventListener('change', updateEndYearOptions);
             window.addEventListener('DOMContentLoaded', updateEndYearOptions);
         </script>
+
+    @include('cycle.script')
 
 @endsection
