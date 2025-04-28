@@ -19,7 +19,7 @@
                     <td>P {{ number_format($cycle->allocation,2) }}</td>
                 @endif
                 <td class="w-40">
-                    <select id="statusSelect-{{ $cycle->status }}" name="cycle_status" class="form-control w-40 border-none" @if ($cycle->status === 'closed' && !auth()->user()->hasRole('admin')) disabled @endif>
+                    <select id="statusSelect-{{ $cycle->status }}" name="cycle_status" class="form-control w-40 border-none" @if ($cycle->status === 'closed' || !auth()->user()->hasRole('admin')) disabled @endif>
                         @foreach ($cycleStatuses as $cycleStatus)
                             <option value="{{ $cycleStatus->value }}"
                                 {{ $cycleStatus->value == $cycle->status ? 'selected' : '' }}>

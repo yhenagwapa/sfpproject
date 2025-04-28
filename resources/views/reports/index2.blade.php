@@ -83,9 +83,8 @@
                                                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center"
-                                                                           href="{{ route('cycle.reports.print.masterlist', $cycle->id ) }}"
-                                                                           target="_blank"
-                                                                        >
+                                                                           href="{{ route('cycle.reports.print.masterlist') }}"
+                                                                           target="_blank">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
                                                                                 stroke-width="2" stroke="currentColor"
@@ -121,7 +120,7 @@
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                           href="{{ route('cycle.reports.print.age-bracket-upon-entry', $cycle->id) }}"
+                                                                           href="{{ route('cycle.reports.print.age-bracket-upon-entry') }}"
                                                                            target="_blank"
                                                                         >
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +139,7 @@
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                           href="{{ route('cycle.reports.print.age-bracket-after-120', $cycle->id) }}"
+                                                                           href="{{ route('cycle.reports.print.age-bracket-after-120') }}"
                                                                            target="_blank"
                                                                         >
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +158,7 @@
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center"
-                                                                           href="{{ route('cycle.reports.print.monitoring', $cycle->id) }}"
+                                                                           href="{{ route('cycle.reports.print.monitoring') }}"
                                                                            target="_blank"
                                                                         >
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +177,7 @@
                                                                     </li>
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center"
-                                                                           href="{{ route('cycle.reports.print.unfunded', $cycle->id) }}"
+                                                                           href="{{ route('cycle.reports.print.unfunded') }}"
                                                                            target="_blank"
                                                                         >
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -219,7 +218,7 @@
                                                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
-                                                                               href="{{ route('cycle.reports.print.malnourished', $cycle->id) }}"
+                                                                               href="{{ route('cycle.reports.print.malnourished') }}"
                                                                                target="_blank"
                                                                                >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -238,7 +237,7 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center"
-                                                                               href="{{ route('cycle.reports.print.disabilities', $cycle->id) }}"
+                                                                               href="{{ route('cycle.reports.print.disabilities') }}"
                                                                                target="_blank"
                                                                             >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -277,7 +276,7 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                               href="{{ route('cycle.reports.print.undernourished-upon-entry', $cycle->id) }}"
+                                                                               href="{{ route('cycle.reports.print.undernourished-upon-entry') }}"
                                                                                target="_blank"
                                                                                >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -296,7 +295,7 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                               href="{{ route('cycle.reports.print.undernourished-after-120', $cycle->id) }}"
+                                                                               href="{{ route('cycle.reports.print.undernourished-after-120') }}"
                                                                                target="_blank"
                                                                             >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -334,7 +333,7 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                               href="{{ route('cycle.reports.print.nutritional-status-upon-entry', $cycle->id) }}"
+                                                                               href="{{ route('cycle.reports.print.nutritional-status-upon-entry') }}"
                                                                                target="_blank"
                                                                             >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -353,7 +352,7 @@
                                                                         </li>
                                                                         <li>
                                                                             <a class="dropdown-item d-flex align-items-center ml-3"
-                                                                               href="{{ route('cycle.reports.print.nutritional-status-after-120', $cycle->id) }}"
+                                                                               href="{{ route('cycle.reports.print.nutritional-status-after-120') }}"
                                                                                target="_blank"
                                                                             >
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
