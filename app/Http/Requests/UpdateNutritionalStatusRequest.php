@@ -41,11 +41,12 @@ class UpdateNutritionalStatusRequest extends FormRequest
             $child = Child::findOrFail($childID);
 
             $childDOB = $child->date_of_birth;
-            return [
+            $rules = [
                 'child_id' => ['required', 'exists:children,id'],
                 'weight' => ['required', 'numeric'],
                 'height' => ['required', 'numeric'],
-                'actual_weighing_date' => ['required', 'date', 'after_or_equal:'. $minWeighingDate, 'before_or_equal:'. $maxDate],
+                'exitWeighing' => ['nullable', 'date'],
+                'actual_weighing_date' => ['required', 'date', 'after_or_equal:'. $minWeighingDate, $this->filled('exitWeighing') ? 'before:exitWeighing' : 'before_or_equal:' . $maxDate],
                 'deworming_date' => ['required', 'date', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
                 'vitamin_a_date' => ['required', 'date', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
             ];
@@ -58,7 +59,7 @@ class UpdateNutritionalStatusRequest extends FormRequest
             $childDOB = $child->date_of_birth;
             $minDateForExit = Carbon::parse($this->input('entryWeighing'))->addDay()->format('Y-m-d');
 
-            return [
+            $rules = [
                 'exitchild_id' => ['required', 'exists:children,id'],
                 'exitweight' => ['required', 'numeric'],
                 'exitheight' => ['required', 'numeric'],
@@ -66,7 +67,9 @@ class UpdateNutritionalStatusRequest extends FormRequest
             ];
         }
 
-        return [];
+        // dd($rules);
+
+        return $rules;
     }
     public function messages()
     {
@@ -91,6 +94,7 @@ class UpdateNutritionalStatusRequest extends FormRequest
                 'actual_weighing_date.required' => 'Please fill in actual date of weighing.',
                 'actual_weighing_date.after_or_equal' => 'Minimum date allowed is ' . $yearFrom . '.',
                 'actual_weighing_date.before_or_equal' => 'Maximum date allowed is ' . $yearTo . '.',
+                'actual_weighing_date.before' => 'Must be earlier than the after 120 weighing date.',
                 'deworming_date.required' => 'Please fill in deworming date.',
                 'deworming_date.after_or_equal' => 'Deworming should be from ' . $childDOB . '.',
                 'deworming_date.before_or_equal' => 'Deworming should be from ' . $childDOB . ' to ' . $maxDate . '.',
