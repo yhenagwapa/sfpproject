@@ -135,7 +135,34 @@ class ImplementationController extends Controller
             'milk' => 'MILK',
         ];
 
-        return view('cycle.edit', compact('cycle', 'cycleStatuses', 'cycleType'));
+        $currentYear = date('Y');
+        if ($cycle->school_year_from == null) {
+            $currentYear = date('Y');
+            $startYear = $currentYear + 1;
+        }
+        else {
+            $startYear = $cycle->school_year_from + 1;
+            $endYear = $cycle->school_year_from + 2;
+        }
+        if ($cycle->school_year_to == null) {
+            $currentYear = date('Y');
+            $endYear = $currentYear + 2;
+            $endYearForSYTo = $currentYear + 3;
+        }
+        else {
+            $endYear = $cycle->school_year_from + 2;
+            $endYearForSYTo = $cycle->school_year_from + 3;
+        }
+
+        return view('cycle.edit', compact(
+            'cycle',
+            'cycleStatuses',
+            'cycleType',
+            'currentYear',
+            'startYear',
+            'endYear',
+            'endYearForSYTo'
+        ));
     }
 
     /**

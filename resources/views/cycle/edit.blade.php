@@ -67,27 +67,6 @@
                                         @enderror
                                     </div>
 
-                                    @php
-
-                                        if ($cycle->school_year_from == null) {
-                                            $currentYear = date('Y');
-                                            $startYear = $currentYear + 1;
-                                        }
-                                        else {
-                                            $startYear = $cycle->school_year_from + 1;
-                                            $endYear = $cycle->school_year_from + 2;
-                                        }
-                                        if ($cycle->school_year_to == null) {
-                                            $currentYear = date('Y');
-                                            $endYear = $currentYear + 2;
-                                            $endYearForSYTo = $currentYear + 3;
-                                        }
-                                        else {
-                                            $endYear = $cycle->school_year_from + 2;
-                                            $endYearForSYTo = $cycle->school_year_from + 3;
-                                        }
-                                    @endphp
-
                                     <div class="col-md-3 mt-3 text-sm">
                                         <label for="cycle_school_year_from">School Year From<b class="text-red-600">*</b></label>
                                         <select name="cycle_school_year_from" id="cycle_school_year_from" class="form-control rounded border-gray-300" required>

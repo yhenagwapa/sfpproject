@@ -528,7 +528,7 @@ class NutritionalStatusController extends Controller
     {
         $validatedData = $request->validated();
 
-        $childID = session('child_id');
+        $childID = $validatedData['child_id'];
 
         $entryWeightForAge = null;
         $entryHeightForAge = null;
@@ -709,7 +709,11 @@ class NutritionalStatusController extends Controller
             ]);
         }
 
-        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
+        // re-save the child 
+        session(['child_id' => $request->input('child_id')]);
+
+        // return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
+        return redirect()->back()->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
 
     }
     public function updateAfter120Details(UpdateNutritionalStatusRequest $request)

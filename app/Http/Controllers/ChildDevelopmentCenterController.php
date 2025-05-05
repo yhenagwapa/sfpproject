@@ -219,7 +219,7 @@ class ChildDevelopmentCenterController extends Controller
     {
         $validatedData = $request->validated();
 
-        $centerID = session('center_id');
+        $centerID = $request->input('center_id'); //session('center_id');
 
         $center = ChildDevelopmentCenter::findOrFail($centerID);
 

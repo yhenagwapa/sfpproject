@@ -54,9 +54,9 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Child Development Center Details</h5>
-                        <form class="row" method="POST" action="{{ route('centers.update') }}">
+                        <form class="row" method="POST" action="{{ route('centers.update') }}" id="centerUpdateForm">
                             @csrf
-                            @method('patch')
+                            @method('post')
 
                             <input type="hidden" name="center_id" value="{{ $center->id }}">
 
@@ -257,7 +257,7 @@
                                             Are you sure you want to save these changes?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit"
+                                            <button type="submit" id="centerUpdateConfirm"
                                                 class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
                                             <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
                                                 data-bs-dismiss="modal">Close</button>
@@ -269,8 +269,8 @@
                         <div class="col-md-12 flex mt-4 justify-end text-right">
                             <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
                                 data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
-                            <form id="cancel-form" method="GET" action="{{ route('centers.index') }}">
-                            </form>
+{{--                            <form id="cancel-form" method="GET" action="{{ route('centers.index') }}">--}}
+{{--                            </form>--}}
                             <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
                                 Cancel
                             </button>
@@ -381,6 +381,11 @@
                 selectedBarangay = ''; // Reset barangay when city changes
                 populateBarangays(this.value);
             });
+
+            document.getElementById('centerUpdateConfirm').addEventListener('click', function () {
+                document.getElementById('centerUpdateForm').submit();
+            });
+
         });
     </script>
 @endsection

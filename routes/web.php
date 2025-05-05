@@ -108,7 +108,7 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
     Route::post('/centers/store', [ChildDevelopmentCenterController::class, 'store'])->name(name: 'centers.store');
     Route::post('/centers/show', [ChildDevelopmentCenterController::class, 'show'])->name(name: 'centers.show');
     Route::get('/centers/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
-    Route::patch('/centers/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
+    Route::post('/centers/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
 
     Route::get('/cycle', [ImplementationController::class, 'index'])->name(name: 'cycle.index');
     Route::get('/cycle/create', [ImplementationController::class, 'create'])->name(name: 'cycle.create');
