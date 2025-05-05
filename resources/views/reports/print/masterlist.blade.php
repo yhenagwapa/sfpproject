@@ -103,6 +103,7 @@
     <table id='funded-table' class="table datatable funded-table w-full">
         <thead>
             <tr>
+                <th rowspan="2" style="width: 10px;">No.</th>
                 <th rowspan="2">Name of Child</th>
                 <th rowspan="2">Sex</th>
                 <th rowspan="2">Date of Birth</th>
@@ -131,6 +132,7 @@
         <tbody class="funded-table text-xs">
             @foreach ($isFunded as $fundedChild)
                 <tr>
+                    <td style="width: 10px;">{{ $loop->iteration }}</td>
                     <td>{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
                     <td style="white-space: nowrap;">{{ $fundedChild->date_of_birth }}</td>
@@ -161,7 +163,7 @@
             @endforeach
             @if (count($isFunded) <= 0)
                 <tr>
-                    <td class="text-center" colspan="19">
+                    <td class="text-center" colspan="20">
                         @if (empty($search))
                             No Data found
                         @endif

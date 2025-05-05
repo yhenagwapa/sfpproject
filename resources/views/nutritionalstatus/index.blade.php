@@ -18,6 +18,13 @@
         </div>
     @endif
 
+    @if (session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show" id="warning-alert" role="alert">
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    @endif
+
     @if (session('success'))
         <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
             {{ session('success') }}
@@ -29,6 +36,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             var alert1 = document.getElementById('success-alert');
             var alert2 = document.getElementById('danger-alert');
+            var alert2 = document.getElementById('warning-alert');
             if (alert1) {
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
@@ -39,6 +47,12 @@
                 setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
+                }, 3000);
+            }
+            if (alert3) {
+                setTimeout(function() {
+                    var bsAlert3 = new bootstrap.Alert(alert3);
+                    bsAlert3.close();
                 }, 3000);
             }
         });
@@ -232,7 +246,6 @@
             <div class="{{ $hasUponExitData || auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') ? 'col-lg-12' : 'col-lg-9' }}">
                 <div class="card">
                     <div class="card-body">
-                        @if($hasUponEntryData || $hasUponExitData)
                             <div class="col-md-12 flex text-right">
                                 <a href={{ route('child.index') }} class="flex italic" style="text-decoration: none;">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e9730" class="mr-1 mt-1 size-4">
@@ -243,7 +256,6 @@
                                     </span>
                                 </a>
                             </div>
-                        @endif
 
                         <h5 class="card-title" style="text-transform: uppercase;">{{ $child->full_name }} <span>| Date of
                                 Birth: {{ $child->date_of_birth->format('Y-m-d') }} | {{ $child->sex->name }}</span></h5>

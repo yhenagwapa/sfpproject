@@ -12,9 +12,10 @@ use Illuminate\Http\Request;
 trait WorkerReports
 {
 
-    public function printMasterlist2($cycleId, Request $request)
+    public function printMasterlist2(Request $request)
     {
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -34,7 +35,8 @@ trait WorkerReports
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
                     if ($cycle) {
                         $query->where('implementation_id', $cycle->id)
-                            ->where('funded', 1);
+                            ->where('funded', 1)
+                            ->where('status', 'active');
                     }
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -47,7 +49,8 @@ trait WorkerReports
                     if ($cycle) {
                         $query->where('child_development_center_id', $cdcId)
                             ->where('implementation_id', $cycle->id)
-                            ->where('funded', 1);
+                            ->where('funded', 1)
+                            ->where('status', 'active');
                     }
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -69,7 +72,8 @@ trait WorkerReports
                     if ($cycle) {
                         $query->whereIn('child_development_center_id', $centerIDs)
                             ->where('implementation_id', $cycle->id)
-                            ->where('funded', 1);
+                            ->where('funded', 1)
+                            ->where('status', 'active');
                     }
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -81,7 +85,8 @@ trait WorkerReports
                     if ($cycle) {
                         $query->where('child_development_center_id', $cdcId)
                             ->where('implementation_id', $cycle->id)
-                            ->where('funded', 1);
+                            ->where('funded', 1)
+                            ->where('status', 'active');
                     }
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -108,9 +113,10 @@ trait WorkerReports
     }
 
 
-    public function printAgeBracketUponEntry2($cycleId, Request $request)
+    public function printAgeBracketUponEntry2(Request $request)
     {
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -438,9 +444,10 @@ trait WorkerReports
     }
 
 
-    public function printAgeBracketAfter1202($cycleId, Request $request)
+    public function printAgeBracketAfter1202(Request $request)
     {
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -781,9 +788,10 @@ trait WorkerReports
     }
 
 
-    public function printMonitoring2($cycleId, Request $request)
+    public function printMonitoring2(Request $request)
     {
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -892,9 +900,10 @@ trait WorkerReports
         return $pdf->stream($cycle->name . ' Weight and Height Monitoring.pdf');
 
     }
-    public function printUnfunded2($cycleId, Request $request)
+    public function printUnfunded2(Request $request)
     {
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');

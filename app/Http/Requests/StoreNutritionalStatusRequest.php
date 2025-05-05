@@ -99,7 +99,7 @@ class StoreNutritionalStatusRequest extends FormRequest
             $childID = $this->input('exitchild_id');
             $child = Child::findOrFail($childID);
 
-            $childDOB = $child->date_of_birth->format('Y-m-d')git add .;
+            $childDOB = $child->date_of_birth->format('Y-m-d');
             $minDateForExit = Carbon::parse($this->input('entryWeighing'))->addDay()->format('Y-m-d');
 
             return [

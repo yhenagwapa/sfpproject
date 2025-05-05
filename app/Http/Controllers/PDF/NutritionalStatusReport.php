@@ -16,16 +16,18 @@ use Illuminate\Support\Facades\DB;
 trait NutritionalStatusReport
 {
 
-    public function printNutritionalStatusAfter120($cycleId, Request $request)
+    public function printNutritionalStatusAfter120(Request $request)
     {
         // define variables
         $report = [];
 
+        $cycleID = session('report_cycle_id');
+
         // define implementation_id (cycle_id)
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         // get all child development centers under the cycle
-        $cc = ChildCenter::where('implementation_id', $cycleId)->get();
+        $cc = ChildCenter::where('implementation_id', $cycleID)->get();
         $cdc = ChildDevelopmentCenter::whereIn('id', $cc->pluck('child_development_center_id'))->get();
 
         $categoriesHFA = ['normal', 'stunted', 'severely stunted', 'tall', 'total'];
@@ -33,9 +35,9 @@ trait NutritionalStatusReport
         $categoriesWFH = ['normal', 'wasted', 'severely wasted', 'overweight', 'obese', 'total'];
 
         foreach ($cdc as $c) {
-            $report['height_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'height_for_age', $categoriesHFA);
-            $report['weight_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'weight_for_age', $categoriesWFA);
-            $report['weight_for_height'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'weight_for_height', $categoriesWFH);
+            $report['height_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleID, 'height_for_age', $categoriesHFA);
+            $report['weight_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleID, 'weight_for_age', $categoriesWFA);
+            $report['weight_for_height'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleID, 'weight_for_height', $categoriesWFH);
         }
 
         // additional values for PDF
@@ -58,15 +60,17 @@ trait NutritionalStatusReport
         return $pdf->stream($cycle->name . ' Nutritional Status After 120.pdf');
     }
 
-    public function printNutritionalStatusUponEntry($cycleId, Request $request)
+    public function printNutritionalStatusUponEntry(Request $request)
     {
         $report = [];
 
+        $cycleID = session('report_cycle_id');
+
         // define implementation_id (cycle_id)
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         // get all child development centers under the cycle
-        $cc = ChildCenter::where('implementation_id', $cycleId)->get();
+        $cc = ChildCenter::where('implementation_id', $cycleID)->get();
         $cdc = ChildDevelopmentCenter::whereIn('id', $cc->pluck('child_development_center_id'))->get();
 
         $categoriesHFA = ['normal', 'stunted', 'severely stunted', 'tall', 'total'];
@@ -74,9 +78,9 @@ trait NutritionalStatusReport
         $categoriesWFH = ['normal', 'wasted', 'severely wasted', 'overweight', 'obese', 'total'];
 
         foreach ($cdc as $c) {
-            $report['height_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'height_for_age', $categoriesHFA);
-            $report['weight_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'weight_for_age', $categoriesWFA);
-            $report['weight_for_height'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleId, 'weight_for_height', $categoriesWFH);
+            $report['height_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleID, 'height_for_age', $categoriesHFA);
+            $report['weight_for_age'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleID, 'weight_for_age', $categoriesWFA);
+            $report['weight_for_height'][$c->id] = $this->nutritionalStatusAfter120($c, $cycleID, 'weight_for_height', $categoriesWFH);
         }
 
         // additional values for PDF

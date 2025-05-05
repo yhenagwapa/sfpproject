@@ -530,6 +530,14 @@ class NutritionalStatusController extends Controller
 
         $childID = $validatedData['child_id'];
 
+        $nutritionalStatus = NutritionalStatus::where('child_id', $childID)->first();
+
+        $nutritionalStatus->fill($request->only(['child_id', 'weight', 'height','actual_weighing_date', 'deworming_date', 'vitamin_a_date']));
+
+        if($nutritionalStatus->isClean()){
+            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
+        }
+
         $entryWeightForAge = null;
         $entryHeightForAge = null;
         $entryWeightForHeight = null;
@@ -688,31 +696,21 @@ class NutritionalStatusController extends Controller
             $entryIsUndernourished = true;
         }
 
-        $nutritionalStatus = NutritionalStatus::where('child_id', $request->child_id)->first();
+        $nutritionalStatus->age_in_months = $entryAgeInMonths;
+        $nutritionalStatus->age_in_years = $entryAgeInYears;
+        $nutritionalStatus->weight_for_age = $entryWeightForAge;
+        $nutritionalStatus->height_for_age = $entryHeightForAge;
+        $nutritionalStatus->weight_for_height = $entryWeightForHeight;
+        $nutritionalStatus->is_malnourish = $entryIsMalnourished;
+        $nutritionalStatus->is_undernourish = $entryIsUndernourished;
+        $nutritionalStatus->updated_by_user_id = auth()->id();
 
-        if ($nutritionalStatus) {
-            $nutritionalStatus->update([
-                'child_id' => $childID,
-                'weight' => $request->weight,
-                'height' => $request->height,
-                'actual_weighing_date' => $request->actual_weighing_date,
-                'age_in_months' => $entryAgeInMonths,
-                'age_in_years' => $entryAgeInYears,
-                'weight_for_age' => $entryWeightForAge,
-                'height_for_age' => $entryHeightForAge,
-                'weight_for_height' => $entryWeightForHeight,
-                'is_malnourish' => $entryIsMalnourished,
-                'is_undernourish' => $entryIsUndernourished,
-                'deworming_date' => $request->deworming_date,
-                'vitamin_a_date' => $request->vitamin_a_date,
-                'updated_by_user_id' => auth()->id(),
-            ]);
-        }
+        $nutritionalStatus->update();
 
-        // re-save the child 
+        // re-save the child
         session(['child_id' => $request->input('child_id')]);
 
-        // return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
+        // return redirect()->route('nutritionalstatus.index')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
         return redirect()->back()->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
 
     }
@@ -721,6 +719,23 @@ class NutritionalStatusController extends Controller
         $validatedData = $request->validated();
 
         $childID = session('exitchild_id');
+
+        $nutritionalStatus = NutritionalStatus::where('child_id', $childID)
+                ->orderBy('created_at')
+                ->skip(1)
+                ->take(1)
+                ->first();
+
+        $nutritionalStatus->fill([
+            'child_id' => $request->input('exitchild_id'),
+            'weight' => $request->input('exitweight'),
+            'height' => $request->input('exitheight'),
+            'actual_weighing_date' =>$request->input('exitweighing_date')
+        ]);
+
+        if($nutritionalStatus->isClean()){
+            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
+        }
 
             $exitWeightForAge = null;
             $exitHeightForAge = null;
@@ -883,28 +898,18 @@ class NutritionalStatusController extends Controller
                 $exitIsUndernourished = true;
             }
 
-            $nutritionalStatus = NutritionalStatus::where('child_id', $childID)
-                ->orderBy('created_at')
-                ->skip(1)
-                ->take(1)
-                ->first();
+            $nutritionalStatus->age_in_months = $exitAgeInMonths;
+            $nutritionalStatus->age_in_years = $exitAgeInYears;
+            $nutritionalStatus->weight_for_age = $exitWeightForAge;
+            $nutritionalStatus->height_for_age = $exitHeightForAge;
+            $nutritionalStatus->weight_for_height = $exitWeightForHeight;
+            $nutritionalStatus->is_malnourish = $exitIsMalnourished;
+            $nutritionalStatus->is_undernourish = $exitIsUndernourished;
+            $nutritionalStatus->updated_by_user_id = auth()->id();
 
-            $nutritionalStatus->update([
-                'child_id' => $childID,
-                'weight' => $request->exitweight,
-                'height' => $request->exitheight,
-                'actual_weighing_date' => $request->exitweighing_date,
-                'age_in_months' => $exitAgeInMonths,
-                'age_in_years' => $exitAgeInYears,
-                'weight_for_age' => $exitWeightForAge,
-                'height_for_age' => $exitHeightForAge,
-                'weight_for_height' => $exitWeightForHeight,
-                'is_malnourish' => $exitIsMalnourished,
-                'is_undernourish' => $exitIsUndernourished,
-                'updated_by_user_id' => auth()->id(),
-            ]);
+            $nutritionalStatus->update();
 
-        return redirect()->route('nutritionalstatus.redirect')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('exitchild_id'));
+        return redirect()->route('nutritionalstatus.index')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('exitchild_id'));
     }
 
     /**

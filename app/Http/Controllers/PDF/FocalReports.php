@@ -12,9 +12,10 @@ use Illuminate\Http\Request;
 
 trait FocalReports
 {
-    public function printMalnourish2($cycleId, Request $request)
+    public function printMalnourish2(Request $request)
     {
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -101,9 +102,10 @@ trait FocalReports
         return $pdf->stream($cycle->cycle_name . ' Malnourished.pdf');
     }
 
-    public function printDisabilities2($cycleId, Request $request)
+    public function printDisabilities2(Request $request)
     {
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -160,9 +162,10 @@ trait FocalReports
 
         return $pdf->stream($cycle->name . ' Persons with Disability.pdf');
     }
-    public function printUndernourishedUponEntry2($cycleId, Request $request)
+    public function printUndernourishedUponEntry2(Request $request)
     {
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -386,9 +389,10 @@ trait FocalReports
 
         return $pdf->stream($cycle->name . ' Undernourished Upon Entry.pdf');
     }
-    public function printUndernourishedAfter1202($cycleId, Request $request)
+    public function printUndernourishedAfter1202(Request $request)
     {
-        $cycle = Implementation::where('id', $cycleId)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');

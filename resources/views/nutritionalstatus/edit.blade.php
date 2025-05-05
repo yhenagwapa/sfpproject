@@ -72,6 +72,7 @@
 
                                 <input type="hidden" name="form_type" value="entry">
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                <input type="hidden" name="exitWeighing" value="{{ $exitDetails ? $exitDetails->actual_weighing_date : null }}">
                                 <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
 
                                 <div class="col-md-12 mt-2 text-sm">

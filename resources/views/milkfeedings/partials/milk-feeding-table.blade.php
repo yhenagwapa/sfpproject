@@ -20,7 +20,7 @@
                 @endif
                 <td class="w-40">
                     <select id="milkStatusSelect-{{ $milkfeeding->status }}" name="milkfeeding_status" class="form-control w-40 border-none"
-                        @if ($milkfeeding->status === 'closed') disabled @endif>
+                        @if ($milkfeeding->status === 'closed' || !auth()->user()->hasRole('admin')) disabled @endif>
                         @foreach ($cycleStatuses as $cycleStatus)
                             <option value="{{ $cycleStatus->value }}"
                                 {{ $cycleStatus->value == $milkfeeding->status ? 'selected' : '' }}>
