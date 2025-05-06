@@ -265,6 +265,7 @@ class ChildController extends Controller
 
             $step1Data['is_pantawid'] = $request->is_pantawid;
             $step1Data['is_person_with_disability'] = $request->is_person_with_disability;
+            $step1Data['edit_counter'] = 0;
 
             $step1Data['region_name'] = PSGC::where('region_psgc', $request->region_psgc ?? null)->value('region_name');
             $step1Data['province_name'] = PSGC::where('province_psgc', $request->province_psgc ?? null)->value('province_name');
