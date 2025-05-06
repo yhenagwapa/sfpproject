@@ -417,7 +417,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-6 mt-3 text-sm">
+                                <div class="col-md-6 mt-3 text-sm hidden">
                                     <label for="milk_feeding_id">Milk Feeding Implementation</label>
                                     <select
                                         class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"

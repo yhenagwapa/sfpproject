@@ -69,7 +69,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-6 mt-3 text-sm">
+                            <div class="col-md-6 mt-3 text-sm hidden">
                                 <label for="assigned_user_id">Assigned PDO<b class='text-red-600'>*</b></label>
                                 <select class="form-control rounded border-gray-300" id="assigned_pdo_user_id"
                                     name="assigned_pdo_user_id">
@@ -215,7 +215,7 @@
                                     </div>
                                     <div class="col-md-12" id="input-container">
                                         <div class="input-group mb-2">
-                                            <input type="text" class="form-control rounded border-gray-300 rounded border-gray-300 mr-3"` 
+                                            <input type="text" class="form-control rounded border-gray-300 rounded border-gray-300 mr-3"`
                                                 name="cdcname[]" value="{{ old('cdcname') }}" autofocus>
                                             <button type="button"
                                                 class="text-white bg-blue-600 rounded text-sm text-nowrap px-4 min-h-9 add-more">
