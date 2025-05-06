@@ -203,7 +203,7 @@
                     </li><!-- End Audit Logs Page Nav -->
                 @endif
 
-                @if (auth()->user()->hasRole('admin'))
+                {{--@if (auth()->user()->hasRole('admin'))
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('activitylogs.index')}}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
@@ -221,7 +221,7 @@
                             <span class="text-sm">Data Export</span>
                         </a>
                     </li><!-- End Audit Logs Page Nav -->
-                @endif
+                @endif--}}
             </ul>
 
 
@@ -234,7 +234,7 @@
 
             <footer id="footer" class="footer">
                 <div class="footer-dswd">
-                    &copy; 2025 Department of Social Welfare and Development.
+                    &copy; {{ now()->year }} Department of Social Welfare and Development.
                 </div>
                 {{-- <div class="credits mt-2 mb-0">
                     &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved

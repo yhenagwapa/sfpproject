@@ -49,12 +49,12 @@
                     bsAlert2.close();
                 }, 3000);
             }
-            if (alert3) {
-                setTimeout(function() {
-                    var bsAlert3 = new bootstrap.Alert(alert3);
-                    bsAlert3.close();
-                }, 3000);
-            }
+            // if (alert3) {
+            //     setTimeout(function() {
+            //         var bsAlert3 = new bootstrap.Alert(alert3);
+            //         bsAlert3.close();
+            //     }, 3000);
+            // }
         });
     </script>
 
@@ -167,9 +167,10 @@
                                 <div class="card-title">
                                     <h5 class='col-md-12'>After 120 Feedings</h5>
                                 </div>
-                                <form method="post" action="{{ route('nutritionalstatus.storeExitDetails') }}">
+                                <form method="post" action="{{ route('nutritionalstatus.storeExitDetails') }}" id="statusAfter120Form">
                                     @csrf
 
+                                    @method('post')
                                     <input type="hidden" name="form_type" value="exit">
                                     <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
                                     <input type="hidden" name="entryWeighing" value="{{ $entryDetails->actual_weighing_date }}">
@@ -217,7 +218,7 @@
                                                     Are you sure you want to save these details?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit"
+                                                    <button type="submit" id="statusAfter120Submit"
                                                         class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
                                                     <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
                                                         data-bs-dismiss="modal">Cancel</button>
@@ -289,5 +290,10 @@
         </div>
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.getElementById('statusAfter120Submit').addEventListener('click', function () {
+            document.getElementById('statusAfter120Form').submit();
+        });
+    </script>
     @vite(['resources/js/app.js'])
 @endsection

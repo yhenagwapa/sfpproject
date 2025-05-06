@@ -574,7 +574,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-6 mt-3 text-sm">
+                                    <div class="col-md-6 mt-3 text-sm hidden">
                                         <label for="milk_feeding_id">Milk Feeding Implementation</label>
                                         <select class="form-control rounded border-gray-300" id="milk_feeding_id"
                                             name='milk_feeding_id'>
@@ -687,10 +687,16 @@
                                         <label>Person with Disability:</label>
                                     </div>
                                     <div class="col-md-4 mt-1 text-sm">
-                                        <input type="text" class="rounded border-gray-300"
-                                            name='person_with_disability_details'
-                                            value="{{ session('step1Data.person_with_disability_details') ? session('step1Data.person_with_disability_details') : 'No' }}"
-                                            disabled>
+                                        <select name="person_with_disability_details" id="person_with_disability_details"
+                                                class="rounded border-gray-300" {{ session('step1Data.person_with_disability_details') ? 'disabled' : '' }}>
+                                            <option value="">-- Select Disability --</option>
+                                            @foreach ($disabilities as $disability)
+                                                <option value="{{ $disability }}"
+                                                    {{ session('step1Data.person_with_disability_details') == $disability ? 'selected' : '' }}>
+                                                    {{ $disability }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class='col-md-6 mt-3 text-gray-400 text-xs'>Center Information</div>
 

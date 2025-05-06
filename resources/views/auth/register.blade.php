@@ -492,7 +492,7 @@
 
             <footer id="register-footer" class="register-footer">
                 <div class="footer-dswd">
-                    &copy; 2025 Department of Social Welfare and Development.
+                    &copy; {{ now()->year }} Department of Social Welfare and Development.
                 </div>
                 {{-- <div class="copyright">
                     &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved

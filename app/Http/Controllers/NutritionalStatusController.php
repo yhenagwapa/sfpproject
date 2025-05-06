@@ -276,6 +276,7 @@ class NutritionalStatusController extends Controller
     }
     public function storeExitDetails(StoreNutritionalStatusRequest $request)
     {
+        dd('hi');
         $validatedData = $request->validated();
 
         $exitRecord = NutritionalStatus::where('child_id', $request->exitchild_id)->count();

@@ -119,6 +119,7 @@
                                                                     <li>
                                                                         <a class="dropdown-item d-flex align-items-center ml-3"
                                                                             href="#"
+                                                                           target="_blank"
                                                                             onclick="workerReport('age-bracket-upon-entry', localStorage.getItem('selected_cycle_id')); return false;">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"

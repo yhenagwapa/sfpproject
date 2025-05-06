@@ -38,6 +38,25 @@ class Child extends Model
         'date_of_birth' => 'date',
     ];
 
+    public static function disabilityOptions(): array
+    {
+        return [
+            "Autism Spectrum Disorder",
+            "Chronic Illness",
+            "Hearing Impairment",
+            "Intellectual Disability",
+            "Learning Disability",
+            "Mental Disorder",
+            "Multiple Disabilities",
+            "Orthopedic Disability",
+            "Others",
+            "Psychosocial Disability",
+            "Rare Disease",
+            "Speech Impairment",
+            "Visual Impairment",
+        ];
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logAll();

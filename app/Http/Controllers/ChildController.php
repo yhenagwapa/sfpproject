@@ -210,7 +210,9 @@ class ChildController extends Controller
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('child.create', compact('cycleImplementations', 'milkFeedings', 'centerNames', 'minDate', 'maxDate','sexOptions', 'provinces', 'cities', 'barangays'));
+        $disabilities = Child::disabilityOptions();
+
+        return view('child.create', compact('cycleImplementations', 'milkFeedings', 'centerNames', 'minDate', 'maxDate','sexOptions', 'provinces', 'cities', 'barangays', 'disabilities'));
     }
 
     /**
@@ -529,6 +531,8 @@ class ChildController extends Controller
         $childCycle = $childCenterId->implementation_id;
         $childMilkFeeding = $childCenterId->milk_feeding_id;
 
+        $disabilities = Child::disabilityOptions();
+
 
         return view(
             'child.edit',
@@ -547,7 +551,8 @@ class ChildController extends Controller
                 'isChildPantawid',
                 'isChildPWD',
                 'childCenterId',
-                'centerName'
+                'centerName',
+                'disabilities',
             ])
         );
     }
