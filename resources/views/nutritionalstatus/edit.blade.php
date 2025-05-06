@@ -94,8 +94,8 @@
                                     @endif
                                 </div>
                                 <div class="col-md-12 mt-2 text-sm">
-                                    <label for="weight">Weight<b class="text-red-600">*</b></label>
-                                    <input type="text"
+                                    <label for="weight">Weight (kg)<b class="text-red-600">*</b></label>
+                                    <input type="number"
                                         class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                         id="weight" name='weight' value="{{ old('weight', $entryDetails->weight) }}">
                                     @if ($errors->has('weight'))
@@ -103,8 +103,8 @@
                                     @endif
                                 </div>
                                 <div class="col-md-12 mt-2 text-sm">
-                                    <label for="height">Height<b class="text-red-600">*</b></label>
-                                    <input type="text"
+                                    <label for="height">Height (cm)<b class="text-red-600">*</b></label>
+                                    <input type="number"
                                         class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                         id="height" name='height' value="{{ old('height', $entryDetails->height) }}">
                                     @if ($errors->has('height'))

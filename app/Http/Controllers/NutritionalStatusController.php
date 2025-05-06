@@ -274,10 +274,9 @@ class NutritionalStatusController extends Controller
 
         return redirect()->route('nutritionalstatus.index')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
     }
-    public function storeExitDetails(StoreNutritionalStatusRequest $request)
+
+    public function storeExitDetails(Request $request)
     {
-        dd('hi');
-        $validatedData = $request->validated();
 
         $exitRecord = NutritionalStatus::where('child_id', $request->exitchild_id)->count();
 
@@ -285,7 +284,7 @@ class NutritionalStatusController extends Controller
             return redirect()->back()->with(['error' => 'Exit details already exist for this child.']);
         }
 
-        if ($exitRecord) { $validatedData = $request->validated();
+        if ($exitRecord) {
 
             $exitWeightForAge = null;
             $exitHeightForAge = null;

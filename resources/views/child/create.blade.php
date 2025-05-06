@@ -244,15 +244,21 @@
                                         <label for="is_person_with_disability_no">No</label>
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm additional-details">
-                                        <label for="person_with_disability_details">Disability Details:</label><b
-                                        class="text-red-600">*</b>
-                                        <input type="text" class="form-control rounded border-gray-300"
-                                            id="person_with_disability_details" name="person_with_disability_details"
-                                            placeholder="Please specify" disabled
-                                            value="{{ old('person_with_disability_details', session('step1Data.person_with_disability_details')) }}">
+                                        <label for="person_with_disability_details">Disability Details:</label><b class="text-red-600">*</b>
+                                        <select class="form-control rounded border-gray-300"
+                                                id="person_with_disability_details"
+                                                name="person_with_disability_details"
+                                                disabled>
+                                            <option value="">-- Select Disability --</option>
+                                            @foreach ($disabilities as $disability)
+                                                <option value="{{ $disability }}"
+                                                    {{ old('person_with_disability_details', session('step1Data.person_with_disability_details')) == $disability ? 'selected' : '' }}>
+                                                    {{ $disability }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                         @if ($errors->has('person_with_disability_details'))
-                                            <span
-                                                class="text-xs text-red-600">{{ $errors->first('person_with_disability_details') }}</span>
+                                            <span class="text-xs text-red-600">{{ $errors->first('person_with_disability_details') }}</span>
                                         @endif
                                     </div>
 

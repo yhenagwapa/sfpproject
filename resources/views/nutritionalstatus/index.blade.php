@@ -94,16 +94,16 @@
                                         @endif
                                     </div>
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="weight">Weight<b class="text-red-600">*</b></label>
-                                        <input type="text" class="form-control rounded border-gray-300" id="weight"
+                                        <label for="weight">Weight (kg)<b class="text-red-600">*</b></label>
+                                        <input type="number" class="form-control rounded border-gray-300" id="weight"
                                             name='weight' value="{{ old('weight') }}">
                                         @if ($errors->has('weight'))
                                             <span class="text-xs text-red-600">{{ $errors->first('weight') }}</span>
                                         @endif
                                     </div>
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="height">Height<b class="text-red-600">*</b></label>
-                                        <input type="text" class="form-control rounded border-gray-300" id="height"
+                                        <label for="height">Height (cm)<b class="text-red-600">*</b></label>
+                                        <input type="number" class="form-control rounded border-gray-300" id="height"
                                             name='height' value="{{ old('height') }}">
                                         @if ($errors->has('height'))
                                             <span class="text-xs text-red-600">{{ $errors->first('height') }}</span>
@@ -177,8 +177,8 @@
                                     <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
 
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="exitweight">Weight<b class="text-red-600">*</b></label>
-                                        <input type="text" class="form-control rounded border-gray-300" id="exitweight"
+                                        <label for="exitweight">Weight (kg)<b class="text-red-600">*</b></label>
+                                        <input type="number" class="form-control rounded border-gray-300" id="exitweight"
                                             name='exitweight' value="{{ old('exitweight') }}">
                                         @if ($errors->has('exitweight'))
                                             <span class="text-xs text-red-600">{{ $errors->first('weight') }}</span>
@@ -186,8 +186,8 @@
 
                                     </div>
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="exitheight">Height<b class="text-red-600">*</b></label>
-                                        <input type="text" class="form-control rounded border-gray-300" id="exitheight"
+                                        <label for="exitheight">Height (cm)<b class="text-red-600">*</b></label>
+                                        <input type="number" class="form-control rounded border-gray-300" id="exitheight"
                                             name='exitheight' value="{{ old('exitheight') }}">
                                         @if ($errors->has('exitheight'))
                                             <span class="text-xs text-red-600">{{ $errors->first('exitheight') }}</span>
