@@ -138,6 +138,7 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
 
     Route::post('/reports/show', [ReportsController::class, 'show'])->name('reports.show');
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::get('/reports/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
     Route::post('/reports/print/malnourished', [PDFController::class, 'printMalnourish'])->name('reports.print.malnourished');
     Route::post('/reports/print/disabilities', [PDFController::class, 'printDisabilities'])->name('reports.print.disabilities');

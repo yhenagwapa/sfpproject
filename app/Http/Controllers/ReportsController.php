@@ -23,7 +23,7 @@ class ReportsController extends Controller
     }
     public function index(Request $request, Implementation $cycle)
     {
-        $cycleID = session('report_cycle_id');
+        $cycleID = session('report_cycle_id') ?? $request->cycle_id;
         $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
