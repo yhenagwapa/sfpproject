@@ -171,7 +171,7 @@ class ChildController extends Controller
     public function create(Request $request)
     {
         $this->authorize('create-child');
-        $cycleImplementations = Implementation::where('status', 'active')->where('type', 'regular')->get();
+        $cycleImplementations = Implementation::where('status', 'active')->where('type', 'regular')->first();
         $milkFeedings = Implementation::where('status', 'active')->where('type', 'milk')->get();
 
         $userID = auth()->id();

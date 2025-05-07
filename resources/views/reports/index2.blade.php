@@ -65,7 +65,6 @@
                                         <div class="col-md-6 text-base inline">
                                             <nav class="d-flex header-nav mt-2 mb-5">
                                                 @if (auth()->user()->hasRole('admin') ||
-                                                        auth()->user()->hasRole('lgu focal') ||
                                                         auth()->user()->hasRole('child development worker'))
 {{--                                                    <form id="printCDWForm" action="" method="POST" target="_blank">--}}
 {{--                                                        @csrf--}}

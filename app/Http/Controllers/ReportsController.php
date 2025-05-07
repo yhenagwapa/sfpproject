@@ -21,10 +21,13 @@ class ReportsController extends Controller
         $this->middleware('permission:create-cycle-implementation', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-cycle-implementation', ['only' => ['edit', 'update']]);
     }
-    public function index(Request $request, Implementation $cycle)
+    public function index(Request $request)
     {
         $cycleID = session('report_cycle_id') ?? $request->cycle_id;
         $cycle = Implementation::where('id', $cycleID)->first();
+
+        // add filter to session
+        session(['filter_cdc_id' => $request->center_name]);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');

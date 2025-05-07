@@ -550,8 +550,8 @@
                                         <label for="child_development_center_id">CDC or SNP <span
                                                 class="text-red-600">*</span></label>
                                         <select class="form-control rounded border-gray-300"
-                                            id="child_development_center_id" name='child_development_center_id'>
-                                            <option value="" disabled selected>Select CDC or SNP</option>
+                                            id="child_development_center_id" name='child_development_center_id' required>
+                                            <option value="" selected>Select CDC or SNP</option>
                                             @foreach ($centerNames as $center)
                                                 <option value="{{ $center->id }}"
                                                     {{ $center->id == old('child_development_center_id', session('step2Data.child_development_center_id')) ? 'selected' : '' }}>
@@ -568,17 +568,12 @@
                                     <div class='col-md-12 mt-4 text-gray-400 text-xs'>Implementation<hr></div>
 
                                     <div class="col-md-6 mt-3 text-sm">
-                                        <label for="implementation_id">Cycle Implementation</label>
-                                        <select class="form-control rounded border-gray-300" id="implementation_id"
-                                            name='implementation_id'>
-                                            <option value="" selected>Not Applicable</option>
-                                            @foreach ($cycleImplementations as $cycle)
-                                                <option value="{{ $cycle->id }}"
-                                                    {{ $cycle->id == old('implementation_id', session('step2Data.implementation_id')) ? 'selected' : '' }}>
-                                                    {{ $cycle->name }}
-                                                </option>
-                                            @endforeach
+                                        <label for="implementation_select">Cycle Implementation</label>
+                                        <select class="form-control rounded border-gray-300" id="implementation_select"
+                                            name='implementation_select' disabled>
+                                                <option value="{{ $cycleImplementations->id }}">{{ $cycleImplementations->name }}</option>
                                         </select>
+                                        <input type="hidden" id="implementation_id" name="implementation_id" value="{{ $cycleImplementations->id }}" />
                                     </div>
                                     <div class="col-md-6 mt-3 text-sm hidden">
                                         <label for="milk_feeding_id">Milk Feeding Implementation</label>
