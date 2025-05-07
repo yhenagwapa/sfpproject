@@ -49,11 +49,11 @@ class Child extends Model
             "Mental Disorder",
             "Multiple Disabilities",
             "Orthopedic Disability",
-            "Others",
             "Psychosocial Disability",
             "Rare Disease",
             "Speech Impairment",
             "Visual Impairment",
+            "Others",
         ];
     }
 
