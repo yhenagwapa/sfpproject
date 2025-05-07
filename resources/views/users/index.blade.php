@@ -45,7 +45,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Users</h5>
 
-                            {{--<div class="row">
+                            <div class="row">
                                 <div class="col-md-8 mt-3 text-sm">
                                 </div>
                                 <div class="col-md-4 mt-3 justify-end">
@@ -61,7 +61,7 @@
                                         autocomplete="off">
                                     </form>
                                 </div>
-                            </div>--}}
+                            </div>
 
                             <div class="table-responsive" id="users-table">
                                 @include('users.partials.users-table', ['users' => $users])
