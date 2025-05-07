@@ -138,17 +138,17 @@
         <tbody class="undernourished-after-120-table text-xs">
             @foreach ($centers as $center)
                 <tr>
-                    <td>{{ $center->center_name }}</td>
+                    <td>{{ $center->center->center_name }}</td>
                     <td>
                         @php
-                            $users = $center->users->filter(function ($user) {
+                            $users = $center->users->get()->filter(function ($user) {
                                 return $user->roles->contains('name', 'child development worker');
                             });
                         @endphp
 
                         @if ($users->isNotEmpty())
                             @foreach ($users as $user)
-                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
+                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }} <br />
                             @endforeach
                         @else
                             No Nurse Assigned

@@ -171,7 +171,7 @@ trait FocalReports
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('filter_cdc_id');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
@@ -398,7 +398,7 @@ trait FocalReports
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('filter_cdc_id');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
