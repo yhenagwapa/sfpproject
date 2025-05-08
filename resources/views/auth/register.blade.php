@@ -110,7 +110,7 @@
                                                 <select
                                                     class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                                     id="extension_name" name='extension_name'>
-                                                    <option value="" disabled selected></option>
+                                                    <option value="" selected></option>
                                                     <option value="Jr"
                                                         {{ old('extension_name') == 'jr' ? 'selected' : '' }}>Jr
                                                     </option>

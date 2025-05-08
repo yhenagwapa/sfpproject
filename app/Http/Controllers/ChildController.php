@@ -34,6 +34,7 @@ class ChildController extends Controller
     }
     public function index(Request $request, Implementation $cycle)
     {
+
         $cycle = Implementation::where('status', 'active')->first();
         $search = $request->get('search');
         $cdcId = $request->input('center_name', 'all_center');

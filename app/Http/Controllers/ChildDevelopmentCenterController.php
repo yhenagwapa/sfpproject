@@ -87,9 +87,31 @@ class ChildDevelopmentCenterController extends Controller
         $encoders = User::role('encoder')->get();
         $psgc = new Psgc();
 
+
         $provinces = $psgc->getProvinces();
         $cities = $psgc->allCities();
         $barangays = $psgc->allBarangays();
+
+        // if not admin, filter provinces and cities
+        if (!$request->user()->hasRole('admin')) {
+
+            // Filter the grouped cities collection to only include entries matching the user's city PSGC
+            $userCity = Psgc::find(auth()->user()->psgc_id)->city_name_psgc;
+            $cities = $cities->map(function ($cityGroup) use ($userCity) {
+                return $cityGroup->filter(function ($city) use ($userCity) {
+                    return $city['psgc'] === $userCity;
+                })->values();
+            })->filter(function ($cityGroup) {
+                return $cityGroup->isNotEmpty();
+            });
+
+            // Keep only the user's province in the list
+            $userProvince = Psgc::find(auth()->user()->psgc_id)->province_psgc;
+            $provinces = array_filter($provinces, function ($name, $psgc) use ($userProvince) {
+                return $psgc === $userProvince;
+            }, ARRAY_FILTER_USE_BOTH);
+
+        }
 
         if ($request->has('province_psgc') && !empty($request->input('province_psgc'))) {
             $province_psgc = $request->input('province_psgc');
@@ -194,6 +216,27 @@ class ChildDevelopmentCenterController extends Controller
         $provinces = $psgc->getProvinces();
         $cities = $psgc->allCities();
         $barangays = $psgc->allBarangays();
+
+        // if not admin, filter provinces and cities
+        if (!$request->user()->hasRole('admin')) {
+
+            // Filter the grouped cities collection to only include entries matching the user's city PSGC
+            $userCity = Psgc::find(auth()->user()->psgc_id)->city_name_psgc;
+            $cities = $cities->map(function ($cityGroup) use ($userCity) {
+                return $cityGroup->filter(function ($city) use ($userCity) {
+                    return $city['psgc'] === $userCity;
+                })->values();
+            })->filter(function ($cityGroup) {
+                return $cityGroup->isNotEmpty();
+            });
+
+            // Keep only the user's province in the list
+            $userProvince = Psgc::find(auth()->user()->psgc_id)->province_psgc;
+            $provinces = array_filter($provinces, function ($name, $psgc) use ($userProvince) {
+                return $psgc === $userProvince;
+            }, ARRAY_FILTER_USE_BOTH);
+
+        }
 
         return view('centers.edit', [
             'center' => $center,
