@@ -24,7 +24,6 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
         if (session('center_id')){
             return [
                 'center_name' => ['required', 'string', 'max:255'],
-                'assigned_pdo_user_id' => ['required', 'exists:users,id'],
                 'assigned_focal_user_id' => ['required', 'exists:users,id'],
                 'assigned_worker_user_id' => ['required', 'exists:users,id'],
                 'assigned_encoder_user_id' => ['nullable','exists:users,id'],

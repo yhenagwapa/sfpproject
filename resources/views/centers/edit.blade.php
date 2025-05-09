@@ -73,10 +73,11 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-6 mt-3 text-sm">
+                            <input id="assigned_pdo_user_id" name="assigned_pdo_user_id" value="1" type="hidden">
+                            <div class="col-md-6 mt-3 text-sm hidden">
                                 <label for="assigned_user_id">Assigned PDO<b class='text-red-600'>*</b></label>
-                                <select class="form-control rounded border-gray-300" id="assigned_pdo_user_id"
-                                    name="assigned_pdo_user_id">
+                                <select class="form-control rounded border-gray-300" id="assigned_pdo_user_id_"
+                                    name="assigned_pdo_user_id_">
                                     <option value="" selected>Select PDO</option>
                                     @foreach ($pdos as $pdo)
                                         <option value="{{ $pdo->id }}"

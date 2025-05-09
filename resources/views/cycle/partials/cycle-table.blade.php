@@ -81,7 +81,7 @@
                     });
                 </script>
 
-                <td class="inline-flex items-center justify-center">
+                <td class="">
                     <div class="inline-flex space-x-3">
                         @can('edit-cycle-implementation')
 

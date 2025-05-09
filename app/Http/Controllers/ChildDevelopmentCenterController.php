@@ -260,6 +260,7 @@ class ChildDevelopmentCenterController extends Controller
      */
     public function update(UpdateChildDevelopmentCenterRequest $request)
     {
+
         $validatedData = $request->validated();
 
         $centerID = $request->input('center_id'); //session('center_id');

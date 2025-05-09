@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'lastname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'firstname' => ['required', 'string', 'regex:/^[a-zA-Z\s]+$/'],
             'middlename' => ['nullable', 'string', 'regex:/^[a-zA-Z\s]+$/'],
@@ -37,9 +37,22 @@ class UpdateUserRequest extends FormRequest
             'city_name_psgc' => ['required'],
             'brgy_psgc' => ['required'],
 
-            'email' => ['required', 'string', 'max:255', Rule::unique('users', 'email')->ignore($this->user_id)],
-            'password' => ['nullable', 'confirmed', Rules\Password::min(8)->mixedCase()->numbers()->symbols()],
+            'email' => ['required', 'string', 'max:255'],
+            'password' => ['nullable', 'confirmed'],
         ];
+
+        // Only add the unique rule if the email has changed
+        if ($this->filled('email') && $this->email !== auth()->user()->email) {
+            $rules['email'][] = Rule::unique('users', 'email')->ignore($this->user_id);
+        }
+
+        // Only apply complex password rules if password is present
+        if ($this->filled('password')) {
+            $rules['password'][] = RulesPassword::min(8)->mixedCase()->numbers()->symbols();
+        }
+
+        return $rules;
+
     }
 
     public function messages()
