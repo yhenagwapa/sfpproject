@@ -105,8 +105,8 @@
                         @can('view-cycle-implementation')
                             <form id="reportForm-{{ $cycle->id }}" action="{{ route('reports.show') }}" method="POST">
                                 @csrf
-                                <input type="hidden" name="cycle_id" id="cycle_id_{{ $cycle->id }}" value="{{ $cycle->id }}">
-                                <button class="relative inline-flex items-center" href="#" onclick="saveAndSubmit('{{ $cycle->id }}', 'editCycle')">
+                                <input type="hidden" name="cycle_id" value="{{ $cycle->id }}">
+                                <button type="submit" class="relative inline-flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="#3968d2" class="w-5 h-5">
                                         <path stroke-linecap="round" stroke-linejoin="round"

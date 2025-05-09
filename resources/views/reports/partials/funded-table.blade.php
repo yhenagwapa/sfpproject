@@ -6,6 +6,7 @@
 	        <th>Sex</th>
             <th>Date of Birth</th>
             <th>Undernourished</th>
+            <th>Malnourished</th>
         </tr>
     </thead>
     <tbody>
@@ -24,6 +25,15 @@
                         Not Applicable
                     @endif
                 </td>
+                <td>
+                    @if ($fundedChild->nutritionalStatus->isNotEmpty() && $fundedChild->nutritionalStatus->first()->is_malnourish)
+                        Yes
+                    @elseif ($fundedChild->nutritionalStatus->isNotEmpty() && !$fundedChild->nutritionalStatus->first()->is_malnourish)
+                        No
+                    @else
+                        Not Applicable
+                    @endif
+                </td>
             </tr>
         @empty
             <tr>
@@ -32,8 +42,8 @@
 		        <td></td>
 		        <td></td>
                 <td></td>
+                <td></td>
             </tr>
-           @endforelse
-
+        @endforelse
     </tbody>
 </table>

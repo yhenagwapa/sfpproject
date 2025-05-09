@@ -76,7 +76,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
-        <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
+        <p>{{ $cycle->name}} ( SY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )</p>
         <p><b>MASTERLIST OF BENEFICIARIES</b></p>
         <br>
     </div>
@@ -130,12 +130,12 @@
             </tr>
         </thead>
         <tbody class="funded-table text-xs">
-            @foreach ($isFunded as $fundedChild)
+            @forelse ($isFunded as $fundedChild)
                 <tr>
                     <td style="width: 10px;">{{ $loop->iteration }}</td>
                     <td>{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td style="white-space: nowrap;">{{ $fundedChild->date_of_birth }}</td>
+                    <td style="white-space: nowrap;">{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
 
                     <td style="white-space: nowrap;">{{ optional($fundedChild->nutritionalStatus->first())->actual_weighing_date }}</td>
                     <td>{{ optional($fundedChild->nutritionalStatus->first())->weight }}</td>
@@ -160,16 +160,13 @@
                     <td>{{ $fundedChild->is_child_of_soloparent ? 'Yes' : 'No' }}</td>
                     <td>{{ $fundedChild->is_lactose_intolerant ? 'Yes' : 'No' }}</td>
                 </tr>
-            @endforeach
-            @if (count($isFunded) <= 0)
+            @empty
                 <tr>
                     <td class="text-center" colspan="20">
-                        @if (empty($search))
-                            No Data found
-                        @endif
+                        No Data found
                     </td>
                 </tr>
-            @endif
+            @endforelse
         </tbody>
     </table>
 
@@ -213,10 +210,16 @@
             </tr>
         </table>
     </div>
-
-    <footer>
-
-    </footer>
-
+    <div class="footer">
+        <span class="pagenum"></span>
+    </div>
 </body>
+<script type="text/php">
+    if (isset($pdf)) {
+        $pdf->page_script('
+            $font = $fontMetrics->get_font("Arial", "normal");
+            $pdf->text(520, 820, "Page {PAGE_NUM} of {PAGE_COUNT}", $font, 10);
+        ');
+    }
+</script>
 </html>

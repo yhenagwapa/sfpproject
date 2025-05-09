@@ -37,6 +37,10 @@ class ChildDevelopmentCenter extends Model
     {
         return $this->belongsToMany(User::class, 'user_centers', 'child_development_center_id', 'user_id')->withTimestamps();
     }
+    public function records()
+    {
+        return $this->hasMany(ChildCenter::class);
+    }
 
 
 

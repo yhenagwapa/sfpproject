@@ -1,7 +1,7 @@
-<table id='children-table' class="table datatable mt-3 text-left">
-    <thead class="text-base">
+<table id='children-table' class="table datatable mt-3 text-left text-sm">
+    <thead class="text-sm">
         <tr>
-            <th>No.</th>
+            <th>ID</th>
             <th>Child Name</th>
             <th>Sex</th>
             <th data-type="date" data-format="MM/DD/YYYY">Date of Birth</th>
@@ -15,7 +15,7 @@
 
         @forelse ($children as $child)
             <tr>
-                <td>{{ $loop->iteration }}</td>
+                <td>{{ $child->id }}</td>
                 <td>{{ $child->full_name }}</td>
                 <td>{{ $child->sex->name }}</td>
                 <td>{{ \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') }}</td>

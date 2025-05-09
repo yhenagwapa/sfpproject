@@ -277,16 +277,10 @@
                     let link = event.target.closest("a"); // Detect if a link is clicked
                     if (link && !window.location.pathname.includes('/child/create')) {
                         event.preventDefault(); // Stop normal navigation
-
                         document.getElementById("redirect_url").value = link.href;
-
                         document.getElementById("clear-session-form").submit();
                     }
                 });
-
-                if (!window.location.pathname.includes('/reports')) {
-                    localStorage.removeItem('selected_cycle_id');
-                }
 
                 window.submitCancelForm = function () {
                     var cancelForm = document.getElementById('cancel-form');

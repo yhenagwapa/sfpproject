@@ -6,13 +6,13 @@ use Spatie\Activitylog\Models\Activity;
 class ActivityLogController extends Controller
 {
     public function index()
-    { 
-        $activities = Activity::with('causer', 'subject')->latest()->paginate(10);
+    {
+        $activities = Activity::with('causer', 'subject')->latest()->paginate(20);
 
         $groupedActivities = [];
 
         foreach ($activities as $activityLog) {
-            
+
             $logData = $activityLog->properties;
 
             $logDataArray = json_decode($logData, true);
@@ -21,7 +21,7 @@ class ActivityLogController extends Controller
                 $eventType = 'updated';
                 $oldAttributes = $logDataArray['old'];
                 $newAttributes = $logDataArray['attributes'];
-        
+
                 $changedFields = [];
                 foreach ($oldAttributes as $key => $oldValue) {
                     $newValue = $newAttributes[$key] ?? null;
@@ -36,7 +36,7 @@ class ActivityLogController extends Controller
                 $eventType = 'created';
                 $changedFields = $logDataArray['attributes'];
             }
-        
+
             $groupedActivities[] = [
                 'activity_id' => $activityLog->id,
                 'description' => $activityLog->description,
