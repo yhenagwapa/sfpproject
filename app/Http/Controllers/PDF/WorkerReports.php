@@ -21,7 +21,7 @@ trait WorkerReports
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = session('filter_cdc_id');
+        $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
@@ -42,21 +42,19 @@ trait WorkerReports
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id);
                     })
-                    ->paginate(5);
+                    ->get();
 
             } else {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
-                    if ($cycle) {
-                        $query->where('child_development_center_id', $cdcId)
+                    $query->where('child_development_center_id', $cdcId->center_name)
                             ->where('implementation_id', $cycle->id)
                             ->where('funded', 1)
                             ->where('status', 'active');
-                    }
-                })
+                    })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id);
                     })
-                    ->paginate(5);
+                    ->get();
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
@@ -79,7 +77,7 @@ trait WorkerReports
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id);
                     })
-                    ->paginate(5);
+                    ->get();
             } else {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                     if ($cycle) {
@@ -92,7 +90,7 @@ trait WorkerReports
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id);
                     })
-                    ->paginate(5);
+                    ->get();
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
 
@@ -104,9 +102,9 @@ trait WorkerReports
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
-                'margin-right' => 1,
+                'margin-right' => .05,
                 'margin-bottom' => 0.5,
-                'margin-left' => 1
+                'margin-left' => 0.5
             ]);
 
         return $pdf->stream($cycle->name . ' Masterlist.pdf');
