@@ -101,6 +101,7 @@
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
             {{ $cycle->name}} ( SY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )</p>
+            {{ $cycle->name}} ( SY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )</p>
         <p><b>WEIGHT AND HEIGHT MONITORING</b></p>
         <br>
     </div>
@@ -127,6 +128,7 @@
     <table id='monitoring-table' class="table datatable monitoring-table w-full">
         <thead>
             <tr>
+                {{-- <th class="border border-white" rowspan="2">No.<th> --}}
                 {{-- <th class="border border-white" rowspan="2">No.<th> --}}
                 <th class="border border-white w-40" rowspan="2">Name of Child</th>
                 <th class="border border-white" rowspan="2">Sex</th>
@@ -164,6 +166,7 @@
         <tbody class="monitoring-table text-xs">
             @foreach ($isFunded as $fundedChild)
                 <tr>
+                    {{-- <td>{{ $loop->iteration }}</td> --}}
                     {{-- <td>{{ $loop->iteration }}</td> --}}
                     <td>{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
@@ -238,9 +241,11 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                     @endif
                 </tr>
             @endforeach
+            {{-- @if (count($isFunded) <= 0)
             {{-- @if (count($isFunded) <= 0)
                 <tr>
                     <td class="text-center" colspan="6">
@@ -249,6 +254,7 @@
                         @endif
                     </td>
                 </tr>
+            @endif --}}
             @endif --}}
         </tbody>
     </table>

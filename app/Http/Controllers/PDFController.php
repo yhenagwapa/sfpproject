@@ -3704,6 +3704,7 @@ class PDFController extends Controller
                     })
                     ->whereHas('nutritionalStatus')
                     ->get();
+                    ->get();
 
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
             }
@@ -3726,6 +3727,7 @@ class PDFController extends Controller
                     })
                     ->whereHas('nutritionalStatus')
                     ->get();
+                    ->get();
 
             } else {
                 $isFunded = Child::with('records', 'nutritionalStatus', 'sex')
@@ -3736,6 +3738,7 @@ class PDFController extends Controller
                             ->where('status', 'active');
                     })
                     ->whereHas('nutritionalStatus')
+                    ->get();
                     ->get();
 
                 $selectedCenter = ChildDevelopmentCenter::find($cdcId);
@@ -3758,6 +3761,8 @@ class PDFController extends Controller
     {
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::where('id', $cycleID)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -3767,8 +3772,10 @@ class PDFController extends Controller
         $selectedCenter = null;
 
         $unfundedChildren = Child::with('records', 'sex', 'psgc')
+        $unfundedChildren = Child::with('records', 'sex', 'psgc')
             ->whereHas('records', function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id)
+                    ->where('status', 'active')
                     ->where('status', 'active')
                     ->where('funded', 0);
             });

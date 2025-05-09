@@ -52,7 +52,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $user->full_name}}</h5>
 
-                            <form class="row" action="{{ route('users.update') }}" method="POST">
+                            <form class="row" action="{{ route('users.update') }}" method="POST" autocomplete="off">
                                 @csrf
                                 @method("patch")
 
@@ -226,9 +226,9 @@
 
                                 <div class="col-md-6 mt-3 text-sm relative">
                                     <label for="password">Password</label>
-                                    <input name="password" type="password"
+                                    <input name="password" type="password" autocomplete="off"
                                         class="password form-control rounded border-gray-300 w-full pr-10"
-                                        id="password" value="{{ old('password') }}">
+                                        id="password">
                                     <button type="button" class="absolute top-7 right-5 text-gray-500"
                                         onclick="togglePassword('password', this)">
                                         <span class="icon">
@@ -247,10 +247,10 @@
 
                                 <div class="col-md-6 mt-3 text-sm relative">
                                     <label for="password_confirmation">Confirm Password</label>
-                                    <input name="password_confirmation" type="password"
+                                    <input name="password_confirmation" type="password" autocomplete="off"
                                         class="password form-control rounded border-gray-300 w-full pr-10"
                                         id="password_confirmation"
-                                        value="{{ old('password_confirmation') }}">
+                                        >
                                     <button type="button" class="absolute top-7 right-5 text-gray-500"
                                         onclick="togglePassword('password_confirmation', this)">
                                         <span class="icon">

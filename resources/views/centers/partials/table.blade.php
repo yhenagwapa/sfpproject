@@ -54,7 +54,7 @@
                 <td>{{ $center['focal'] ? $center['focal']->getFullNameAttribute() : 'N/A' }}</td>
                 <td>{{ $center['pdo'] ? $center['pdo']->getFullNameAttribute() : 'N/A' }}</td>
                 <td>{{ $center['address'] }}</td>
-                <td class="inline-flex items-center justify-center">
+                <td class="">
                     <div class="flex space-x-3">
                         @can(['edit-child-development-center'])
                             <form id="center_id-{{ $center['center_id'] }}" action="{{ route('centers.show') }}" method="POST" class="inline">
