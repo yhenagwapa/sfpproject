@@ -100,7 +100,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
-            {{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
+            {{ $cycle->name}} ( SY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )</p>
         <p><b>WEIGHT AND HEIGHT MONITORING</b></p>
         <br>
     </div>
@@ -127,6 +127,7 @@
     <table id='monitoring-table' class="table datatable monitoring-table w-full">
         <thead>
             <tr>
+                {{-- <th class="border border-white" rowspan="2">No.<th> --}}
                 <th class="border border-white w-40" rowspan="2">Name of Child</th>
                 <th class="border border-white" rowspan="2">Sex</th>
                 <th class="border border-white w-24" rowspan="2">Date of Birth</th>
@@ -147,14 +148,14 @@
             <tr>
                 <th class="border border-white">Month</th>
                 <th class="border border-white">Year</th>
-                <th class="border border-white">Weight for Age</th>
-                <th class="border border-white">Weight for Height</th>
-                <th class="border border-white">Height for Age</th>
-                <th class="border border-white">Month</th>
-                <th class="border border-white">Year</th>
-                <th class="border border-white">Weight for Age</th>
-                <th class="border border-white">Weight for Height</th>
-                <th class="border border-white">Height for Age</th>
+                <th class="border border-white" style="white-space: wrap;">Weight for Age</th>
+                <th class="border border-white" style="white-space: wrap;">Weight for Height</th>
+                <th class="border border-white" style="white-space: wrap;">Height for Age</th>
+                <th class="border border-white" style="white-space: wrap;">Month</th>
+                <th class="border border-white" style="white-space: wrap;">Year</th>
+                <th class="border border-white" style="white-space: wrap;">Weight for Age</th>
+                <th class="border border-white" style="white-space: wrap;">Weight for Height</th>
+                <th class="border border-white" style="white-space: wrap;">Height for Age</th>
             </tr>
         </thead>
         {{-- @php
@@ -163,9 +164,10 @@
         <tbody class="monitoring-table text-xs">
             @foreach ($isFunded as $fundedChild)
                 <tr>
+                    {{-- <td>{{ $loop->iteration }}</td> --}}
                     <td>{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name }}</td>
-                    <td>{{ $fundedChild->date_of_birth }}</td>
+                    <td>{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
 
                     @if ($fundedChild->nutritionalStatus)
                         @if ($fundedChild->nutritionalStatus->first() === null)
@@ -212,7 +214,6 @@
                                 @endif
                             </td>
                         @else
-
                             <td></td>
                             <td></td>
                             <td></td>
@@ -236,11 +237,11 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                     @endif
                 </tr>
-
             @endforeach
-            @if (count($isFunded) <= 0)
+            {{-- @if (count($isFunded) <= 0)
                 <tr>
                     <td class="text-center" colspan="6">
                         @if (empty($search))
@@ -248,7 +249,7 @@
                         @endif
                     </td>
                 </tr>
-            @endif
+            @endif --}}
         </tbody>
     </table>
 

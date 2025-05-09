@@ -90,10 +90,6 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
     Route::post('/attendance/{child_id}/store-cycle-attendance', [AttendanceController::class, 'storeCycleAttendance'])->name('attendance.storeCycleAttendance');
     Route::post('/attendance/{child_id}/store-milk-attendance', [AttendanceController::class, 'storeMilkAttendance'])->name('attendance.storeMilkAttendance');
 
-    Route::get('/nutritionalstatus/redirect', function () {
-        return view('nutritionalstatus.redirect');
-    })->name('nutritionalstatus.redirect');
-
     Route::post('/nutritionalstatus/create', [NutritionalStatusController::class, 'create'])->name('nutritionalstatus.create');
     Route::get('/nutritionalstatus', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
     Route::post('/nutritionalstatus/store-entry', [NutritionalStatusController::class, 'storeUponEntryDetails'])->name('nutritionalstatus.storeUponEntryDetails');
@@ -122,24 +118,24 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
 
 
     //--------
-    Route::get('/cycle/reports', [ReportsController::class, 'index2'])->name(name: 'cycle.reports.index');
-    Route::get('/cycle/reports/print/masterlist', [PDFController::class, 'printMasterlist2'])->name('cycle.reports.print.masterlist');
-    Route::get('/cycle/reports/print/age-bracket-upon-entry', [PDFController::class, 'printAgeBracketUponEntry2'])->name('cycle.reports.print.age-bracket-upon-entry');
-    Route::get('/cycle/reports/print/age-bracket-after-120', [PDFController::class, 'printAgeBracketAfter1202'])->name('cycle.reports.print.age-bracket-after-120');
-    Route::get('/cycle/reports/print/monitoring', [PDFController::class, 'printMonitoring2'])->name('cycle.reports.print.monitoring');
-    Route::get('/cycle/reports/print/unfunded', [PDFController::class, 'printUnfunded2'])->name('cycle.reports.print.unfunded');
-    Route::get('/cycle/reports/print/malnourished', [PDFController::class, 'printMalnourish2'])->name('cycle.reports.print.malnourished');
-    Route::get('/cycle/reports/print/disabilities', [PDFController::class, 'printDisabilities2'])->name('cycle.reports.print.disabilities');
-    Route::get('/cycle/reports/print/undernourished-upon-entry', [PDFController::class, 'printUndernourishedUponEntry2'])->name('cycle.reports.print.undernourished-upon-entry');
-    Route::get('/cycle/reports/print/undernourished-after-120', [PDFController::class, 'printUndernourishedAfter1202'])->name('cycle.reports.print.undernourished-after-120');
-    Route::get('/cycle/reports/print/nutritional-status-upon-entry', [PDFController::class, 'printNutritionalStatusUponEntry'])->name('cycle.reports.print.nutritional-status-upon-entry');
-    Route::get('/cycle/reports/print/nutritional-status-after-120', [PDFController::class, 'printNutritionalStatusAfter120'])->name('cycle.reports.print.nutritional-status-after-120');
+    // Route::get('/cycle/reports', [ReportsController::class, 'index'])->name(name: 'cycle.reports.index');
+    // Route::get('/cycle/reports/print/masterlist', [PDFController::class, 'printMasterlist'])->name('cycle.reports.print.masterlist');
+    // Route::get('/cycle/reports/print/age-bracket-upon-entry', [PDFController::class, 'printAgeBracketUponEntry2'])->name('cycle.reports.print.age-bracket-upon-entry');
+    // Route::get('/cycle/reports/print/age-bracket-after-120', [PDFController::class, 'printAgeBracketAfter1202'])->name('cycle.reports.print.age-bracket-after-120');
+    // Route::get('/cycle/reports/print/monitoring', [PDFController::class, 'printMonitoring2'])->name('cycle.reports.print.monitoring');
+    // Route::get('/cycle/reports/print/unfunded', [PDFController::class, 'printUnfunded2'])->name('cycle.reports.print.unfunded');
+    // Route::get('/cycle/reports/print/malnourished', [PDFController::class, 'printMalnourish2'])->name('cycle.reports.print.malnourished');
+    // Route::get('/cycle/reports/print/disabilities', [PDFController::class, 'printDisabilities2'])->name('cycle.reports.print.disabilities');
+    // Route::get('/cycle/reports/print/undernourished-upon-entry', [PDFController::class, 'printUndernourishedUponEntry2'])->name('cycle.reports.print.undernourished-upon-entry');
+    // Route::get('/cycle/reports/print/undernourished-after-120', [PDFController::class, 'printUndernourishedAfter1202'])->name('cycle.reports.print.undernourished-after-120');
+    // Route::get('/cycle/reports/print/nutritional-status-upon-entry', [PDFController::class, 'printNutritionalStatusUponEntry'])->name('cycle.reports.print.nutritional-status-upon-entry');
+    // Route::get('/cycle/reports/print/nutritional-status-after-120', [PDFController::class, 'printNutritionalStatusAfter120'])->name('cycle.reports.print.nutritional-status-after-120');
     //--------
 
     Route::post('/reports/show', [ReportsController::class, 'show'])->name('reports.show');
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
-    Route::get('/reports/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
+    Route::post('/reports/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
     Route::post('/reports/print/malnourished', [PDFController::class, 'printMalnourish'])->name('reports.print.malnourished');
     Route::post('/reports/print/disabilities', [PDFController::class, 'printDisabilities'])->name('reports.print.disabilities');
     Route::post('/reports/print/undernourished-upon-entry', [PDFController::class, 'printUndernourishedUponEntry'])->name('reports.print.undernourished-upon-entry');

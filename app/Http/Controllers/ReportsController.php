@@ -23,7 +23,7 @@ class ReportsController extends Controller
     }
     public function index(Request $request)
     {
-        $cycleID = session('report_cycle_id') ?? $request->cycle_id;
+        $cycleID = session('report_cycle_id');
         $cycle = Implementation::where('id', $cycleID)->first();
 
         // add filter to session
@@ -53,7 +53,7 @@ class ReportsController extends Controller
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);
                 })
-                ->paginate(5);
+                ->paginate(10);
 
                 $childCount = $isFunded->count();
 
@@ -68,7 +68,7 @@ class ReportsController extends Controller
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);
                 })
-                ->paginate(5);
+                ->paginate(10);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
                 $childCount = $isFunded->count();
             }
@@ -92,7 +92,7 @@ class ReportsController extends Controller
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);
                 })
-                ->paginate(5);
+                ->paginate(10);
 
                 $childCount = $isFunded->count();
             } else {
@@ -106,102 +106,102 @@ class ReportsController extends Controller
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);
                 })
-                ->paginate(5);
+                ->paginate(10);
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
                 $childCount = $isFunded->count();
             }
 
         }
 
-        return view('reports.index2', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames', 'childCount'));
+        return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames', 'childCount'));
     }
 
-    public function index2($cycleId, Request $request)
-    {
-        $cycle = Implementation::where('id', $cycleId)->first();
+    // public function index2($cycleId, Request $request)
+    // {
+    //     $cycle = Implementation::where('id', $cycleId)->first();
 
-        if (!$cycle) {
-            return back()->with('error', 'No active regular cycle found.');
-        }
+    //     if (!$cycle) {
+    //         return back()->with('error', 'No active regular cycle found.');
+    //     }
 
-        $cdcId = $request->input('center_name', 'all_center');
-        $selectedCenter = null;
+    //     $cdcId = $request->input('center_name', 'all_center');
+    //     $selectedCenter = null;
 
-        $fundedChildren = Child::with('records','nutritionalStatus', 'sex');
+    //     $fundedChildren = Child::with('records','nutritionalStatus', 'sex');
 
-        if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::all()->keyBy('id');
-            $centerIDs = $centers->pluck('id');
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+    //     if (auth()->user()->hasRole('admin')) {
+    //         $centers = ChildDevelopmentCenter::all()->keyBy('id');
+    //         $centerIDs = $centers->pluck('id');
+    //         $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                    $query->where('implementation_id', $cycle->id)
-                        ->where('funded', 1);
-                })
-                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id);
-                    })
-                    ->paginate(5);
+    //         if ($cdcId == 'all_center') {
+    //             $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
+    //                 $query->where('implementation_id', $cycle->id)
+    //                     ->where('funded', 1);
+    //             })
+    //                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+    //                     $query->where('implementation_id', $cycle->id);
+    //                 })
+    //                 ->paginate(5);
 
-                $childCount = $isFunded->count();
+    //             $childCount = $isFunded->count();
 
-            } else {
+    //         } else {
 
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($request, $cycle) {
-                    $query->where('child_development_center_id', $request->center_name)
-                        ->where('implementation_id', $cycle->id)
-                        ->where('funded', 1);
-                })
-                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id);
-                    })
-                    ->paginate(5);
-                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
-                $childCount = $isFunded->count();
-            }
+    //             $isFunded = $fundedChildren->whereHas('records', function ($query) use ($request, $cycle) {
+    //                 $query->where('child_development_center_id', $request->center_name)
+    //                     ->where('implementation_id', $cycle->id)
+    //                     ->where('funded', 1);
+    //             })
+    //                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+    //                     $query->where('implementation_id', $cycle->id);
+    //                 })
+    //                 ->paginate(5);
+    //             $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
+    //             $childCount = $isFunded->count();
+    //         }
 
-        } else {
-            $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
+    //     } else {
+    //         $userID = auth()->id();
+    //         $centers = UserCenter::where('user_id', $userID)->get();
+    //         $centerIDs = $centers->pluck('child_development_center_id');
 
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+    //         $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
-                    if ($cycle) {
-                        $query->whereIn('child_development_center_id', $centerIDs)
-                            ->where('implementation_id', $cycle->id)
-                            ->where('funded', 1);
-                    }
-                })
-                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id);
-                    })
-                    ->paginate(5);
+    //         if ($cdcId == 'all_center') {
+    //             $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
+    //                 if ($cycle) {
+    //                     $query->whereIn('child_development_center_id', $centerIDs)
+    //                         ->where('implementation_id', $cycle->id)
+    //                         ->where('funded', 1);
+    //                 }
+    //             })
+    //                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+    //                     $query->where('implementation_id', $cycle->id);
+    //                 })
+    //                 ->paginate(5);
 
-                $childCount = $isFunded->count();
-            } else {
+    //             $childCount = $isFunded->count();
+    //         } else {
 
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
-                    $query->where('child_development_center_id', $cdcId)
-                        ->where('implementation_id', $cycle->id)
-                        ->where('funded', 1);
+    //             $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
+    //                 $query->where('child_development_center_id', $cdcId)
+    //                     ->where('implementation_id', $cycle->id)
+    //                     ->where('funded', 1);
 
-                })
-                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id);
-                    })
-                    ->paginate(5);
-                $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
-                $childCount = $isFunded->count();
-            }
+    //             })
+    //                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+    //                     $query->where('implementation_id', $cycle->id);
+    //                 })
+    //                 ->paginate(5);
+    //             $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
+    //             $childCount = $isFunded->count();
+    //         }
 
-        }
+    //     }
 
-        return view('reports.index2', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames', 'childCount'));
-    }
+    //     return view('reports.index2', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames', 'childCount'));
+    // }
 
     public function create()
     {
