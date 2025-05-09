@@ -247,7 +247,8 @@ class NutritionalStatusController extends Controller
             $entryIsMalnourished = false;
         }
 
-        if ($entryWeightForAge != 'Normal' || $entryWeightForAge != 'Overweight' || $entryHeightForAge != 'Tall' || $entryHeightForAge != 'Normal' || $entryWeightForHeight != 'Normal' || $entryWeightForHeight != 'Overweight' || $entryWeightForHeight != 'Obese') {
+        if ($entryWeightForAge != 'Normal' || $entryWeightForAge != 'Overweight' ||
+            $entryHeightForAge != 'Normal' || $entryWeightForHeight != 'Normal' || $entryWeightForHeight != 'Overweight' || $entryWeightForHeight != 'Obese') {
             $entryIsUndernourished = true;
         } else {
             $entryIsUndernourished = false;

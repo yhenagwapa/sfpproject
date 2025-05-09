@@ -151,7 +151,7 @@
                                 {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
                             @endforeach
                         @else
-                            No Nurse Assigned
+                            No Worker Assigned
                         @endif
                     </td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['2_years_old']['male'] ?? 0 }}</td>

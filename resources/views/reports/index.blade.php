@@ -288,7 +288,6 @@
                                                                     @csrf
                                                                     <input type="hidden" name="cycle_id2" id="cycle_id2"
                                                                         value="{{ $cycle->id }}">
-                                                                        value="{{ $cycle->id }}">
                                                                     <input type="hidden" name="center_name2"
                                                                         id="center_id2" value="">
                                                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
@@ -516,24 +515,16 @@
                                     <script>
                                         function workerReport(reportType) {
                                             let printCDWForm = document.getElementById('printCDWForm');
-                                        function workerReport(reportType) {
-                                            let printCDWForm = document.getElementById('printCDWForm');
                                             let centerInput = document.getElementById('center_name');
                                             let centerHiddenInput = document.getElementById('center_id');
                                             let cycle_id = document.getElementById('cycle_id');
-                                            let cycle_id = document.getElementById('cycle_id');
 
                                             let center_name = centerInput.value;
 
                                             centerHiddenInput.value = center_name;
-                                            let center_name = centerInput.value;
 
-                                            centerHiddenInput.value = center_name;
-
-                                            printCDWForm.action = `{{ url('') }}/reports/print/${reportType}`;
                                             printCDWForm.action = `{{ url('') }}/reports/print/${reportType}`;
                                             printCDWForm.target = "_blank";
-                                            printCDWForm.submit();
                                             printCDWForm.submit();
                                         }
 
@@ -542,12 +533,7 @@
                                             let centerInput = document.getElementById('center_name');
                                             let centerHiddenInput = document.getElementById('center_id');
                                             let cycle_id = document.getElementById('cycle_id2');
-                                            let cycle_id = document.getElementById('cycle_id2');
 
-                                            let center_name = centerInput.value;
-
-                                            printFocalForm.action = `{{ url('') }}/reports/print/${reportType}`;
-                                            printFocalForm.target = "_blank";
                                             let center_name = centerInput.value;
 
                                             printFocalForm.action = `{{ url('') }}/reports/print/${reportType}`;

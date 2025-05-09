@@ -136,22 +136,22 @@
             </tr>
         </thead>
         <tbody class="undernourished-after-120-table text-xs">
-            @foreach ($centers as $center)
+            @forelse ($centers as $center)
                 <tr>
-                    <td>{{ $center->center->center_name }}</td>
+                    <td>{{ $center->center_name }}</td>
                     <td>
                         @php
-                            $users = $center->users->get()->filter(function ($user) {
+                            $users = $center->users->filter(function ($user) {
                                 return $user->roles->contains('name', 'child development worker');
                             });
                         @endphp
 
                         @if ($users->isNotEmpty())
                             @foreach ($users as $user)
-                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }} <br />
+                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
                             @endforeach
                         @else
-                            No Nurse Assigned
+                            No Worker Assigned
                         @endif
                     </td>
                     <td>{{ $exitAgeGroupsPerCenter[$center->id]['2_years_old']['male'] ?? 0 }}</td>
@@ -178,16 +178,14 @@
                     <td>{{ $exitAgeGroupsPerCenter[$center->id]['vitamin_a']['male'] ?? 0 }}</td>
                     <td>{{ $exitAgeGroupsPerCenter[$center->id]['vitamin_a ']['female'] ?? 0 }}</td>
                 </tr>
-            @endforeach
-            @if (count($centers) <= 0)
+            @empty
                 <tr>
-                    <td class="text-center" colspan="6">
-                        @if (empty($search))
-                            No Data found
-                        @endif
+                    <td class="text-center" colspan="20">
+                        No Data found
                     </td>
                 </tr>
-            @endif
+            @endforelse
+
         </tbody>
     </table>
 
