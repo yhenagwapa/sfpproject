@@ -365,7 +365,9 @@ class PDFController extends Controller
             ];
         });
 
-        $ageGroupsPerCenter = $fundedChildren->groupBy(function ($child) {
+        $ageGroupsPerCenter = $fundedChildren->filter(function ($child) {
+            return $child->records->firstWhere('status', 'active') !== null;
+        })->groupBy(function ($child) {
             $activeRecord = $child->records->firstWhere('status', 'active');
             return $activeRecord->child_development_center_id;
         })->mapWithKeys(function ($childrenByCenter, $centerID) use ($nutritionalStatusOccurrences) {
