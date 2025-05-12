@@ -22,12 +22,10 @@ class StoreChildRequest extends FormRequest
      */
     public function rules(): array
     {
-        $step = $this->input('step', 1);
 
         $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
         $maxDate = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
 
-        if ($step == 1) {
             return [
                 'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
@@ -47,20 +45,10 @@ class StoreChildRequest extends FormRequest
                 'is_indigenous_people' => ['required', 'boolean'],
                 'is_child_of_soloparent' => ['required', 'boolean'],
                 'is_lactose_intolerant' => ['required', 'boolean'],
+                'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
+                'implementation_id' => ['required', 'exists:implementations,id'],
+                'is_funded' => ['required', 'boolean'],
             ];
-
-        } elseif ($step == 2) {
-            return [
-                'child_development_center_id' => $this->input('action') === 'next'
-                    ? ['required', 'exists:child_development_centers,id']
-                    : ['nullable', 'exists:child_development_centers,id'],
-
-                'implementation_id' => ['nullable', 'exists:implementations,id'],
-                'milk_feeding_id' => ['nullable', 'exists:implementations,id'],
-            ];
-        }
-
-        return [];
     }
     public function messages()
     {
@@ -83,15 +71,16 @@ class StoreChildRequest extends FormRequest
             'brgy_psgc.required' => 'Please select a barangay.',
             'address.required' => 'Please fill in address.',
 
-            'is_pantawid.required' => 'Please select yes or no.',
-            'is_person_with_disability.required' => 'Please select yes or no.',
+            'is_pantawid.required' => 'Please select an option.',
+            'is_person_with_disability.required' => 'Please select an option.',
             'pantawid_details.required_if' => 'Please specify pantawid details.',
             'person_with_disability_details.required_if' => 'Please fill in disability details.',
-            'is_indigenous_people.required' => 'Please select yes or no.',
-            'is_child_of_soloparent.required' => 'Please select yes or no.',
-            'is_lactose_intolerant.required' => 'Please select yes or no.',
+            'is_indigenous_people.required' => 'Please select an option.',
+            'is_child_of_soloparent.required' => 'Please select an option.',
+            'is_lactose_intolerant.required' => 'Please select an option.',
 
             'child_development_center_id.required' => 'Please select CDC or SNP.',
+            'is_funded' => 'Please select an option.'
         ];
 
     }

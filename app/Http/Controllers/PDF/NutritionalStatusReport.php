@@ -27,7 +27,7 @@ trait NutritionalStatusReport
         $cycle = Implementation::where('id', $cycleID)->first();
 
         // get all child development centers under the cycle
-        $cc = ChildCenter::where('implementation_id', $cycleID)->get();
+        $cc = ChildCenter::where('implementation_id', $cycleID)->where('status', 'active')->get();
         $cdc = ChildDevelopmentCenter::whereIn('id', $cc->pluck('child_development_center_id'))->get();
 
         $categoriesHFA = ['normal', 'stunted', 'severely stunted', 'tall', 'total'];
@@ -48,7 +48,7 @@ trait NutritionalStatusReport
 
         $pdf = PDF::loadView('reports.print.nutritional-status.after120',
             compact('report', 'cycle', 'province', 'city',
-            'cc', 'categoriesHFA', 'categoriesWFA', 'categoriesWFH'))
+            'cc','centers', 'categoriesHFA', 'categoriesWFA', 'categoriesWFH'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -84,14 +84,14 @@ trait NutritionalStatusReport
         }
 
         // additional values for PDF
-        $centers = UserCenter::where('user_id', auth()->id())->get();
+        $centers = UserCenter::with('users')->where('user_id', auth()->id())->get();
         $getPsgc = $centers->pluck('psgc_id');
         $province = Psgc::whereIn('psgc_id', $getPsgc)->pluck('province_name')->unique();
         $city = Psgc::whereIn('psgc_id', $getPsgc)->pluck('city_name')->unique();
 
         $pdf = PDF::loadView('reports.print.nutritional-status.upon-entry',
             compact('report', 'cycle', 'province', 'city',
-                'cc', 'categoriesHFA', 'categoriesWFA', 'categoriesWFH'))
+                'cc', 'centers', 'categoriesHFA', 'categoriesWFA', 'categoriesWFH'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -107,7 +107,21 @@ trait NutritionalStatusReport
     {
         $center['center_id'] = $cdc->id;
         $center['cdc_name'] = $cdc->center_name;
-        $center['worker_name'] = ''; // TODO get Name of Child Development Worker
+
+        $workers = UserCenter::with('users.roles')->get();  // Load users along with their roles
+
+// Create an array to hold the worker names per center
+$centersWithWorkers = [];
+
+foreach ($workers as $worker) {
+    // Filter users based on the 'child development worker' role
+    $workerNames = $worker->users->filter(function ($user) {
+        return $user->roles->contains('name', 'child development worker');
+    })->pluck('full_name');  // Pluck just the full_name of the workers
+
+    // Store the worker names in the array
+    $centersWithWorkers[$worker->id] = $workerNames;
+}      
 
         $genders = ['male', 'female'];
         $ages = ['2', '3', '4', '5'];
