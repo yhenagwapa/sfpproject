@@ -48,7 +48,7 @@
                             <div class="row">
                                 <div class="col-md-8 mt-3 text-sm">
                                 </div>
-                                <div class="col-md-4 mt-3 justify-end">
+                  {{--              <div class="col-md-4 mt-3 justify-end">
                                     <form class="flex" id="search-form" method="GET" action="{{ route('users.index') }}">
                                         <label for="q-input" class="text-base mt-2 mr-2">Search:</label>
                                         <input
@@ -60,10 +60,10 @@
                                         class="form-control rounded border-gray-300"
                                         autocomplete="off">
                                     </form>
-                                </div>
+                                </div>--}}
                             </div>
 
-                            <div class="table-responsive" id="users-table">
+                            <div class="table-responsive">
                                 @include('users.partials.users-table', ['users' => $users])
                             </div>
 
@@ -77,14 +77,20 @@
     @vite(['resources/js/app.js'])
 
     <script>
-        (function(){
-          let timer;
-          $('#q-input').on('keyup', function(){
-            clearTimeout(timer);
-            timer = setTimeout(function(){
-              $('#search-form').submit();
-            }, 300);
-          });
-        })();
+        jQuery(document).ready(function () {
+            jQuery("#users-table").DataTable({
+                paging: true,             // Enable paging
+                pageLength: 10,           // Show 10 entries per page
+                lengthChange: false,      // Hide the dropdown to change entry count
+                searching: true,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    {
+                        orderSequence: ["desc", "asc"]
+                    },
+                ],
+                info: false
+            });
+        });
     </script>
 @endsection

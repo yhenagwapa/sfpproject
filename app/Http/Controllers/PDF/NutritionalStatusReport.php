@@ -107,7 +107,21 @@ trait NutritionalStatusReport
     {
         $center['center_id'] = $cdc->id;
         $center['cdc_name'] = $cdc->center_name;
-        $center['center_worker'] = '';
+
+        $workers = UserCenter::with('users.roles')->get();  // Load users along with their roles
+
+// Create an array to hold the worker names per center
+$centersWithWorkers = [];
+
+foreach ($workers as $worker) {
+    // Filter users based on the 'child development worker' role
+    $workerNames = $worker->users->filter(function ($user) {
+        return $user->roles->contains('name', 'child development worker');
+    })->pluck('full_name');  // Pluck just the full_name of the workers
+
+    // Store the worker names in the array
+    $centersWithWorkers[$worker->id] = $workerNames;
+}
 
         $genders = ['male', 'female'];
         $ages = ['2', '3', '4', '5'];
@@ -138,19 +152,32 @@ trait NutritionalStatusReport
                 foreach ($ns as $n) {
 
                     foreach ($categories as $category) {
+
                         foreach ($genders as $gender) {
+
                             foreach ($ages as $age) {
+
                                 if (strtolower($n->$categoryType) == $category && strtolower($n->gender) == strtolower($gender) && $n->age_in_years == $age) {
                                     $center[$category][$gender][$age]++;
                                     $center['total'][$gender][$age]++;
                                 }
+
+//                                $center['total'][$category][$gender][$age]++;
                             }
+
+//                            $center['total'][$category][$gender]++;
                         }
+
+//                        $center['total'][$category]++;
                     }
+
+//                    $center['total']++;
                 }
             }
 
         }
+
+        dd($center);
 
         return $center;
     }

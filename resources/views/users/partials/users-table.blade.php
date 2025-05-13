@@ -217,16 +217,13 @@
             </tr>
         @empty
             <tr>
-                <td><strong>No User Found!</strong></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td colspan="8"><strong>No User Found!</strong></td>
             </tr>
         @endforelse
     </tbody>
 </table>
+{{--
 <div>
     {{ $users->links() }}
 </div>
+--}}

@@ -54,7 +54,13 @@
             <tr>
                 <td>{{ ++$i }}</td>
                 <td>{{ $center['cdc_name'] }}</td>
-                <td></td>
+                <td>
+{{--                    @forelse ($center['worker_name'] as $name)--}}
+{{--                        {{ $name }}<br>--}}
+{{--                    @empty--}}
+{{--                        <em>No workers assigned</em>--}}
+{{--                    @endforelse--}}
+                </td>
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>

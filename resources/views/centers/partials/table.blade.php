@@ -14,11 +14,11 @@
         </div>
         <div class="col-md-2">
         </div>
-        <div class="col-md-4 flex">
+{{--        <div class="col-md-4 flex">
             <label for="q-input" class="text-base mt-2 mr-2">Search:</label>
             <input type="text" name="search" id="q-input" value="{{ request('search') }}" placeholder="Search" class="form-control rounded border-gray-300"
             autocomplete="off">
-        </div>
+        </div>--}}
     </form>
 </div>
 
@@ -39,7 +39,7 @@
             <th>Child Development Worker</th>
             <th>Encoder</th>
             <th>LGU Focal</th>
-            <th>PDO</th>
+{{--            <th>PDO</th>--}}
             <th>Address</th>
             <th>Action</th>
         </tr>
@@ -52,7 +52,7 @@
                 <td>{{ $center['worker'] ? $center['worker']->getFullNameAttribute() : 'N/A' }}</td>
                 <td>{{ $center['encoder'] ? $center['encoder']->getFullNameAttribute() : 'N/A' }}</td>
                 <td>{{ $center['focal'] ? $center['focal']->getFullNameAttribute() : 'N/A' }}</td>
-                <td>{{ $center['pdo'] ? $center['pdo']->getFullNameAttribute() : 'N/A' }}</td>
+{{--                <td>{{ $center['pdo'] ? $center['pdo']->getFullNameAttribute() : 'N/A' }}</td>--}}
                 <td>{{ $center['address'] }}</td>
                 <td class="">
                     <div class="flex space-x-3">
@@ -96,9 +96,9 @@
         </script>
     </tbody>
 </table>
-<div>
+{{--<div>
     {{ $centers->links() }}
-</div>
+</div>--}}
 
 
 

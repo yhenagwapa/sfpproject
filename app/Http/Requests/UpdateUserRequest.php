@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rule;
 use App\Models\User;
+use Illuminate\Validation\Rules\Password;
 
 
 class UpdateUserRequest extends FormRequest
@@ -39,7 +40,13 @@ class UpdateUserRequest extends FormRequest
         ];
 
         if ($this->filled('password')) {
-            $rules['password'][] = Rule::min(8)->mixedCase()->numbers()->symbols();
+            $rules['password'] = [
+                'required', // or sometimes 'nullable' depending on use case
+                Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols(),
+            ];
         }
 
         return $rules;

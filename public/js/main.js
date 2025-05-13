@@ -212,7 +212,7 @@ import 'datatables.net-bs5';
     /**
      * Initiate Datatables
      */
-    $(document).ready(function () {
+   /* $(document).ready(function () {
         $('.datatable').each(function () {
             if (!$.fn.DataTable.isDataTable(this)) {
                 let isAttendanceTable = $(this).hasClass('cycle-attendance-table'); // Check if it's the attendance table
@@ -231,7 +231,7 @@ import 'datatables.net-bs5';
                 });
             }
         });
-    });
+    });*/
 
     /**
      * Autoresize echart charts

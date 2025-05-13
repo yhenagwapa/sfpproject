@@ -48,14 +48,34 @@
                             <div id="activitylogs" class="table-responsive">
                                 @include('activitylogs.partials.activitylogs-table', ['groupedActivities' => $groupedActivities])
                             </div>
-                            <div class="pagination-links">
+{{--                            <div class="pagination-links">
                                 {{ $activities->links() }}
-                            </div>
+                            </div>--}}
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/js/app.js'])
+
+    <script>
+        jQuery(document).ready(function () {
+            jQuery("#activitylogs-table").DataTable({
+                paging: true,             // Enable paging
+                pageLength: 10,           // Show 10 entries per page
+                lengthChange: false,      // Hide the dropdown to change entry count
+                searching: true,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    {
+                        orderSequence: ["desc", "asc"]
+                    },
+                ],
+                info: false
+            });
+        });
+    </script>
 
 @endsection
