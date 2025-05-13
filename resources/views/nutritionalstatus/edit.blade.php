@@ -59,153 +59,73 @@
     <section class="section">
         <div class="row">
             <div class="col-lg-3">
-                @can(['edit-nutritional-status'])
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h5 class='col-md-12'>Upon entry details</h5>
-                            </div>
-                            <form id="main-form" method="POST"
-                                action="{{ route('nutritionalstatus.updateUponEntryDetails') }}">
-                                @csrf
-                                @method('PATCH')
-
-                                <input type="hidden" name="form_type" value="entry">
-                                <input type="hidden" name="child_id" value="{{ $child->id }}">
-                                <input type="hidden" name="exitWeighing" value="{{ $exitDetails ? $exitDetails->actual_weighing_date : null }}">
-                                <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
-
-                                <div class="col-md-12 mt-2 text-sm">
-                                    <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
-                                    <input type="date" class="form-control rounded border-gray-300" id="deworming_date"
-                                        name='deworming_date' value="{{ old('deworming_date', $entryDetails->deworming_date) }}"
-                                        >
-                                    @if ($errors->has('deworming_date'))
-                                        <span class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
-                                    @endif
-                                </div>
-                                <div class="col-md-12 mt-2 text-sm">
-                                    <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
-                                    <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date"
-                                        name='vitamin_a_date' value="{{ old('vitamin_a_date', $entryDetails->vitamin_a_date) }}"
-                                        >
-                                    @if ($errors->has('vitamin_a_date'))
-                                        <span class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
-                                    @endif
-                                </div>
-                                <div class="col-md-12 mt-2 text-sm">
-                                    <label for="weight">Weight (kg)<b class="text-red-600">*</b></label>
-                                    <input type="number"
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="weight" name='weight' value="{{ old('weight', $entryDetails->weight) }}">
-                                    @if ($errors->has('weight'))
-                                        <span class="text-xs text-red-600">{{ $errors->first('weight') }}</span>
-                                    @endif
-                                </div>
-                                <div class="col-md-12 mt-2 text-sm">
-                                    <label for="height">Height (cm)<b class="text-red-600">*</b></label>
-                                    <input type="number"
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="height" name='height' value="{{ old('height', $entryDetails->height) }}">
-                                    @if ($errors->has('height'))
-                                        <span class="text-xs text-red-600">{{ $errors->first('height') }}</span>
-                                    @endif
-                                </div>
-
-                                <div class="col-md-12 mt-2 text-sm">
-                                    <label for="actual_weighing_date">Actual date of weighing<b
-                                            class="text-red-600">*</b></label>
-                                    <input type="date"
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="actual_weighing_date" name='actual_weighing_date'
-                                        value="{{ old('actual_weighing_date', $entryDetails->actual_weighing_date) }}">
-                                    @if ($errors->has('actual_weighing_date'))
-                                        <span class="text-xs text-red-600">{{ $errors->first('actual_weighing_date') }}</span>
-                                    @endif
-                                </div>
-
-                                <div class="modal fade" id="verticalycentered" tabindex="-1">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title text-red-600">Confirmation</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Are you sure you want to save these changes?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit"
-                                                    class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                                    data-bs-dismiss="modal">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="col-md-12 flex mt-4 justify-end text-right">
-                                <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
-                                    data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
-
-                                <form id="cancel-form" method="get" action="{{ route('nutritionalstatus.index') }}">
-                                </form>
-
-                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    @if($hasUponExitData)
+                @if(session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status'))
+                    @if($entryDetails->edit_counter != 2)
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title">
-                                    <h5 class='col-md-12'>After 120-feeding details</h5>
+                                    <h5 class='col-md-12'>Upon entry details</h5>
                                 </div>
-                                <form method="POST"
-                                    action="{{ route('nutritionalstatus.updateAfter120Details') }}">
+                                <form id="main-form" method="POST"
+                                    action="{{ route('nutritionalstatus.updateUponEntryDetails') }}">
                                     @csrf
                                     @method('PATCH')
 
-                                    <input type="hidden" name="form_type" value="exit">
-                                    <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
-                                    <input type="hidden" name="entryWeighing" value="{{ $entryDetails->actual_weighing_date }}">
+                                    <input type="hidden" name="form_type" value="entry">
+                                    <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                    <input type="hidden" name="exitWeighing" value="{{ $exitDetails ? $exitDetails->actual_weighing_date : null }}">
                                     <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
 
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="exitweight">Weight<b class="text-red-600">*</b></label>
-                                        <input type="text"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="exitweight" name='exitweight' value="{{ old('exitweight', $exitDetails->weight) }}">
-                                        @if ($errors->has('exitweight'))
-                                            <span class="text-xs text-red-600">{{ $errors->first('exitweight') }}</span>
+                                        <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
+                                        <input type="date" class="form-control rounded border-gray-300" id="deworming_date"
+                                            name='deworming_date' value="{{ old('deworming_date', $entryDetails->deworming_date) }}"
+                                            >
+                                        @if ($errors->has('deworming_date'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
                                         @endif
                                     </div>
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="exitheight">Height<b class="text-red-600">*</b></label>
-                                        <input type="text"
+                                        <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
+                                        <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date"
+                                            name='vitamin_a_date' value="{{ old('vitamin_a_date', $entryDetails->vitamin_a_date) }}"
+                                            >
+                                        @if ($errors->has('vitamin_a_date'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="col-md-12 mt-2 text-sm">
+                                        <label for="weight">Weight (kg)<b class="text-red-600">*</b></label>
+                                        <input type="number"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="exitheight" name='exitheight' value="{{ old('exitheight', $exitDetails->height) }}">
-                                        @if ($errors->has('exitheight'))
-                                            <span class="text-xs text-red-600">{{ $errors->first('exitheight') }}</span>
+                                            id="weight" name='weight' value="{{ old('weight', $entryDetails->weight) }}">
+                                        @if ($errors->has('weight'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('weight') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="col-md-12 mt-2 text-sm">
+                                        <label for="height">Height (cm)<b class="text-red-600">*</b></label>
+                                        <input type="number"
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="height" name='height' value="{{ old('height', $entryDetails->height) }}">
+                                        @if ($errors->has('height'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('height') }}</span>
                                         @endif
                                     </div>
 
                                     <div class="col-md-12 mt-2 text-sm">
-                                        <label for="exitweighing_date">Actual date of weighing<b
+                                        <label for="actual_weighing_date">Actual date of weighing<b
                                                 class="text-red-600">*</b></label>
                                         <input type="date"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="exitweighing_date" name='exitweighing_date'
-                                            value="{{ old('exitweighing_date', $exitDetails->actual_weighing_date) }}">
-                                        @if ($errors->has('exitweighing_date'))
-                                            <span class="text-xs text-red-600">{{ $errors->first('exitweighing_date') }}</span>
+                                            id="actual_weighing_date" name='actual_weighing_date'
+                                            value="{{ old('actual_weighing_date', $entryDetails->actual_weighing_date) }}">
+                                        @if ($errors->has('actual_weighing_date'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('actual_weighing_date') }}</span>
                                         @endif
                                     </div>
 
-                                    <div class="modal fade" id="verticalycentered1" tabindex="-1">
+                                    <div class="modal fade" id="verticalycentered" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -214,7 +134,7 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Are you sure you want to save these changes in exit details?
+                                                    Are you sure you want to save these changes?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit"
@@ -226,22 +146,108 @@
                                         </div>
                                     </div>
                                 </form>
-
                                 <div class="col-md-12 flex mt-4 justify-end text-right">
-                                    <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
-                                        data-bs-toggle="modal" data-bs-target="#verticalycentered1">Save Changes</button>
+                                    <button type="button" id="saveEntryBtn" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
+                                        data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
 
-                                    <form id="cancel-form" method="GET" action="{{ route('nutritionalstatus.index') }}">
+                                    <form id="cancel-form" method="get" action="{{ route('nutritionalstatus.index') }}">
                                     </form>
 
-                                    <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                    <button type="button" id="cancelEntryBtn" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
                                         Cancel
                                     </button>
                                 </div>
                             </div>
                         </div>
                     @endif
-                @endcan
+                    @if($hasUponExitData)
+                        @if($exitDetails->edit_counter != 2)
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        <h5 class='col-md-12'>After 120-feeding details</h5>
+                                    </div>
+                                    <form method="POST"
+                                        action="{{ route('nutritionalstatus.updateAfter120Details') }}">
+                                        @csrf
+                                        @method('PATCH')
+
+                                        <input type="hidden" name="form_type" value="exit">
+                                        <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
+                                        <input type="hidden" name="entryWeighing" value="{{ $entryDetails->actual_weighing_date }}">
+                                        <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
+                                        <input type="hidden" name="exiteditcount" id="exiteditcount" value="{{ $exitDetails->edit_counter }}">
+
+
+                                        <div class="col-md-12 mt-2 text-sm">
+                                            <label for="exitweight">Weight<b class="text-red-600">*</b></label>
+                                            <input type="text"
+                                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                                id="exitweight" name='exitweight' value="{{ old('exitweight', $exitDetails->weight) }}">
+                                            @if ($errors->has('exitweight'))
+                                                <span class="text-xs text-red-600">{{ $errors->first('exitweight') }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-12 mt-2 text-sm">
+                                            <label for="exitheight">Height<b class="text-red-600">*</b></label>
+                                            <input type="text"
+                                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                                id="exitheight" name='exitheight' value="{{ old('exitheight', $exitDetails->height) }}">
+                                            @if ($errors->has('exitheight'))
+                                                <span class="text-xs text-red-600">{{ $errors->first('exitheight') }}</span>
+                                            @endif
+                                        </div>
+
+                                        <div class="col-md-12 mt-2 text-sm">
+                                            <label for="exitweighing_date">Actual date of weighing<b
+                                                    class="text-red-600">*</b></label>
+                                            <input type="date"
+                                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                                id="exitweighing_date" name='exitweighing_date'
+                                                value="{{ old('exitweighing_date', $exitDetails->actual_weighing_date) }}">
+                                            @if ($errors->has('exitweighing_date'))
+                                                <span class="text-xs text-red-600">{{ $errors->first('exitweighing_date') }}</span>
+                                            @endif
+                                        </div>
+
+                                        <div class="modal fade" id="verticalycentered1" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-red-600">Confirmation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to save these changes in exit details?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit"
+                                                            class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                                        <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
+                                                            data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <div class="col-md-12 flex mt-4 justify-end text-right">
+                                        <button type="button" id="saveExitBtn" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
+                                            data-bs-toggle="modal" data-bs-target="#verticalycentered1">Save Changes</button>
+
+                                        <form id="cancel-form" method="GET" action="{{ route('nutritionalstatus.index') }}">
+                                        </form>
+
+                                        <button type="button" id="cancelExitBtn" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
+                @endif
             </div>
             <div class="col-lg-9">
                 <div class="card">
@@ -258,4 +264,6 @@
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
+
+
 @endsection

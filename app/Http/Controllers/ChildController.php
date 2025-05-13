@@ -414,6 +414,8 @@ class ChildController extends Controller
 
         $childID = session('editing_child_id');
 
+        $editCounter = 0;
+
         $child = Child::findOrFail($childID);
 
         $query = Child::where('firstname', $validatedData['firstname'])
@@ -443,6 +445,12 @@ class ChildController extends Controller
             return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
         }
 
+        $childEditCount = $child->edit_counter;
+
+        if(!auth()->user()->hasRole('admin')) {
+            $editCounter = $childEditCount + 1;
+        }
+
         $updated = $child->update([
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
@@ -457,6 +465,7 @@ class ChildController extends Controller
             'is_indigenous_people' => $request->is_indigenous_people,
             'is_child_of_soloparent' => $request->is_child_of_soloparent,
             'is_lactose_intolerant' => $request->is_lactose_intolerant,
+            'edit_counter' => $editCounter,
             'updated_by_user_id' => auth()->id(),
         ]);
 

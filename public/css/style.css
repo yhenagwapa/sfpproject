@@ -497,6 +497,7 @@ input, select, table, td {
 
 .header-nav .nav-profile {
   color: #012970;
+  text-transform: capitalize;
 }
 
 .header-nav .nav-profile img {

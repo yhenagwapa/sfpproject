@@ -70,7 +70,7 @@ trait NutritionalStatusReport
         $cycle = Implementation::where('id', $cycleID)->first();
 
         // get all child development centers under the cycle
-        $cc = ChildCenter::where('implementation_id', $cycleID)->get();
+        $cc = ChildCenter::where('implementation_id', $cycleID)->where('status','active')->get();
         $cdc = ChildDevelopmentCenter::whereIn('id', $cc->pluck('child_development_center_id'))->get();
 
         $categoriesHFA = ['normal', 'stunted', 'severely stunted', 'tall', 'total'];
@@ -107,21 +107,7 @@ trait NutritionalStatusReport
     {
         $center['center_id'] = $cdc->id;
         $center['cdc_name'] = $cdc->center_name;
-
-        $workers = UserCenter::with('users.roles')->get();  // Load users along with their roles
-
-// Create an array to hold the worker names per center
-$centersWithWorkers = [];
-
-foreach ($workers as $worker) {
-    // Filter users based on the 'child development worker' role
-    $workerNames = $worker->users->filter(function ($user) {
-        return $user->roles->contains('name', 'child development worker');
-    })->pluck('full_name');  // Pluck just the full_name of the workers
-
-    // Store the worker names in the array
-    $centersWithWorkers[$worker->id] = $workerNames;
-}      
+        $center['center_worker'] = '';
 
         $genders = ['male', 'female'];
         $ages = ['2', '3', '4', '5'];
@@ -135,7 +121,9 @@ foreach ($workers as $worker) {
             }
         }
 
-        $cc = ChildCenter::where('child_development_center_id', $cdc->id)->where('implementation_id', $implementationId)->get();
+        $cc = ChildCenter::where('child_development_center_id', $cdc->id)
+                ->where('implementation_id', $implementationId)
+                ->where('status', 'active')->get();
 
         // for height for age
         foreach ($cc as $child) {
@@ -161,6 +149,7 @@ foreach ($workers as $worker) {
                     }
                 }
             }
+
         }
 
         return $center;

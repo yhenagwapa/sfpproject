@@ -28,7 +28,7 @@ class NutritionalStatusController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('permission:create-nutritional-status', ['only' => ['storeUponEntryDetails', 'storeExitDetails']]);
-        $this->middleware('permission:edit-nutritional-status', ['only' => ['edit', 'updateUponEntryDetails', 'updateAfter120Details' ]]);
+        // $this->middleware('permission:edit-nutritional-status', ['only' => ['edit', 'updateUponEntryDetails', 'updateAfter120Details' ]]);
     }
 
     public function index(Request $request)
@@ -246,13 +246,13 @@ class NutritionalStatusController extends Controller
             ($entryHeightForAge === 'Normal' || $entryHeightForAge === 'Tall') &&
             $entryWeightForHeight === 'Normal'
         );
-        
+
         $entryIsUndernourished = !(
             in_array($entryWeightForAge, ['Normal', 'Overweight']) &&
             $entryHeightForAge === 'Normal' &&
             in_array($entryWeightForHeight, ['Normal', 'Overweight', 'Obese'])
         );
-        
+
 
         $entryNutritionalStatus = NutritionalStatus::create([
             'implementation_id' => $cycleID,
@@ -441,13 +441,13 @@ class NutritionalStatusController extends Controller
                 ($exitHeightForAge === 'Normal' || $exitHeightForAge === 'Tall') &&
                 $exitWeightForHeight === 'Normal'
             );
-            
+
             $exitIsUndernourished = !(
                 in_array($exitWeightForAge, ['Normal', 'Overweight']) &&
                 $exitHeightForAge === 'Normal' &&
                 in_array($exitWeightForHeight, ['Normal', 'Overweight', 'Obese'])
             );
-            
+
 
             $exitNutritionalStatus = NutritionalStatus::create([
                 'implementation_id' => $cycleID,
@@ -531,6 +531,8 @@ class NutritionalStatusController extends Controller
         $validatedData = $request->validated();
 
         $childID = $validatedData['child_id'];
+
+        $editCounter = 0;
 
         $nutritionalStatus = NutritionalStatus::where('child_id', $childID)->first();
 
@@ -691,12 +693,16 @@ class NutritionalStatusController extends Controller
             ($entryHeightForAge === 'Normal' || $entryHeightForAge === 'Tall') &&
             $entryWeightForHeight === 'Normal'
         );
-        
+
         $entryIsUndernourished = !(
             in_array($entryWeightForAge, ['Normal', 'Overweight']) &&
             $entryHeightForAge === 'Normal' &&
             in_array($entryWeightForHeight, ['Normal', 'Overweight', 'Obese'])
-        );        
+        );
+
+        $nsEditCount = $nutritionalStatus->edit_counter;
+
+        $editCounter = $nsEditCount + 1;
 
         $nutritionalStatus->age_in_months = $entryAgeInMonths;
         $nutritionalStatus->age_in_years = $entryAgeInYears;
@@ -705,14 +711,17 @@ class NutritionalStatusController extends Controller
         $nutritionalStatus->weight_for_height = $entryWeightForHeight;
         $nutritionalStatus->is_malnourish = $entryIsMalnourished;
         $nutritionalStatus->is_undernourish = $entryIsUndernourished;
+
+        if(!auth()->user()->hasRole('admin')) {
+            $nutritionalStatus->edit_counter = $editCounter;
+        }
+
         $nutritionalStatus->updated_by_user_id = auth()->id();
 
         $nutritionalStatus->update();
 
-        // re-save the child
         session(['child_id' => $request->input('child_id')]);
 
-        // return redirect()->route('nutritionalstatus.index')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
         return redirect()->route('nutritionalstatus.index')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('child_id'));
 
     }
@@ -721,6 +730,8 @@ class NutritionalStatusController extends Controller
         $validatedData = $request->validated();
 
         $childID = session('exitchild_id');
+
+        $editCounter = 0;
 
         $nutritionalStatus = NutritionalStatus::where('child_id', $childID)
                 ->orderBy('created_at')
@@ -893,13 +904,16 @@ class NutritionalStatusController extends Controller
                 ($exitHeightForAge === 'Normal' || $exitHeightForAge === 'Tall') &&
                 $exitWeightForHeight === 'Normal'
             );
-            
+
             $exitIsUndernourished = !(
                 in_array($exitWeightForAge, ['Normal', 'Overweight']) &&
                 $exitHeightForAge === 'Normal' &&
                 in_array($exitWeightForHeight, ['Normal', 'Overweight', 'Obese'])
             );
-            
+
+            $nsEditCount = $nutritionalStatus->edit_counter;
+
+            $editCounter = $nsEditCount + 1;
 
             $nutritionalStatus->age_in_months = $exitAgeInMonths;
             $nutritionalStatus->age_in_years = $exitAgeInYears;
@@ -908,6 +922,11 @@ class NutritionalStatusController extends Controller
             $nutritionalStatus->weight_for_height = $exitWeightForHeight;
             $nutritionalStatus->is_malnourish = $exitIsMalnourished;
             $nutritionalStatus->is_undernourish = $exitIsUndernourished;
+
+            if(!auth()->user()->hasRole('admin')) {
+                $nutritionalStatus->edit_counter = $editCounter;
+            }
+
             $nutritionalStatus->updated_by_user_id = auth()->id();
 
             $nutritionalStatus->update();

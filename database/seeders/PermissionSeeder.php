@@ -100,6 +100,7 @@ class PermissionSeeder extends Seeder
         $encoder->givePermissionTo([
             'create-child',
             'view-child',
+            'create-nutritional-status',
         ]);
 
         $pdo->givePermissionTo([

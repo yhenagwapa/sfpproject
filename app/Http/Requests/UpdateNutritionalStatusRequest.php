@@ -17,7 +17,7 @@ class UpdateNutritionalStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return session('temp_can_edit') || $this->user()->can('edit-nutritional-status');
     }
 
     /**

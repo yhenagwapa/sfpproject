@@ -23,6 +23,7 @@
         <th rowspan="3">No.</th>
         <th rowspan="3">Name of Child Development Center (CDC)</th>
         <th rowspan="3">Name of Child Development Workers (Surname, First name, M.I)</th>
+        <th rowspan="3">Total No. Served</th>
         <th colspan="2">Total No. of CDCCh/SNP Served</th>
         <th colspan="8">Normal (N)</th>
         <th colspan="8">Wasted (W)</th>
@@ -57,6 +58,7 @@
             <td></td>
             <td>0</td>
             <td>0</td>
+            <td>0</td>
             @foreach ($categoriesWFH as $category)
                 @foreach (['male', 'female'] as $gender)
                     @foreach (['2', '3', '4', '5'] as $age)
@@ -68,7 +70,7 @@
     @endforeach
     @if (count($report) <= 0)
         <tr>
-            <td class="text-center" colspan="53">
+            <td class="text-center" colspan="54">
                 @if (empty($search))
                     No Data found
                 @endif
@@ -80,7 +82,7 @@
     <tr>
         <th colspan="3" style="text-align: right; padding-right: 5px;">Total per Age Bracket &gt; </th>
         <th rowspan="3">0</th>
-        @for($i = 0; $i <= 48; $i++)
+        @for($i = 0; $i <= 49; $i++)
         <th>0</th>
         @endfor
     </tr>

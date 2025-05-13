@@ -12,7 +12,7 @@ class UpdateChildRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return session('temp_can_edit') || $this->user()->can('edit-child');
+        return $this->user()->can('edit-child') || $this->getRequest()->attributes->get('temp_can_edit') === true;
     }
 
     /**

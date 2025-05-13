@@ -71,7 +71,7 @@
 
                 <ul class="d-flex list-unstyled mt-2">
                     <li class="nav-item dropdown pe-3">
-                        <button type="button" class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                        <button type="button" class="nav-link nav-profile d-flex align-items-center pe-0 uppercase" href="#"
                             data-bs-toggle="dropdown">
                             @auth
                                 @php
