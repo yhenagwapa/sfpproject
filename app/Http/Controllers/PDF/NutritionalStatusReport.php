@@ -121,7 +121,7 @@ foreach ($workers as $worker) {
 
     // Store the worker names in the array
     $centersWithWorkers[$worker->id] = $workerNames;
-}      
+}
 
         $genders = ['male', 'female'];
         $ages = ['2', '3', '4', '5'];
@@ -150,18 +150,31 @@ foreach ($workers as $worker) {
                 foreach ($ns as $n) {
 
                     foreach ($categories as $category) {
+
                         foreach ($genders as $gender) {
+
                             foreach ($ages as $age) {
+
                                 if (strtolower($n->$categoryType) == $category && strtolower($n->gender) == strtolower($gender) && $n->age_in_years == $age) {
                                     $center[$category][$gender][$age]++;
                                     $center['total'][$gender][$age]++;
                                 }
+
+//                                $center['total'][$category][$gender][$age]++;
                             }
+
+//                            $center['total'][$category][$gender]++;
                         }
+
+//                        $center['total'][$category]++;
                     }
+
+//                    $center['total']++;
                 }
             }
         }
+
+        dd($center);
 
         return $center;
     }
