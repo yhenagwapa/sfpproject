@@ -50,7 +50,7 @@
                             </div>
 
                             <!-- Centers Table -->
-                            <div class="table-responsive" id="centers-table">
+                            <div class="table-responsive">
                                 @include('centers.partials.table', ['centersWithRoles' => $centersWithRoles])
                             </div>
                         </div>
@@ -76,4 +76,21 @@
         })();
     </script>
 
+    <script>
+        jQuery(document).ready(function () {
+            jQuery("#centers-table").DataTable({
+                paging: true,             // Enable paging
+                pageLength: 10,           // Show 10 entries per page
+                lengthChange: false,      // Hide the dropdown to change entry count
+                searching: true,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    {
+                        orderSequence: ["desc", "asc"]
+                    },
+                ],
+                info: false
+            });
+        });
+    </script>
 @endsection

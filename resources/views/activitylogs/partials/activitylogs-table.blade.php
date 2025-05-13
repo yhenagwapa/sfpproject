@@ -18,7 +18,7 @@
                 <td>{{ $activity['description'] }}</td>
                 <td>{{ $activity['subject_type'] }}</td>
                 <td>{{ $activity['causer'] }}</td>
-                <td class="inline-flex items-center justify-center">
+                <td class="">
                     <div class="flex space-x-3">
                         <button class="relative inline-flex items-center justify-center" data-bs-toggle="modal" data-bs-target="#verticalycentered">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

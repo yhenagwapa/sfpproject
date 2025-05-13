@@ -32,7 +32,7 @@ class ChildController extends Controller
         $this->middleware('permission:edit-child', ['only' => ['edit', 'update']]);
         $this->middleware('permission:view-child', ['only' => ['index']]);
     }
-    public function index(Request $request, Implementation $cycle)
+    public function _index(Request $request, Implementation $cycle)
     {
 
         $permissionNames = auth()->user()->getAllPermissions()->pluck('name');
@@ -159,6 +159,73 @@ class ChildController extends Controller
         }
 
         return view('child.index', compact('children', 'centerNames', 'centers', 'cdcId', 'search'));
+    }
+
+    public function index(Request $request, Implementation $cycle)
+    {
+        $cdcId = $request->input('center_name', 'all_center');
+        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
+        $childrenQuery = clone $fundedChildren;
+
+        $userID = auth()->id();
+
+        if (auth()->user()->hasRole('admin')) {
+            $centers = UserCenter::all();
+            $centerIds = $centers->pluck('id');
+            $centerNames = ChildDevelopmentCenter::all()->keyBy('id');
+
+            if ($cdcId === 'all_center') {
+                $children = $childrenQuery->whereHas('records', function ($query) use ($centerIds) {
+                    $query->whereIn('child_development_center_id', $centerIds)
+                        ->where('status', 'active')
+                        ->groupBy('child_id');
+                })
+                    ->whereHas('sex')
+                    ->orderBy('sex_id', 'asc')
+                    ->get();
+
+            } else {
+
+                $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
+                    $query->where('child_development_center_id', $cdcId)
+                        ->where('status', 'active')
+                        ->groupBy('child_id');
+                })
+                    ->whereHas('sex')
+                    ->orderBy('sex_id', 'asc')
+                    ->get();
+            }
+
+        } else {
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+
+            if ($cdcId === 'all_center') {
+
+                $children = $childrenQuery->whereHas('records', function ($query) use ($centerIDs) {
+                    $query->whereIn('child_development_center_id', $centerIDs)
+                        ->where('status', 'active')
+                        ->groupBy('child_id');
+                })
+                    ->whereHas('sex')
+                    ->orderBy('sex_id', 'asc')
+                    ->get();
+
+
+            } else {
+                $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
+                    $query->where('child_development_center_id', $cdcId)
+                        ->where('status', 'active')
+                        ->groupBy('child_id');
+                })
+                    ->whereHas('sex')
+                    ->orderBy('sex_id', 'asc')
+                    ->get();
+            }
+        }
+
+        return view('child.index', compact('children', 'centerNames', 'centers', 'cdcId'));
     }
 
     /**

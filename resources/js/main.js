@@ -212,14 +212,15 @@ import 'datatables.net-bs5';
     /**
      * Initiate Datatables
      */
-    $(document).ready(function () {
+    /*$(document).ready(function () {
         $('.datatable').each(function () {
             if (!$.fn.DataTable.isDataTable(this)) {
                 let isAttendanceTable = $(this).hasClass('cycle-attendance-table'); // Check if it's the attendance table
 
                 $(this).DataTable({
-                    paging: false,
-                    lengthChange: false,
+                    paging: true,             // Enable paging
+                    pageLength: 10,           // Show 10 entries per page
+                    lengthChange: false,      // Hide the dropdown to change entry count
                     searching: false,
                     order: [[0, 'asc']],
                     columnDefs: [
@@ -231,7 +232,7 @@ import 'datatables.net-bs5';
                 });
             }
         });
-    });
+    });*/
 
 
     /**

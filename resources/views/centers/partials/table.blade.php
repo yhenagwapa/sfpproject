@@ -14,11 +14,11 @@
         </div>
         <div class="col-md-2">
         </div>
-        <div class="col-md-4 flex">
+{{--        <div class="col-md-4 flex">
             <label for="q-input" class="text-base mt-2 mr-2">Search:</label>
             <input type="text" name="search" id="q-input" value="{{ request('search') }}" placeholder="Search" class="form-control rounded border-gray-300"
             autocomplete="off">
-        </div>
+        </div>--}}
     </form>
 </div>
 
@@ -96,9 +96,9 @@
         </script>
     </tbody>
 </table>
-<div>
+{{--<div>
     {{ $centers->links() }}
-</div>
+</div>--}}
 
 
 
