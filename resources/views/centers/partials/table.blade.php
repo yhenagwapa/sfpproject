@@ -39,7 +39,7 @@
             <th>Child Development Worker</th>
             <th>Encoder</th>
             <th>LGU Focal</th>
-            <th>PDO</th>
+{{--            <th>PDO</th>--}}
             <th>Address</th>
             <th>Action</th>
         </tr>
@@ -52,7 +52,7 @@
                 <td>{{ $center['worker'] ? $center['worker']->getFullNameAttribute() : 'N/A' }}</td>
                 <td>{{ $center['encoder'] ? $center['encoder']->getFullNameAttribute() : 'N/A' }}</td>
                 <td>{{ $center['focal'] ? $center['focal']->getFullNameAttribute() : 'N/A' }}</td>
-                <td>{{ $center['pdo'] ? $center['pdo']->getFullNameAttribute() : 'N/A' }}</td>
+{{--                <td>{{ $center['pdo'] ? $center['pdo']->getFullNameAttribute() : 'N/A' }}</td>--}}
                 <td>{{ $center['address'] }}</td>
                 <td class="">
                     <div class="flex space-x-3">
