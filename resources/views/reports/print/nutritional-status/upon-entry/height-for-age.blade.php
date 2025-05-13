@@ -19,83 +19,137 @@
 <table id='after-120-hfa' class="table datatable nutritional-status w-full">
 
     <thead class="border bg-gray-200 header-bg">
-    <tr>
-        <th rowspan="3">No.</th>
-        <th rowspan="3">Name of Child Development Center (CDC)</th>
-        <th rowspan="3">Name of Child Development Workers (Surname, First name, M.I)</th>
-        <th colspan="2">Total No. of CDCCh/SNP Served</th>
-        <th colspan="8">Normal (N)</th>
-        <th colspan="8">Stunted (S)</th>
-        <th colspan="8">Severely Stunted (SS)</th>
-        <th colspan="8">Tall (T)</th>
-        <th colspan="8">Total</th>
-    </tr>
-    <tr>
-        <th class="subheader-bg" rowspan="2">Male</th>
-        <th class="subheader-bg" rowspan="2">Female</th>
-        @for($i = 0; $i < 5; $i++)
-        <th colspan="4">Male</th>
-        <th colspan="4">Female</th>
-        @endfor
-    </tr>
-    <tr class="subheader-bg">
-        @for($i = 0; $i < 10; $i++)
-        <th>2</th>
-        <th>3</th>
-        <th>4</th>
-        <th>5</th>
-        @endfor
-    </tr>
-    </thead>
-    <tbody class="nutritional-status text-xs ">
-    @php $i = 0; @endphp
-    @foreach ($report['height_for_age'] as $key => $center)
         <tr>
-            <td>{{ ++$i }}</td>
-            <td>{{ $center['cdc_name'] }}</td>
-            <td></td>
-            <td>0</td>
-            <td>0</td>
-            @foreach ($categoriesHFA as $category)
-                @foreach (['male', 'female'] as $gender)
-                    @foreach (['2', '3', '4', '5'] as $age)
-                        <td>{{ $center[$category][$gender][$age] }}</td>
+            <th rowspan="3">No.</th>
+            <th rowspan="3">Name of Child Development Center (CDC)</th>
+            <th rowspan="3">Name of Child Development Workers (Surname, First name, M.I)</th>
+            <th rowspan="3">Total No. Served</th>
+            <th colspan="2">Total No. of CDCCh/SNP Served</th>
+            <th colspan="8">Normal (N)</th>
+            <th colspan="8">Stunted (S)</th>
+            <th colspan="8">Severely Stunted (SS)</th>
+            <th colspan="8">Tall (T)</th>
+            <th colspan="8">Total</th>
+        </tr>
+        <tr>
+            <th class="subheader-bg" rowspan="2">Male</th>
+            <th class="subheader-bg" rowspan="2">Female</th>
+            @for ($i = 0; $i < 5; $i++)
+                <th colspan="4">Male</th>
+                <th colspan="4">Female</th>
+            @endfor
+        </tr>
+        <tr class="subheader-bg">
+            @for ($i = 0; $i < 10; $i++)
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+            @endfor
+        </tr>
+    </thead>
+    <tbody class="nutritional-status text-xs">
+        @php $i = 0; @endphp
+        @foreach ($report['height_for_age'] as $key => $center)
+            <tr>
+                <td>{{ ++$i }}</td>
+                <td>{{ $center['cdc_name'] }}</td>
+                <td>
+                    @forelse ($center['worker_name'] as $name)
+                        {{ $name }}<br>
+                    @empty
+                        <em>No workers assigned</em>
+                    @endforelse
+                </td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                @foreach ($categoriesHFA as $category)
+                    @foreach (['male', 'female'] as $gender)
+                        @foreach (['2', '3', '4', '5'] as $age)
+                            <td>{{ $center[$category][$gender][$age] }}</td>
+                        @endforeach
                     @endforeach
                 @endforeach
-            @endforeach
-        </tr>
-    @endforeach
-    @if (count($report) <= 0)
-        <tr>
-            <td class="text-center" colspan="6">
-                @if (empty($search))
-                    No Data found
-                @endif
-            </td>
-        </tr>
-    @endif
+            </tr>
+        @endforeach
+        @if (count($report) <= 0)
+            <tr>
+                <td class="text-center" colspan="54">
+                    @if (empty($search))
+                        No Data found
+                    @endif
+                </td>
+            </tr>
+        @endif
     </tbody>
     <tfoot>
-    <tr>
-        <th colspan="3" style="text-align: right; padding-right: 5px;">Total per Age Bracket &gt; </th>
-        <th rowspan="3">0</th>
-        @for($i = 0; $i <= 40; $i++)
-        <th>0</th>
-        @endfor
-    </tr>
-    <tr>
-        <th colspan="3" style="text-align: right; padding-right: 5px;">Total Male/Female &gt;</th>
-        <th rowspan="2" colspan="2">0</th>
-        @for($i = 0; $i < 10; $i++)
-        <th colspan="4">0</th>
-        @endfor
-    </tr>
-    <tr>
-        <th colspan="3" style="text-align: right; padding-right: 5px;">Total children beneficiaries &gt; </th>
-        @for($i = 0; $i < 5; $i++)
-        <th colspan="8">0</th>
-        @endfor
-    </tr>
+        @php
+            $totalMaleAllAges = 0;
+            $totalFemaleAllAges = 0;
+            $totalServed = 0;
+        @endphp
+
+        @php
+            $totalMale = 0;
+            $totalFemale = 0;
+
+            foreach ($categoriesHFA as $category) {
+                foreach (['male', 'female'] as $gender) {
+                    foreach (['2', '3', '4', '5'] as $age) {
+                        $totalMale += $center[$category][$gender][$age] ?? 0;
+                        $totalFemale += $center[$category][$gender][$age] ?? 0;
+                    }
+                }
+            }
+
+            $totalMaleAllAges += $totalMale;
+            $totalFemaleAllAges += $totalFemale;
+            $totalServed = $totalMaleAllAges + $totalFemaleAllAges;
+        @endphp
+        {{-- <td>{{ $center[$category][$gender][$age] }}</td> --}}
+        
+
+        {{-- @foreach (['2', '3', '4', '5'] as $age)
+            @php
+                $totalMale = 0;
+                $totalFemale = 0;
+
+                foreach ($categoriesHFA as $category) {
+                    $totalMale += $center[$category]['male'][$age] ?? 0;
+                    $totalFemale += $center[$category]['female'][$age] ?? 0;
+                }
+
+                $totalMaleAllAges += $totalMale;
+                $totalFemaleAllAges += $totalFemale;
+                $totalServed = $totalMaleAllAges + $totalFemaleAllAges;
+            @endphp
+            <tr>
+                <td>Age {{ $age }}</td>
+                <td>{{ $totalMale }}</td>
+                <td>{{ $totalFemale }}</td>
+            </tr>
+        @endforeach --}}
+        <tr>
+            <th colspan="3" style="text-align: right; padding-right: 5px;">Total per Age Bracket &gt; </th>
+            <th rowspan="3">{{ $totalServed }}</th>
+            @for ($i = 0; $i <= 41; $i++)
+                <th>0</th>
+            @endfor
+        </tr>
+        <tr>
+            <th colspan="3" style="text-align: right; padding-right: 5px;">Total Male/Female &gt;</th>
+            <th rowspan="2" colspan="2">0</th>
+            @for ($i = 0; $i < 10; $i++)
+                <th colspan="4">0</th>
+            @endfor
+        </tr>
+        <tr>
+            <th colspan="3" style="text-align: right; padding-right: 5px;">Total children beneficiaries &gt; </th>
+            @for ($i = 0; $i < 5; $i++)
+                <th colspan="8">0</th>
+            @endfor
+        </tr>
     </tfoot>
 </table>
 

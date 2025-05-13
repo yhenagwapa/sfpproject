@@ -70,18 +70,11 @@
                                         <div class="col-md-4 flex">
                                             <label for="q-input" class="text-base mt-2 mr-2">Search:</label>
                                             <input type="text" name="search" id="q-input" value="{{ request('search') }}" placeholder="Search" class="form-control rounded border-gray-300"
-                                            autocomplete="off">
+                                            autocomplete="off" autofocus>
                                         </div>
                                     </form>
                                 </div>
-                                <script>
-                                    function clearSearchAndSubmit(selectElement) {
-                                        const form = selectElement.form;
-                                        const searchInput = form.querySelector('input[name="search"]');
-                                        if (searchInput) searchInput.value = '';
-                                        form.submit();
-                                    }
-                                </script>
+                                
                             {{-- </div> --}}
 
                             <div class="table-responsive" id='children-table'>
@@ -96,7 +89,14 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/js/app.js'])
-
+    <script>
+        function clearSearchAndSubmit(selectElement) {
+            const form = selectElement.form;
+            const searchInput = form.querySelector('input[name="search"]');
+            if (searchInput) searchInput.value = '';
+            form.submit();
+        }
+    </script>
     <script>
         (function(){
           let timer;

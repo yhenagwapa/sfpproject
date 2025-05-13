@@ -162,20 +162,8 @@
                                         </div>
 
                                         <div class="flex flex-wrap mt-4">
-                                            <div class='w-full px-3 mt-2 text-gray-400 text-xs'>Address
+                                            <div class='w-full px-3 mt-2 text-gray-400 text-xs'>Area of Assignment
                                                 <hr>
-                                            </div>
-                                        </div>
-
-                                        <div class="flex flex-wrap">
-                                            <div class="w-full px-3 mt-3 text-sm">
-                                                <label for="address">Address<b class="text-red-600">*</b></label>
-                                                <input name="address" type="text"
-                                                    class="form-control rounded border-gray-300 w-full" id="address"
-                                                    value="{{ old('address') }}">
-                                                @error('address')
-                                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                                @enderror
                                             </div>
                                         </div>
 

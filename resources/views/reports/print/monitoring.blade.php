@@ -24,11 +24,7 @@
             padding: 10px;
             vertical-align: top;
         }
-
-        .table td:first-child {
-            width: 70%;
-        }
-
+        
         .p {
             margin: 5px 0;
         }
@@ -45,7 +41,7 @@
             text-transform: uppercase;
         }
 
-        .monitoring-table td:first-child{
+        .monitoring-table td:nth-child(2){
             width: 15%;
         }
 
@@ -101,7 +97,6 @@
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
             {{ $cycle->name}} ( SY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )</p>
-            {{ $cycle->name}} ( SY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )</p>
         <p><b>WEIGHT AND HEIGHT MONITORING</b></p>
         <br>
     </div>
@@ -128,24 +123,22 @@
     <table id='monitoring-table' class="table datatable monitoring-table w-full">
         <thead>
             <tr>
-                {{-- <th class="border border-white" rowspan="2">No.<th> --}}
-                {{-- <th class="border border-white" rowspan="2">No.<th> --}}
+                <th class="border border-white" rowspan="2">No.</th>
                 <th class="border border-white w-40" rowspan="2">Name of Child</th>
                 <th class="border border-white" rowspan="2">Sex</th>
                 <th class="border border-white w-24" rowspan="2">Date of Birth</th>
-                <th class="border border-white w-24" rowspan="2">Actual Date of Weighing</th>
-                <th class="border border-white" rowspan="2">Weight in kg.</th>
-                <th class="border border-white" rowspan="2">Height in cm.</th>
+                <th class="border border-white w-24" rowspan="2">Actual Date <br>of Weighing</th>
+                <th class="border border-white" rowspan="2">Weight <br>in kg.</th>
+                <th class="border border-white" rowspan="2">Height <br>in cm.</th>
                 <th class="border border-white" colspan="2">Age in month/year</th>
-                <th class="border border-white" colspan="3">Nutritional Status Upon Entry</th>
+                <th class="border border-white" colspan="3">Nutritional Status <br>Upon Entry</th>
                 <th class="border border-white w-10" rowspan="2">Summary of Under-<br>nourished Children</th>
-                <th class="border border-white w-24" rowspan="2">Actual Date of Weighing</th>
-                <th class="border border-white" rowspan="2">Weight in kg.</th>
-                <th class="border border-white" rowspan="2">Height in cm.</th>
+                <th class="border border-white w-24" rowspan="2">Actual Date <br>of Weighing</th>
+                <th class="border border-white" rowspan="2">Weight <br>in kg.</th>
+                <th class="border border-white" rowspan="2">Height <br>in cm.</th>
                 <th class="border border-white" colspan="2">Age in month/year</th>
-                <th class="border border-white" colspan="3">Nutritional Status After 120 Feedings</th>
+                <th class="border border-white" colspan="3">Nutritional Status <br>After 120 Feedings</th>
                 <th class="border border-white w-10" rowspan="2">Summary of Under-<br>nourished Children</th>
-
             </tr>
             <tr>
                 <th class="border border-white">Month</th>
@@ -164,10 +157,9 @@
         dd($isFunded); // This will stop execution and show the contents of $isFunded
     @endphp --}}
         <tbody class="monitoring-table text-xs">
-            @foreach ($isFunded as $fundedChild)
+            @forelse ($isFunded as $fundedChild)
                 <tr>
-                    {{-- <td>{{ $loop->iteration }}</td> --}}
-                    {{-- <td>{{ $loop->iteration }}</td> --}}
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
                     <td>{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
@@ -244,18 +236,12 @@
                         <td></td>
                     @endif
                 </tr>
-            @endforeach
-            {{-- @if (count($isFunded) <= 0)
-            {{-- @if (count($isFunded) <= 0)
+            @empty
                 <tr>
-                    <td class="text-center" colspan="6">
-                        @if (empty($search))
-                            No Data found
-                        @endif
-                    </td>
+                    <td class="text-center" colspan="22">NO DATA FOUND</td>
                 </tr>
-            @endif --}}
-            @endif --}}
+            @endforelse
+
         </tbody>
     </table>
 
@@ -300,11 +286,11 @@
 </body>
 
 </html>
-<script type="text/php">
+{{-- <script type="text/php">
     if (isset($pdf)) {
         $pdf->page_script('
             $font = $fontMetrics->get_font("Arial", "normal");
             $pdf->text(100, 100, "TEST PAGE {PAGE_NUM}", $font, 20);
         ');
     }
-</script>
+</script> --}}

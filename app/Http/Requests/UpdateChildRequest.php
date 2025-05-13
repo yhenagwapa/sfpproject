@@ -43,6 +43,7 @@ class UpdateChildRequest extends FormRequest
             'is_lactose_intolerant' => ['required', 'boolean'],
             'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
             'implementation_id' => ['nullable', 'exists:implementations,id'],
+            'is_funded' => ['required', 'boolean'],
         ];
     }
 
@@ -67,15 +68,16 @@ class UpdateChildRequest extends FormRequest
             'barangay.required' => 'Please select a barangay.',
             'address.required' => 'Please fill in this field.',
 
-            'is_pantawid.required' => 'Please select yes or no.',
-            'is_person_with_disability.required' => 'Please select yes or no.',
+            'is_pantawid.required' => 'Please select an option.',
+            'is_person_with_disability.required' => 'Please select an option.',
             'pantawid_details.required_if' => 'Please specify pantawid details.',
             'person_with_disability_details.required_if' => 'Please fill in disability details.',
-            'is_indigenous_people.required' => 'Please select yes or no.',
-            'is_child_of_soloparent.required' => 'Please select yes or no.',
-            'is_lactose_intolerant.required' => 'Please select yes or no.',
+            'is_indigenous_people.required' => 'Please select an option.',
+            'is_child_of_soloparent.required' => 'Please select an option.',
+            'is_lactose_intolerant.required' => 'Please select an option.',
 
-            'child_development_center_id.required' => 'Please select a CDC or SNP.'
+            'child_development_center_id.required' => 'Please select a CDC or SNP.',
+            'is_funded.required' => 'Please select an option.',
         ];
     }
 }

@@ -37,7 +37,7 @@
                 <td>{{ $user->email }}</td>
 
                 <td class="justify-items-center items-center">
-                    <select class="form-control w-full border-none" id="role_id-{{ $user->id }}" name="role_id" @if (auth()->user()->id === $user->id) disabled @endif>
+                    <select class="form-control uppercase w-full border-none" id="role_id-{{ $user->id }}" name="role_id" @if (auth()->user()->id === $user->id) disabled @endif>
                         <option value="" disabled>Select role</option>
                         @foreach ($roles as $role)
                             @if (!($role->name === 'admin' && !auth()->user()->hasRole('admin')))

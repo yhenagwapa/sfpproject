@@ -241,17 +241,18 @@ class NutritionalStatusController extends Controller
 
         }
 
-        if ($entryWeightForAge != 'Normal' || $entryHeightForAge != 'Normal' || $entryHeightForAge == 'Tall' || $entryWeightForHeight != 'Normal') {
-            $entryIsMalnourished = true;
-        } else {
-            $entryIsMalnourished = false;
-        }
-
-        if ($entryWeightForAge != 'Normal' || $entryWeightForAge != 'Overweight' || $entryHeightForAge != 'Tall' || $entryHeightForAge != 'Normal' || $entryWeightForHeight != 'Normal' || $entryWeightForHeight != 'Overweight' || $entryWeightForHeight != 'Obese') {
-            $entryIsUndernourished = true;
-        } else {
-            $entryIsUndernourished = false;
-        }
+        $entryIsMalnourished = !(
+            $entryWeightForAge === 'Normal' &&
+            ($entryHeightForAge === 'Normal' || $entryHeightForAge === 'Tall') &&
+            $entryWeightForHeight === 'Normal'
+        );
+        
+        $entryIsUndernourished = !(
+            in_array($entryWeightForAge, ['Normal', 'Overweight']) &&
+            $entryHeightForAge === 'Normal' &&
+            in_array($entryWeightForHeight, ['Normal', 'Overweight', 'Obese'])
+        );
+        
 
         $entryNutritionalStatus = NutritionalStatus::create([
             'implementation_id' => $cycleID,
@@ -435,17 +436,18 @@ class NutritionalStatusController extends Controller
                 }
             }
 
-            if ($exitWeightForAge != 'Normal' || $exitHeightForAge != 'Normal' || $exitHeightForAge == 'Tall' || $exitWeightForHeight != 'Normal') {
-                $exitIsMalnourished = true;
-            } else {
-                $exitIsMalnourished = false;
-            }
-
-            if ($exitWeightForAge != 'Normal' || $exitWeightForAge != 'Overweight' || $exitHeightForAge != 'Tall' || $exitHeightForAge != 'Normal' || $exitWeightForHeight != 'Normal' || $exitWeightForHeight != 'Overweight' || $exitWeightForHeight != 'Obese') {
-                $exitIsUndernourished = true;
-            } else {
-                $exitIsUndernourished = false;
-            }
+            $exitIsMalnourished = !(
+                $exitWeightForAge === 'Normal' &&
+                ($exitHeightForAge === 'Normal' || $exitHeightForAge === 'Tall') &&
+                $exitWeightForHeight === 'Normal'
+            );
+            
+            $exitIsUndernourished = !(
+                in_array($exitWeightForAge, ['Normal', 'Overweight']) &&
+                $exitHeightForAge === 'Normal' &&
+                in_array($exitWeightForHeight, ['Normal', 'Overweight', 'Obese'])
+            );
+            
 
             $exitNutritionalStatus = NutritionalStatus::create([
                 'implementation_id' => $cycleID,
@@ -684,17 +686,17 @@ class NutritionalStatusController extends Controller
 
         }
 
-        if ($entryWeightForAge == 'Normal' || $entryHeightForAge == 'Normal' || $entryHeightForAge == 'Tall' || $entryWeightForHeight == 'Normal') {
-            $entryIsMalnourished = false;
-        } else {
-            $entryIsMalnourished = true;
-        }
-
-        if ($entryWeightForAge == 'Normal' || $entryWeightForAge == 'Overweight' || $entryHeightForAge == 'Tall' || $entryHeightForAge == 'Normal' || $entryWeightForHeight == 'Normal' || $entryWeightForHeight == 'Overweight' || $entryWeightForHeight == 'Obese') {
-            $entryIsUndernourished = false;
-        } else {
-            $entryIsUndernourished = true;
-        }
+        $entryIsMalnourished = !(
+            $entryWeightForAge === 'Normal' &&
+            ($entryHeightForAge === 'Normal' || $entryHeightForAge === 'Tall') &&
+            $entryWeightForHeight === 'Normal'
+        );
+        
+        $entryIsUndernourished = !(
+            in_array($entryWeightForAge, ['Normal', 'Overweight']) &&
+            $entryHeightForAge === 'Normal' &&
+            in_array($entryWeightForHeight, ['Normal', 'Overweight', 'Obese'])
+        );        
 
         $nutritionalStatus->age_in_months = $entryAgeInMonths;
         $nutritionalStatus->age_in_years = $entryAgeInYears;
@@ -711,7 +713,7 @@ class NutritionalStatusController extends Controller
         session(['child_id' => $request->input('child_id')]);
 
         // return redirect()->route('nutritionalstatus.index')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
-        return redirect()->back()->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('child_id'));
+        return redirect()->route('nutritionalstatus.index')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('child_id'));
 
     }
     public function updateAfter120Details(UpdateNutritionalStatusRequest $request)
@@ -886,17 +888,18 @@ class NutritionalStatusController extends Controller
                 }
             }
 
-            if ($exitWeightForAge == 'Normal' || $exitHeightForAge == 'Normal' || $exitHeightForAge == 'Tall' || $exitWeightForHeight == 'Normal') {
-                $exitIsMalnourished = false;
-            } else {
-                $exitIsMalnourished = true;
-            }
-
-            if ($exitWeightForAge == 'Normal' || $exitWeightForAge == 'Overweight' || $exitHeightForAge == 'Tall' || $exitHeightForAge == 'Normal' || $exitWeightForHeight == 'Normal' || $exitWeightForHeight == 'Overweight' || $exitWeightForHeight == 'Obese') {
-                $exitIsUndernourished = false;
-            } else {
-                $exitIsUndernourished = true;
-            }
+            $exitIsMalnourished = !(
+                $exitWeightForAge === 'Normal' &&
+                ($exitHeightForAge === 'Normal' || $exitHeightForAge === 'Tall') &&
+                $exitWeightForHeight === 'Normal'
+            );
+            
+            $exitIsUndernourished = !(
+                in_array($exitWeightForAge, ['Normal', 'Overweight']) &&
+                $exitHeightForAge === 'Normal' &&
+                in_array($exitWeightForHeight, ['Normal', 'Overweight', 'Obese'])
+            );
+            
 
             $nutritionalStatus->age_in_months = $exitAgeInMonths;
             $nutritionalStatus->age_in_years = $exitAgeInYears;
@@ -909,7 +912,9 @@ class NutritionalStatusController extends Controller
 
             $nutritionalStatus->update();
 
-        return redirect()->route('nutritionalstatus.index')->with('success', 'Child nutritional status saved successfully.')->with('child_id', $request->input('exitchild_id'));
+            session(['exitchild_id' => $request->input('child_id')]);
+
+        return redirect()->route('nutritionalstatus.index')->with('success', 'Child nutritional status updated successfully.')->with('child_id', $request->input('exitchild_id'));
     }
 
     /**

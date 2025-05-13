@@ -32,14 +32,14 @@
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
                     bsAlert1.close();
-                }, 2000);
+                }, 3000);
             }
             if (alert2) {
                 // Automatically close the alert after 3 seconds (3000 milliseconds)
                 setTimeout(function() {
                     var bsAlert2 = new bootstrap.Alert(alert2);
                     bsAlert2.close();
-                }, 2000);
+                }, 3000);
             }
         });
     </script>
@@ -188,40 +188,24 @@
                                     @enderror
                                 </div>
 
-
                                 <input type="hidden" id="psgc_id" name="psgc_id" value="{{ $user->psgc_id }}">
 
-                                <div class="col-md-12 mt-2 text-sm">
-                                    <label for="address">House No./ Street/ Purok<b class="text-red-600">*</b></label>
-                                    <input type="text" class="form-control rounded border-gray-300" id="address"
-                                        name='address' value="{{ old('address', $user->address) }}">
-                                    @error('address')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-
                                 <div class='col-md-12 mt-4 text-gray-400 text-xs'>
-                                    Child Development Center or Supervised Neighborhood Play<hr>
+                                    Account Information<hr>
                                 </div>
 
                                 <div class="col-md-6 mt-3 text-sm">
-                                    <label for="email">Email<b class="text-red-600">*</b></label>
-                                    <input type="email" class="form-control rounded border-gray-300" id="email" name="email" value="{{ $user->email }}">
-                                        @error('email')
-                                            <span class="text-xs text-red-600">{{ $message }}</span>
-                                        @enderror
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control rounded border-gray-300" id="email" name="email" value="{{ $user->email }}" disabled>
                                 </div>
+
                                 <div class="col-md-6 mt-3 text-sm">
                                     <label for="roles">Role</label>
                                         <select class="form-control" id="roles" name="roles">
-                                            <option value="{{ $userRole }}" selected disabled>
+                                            <option value="{{ $userRole }}" selected readonly>
                                                 {{ $userRole }}
                                             </option>
                                         </select>
-                                        @if ($errors->has('roles'))
-                                            <span class="text-danger">{{ $errors->first('roles') }}</span>
-                                        @endif
                                 </div>
 
                                 <div class="col-md-6 mt-3 text-sm relative">

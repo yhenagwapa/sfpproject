@@ -72,7 +72,7 @@
                             <h5 class='card-title'>{{ $child->full_name }}</h5>
 
                             <!-- Personal Information Form -->
-                            <form class="row" method="post" action="{{ route('child.update') }}">
+                            <form class="row" method="post" action="{{ route('child.update') }}" novalidate>
                                 @csrf
                                 @method('patch')
 
@@ -126,7 +126,7 @@
                                 <div class="col-md-6 mt-2 text-sm">
                                     <label for="date_of_birth">Date of Birth<b class="text-red-600">*</b></label>
                                     <input type="date" class="form-control rounded border-gray-300" id="date_of_birth"
-                                        name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('Y-m-d')) }}">
+                                        name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('Y-m-d')) }}" min="{{ $minDate }}" max="{{ $maxDate }}">
                                     @error('date_of_birth')
                                         <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
@@ -367,11 +367,8 @@
                                     @enderror
                                 </div>
 
-
-                                <div class='col-md-3 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised
-                                    Neighborhood Play</div>
-                                <div class='col-md-9 mt-8 text-gray-400 text-xs'>
-                                    <hr>
+                                <div class='col-md-12 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised
+                                    Neighborhood Play<hr>
                                 </div>
 
                                 <div class="col-md-6 mt-3 text-sm">
@@ -399,21 +396,34 @@
                                         name="spaceonly">
                                 </div>
 
-                                <div class="col-md-6 mt-3 text-sm">
+                                <div class='col-md-12 mt-4 text-gray-400 text-xs'>Implementation<hr>
+                                </div>
+
+                                <div class="col-md-6 text-sm">
                                     <label for="cycle_implementation_id">Cycle Implementation</label>
-                                    <select
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="implementation_id" name='implementation_id'>
-                                        @if ($cycle)
-                                            <option value="{{ $cycle->id }}"
-                                                {{ $cycle->id == old('implementation_id', $childCenterId->implementation_id) ? 'selected' : '' }}>
-                                                {{ $cycle->name }}
-                                            </option>
-                                        @else
-                                            <option value="" disabled selected>No active cycle implementation
-                                            </option>
-                                        @endif
+                                    <select class="form-control rounded border-gray-300" id="implementation_select"
+                                        name='implementation_select' disabled>
+                                        <option value="{{ $cycle->id }}">{{ $cycle->name }}
+                                        </option>
                                     </select>
+                                    <input type="hidden" id="implementation_id" name="implementation_id"
+                                        value="{{ $childCenterId->implementation_id }}" />
+                                </div>
+
+                                <div class="col-md-6 text-sm">
+                                    <label for="is_funded">Is child funded?<b class="text-red-600">*</b></label><br>
+                                    <input type="radio" class="ml-5" name="is_funded" id="is_funded_yes" value="1"
+                                        {{ old('is_funded', $childCenterId->funded) == '1' ? 'checked' : '' }}>
+                                    <label class="mt-2" for="is_funded_yes">Yes</label>
+        
+                                    <input type="radio" class="ml-5" name="is_funded" id="is_funded_no" value="0"
+                                        {{ old('is_funded', $childCenterId->funded) == '0' ? 'checked' : '' }}>
+                                    <label class="mt-2" for="is_funded_no">No</label>
+                                    <div class="col-md-6 text-sm">
+                                        @if ($errors->has('is_funded'))
+                                            <span class="text-xs text-red-600">{{ $errors->first('is_funded') }}</span>
+                                        @endif
+                                    </div>
                                 </div>
 
                                 <div class="col-md-6 mt-3 text-sm hidden">
@@ -463,7 +473,7 @@
 
                             <div class="col-md-12 flex mt-4 justify-end text-right">
                                 <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
-                                    data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
+                                    data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
                                     <form id="cancel-form" method="GET" action="{{ route('child.index') }}">
                                     </form>
 

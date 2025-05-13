@@ -136,23 +136,22 @@ class ImplementationController extends Controller
         ];
 
         $currentYear = date('Y');
-        if ($cycle->school_year_from == null) {
-            $currentYear = date('Y');
-            $startYear = $currentYear + 1;
+
+        // Default values
+        $startYear = $currentYear;
+        $endYear = $currentYear + 2;
+        $endYearForSYTo = $currentYear + 3;
+
+        if (!is_null($cycle->school_year_from)) {
+            $startYear = min($currentYear, $cycle->school_year_from); // Include stored year
+            $endYear = max($endYear, $cycle->school_year_from + 2);
+            $endYearForSYTo = max($endYearForSYTo, $cycle->school_year_from + 3);
         }
-        else {
-            $startYear = $cycle->school_year_from + 1;
-            $endYear = $cycle->school_year_from + 2;
+
+        if (!is_null($cycle->school_year_to)) {
+            $endYearForSYTo = max($endYearForSYTo, $cycle->school_year_to + 1); // ensure "to" year is in the list
         }
-        if ($cycle->school_year_to == null) {
-            $currentYear = date('Y');
-            $endYear = $currentYear + 2;
-            $endYearForSYTo = $currentYear + 3;
-        }
-        else {
-            $endYear = $cycle->school_year_from + 2;
-            $endYearForSYTo = $cycle->school_year_from + 3;
-        }
+
 
         return view('cycle.edit', compact(
             'cycle',

@@ -54,11 +54,12 @@
             width: 100%;
             font-family: 'Arial', sans-serif;
             font-size: 10px;
-            border: 5px
+            border: 5px;
         }
 
         .footer-table p{
             margin: 0;
+            text-transform: uppercase;
         }
 
         .footer-table td {
@@ -180,7 +181,23 @@
                     <br>
                     <p>Prepare by:</p>
                     <br>
-                    <p>______________________________________</p>
+                    <p><u>
+                        @if($selectedCenter)
+                            @php
+                                $users = $selectedCenter->users->filter(function ($user) {
+                                    return $user->roles->contains('name', 'child development worker');
+                                });
+                            @endphp
+
+                            @if ($users->isNotEmpty())
+                                @foreach ($users as $user)
+                                    {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
+                                @endforeach
+                            @else
+                                No Worker Assigned
+                            @endif
+                        @endif
+                    </u></p>
                     <p>Child Development Worker/Teacher</p>
                 </td>
                 <td>
@@ -214,12 +231,12 @@
         <span class="pagenum"></span>
     </div>
 </body>
-<script type="text/php">
+{{-- <script type="text/php">
     if (isset($pdf)) {
         $pdf->page_script('
             $font = $fontMetrics->get_font("Arial", "normal");
             $pdf->text(520, 820, "Page {PAGE_NUM} of {PAGE_COUNT}", $font, 10);
         ');
     }
-</script>
+</script> --}}
 </html>

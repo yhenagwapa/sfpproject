@@ -67,7 +67,7 @@
     @endforeach
     @if (count($report) <= 0)
         <tr>
-            <td class="text-center" colspan="6">
+            <td class="text-center" colspan="53">
                 @if (empty($search))
                     No Data found
                 @endif

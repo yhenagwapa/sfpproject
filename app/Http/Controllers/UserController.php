@@ -152,6 +152,19 @@ class UserController extends Controller
 
         $user = User::findOrFail($userID);
 
+        $psgc = Psgc::where('province_psgc', $request->province_psgc)
+            ->where('city_name_psgc', $request->city_name_psgc)
+            ->where('brgy_psgc', $request->brgy_psgc)
+            ->first();
+
+        $request->merge(['psgc_id' => $psgc->psgc_id]);
+
+        $user->fill($request->only(['firstname', 'middlename', 'lastname','extension_name', 'contact_number', 'psgc_id']));
+
+        if($user->isClean()){
+            return redirect()->route('child.index')->with('warning', 'No changes were made.');
+        }
+
         $query = User::where('firstname', $validatedData['firstname'])
             ->where('middlename', $validatedData['middlename'])
             ->where('lastname', $validatedData['lastname'])
@@ -161,16 +174,11 @@ class UserController extends Controller
             $query->where('extension_name', $validatedData['extension_name']);
         }
 
-        $existingChild = $query->first();
+        $existingUser= $query->first();
 
-        if ($existingChild) {
+        if ($existingUser) {
             return redirect()->back()->with('error', 'User already exists.');
         }
-
-        $psgc = Psgc::where('province_psgc', $request->province_psgc)
-            ->where('city_name_psgc', $request->city_name_psgc)
-            ->where('brgy_psgc', $request->brgy_psgc)
-            ->first();
 
         if ($psgc) {
             $validatedData['psgc_id'] = $psgc->psgc_id;
@@ -188,8 +196,7 @@ class UserController extends Controller
 
         $user->syncRoles($request->roles);
 
-        return redirect()->back()
-                ->withSuccess('User is updated successfully.');
+        return redirect()->back()->withSuccess('User is updated successfully.');
     }
 
     public function updateStatus(Request $request, User $user)
