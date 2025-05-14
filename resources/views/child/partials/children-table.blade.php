@@ -30,7 +30,7 @@
                                 <form id="editChild-{{ $child->id }}" action="{{ route('child.show') }}" method="POST" class="inline">
                                     @csrf
                                     <input type="hidden" name="child_id" value="{{ $child->id }}">
-                                    <button type="submit" class="flex edit-child-btn" onclick="ediChild('{{ $child->id }}')" >
+                                    <button type="submit" class="flex bg-white text-blue-600 rounded px-3 min-h-9 items-center edit-child-btn" onclick="ediChild('{{ $child->id }}')" >
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="#3968d2" class="w-5 h-5">
                                             <path stroke-linecap="round" stroke-linejoin="round"

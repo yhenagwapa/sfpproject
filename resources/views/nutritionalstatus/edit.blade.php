@@ -98,7 +98,7 @@
                                         <label for="weight">Weight (kg)<b class="text-red-600">*</b></label>
                                         <input type="number"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="weight" name='weight' value="{{ old('weight', $entryDetails->weight) }}">
+                                            id="weight" name='weight' value="{{ old('weight', $entryDetails->weight) }}" step=".01">
                                         @if ($errors->has('weight'))
                                             <span class="text-xs text-red-600">{{ $errors->first('weight') }}</span>
                                         @endif
@@ -107,7 +107,7 @@
                                         <label for="height">Height (cm)<b class="text-red-600">*</b></label>
                                         <input type="number"
                                             class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="height" name='height' value="{{ old('height', $entryDetails->height) }}">
+                                            id="height" name='height' value="{{ old('height', $entryDetails->height) }}" step=".01">
                                         @if ($errors->has('height'))
                                             <span class="text-xs text-red-600">{{ $errors->first('height') }}</span>
                                         @endif
