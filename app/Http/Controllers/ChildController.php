@@ -289,7 +289,7 @@ class ChildController extends Controller
 
         $validatedData = $request->validated();
 
-        dd($validatedData);
+//        dd($validatedData);
 
         $child = Child::where([
             'firstname' => $request->firstname,
