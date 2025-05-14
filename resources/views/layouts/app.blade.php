@@ -238,7 +238,7 @@
                 <div class="footer-dswd">
                     &copy; {{ now()->year }} Department of Social Welfare and Development.
                 </div>
-                {{-- <div class="credits mt-2 mb-0">
+                <div class="credits mt-2 mb-0">
                     &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
 
                     <!-- All the links in the footer should remain intact. -->
@@ -246,7 +246,7 @@
                     <!-- Licensing information: https://bootstrapmade.com/license/ -->
                     <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
                     Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                </div> --}}
+                </div>
             </footer><!-- End Footer -->
         </div>
 
