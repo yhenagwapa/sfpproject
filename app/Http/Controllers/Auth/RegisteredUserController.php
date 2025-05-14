@@ -56,7 +56,7 @@ class RegisteredUserController extends Controller
             'extension_name' => $request->extension_name,
             'contact_number' => $request->contact_number,
             'psgc_id' => $psgc->psgc_id,
-            'address' => $request->address,
+            'address' => '-',
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);

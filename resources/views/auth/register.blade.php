@@ -187,7 +187,7 @@
                                                     <option value="" selected>Select Province</option>
                                                     @foreach ($provinces as $psgc => $name)
                                                         <option value="{{ $psgc }}"
-                                                            {{ old('province_psgc', session('step1Data.province_psgc')) == $psgc ? 'selected' : '' }}>
+                                                            {{ old('province_psgc') == $psgc ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -205,7 +205,7 @@
                                                     <option value="" selected>Select City/Municipality</option>
                                                     @foreach ($cities as $psgc => $name)
                                                         <option value="{{ $psgc }}"
-                                                            {{ old('city_name_psgc', session('step1Data.city_name_psgc')) == $psgc ? 'selected' : '' }}>
+                                                            {{ old('city_name_psgc') == $psgc ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
@@ -222,7 +222,7 @@
                                                     <option value="" selected>Select Barangay</option>
                                                     @foreach ($barangays as $psgc => $name)
                                                         <option value="{{ $psgc }}"
-                                                            {{ old('brgy_psgc', session('step1Data.brgy_psgc')) == $psgc ? 'selected' : '' }}>
+                                                            {{ old('brgy_psgc') == $psgc ? 'selected' : '' }}>
                                                             {{ $name }}
                                                         </option>
                                                     @endforeach
