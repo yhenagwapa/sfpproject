@@ -146,7 +146,7 @@
                                                 @elseif ($assignedEncoder && $assignedEncoder->id == $encoder->id)
                                                     selected @endif>
 
-                                            {{ $worker->full_name }}
+                                            {{ $encoder->full_name }}
                                         </option>
                                     @endforeach
                                 </select>

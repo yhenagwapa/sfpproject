@@ -18,6 +18,13 @@
         </div>
     @endif
 
+    @if ($errors->has('ageError'))
+        <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
+            {{ $errors->first('ageError') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     @if (session('warning'))
         <div class="alert alert-warning alert-dismissible fade show" id="warning-alert" role="alert">
             {{ session('warning') }}
