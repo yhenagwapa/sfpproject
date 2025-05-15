@@ -73,18 +73,7 @@
                     </div>
                 </td>
             </tr>
-        @empty
-            <tr>
-                <td class="text-center"><b>No CDC/SNP found.</b></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-            </tr>
-        @endforelse
+        @endforeach
         <script>
             function editCenter(centerID) {
                 localStorage.setItem('center_id', centerID);

@@ -36,14 +36,21 @@ class UserController extends Controller
         $roles = Role::all();
 
         $search = $request->get('search');
-        $users = User::get();
+        // Start with the query builder
+        $query = User::query();
 
-        // if not admin, filter by city
+        // If not admin, filter by city
         if (!$request->user()->hasRole('admin')) {
             $psgcCity = Psgc::find(auth()->user()->psgc_id)->city_name_psgc;
-            $users->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id');
-            $users->where('psgcs.city_name_psgc', $psgcCity);
+
+            // Apply left join and where clause
+            $query->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                ->where('psgcs.city_name_psgc', $psgcCity)
+                ->select('users.*'); // Optional: make sure only User columns are selected
         }
+
+        // Get the result
+        $users = $query->get();
 
 
         return view('users.index', compact('users', 'roles', 'search'));

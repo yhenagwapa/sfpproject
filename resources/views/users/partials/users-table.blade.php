@@ -215,11 +215,7 @@
                     </script>
                 @endif
             </tr>
-        @empty
-            <tr>
-                <td colspan="8"><strong>No User Found!</strong></td>
-            </tr>
-        @endforelse
+        @endforeach
     </tbody>
 </table>
 {{--

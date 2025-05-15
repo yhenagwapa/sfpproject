@@ -275,6 +275,13 @@ class ChildController extends Controller
 
         $disabilities = Child::disabilityOptions();
 
+        // get all children regardless
+//        $allChildren = Child::select(
+//            'id',
+//            DB::raw("CONCAT(firstname, ' ', middlename, ' ', lastname, ' ', extension_name) AS full_name"),
+//        )->pluck('full_name', 'id');
+//        dd($allChildren);
+
         return view('child.create', compact('cycle', 'milkFeedings', 'centerNames', 'minDate', 'maxDate', 'sexOptions', 'provinces', 'cities', 'barangays', 'disabilities'));
     }
 

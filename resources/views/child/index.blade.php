@@ -144,11 +144,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td class="text-center" colspan="8">No children found.</td>
-                                        </tr>
-                                    @endforelse
+                                    @endforeach
                                     </tbody>
                                 </table>
 
