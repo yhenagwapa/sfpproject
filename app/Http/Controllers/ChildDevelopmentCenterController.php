@@ -102,6 +102,18 @@ class ChildDevelopmentCenterController extends Controller
                 ->select('users.*') // optionally select fields from psgcs too
                 ->get();
 
+            $workers = User::role('child development worker') // still on query builder
+            ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                ->where('psgcs.city_name_psgc', $psgcCity)
+                ->select('users.*') // optionally select fields from psgcs too
+                ->get();
+
+            $encoders = User::role('encoder') // still on query builder
+            ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                ->where('psgcs.city_name_psgc', $psgcCity)
+                ->select('users.*') // optionally select fields from psgcs too
+                ->get();
+
             // Filter the grouped cities collection to only include entries matching the user's city PSGC
             $userCity = Psgc::find(auth()->user()->psgc_id)->city_name_psgc;
             $cities = $cities->map(function ($cityGroup) use ($userCity) {
@@ -229,6 +241,18 @@ class ChildDevelopmentCenterController extends Controller
 
             $psgcCity = Psgc::find(auth()->user()->psgc_id)->city_name_psgc;
             $focals = User::role('lgu focal') // still on query builder
+            ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                ->where('psgcs.city_name_psgc', $psgcCity)
+                ->select('users.*') // optionally select fields from psgcs too
+                ->get();
+
+            $workers = User::role('child development worker') // still on query builder
+            ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                ->where('psgcs.city_name_psgc', $psgcCity)
+                ->select('users.*') // optionally select fields from psgcs too
+                ->get();
+
+            $encoders = User::role('encoder') // still on query builder
             ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
                 ->where('psgcs.city_name_psgc', $psgcCity)
                 ->select('users.*') // optionally select fields from psgcs too
