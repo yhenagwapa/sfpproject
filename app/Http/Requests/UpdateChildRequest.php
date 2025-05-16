@@ -22,8 +22,8 @@ class UpdateChildRequest extends FormRequest
      */
     public function rules(): array
     {
-        $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
-        $maxDate = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
+        $minDate = Carbon::now()->subYears(6)->addDay()->format('Y-m-d');
+        $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('Y-m-d');
 
         return [
             'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
@@ -49,8 +49,8 @@ class UpdateChildRequest extends FormRequest
 
     public function messages()
     {
-        $minDate = Carbon::now()->subYears(5)->startOfYear();
-        $maxDate = Carbon::now()->subYears(2)->endOfYear();
+        $minDate = Carbon::now()->subYears(6)->addDay()->format('Y-m-d');
+        $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('Y-m-d');
 
         return [
             'lastname.required' => 'Please fill in this field.',
@@ -59,8 +59,8 @@ class UpdateChildRequest extends FormRequest
             'firstname.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
             'middlename.regex' => 'This field only accepts letters, numbers and characters (.) and (-).',
             'date_of_birth.required' => 'Please fill in this field.',
-            'date_of_birth.after_or_equal' => 'Invalid date. Date of birth should be ' . $minDate->format('Y') . ' to ' . $maxDate->format('Y') . '.',
-            'date_of_birth.before_or_equal' => 'Invalid date. Date of birth should be ' . $minDate->format('Y') . ' to ' . $maxDate->format('Y') . '.',
+            'date_of_birth.after_or_equal' => 'Invalid date. Date of birth should be ' . $minDate . ' to ' . $maxDate . '.',
+            'date_of_birth.before_or_equal' => 'Invalid date. Date of birth should be ' . $minDate . ' to ' . $maxDate . '.',
             'sex_id.required' => 'Please fill in this field.',
 
             'province.required' => 'Please select a province.',

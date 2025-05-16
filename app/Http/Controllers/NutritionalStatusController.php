@@ -45,6 +45,15 @@ class NutritionalStatusController extends Controller
             ->whereNotNull('actual_weighing_date')
             ->get();
 
+        $startDate = $implementation->school_year_from;
+        $endDate = $implementation->school_year_to;
+
+        $minDate = Carbon::create($startDate, 6, 1)->format('Y-m-d');
+        $maxDate = Carbon::create($endDate, 6, 1)->format('Y-m-d');
+
+        $minDateExit = null;
+        $today = null;
+
         $hasUponEntryData = false;
         $hasUponExitData = false;
         $entryDetails = null;
@@ -62,11 +71,14 @@ class NutritionalStatusController extends Controller
             $hasUponEntryData = true;
             $hasUponExitData = true;
             $entryDetails = $entryData[0];
+            $entryWeighingDate = $entryData[0]->actual_weighing_date;
             $exitDetails = $entryData[1];
+            $minDateExit = Carbon::create($entryWeighingDate)->addDays(60)->format('Y-m-d');
+            $today = Carbon::today()->format('Y-m-d');
         }
 
 
-        return view('nutritionalstatus.index', compact('child', 'implementation', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData'));
+        return view('nutritionalstatus.index', compact('child', 'implementation', 'minDate', 'maxDate', 'minDateExit', 'today', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData'));
     }
 
 
@@ -241,18 +253,14 @@ class NutritionalStatusController extends Controller
 
         }
 
-        $entryIsMalnourished = !(
-            $entryWeightForAge === 'Normal' &&
-            ($entryHeightForAge === 'Normal' || $entryHeightForAge === 'Tall') &&
-            $entryWeightForHeight === 'Normal'
-        );
+        $entryIsMalnourished = in_array($entryWeightForAge, ['Underweight', 'Severely Underweight', 'Overweight']) ||
+                         in_array($entryHeightForAge, ['Stunted', 'Severely Stunted']) ||
+                         in_array($entryWeightForHeight, ['Wasted', 'Severely Wasted', 'Overweight', 'Obese']);
 
-        $entryIsUndernourished = !(
-            in_array($entryWeightForAge, ['Normal', 'Overweight']) &&
-            $entryHeightForAge === 'Normal' &&
-            in_array($entryWeightForHeight, ['Normal', 'Overweight', 'Obese'])
-        );
 
+       $entryIsUndernourished = in_array($entryWeightForAge, ['Underweight', 'Severely Underweight']) ||
+                         in_array($entryHeightForAge, ['Stunted', 'Severely Stunted']) ||
+                         in_array($entryWeightForHeight, ['Wasted', 'Severely Wasted']);
 
         $entryNutritionalStatus = NutritionalStatus::create([
             'implementation_id' => $cycleID,
@@ -436,17 +444,14 @@ class NutritionalStatusController extends Controller
                 }
             }
 
-            $exitIsMalnourished = !(
-                $exitWeightForAge === 'Normal' &&
-                ($exitHeightForAge === 'Normal' || $exitHeightForAge === 'Tall') &&
-                $exitWeightForHeight === 'Normal'
-            );
+            $exitIsMalnourished = in_array($exitWeightForAge, ['Underweight', 'Severely Underweight', 'Overweight']) ||
+                         in_array($exitHeightForAge, ['Stunted', 'Severely Stunted']) ||
+                         in_array($exitWeightForHeight, ['Wasted', 'Severely Wasted', 'Overweight', 'Obese']);
 
-            $exitIsUndernourished = !(
-                in_array($exitWeightForAge, ['Normal', 'Overweight']) &&
-                $exitHeightForAge === 'Normal' &&
-                in_array($exitWeightForHeight, ['Normal', 'Overweight', 'Obese'])
-            );
+
+            $exitIsUndernourished = in_array($exitWeightForAge, ['Underweight', 'Severely Underweight']) ||
+                         in_array($exitHeightForAge, ['Stunted', 'Severely Stunted']) ||
+                         in_array($exitWeightForHeight, ['Wasted', 'Severely Wasted']);
 
 
             $exitNutritionalStatus = NutritionalStatus::create([
@@ -688,17 +693,14 @@ class NutritionalStatusController extends Controller
 
         }
 
-        $entryIsMalnourished = !(
-            $entryWeightForAge === 'Normal' &&
-            ($entryHeightForAge === 'Normal' || $entryHeightForAge === 'Tall') &&
-            $entryWeightForHeight === 'Normal'
-        );
+        $entryIsMalnourished = in_array($entryWeightForAge, ['Underweight', 'Severely Underweight', 'Overweight']) ||
+                         in_array($entryHeightForAge, ['Stunted', 'Severely Stunted']) ||
+                         in_array($entryWeightForHeight, ['Wasted', 'Severely Wasted', 'Overweight', 'Obese']);
 
-        $entryIsUndernourished = !(
-            in_array($entryWeightForAge, ['Normal', 'Overweight']) &&
-            $entryHeightForAge === 'Normal' &&
-            in_array($entryWeightForHeight, ['Normal', 'Overweight', 'Obese'])
-        );
+
+       $entryIsUndernourished = in_array($entryWeightForAge, ['Underweight', 'Severely Underweight']) ||
+                         in_array($entryHeightForAge, ['Stunted', 'Severely Stunted']) ||
+                         in_array($entryWeightForHeight, ['Wasted', 'Severely Wasted']);
 
         $nsEditCount = $nutritionalStatus->edit_counter;
 
@@ -899,17 +901,14 @@ class NutritionalStatusController extends Controller
                 }
             }
 
-            $exitIsMalnourished = !(
-                $exitWeightForAge === 'Normal' &&
-                ($exitHeightForAge === 'Normal' || $exitHeightForAge === 'Tall') &&
-                $exitWeightForHeight === 'Normal'
-            );
+            $exitIsMalnourished = in_array($exitWeightForAge, ['Underweight', 'Severely Underweight', 'Overweight']) ||
+                         in_array($exitHeightForAge, ['Stunted', 'Severely Stunted']) ||
+                         in_array($exitWeightForHeight, ['Wasted', 'Severely Wasted', 'Overweight', 'Obese']);
 
-            $exitIsUndernourished = !(
-                in_array($exitWeightForAge, ['Normal', 'Overweight']) &&
-                $exitHeightForAge === 'Normal' &&
-                in_array($exitWeightForHeight, ['Normal', 'Overweight', 'Obese'])
-            );
+
+            $exitIsUndernourished = in_array($exitWeightForAge, ['Underweight', 'Severely Underweight']) ||
+                         in_array($exitHeightForAge, ['Stunted', 'Severely Stunted']) ||
+                         in_array($exitWeightForHeight, ['Wasted', 'Severely Wasted']);
 
             $nsEditCount = $nutritionalStatus->edit_counter;
 

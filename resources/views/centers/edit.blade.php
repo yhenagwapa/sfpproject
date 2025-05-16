@@ -7,7 +7,7 @@
         <nav style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb mb-3 p-0">
                 <li class="breadcrumb-item"><a href="{{ route('centers.index') }}">Child Development Centers</a></li>
-                <li class="breadcrumb-item active">{{ $center->center_name }}</li>
+                <li class="breadcrumb-item active uppercase">{{ $center->center_name }}</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->

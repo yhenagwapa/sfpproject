@@ -5,7 +5,7 @@
         <nav style="--bs-breadcrumb-divider: '>'; ">
             <ol class="breadcrumb mb-3 p-0">
                 <li class="breadcrumb-item"><a href="{{ route('child.index') }}">Children</a></li>
-                <li class="breadcrumb-item active" style="text-transform: uppercase;">{{ $child->full_name }}</li>
+                <li class="breadcrumb-item active uppercase">{{ $child->full_name }}</li>
             </ol>
         </nav>
     </div>
@@ -415,7 +415,7 @@
                                     <input type="radio" class="ml-5" name="is_funded" id="is_funded_yes" value="1"
                                         {{ old('is_funded', $childCenterId->funded) == '1' ? 'checked' : '' }}>
                                     <label class="mt-2" for="is_funded_yes">Yes</label>
-        
+
                                     <input type="radio" class="ml-5" name="is_funded" id="is_funded_no" value="0"
                                         {{ old('is_funded', $childCenterId->funded) == '0' ? 'checked' : '' }}>
                                     <label class="mt-2" for="is_funded_no">No</label>

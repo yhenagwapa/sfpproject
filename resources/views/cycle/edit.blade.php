@@ -7,7 +7,7 @@
         <nav style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb mb-3 p-0">
                 <li class="breadcrumb-item"><a href="{{ route('cycle.index') }}">Implementations</a></li>
-                <li class="breadcrumb-item active" style="text-transform: uppercase;">{{ $cycle->name }}</li>
+                <li class="breadcrumb-item active uppercase">{{ $cycle->name }}</li>
             </ol>
         </nav>
     </div>
@@ -82,7 +82,7 @@
                                             <span class="text-xs text-red-600">{{ $errors->first('cycle_school_year_from') }}</span>
                                         @endif
                                     </div>
-                                    
+
                                     <div class="col-md-3 mt-3 text-sm">
                                         <label for="cycle_school_year_to">School Year To<b class="text-red-600">*</b></label>
                                         <select name="cycle_school_year_to" id="cycle_school_year_to" class="form-control rounded border-gray-300">
@@ -97,7 +97,7 @@
                                         @if ($errors->has('cycle_school_year_to'))
                                             <span class="text-xs text-red-600">{{ $errors->first('cycle_school_year_to') }}</span>
                                         @endif
-                                    </div>                                    
+                                    </div>
 
                                     <div class="col-md-6 mt-3 text-sm">
                                         <label for="cycle_target">Target<b class="text-red-600">*</b></label>
@@ -179,11 +179,11 @@
         <script>
             const startYearSelect = document.getElementById('cycle_school_year_from');
             const endYearSelect = document.getElementById('cycle_school_year_to');
-        
+
             function updateEndYearOptions() {
                 const startYear = parseInt(startYearSelect.value);
                 const nextYear = startYear + 1;
-        
+
                 // Loop through and enable/disable options
                 Array.from(endYearSelect.options).forEach(option => {
                     const year = parseInt(option.value);
@@ -191,7 +191,7 @@
                         option.disabled = (year !== nextYear);
                     }
                 });
-        
+
                 // Auto-select next year if it's a valid option
                 const nextOption = Array.from(endYearSelect.options).find(option => parseInt(option.value) === nextYear);
                 if (nextOption) {
@@ -200,14 +200,14 @@
                     endYearSelect.value = ''; // fallback if next year not in list
                 }
             }
-        
+
             document.addEventListener('DOMContentLoaded', function () {
                 updateEndYearOptions(); // run once initially
                 startYearSelect.addEventListener('change', updateEndYearOptions); // run on change
             });
         </script>
-        
-        
+
+
         {{-- @endif --}}
 
     @include('cycle.script')
