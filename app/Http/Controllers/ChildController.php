@@ -251,8 +251,8 @@ class ChildController extends Controller
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
         }
 
-        $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
-        $maxDate = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
+        $minDate = Carbon::now()->subYears(6)->addDay()->format('Y-m-d');
+        $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('Y-m-d');
 
         $sexOptions = Sex::all();
 
