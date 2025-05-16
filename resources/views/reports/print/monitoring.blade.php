@@ -24,7 +24,7 @@
             padding: 10px;
             vertical-align: top;
         }
-        
+
         .p {
             margin: 5px 0;
         }
@@ -186,9 +186,9 @@
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height_for_age : 'N/A' }}</td>
                             <td>
                                 @if ($fundedChild->nutritionalStatus->isNotEmpty() && $fundedChild->nutritionalStatus->first()->is_undernourish)
-                                    Yes
+                                    1
                                 @elseif ($fundedChild->nutritionalStatus->isNotEmpty())
-                                    No
+                                    0
                                 @endif
                             </td>
                         @endif
@@ -203,9 +203,9 @@
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->height_for_age : 'N/A' }}</td>
                             <td>
                                 @if ($fundedChild->nutritionalStatus->isNotEmpty() && $fundedChild->nutritionalStatus[1]->is_undernourish)
-                                    Yes
+                                    1
                                 @elseif ($fundedChild->nutritionalStatus->isNotEmpty())
-                                    No
+                                    0
                                 @endif
                             </td>
                         @else

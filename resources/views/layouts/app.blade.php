@@ -47,7 +47,7 @@
 <body class="font-sans antialiased">
         <header id="header" class="header fixed-top d-flex align-items-right">
             <div class="d-flex justify-center">
-                <a href="https://fo11.dswd.gov.ph/" class="logo d-flex align-items-center">
+                <a href="{{ route('child.index') }}" class="logo d-flex align-items-center">
                     <img src="{{ asset('img/DSWD_Logo.png') }}" alt="dswd_logo">
 
                 </a>

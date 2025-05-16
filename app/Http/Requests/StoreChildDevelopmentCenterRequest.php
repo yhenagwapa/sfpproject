@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Unique;
 
 class StoreChildDevelopmentCenterRequest extends FormRequest
 {
@@ -22,7 +23,7 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'center_name' => ['required', 'string', 'max:255'],
+            'center_name' => ['required', 'unique:child_development_centers,center_name'],
             'assigned_focal_user_id' => ['required', 'exists:users,id'],
             'assigned_worker_user_id' => ['required', 'exists:users,id'],
             'assigned_encoder_user_id' => ['nullable','exists:users,id'],
@@ -36,7 +37,7 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
     {
         return [
             'center_name.required' => 'Please fill in the name of the child development center.',
-            'center_name.string' => 'Invalid entry for center name.',
+            'center_name.unique' => 'The center name has already been taken.',
             'assigned_pdo_user_id.required' => 'Please select an assigned PDO.',
             'assigned_focal_user_id.required' => 'Please select an assigned LGU Focal.',
             'assigned_worker_user_id.required' => 'Please select an assigned worker.',

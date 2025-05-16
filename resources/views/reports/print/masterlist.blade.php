@@ -111,9 +111,9 @@
                 <th rowspan="2">Actual Date of Weighing</th>
                 <th rowspan="2">Weight in kg.</th>
                 <th rowspan="2">Height in cm.</th>
-                <th colspan="2">Age in months/years</th>
+                <th colspan="2">Age in</th>
                 <th colspan="3">Nutritional Status</th>
-                <th rowspan="2">Summary of Undernourished Children</th>
+                <th rowspan="2">Summary of Under<br>nourished Children</th>
                 <th rowspan="2">Deworming</th>
                 <th rowspan="2">Vitamin A</th>
                 <th rowspan="2">Pantawid Member</th>
@@ -123,8 +123,8 @@
                 <th rowspan="2">Lactose Intolerant</th>
             </tr>
             <tr>
-                <th>Month</th>
-                <th>Year</th>
+                <th style="font-size: 8px;">Months</th>
+                <th style="font-size: 8px;">Years</th>
                 <th>Weight for Age</th>
                 <th>Weight for Height</th>
                 <th>Height for Age</th>
@@ -148,18 +148,18 @@
                     <td>{{ optional($fundedChild->nutritionalStatus->first())->height_for_age }}</td>
                     <td>
                         @if ($fundedChild->nutritionalStatus->isNotEmpty() && $fundedChild->nutritionalStatus->first()->is_undernourish)
-                            Yes
+                            1
                         @elseif ($fundedChild->nutritionalStatus->isNotEmpty())
-                            No
+                            0
                         @endif
                     </td>
                     <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->deworming_date }}</td>
                     <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->vitamin_a_date }}</td>
-                    <td>{{ $fundedChild->pantawid_details ?  $fundedChild->pantawid_details : 'No'}}</td>
-                    <td>{{ $fundedChild->is_indigenous_people ? 'Yes' : 'No' }}</td>
-                    <td>{{ $fundedChild->person_with_disability_details ? $fundedChild->person_with_disability_details : 'No'}}</td>
-                    <td>{{ $fundedChild->is_child_of_soloparent ? 'Yes' : 'No' }}</td>
-                    <td>{{ $fundedChild->is_lactose_intolerant ? 'Yes' : 'No' }}</td>
+                    <td>{{ $fundedChild->pantawid_details ?  $fundedChild->pantawid_details : '0'}}</td>
+                    <td>{{ $fundedChild->is_indigenous_people ? '1' : '0' }}</td>
+                    <td>{{ $fundedChild->person_with_disability_details ? $fundedChild->person_with_disability_details : '0'}}</td>
+                    <td>{{ $fundedChild->is_child_of_soloparent ? '1' : '0' }}</td>
+                    <td>{{ $fundedChild->is_lactose_intolerant ? '1' : '0' }}</td>
                 </tr>
             @empty
                 <tr>
