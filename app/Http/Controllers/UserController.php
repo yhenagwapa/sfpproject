@@ -52,7 +52,6 @@ class UserController extends Controller
         // Get the result
         $users = $query->get();
 
-
         return view('users.index', compact('users', 'roles', 'search'));
     }
 

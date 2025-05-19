@@ -105,7 +105,18 @@ class PDFController extends Controller
 
         }
 
-        // dd($isFunded);
+         // sort by gender
+        $isFunded = $isFunded->sort(function($a, $b) {
+            // 1) gender priority
+            if ($a->sex->name === 'Male' && $b->sex->name !== 'Male') {
+                return -1;
+            }
+            if ($b->sex->name === 'Male' && $a->sex->name !== 'Male') {
+                return 1;
+            }
+            // 2) same gender, compare full_name
+            return strcmp($a->full_name, $b->full_name);
+        });
 
         $pdf = Pdf::loadView('reports.print.masterlist', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames'))
             ->setPaper('folio', 'landscape')
@@ -3763,6 +3774,19 @@ class PDFController extends Controller
                 $selectedCenter = ChildDevelopmentCenter::find($cdcId);
             }
         }
+
+        // sort by gender
+        $isFunded = $isFunded->sort(function($a, $b) {
+            // 1) gender priority
+            if ($a->sex->name === 'Male' && $b->sex->name !== 'Male') {
+                return -1;
+            }
+            if ($b->sex->name === 'Male' && $a->sex->name !== 'Male') {
+                return 1;
+            }
+            // 2) same gender, compare full_name
+            return strcmp($a->full_name, $b->full_name);
+        });
 
         $pdf = Pdf::loadView('reports.print.monitoring', compact('cycle', 'isFunded', 'centers', 'cdcId', 'selectedCenter'))
             ->setPaper('folio', 'landscape')

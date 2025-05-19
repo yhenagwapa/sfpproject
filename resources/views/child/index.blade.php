@@ -76,27 +76,31 @@
                                 <table id='children-table' class="table datatable mt-3 text-left text-sm">
                                     <thead class="text-sm">
                                     <tr>
-                                        <th>ID</th>
+                                        <th>#</th>
                                         <th>Child Name</th>
                                         <th>Sex</th>
                                         <th data-type="date" data-format="MM/DD/YYYY">Date of Birth</th>
                                         <th>Weight for Age</th>
                                         <th>Weight for Height</th>
                                         <th>Height for Age</th>
+                                        <th>Funded</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
+                                    @php($i=0)
                                     @forelse ($children as $child)
+                                        @php($i++)
                                         <tr>
-                                            <td>{{ $child->id }}</td>
+                                            <td>{{ $i }}</td>
                                             <td>{{ $child->full_name }}</td>
                                             <td>{{ $child->sex->name }}</td>
                                             <td>{{ \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') }}</td>
                                             <td>{{ optional($child->nutritionalStatus->first())->weight_for_age }}</td>
                                             <td>{{ optional($child->nutritionalStatus->first())->weight_for_height }}</td>
                                             <td>{{ optional($child->nutritionalStatus->first())->height_for_age }}</td>
+                                            <td class="capitalize">{{ $child->childCenters->contains('funded', true) ? 'Yes' : 'No' }}</td>
 
                                             <td class="inline-flex">
                                                 <div class="flex space-x-3">

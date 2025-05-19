@@ -121,4 +121,10 @@ class User extends Authenticatable
         return $this->belongsToMany(ChildDevelopmentCenter::class, 'user_center', 'user_id', 'child_development_center_id')->withTimestamps();
     }
 
+    public function psgc()
+    {
+        // Model, foreign key on users table, local key on psgcs table
+        return $this->belongsTo(Psgc::class, 'psgc_id', 'psgc_id');
+    }
+
 }

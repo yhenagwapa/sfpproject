@@ -24,13 +24,13 @@
             <th scope="col">Email</th>
             <th scope="col">Roles</th>
             <th scope="col">Status</th>
-            @if (auth()->user()->hasRole('admin'))
+            @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') )
                 <th scope="col">Action</th>
             @endif
         </tr>
     </thead>
     <tbody class='users-table'>
-        @forelse ($users as $user)
+        @foreach ($users as $user)
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td class="text-left">{{ $user->full_name }}</td>
@@ -171,48 +171,53 @@
                 </script>
 
                 <!-- Reset Password Button -->
-                @if (auth()->user()->hasRole('admin'))
-                    <td class="justify-items-center items-center">
-                        <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9 custom-disabled-btn" data-bs-toggle="modal"
-                            data-bs-target="#resetPasswordModal-{{ $user->id }}" @if (auth()->user()->id === $user->id) disabled  @endif>
-                            Reset Password
-                        </button>
-                    </td>
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                    @if (auth()->user()->hasRole('lgu focal') && $user->hasRole('lgu focal'))
+                        <td></td>
+                    @else
+                        <td class="justify-items-center items-center">
+                            <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9 custom-disabled-btn" data-bs-toggle="modal"
+                                    data-bs-target="#resetPasswordModal-{{ $user->id }}" @if (auth()->user()->id === $user->id) disabled  @endif>
+                                Reset Password
+                            </button>
+                        </td>
 
-                    <!-- Modal for Reset Password -->
-                    <div class="modal fade" id="resetPasswordModal-{{ $user->id }}" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-red-600">Confirmation</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Are you sure you want to reset <b class="text-red-600">{{ $user->full_name }}</b>'s
-                                    password?
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="confirmResetPassword-{{ $user->id }}" type="button"
-                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                    <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                        data-bs-dismiss="modal">Cancel</button>
+                        <!-- Modal for Reset Password -->
+                        <div class="modal fade" id="resetPasswordModal-{{ $user->id }}" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-red-600">Confirmation</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to reset <b class="text-red-600">{{ $user->full_name }}</b>'s
+                                        password?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="confirmResetPassword-{{ $user->id }}" type="button"
+                                                class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                        <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <form id="resetPasswordForm-{{ $user->id }}" method="POST"
-                        action="{{ route('users.reset-password', $user->id) }}">
-                        @csrf
-                        <input type="hidden" name="_method" value="PUT">
-                    </form>
+                        <form id="resetPasswordForm-{{ $user->id }}" method="POST"
+                              action="{{ route('users.reset-password', $user->id) }}">
+                            @csrf
+                            <input type="hidden" name="_method" value="PUT">
+                        </form>
 
-                    <script>
-                        document.getElementById('confirmResetPassword-{{ $user->id }}').addEventListener('click', function() {
-                            document.getElementById('resetPasswordForm-{{ $user->id }}').submit();
-                        });
-                    </script>
+                        <script>
+                            document.getElementById('confirmResetPassword-{{ $user->id }}').addEventListener('click', function() {
+                                document.getElementById('resetPasswordForm-{{ $user->id }}').submit();
+                            });
+                        </script>
+                    @endif
+
                 @endif
             </tr>
         @endforeach
