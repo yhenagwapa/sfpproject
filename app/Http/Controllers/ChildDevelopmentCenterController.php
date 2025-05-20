@@ -24,25 +24,13 @@ class ChildDevelopmentCenterController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->get('search');
-        $centersQuery = ChildDevelopmentCenter::query();
 
         if (auth()->user()->hasRole('admin')) {
-            if($search){
-                $centers = $centersQuery->where("center_name", "like", "%{$search}%")
-                    ->paginate('10');
-            }
-            $centers = $centersQuery->paginate('10');
+            $centers = ChildDevelopmentCenter::all();
         } else {
             $userCenters = UserCenter::where('user_id', auth()->id())->get();
             $centerIDs = $userCenters->pluck('child_development_center_id');
-
-            if($search){
-                $centers = $centersQuery->whereIn('id', $centerIDs)
-                    ->where("center_name", "like", "%{$search}%")
-                    ->paginate('10');
-            }
-            $centers = $centersQuery->whereIn('id', $centerIDs)->paginate('10');
+            $centers = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
         }
 
         $centersWithRoles = [];
