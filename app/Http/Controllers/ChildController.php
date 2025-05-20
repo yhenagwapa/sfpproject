@@ -547,56 +547,58 @@ class ChildController extends Controller
 
         $child = Child::findOrFail($childID);
 
-        $query = Child::where('firstname', $validatedData['firstname'])
-            ->where('middlename', $validatedData['middlename'])
-            ->where('lastname', $validatedData['lastname'])
-            ->where('date_of_birth', $validatedData['date_of_birth'])
-            ->where('id', '!=', $child->id);
+        if(!auth()->user()->hasRole('lgu focal')){
+            $query = Child::where('firstname', $validatedData['firstname'])
+                ->where('middlename', $validatedData['middlename'])
+                ->where('lastname', $validatedData['lastname'])
+                ->where('date_of_birth', $validatedData['date_of_birth'])
+                ->where('id', '!=', $child->id);
 
-        if (isset($validatedData['extension_name'])) {
-            $query->where('extension_name', $validatedData['extension_name']);
+            if (isset($validatedData['extension_name'])) {
+                $query->where('extension_name', $validatedData['extension_name']);
+            }
+
+            $existingChild = $query->first();
+
+            if ($existingChild) {
+                return redirect()->back()->with('error', 'Child already exists.');
+            }
+
+            $psgc = Psgc::where('province_psgc', $request->province_psgc)
+                ->where('city_name_psgc', $request->city_name_psgc)
+                ->where('brgy_psgc', $request->brgy_psgc)
+                ->first();
+
+            if ($psgc) {
+                $validatedData['psgc_id'] = $psgc->psgc_id;
+            } else {
+                return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
+            }
+
+            $childEditCount = $child->edit_counter;
+
+            if (!auth()->user()->hasRole('admin')) {
+                $editCounter = $childEditCount + 1;
+            }
+
+            $updated = $child->update([
+                'firstname' => $request->firstname,
+                'middlename' => $request->middlename,
+                'lastname' => $request->lastname,
+                'extension_name' => $request->extension_name,
+                'date_of_birth' => $request->date_of_birth,
+                'sex_id' => $request->sex_id,
+                'address' => $request->address,
+                'psgc_id' => $psgc->psgc_id,
+                'pantawid_details' => $request->pantawid_details ? $request->pantawid_details : null,
+                'person_with_disability_details' => $request->person_with_disability_details ? $request->person_with_disability_details : null,
+                'is_indigenous_people' => $request->is_indigenous_people,
+                'is_child_of_soloparent' => $request->is_child_of_soloparent,
+                'is_lactose_intolerant' => $request->is_lactose_intolerant,
+                'edit_counter' => $editCounter,
+                'updated_by_user_id' => auth()->id(),
+            ]);
         }
-
-        $existingChild = $query->first();
-
-        if ($existingChild) {
-            return redirect()->back()->with('error', 'Child already exists.');
-        }
-
-        $psgc = Psgc::where('province_psgc', $request->province_psgc)
-            ->where('city_name_psgc', $request->city_name_psgc)
-            ->where('brgy_psgc', $request->brgy_psgc)
-            ->first();
-
-        if ($psgc) {
-            $validatedData['psgc_id'] = $psgc->psgc_id;
-        } else {
-            return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
-        }
-
-        $childEditCount = $child->edit_counter;
-
-        if (!auth()->user()->hasRole('admin')) {
-            $editCounter = $childEditCount + 1;
-        }
-
-        $updated = $child->update([
-            'firstname' => $request->firstname,
-            'middlename' => $request->middlename,
-            'lastname' => $request->lastname,
-            'extension_name' => $request->extension_name,
-            'date_of_birth' => $request->date_of_birth,
-            'sex_id' => $request->sex_id,
-            'address' => $request->address,
-            'psgc_id' => $psgc->psgc_id,
-            'pantawid_details' => $request->pantawid_details ? $request->pantawid_details : null,
-            'person_with_disability_details' => $request->person_with_disability_details ? $request->person_with_disability_details : null,
-            'is_indigenous_people' => $request->is_indigenous_people,
-            'is_child_of_soloparent' => $request->is_child_of_soloparent,
-            'is_lactose_intolerant' => $request->is_lactose_intolerant,
-            'edit_counter' => $editCounter,
-            'updated_by_user_id' => auth()->id(),
-        ]);
 
         $currentChildCenter = ChildCenter::where('child_id', $child->id)
             ->where('status', 'active')->first();
