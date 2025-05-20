@@ -90,6 +90,25 @@ class Child extends Model
     }
 
 
+    /**
+     * All center‐records for this child.
+     */
+    public function childCenters()
+    {
+        return $this->hasMany(ChildCenter::class, 'child_id', 'id');
+    }
 
+    /**
+     * Quick “funded” lookup as “Yes” or “No”.
+     */
+    public function getFundedAttribute(): string
+    {
+        // if any related record has funded = true
+        $isFunded = $this->childCenters()
+            ->where('funded', true)
+            ->exists();
+
+        return $isFunded ? 'Yes' : 'No';
+    }
 
 }
