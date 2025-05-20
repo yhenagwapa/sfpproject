@@ -408,7 +408,7 @@
                         <div class="col-md-6 mt-3 text-sm">
                             <label for="child_development_center_id">CDC or SNP <span
                                     class="text-red-600">*</span></label>
-                            <select class="form-control rounded border-gray-300" id="child_development_center_id"
+                            <select class="form-control rounded border-gray-300 uppercase" id="child_development_center_id"
                                 name='child_development_center_id' required>
                                 <option value="" selected>Select CDC or SNP</option>
                                 @foreach ($centerNames as $center)
