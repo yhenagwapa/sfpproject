@@ -442,7 +442,15 @@ class ChildController extends Controller
             $centerIDs = $centers->pluck('child_development_center_id');
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+
+        } elseif (auth()->user()->hasRole('lgu focal')) {
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
+
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
         }
+
+        $centers = ChildDevelopmentCenter::all();
 
         $psgc = new Psgc();
 

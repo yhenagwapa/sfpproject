@@ -412,6 +412,7 @@ td {
 .breadcrumb a {
     color: #899bbd;
     transition: 0.3s;
+    text-decoration: none;
 }
 
 .breadcrumb a:hover {

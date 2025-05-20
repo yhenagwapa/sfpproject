@@ -78,294 +78,295 @@
 
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">
 
-                                <div class='col-md-12 mt-3 text-gray-400 text-xs'>Personal Information<hr></div>
+                                @if(!auth()->user()->hasRole('lgu focal'))
+                                    <div class='col-md-12 mt-3 text-gray-400 text-xs'>Personal Information<hr></div>
 
-                                <div class="col-md-6 mt-3 text-sm">
-                                    <label for="firstname">First Name<b class="text-red-600">*</b></label>
-                                    <input type="text" class="form-control rounded border-gray-300" id="firstname"
-                                        name='firstname' value="{{ old('firstname', $child->firstname) }}" autofocus>
-                                    @error('firstname')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 mt-3 text-sm">
-                                    <label for="middlename">Middle Name</label>
-                                    <input type="text" class="form-control rounded border-gray-300" id="middlename"
-                                        name='middlename' value="{{ old('middlename', $child->middlename) }}">
-                                    @error('middlename')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="lastname">Last Name<b class="text-red-600">*</b></label>
-                                    <input type="text" class="form-control rounded border-gray-300" id="lastname"
-                                        name='lastname' value="{{ old('lastname', $child->lastname) }}">
-                                    @error('lastname')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="extension_name">Extension Name</label>
-                                    <select class="form-control rounded border-gray-300" id="extension_name"
-                                        name="extension_name">
-                                        <option value=""></option>
-                                        @foreach ($extNameOptions as $value1 => $label1)
-                                            <option value="{{ $value1 }}"
-                                                {{ old('extension_name', $child->extension_name) == $value1 ? 'selected' : '' }}>
-                                                {{ $label1 }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                {{-- @php
-                                    use Carbon\Carbon;
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="firstname">First Name<b class="text-red-600">*</b></label>
+                                        <input type="text" class="form-control rounded border-gray-300" id="firstname"
+                                            name='firstname' value="{{ old('firstname', $child->firstname) }}" autofocus>
+                                        @error('firstname')
+                                            <span class="text-xs text-red-600">{{ $errors->first('firstname') }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="middlename">Middle Name</label>
+                                        <input type="text" class="form-control rounded border-gray-300" id="middlename"
+                                            name='middlename' value="{{ old('middlename', $child->middlename) }}">
+                                        @error('middlename')
+                                            <span class="text-xs text-red-600">{{ $errors->first('firstname') }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mt-2 text-sm">!~
+|""                                        <input type="text" class="form-control rounded border-gray-300" id="lastname"
+                                            name='lastname' value="{{ old('lastname', $child->lastname) }}">
+                                        @error('lastname')
+                                            <span class="text-xs text-red-600">{{ $errors->first('firstname') }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="extension_name">Extension Name</label>
+                                        <select class="form-control rounded border-gray-300" id="extension_name"
+                                            name="extension_name">
+                                            <option value=""></option>
+                                            @foreach ($extNameOptions as $value1 => $label1)
+                                                <option value="{{ $value1 }}"
+                                                    {{ old('extension_name', $child->extension_name) == $value1 ? 'selected' : '' }}>
+                                                    {{ $label1 }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    {{-- @php
+                                        use Carbon\Carbon;
 
-                                    $min = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
-                                    $max = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
-                                @endphp --}}
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="date_of_birth">Date of Birth<b class="text-red-600">*</b></label>
-                                    <input type="date" class="form-control rounded border-gray-300" id="date_of_birth"
-                                        name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('Y-m-d')) }}" min="{{ $minDate }}" max="{{ $maxDate }}">
-                                    @error('date_of_birth')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="sex">Sex<b class="text-red-600">*</b></label>
-                                    <select class="form-control rounded border-gray-300" id="sex_id" name="sex_id">
-                                        <option value="" disabled>Select Sex</option>
-                                        @foreach ($sexOptions as $sex)
-                                            <option value="{{ $sex->id }}"
-                                                {{ old('sex_id', $child->sex_id) == $sex->id ? 'selected' : '' }}>
-                                                {{ $sex->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('sex_id')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                        $min = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
+                                        $max = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
+                                    @endphp --}}
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="date_of_birth">Date of Birth<b class="text-red-600">*</b></label>
+                                        <input type="date" class="form-control rounded border-gray-300" id="date_of_birth"
+                                            name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('Y-m-d')) }}" min="{{ $minDate }}" max="{{ $maxDate }}">
+                                        @error('date_of_birth')
+                                            <span class="text-xs text-red-600">{{ $errors->first('date_of_birth') }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="sex">Sex<b class="text-red-600">*</b></label>
+                                        <select class="form-control rounded border-gray-300" id="sex_id" name="sex_id">
+                                            <option value="" disabled>Select Sex</option>
+                                            @foreach ($sexOptions as $sex)
+                                                <option value="{{ $sex->id }}"
+                                                    {{ old('sex_id', $child->sex_id) == $sex->id ? 'selected' : '' }}>
+                                                    {{ $sex->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('sex_id')
+                                            <span class="text-xs text-red-600">{{ $errors->first('sex_id') }}</span>
+                                        @enderror
+                                    </div>
 
-                                <div class="col-md-4 mt-4">
-                                    <label for="is_pantawid">Pantawid Member:<b class="text-red-600">*</b></label>
-                                    @if ($errors->has('is_pantawid'))
+                                    <div class="col-md-4 mt-4">
+                                        <label for="is_pantawid">Pantawid Member:<b class="text-red-600">*</b></label>
+                                        @if ($errors->has('is_pantawid'))
+                                                <span
+                                                class="text-xs text-red-600">{{ $errors->first('is_pantawid') }}</span>
+                                            @endif
+                                    </div>
+                                    <div class="col-md-1 mt-4">
+                                        <input type="radio" id="is_pantawid_yes" name="is_pantawid" value="1"
+                                            {{ old('is_pantawid', $isChildPantawid) == true ? 'checked' : '' }}>
+                                        <label for="is_pantawid_yes">Yes</label>
+                                    </div>
+                                    <div class="col-md-1 mt-4">
+                                        <input type="radio" id="is_pantawid_no" name="is_pantawid" value="0"
+                                            {{ old('is_pantawid', $isChildPantawid) == false ? 'checked' : '' }}>
+                                        <label for="is_pantawid_no">No</label>
+                                    </div>
+                                    <div class="col-md-6 mt-4 additional-details">
+                                        <label for="pantawid_details">Pantawid Details:</label><b
+                                                class="text-red-600">*</b>
+                                        <select class="form-control rounded border-gray-300" id="pantawid_details"
+                                            name="pantawid_details"
+                                            {{ old('pantawid_details', $child->pantawid_details) == null ? 'disabled' : '' }}>
+                                            <option value="" selected disabled>SELECT DETAILS</option>
+                                            @foreach ($pantawidDetails as $value => $label)
+                                                <option value="{{ $value }}"
+                                                    {{ old('pantawid_details', $child->pantawid_details) == $value ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('pantawid_details')
+                                            <span class="text-xs text-red-600">{{ $errors->first('firstname') }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 mt-2">
+                                        <label for="is_person_with_disability">Person with
+                                            Disability:<b class="text-red-600">*</b></label>
+                                            @if ($errors->has('is_person_with_disability'))
                                             <span
-                                            class="text-xs text-red-600">{{ $errors->first('is_pantawid') }}</span>
-                                        @endif
-                                </div>
-                                <div class="col-md-1 mt-4">
-                                    <input type="radio" id="is_pantawid_yes" name="is_pantawid" value="1"
-                                        {{ old('is_pantawid', $isChildPantawid) == true ? 'checked' : '' }}>
-                                    <label for="is_pantawid_yes">Yes</label>
-                                </div>
-                                <div class="col-md-1 mt-4">
-                                    <input type="radio" id="is_pantawid_no" name="is_pantawid" value="0"
-                                        {{ old('is_pantawid', $isChildPantawid) == false ? 'checked' : '' }}>
-                                    <label for="is_pantawid_no">No</label>
-                                </div>
-                                <div class="col-md-6 mt-4 additional-details">
-                                    <label for="pantawid_details">Pantawid Details:</label><b
-                                            class="text-red-600">*</b>
-                                    <select class="form-control rounded border-gray-300" id="pantawid_details"
-                                        name="pantawid_details"
-                                        {{ old('pantawid_details', $child->pantawid_details) == null ? 'disabled' : '' }}>
-                                        <option value="" selected disabled>SELECT DETAILS</option>
-                                        @foreach ($pantawidDetails as $value => $label)
-                                            <option value="{{ $value }}"
-                                                {{ old('pantawid_details', $child->pantawid_details) == $value ? 'selected' : '' }}>
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('pantawid_details')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                                class="text-xs text-red-600">{{ $errors->first('is_person_with_disability') }}</span>
+                                            @endif
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <input type="radio" id="is_person_with_disability_yes"
+                                            name="is_person_with_disability" value="1"
+                                            {{ old('is_person_with_disability', $isChildPWD) == true ? 'checked' : '' }}>
+                                        <label for="is_person_with_disability_yes">Yes</label>
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <input type="radio" id="is_person_with_disability_no"
+                                            name="is_person_with_disability" value="0"
+                                            {{ old('is_person_with_disability', $isChildPWD) == false ? 'checked' : '' }}>
+                                        <label for="is_person_with_disability_no">No</label>
+                                    </div>
+                                    <div class="col-md-6 mt-2 additional-details" id="person_with_disability_additionalDetails">
+                                        <label for="person_with_disability_details">Disability Details:</label><b class="text-red-600">*</b>
+                                        <select class="form-control rounded border-gray-300"
+                                                id="person_with_disability_details"
+                                                name="person_with_disability_details"
+                                            {{ $isChildPWD ? '' : 'disabled' }}>
+                                            <option value="">-- Select Disability --</option>
+                                            @foreach ($disabilities as $disability)
+                                                <option value="{{ $disability }}"
+                                                    {{ old('person_with_disability_details', $child->person_with_disability_details) == $disability ? 'selected' : '' }}>
+                                                    {{ $disability }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('person_with_disability_details')
+                                        <span class="text-xs text-red-600">{{ $errors->first('firstname') }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-4 mt-2">
+                                        <label for="is_indigenous_people">Indigenous People (IP):</label><b
+                                        class="text-red-600">*</b>
+                                        @if ($errors->has('is_indigenous_people'))
+                                                <span
+                                                    class="text-xs text-red-600">{{ $errors->first('is_indigenous_people') }}</span>
+                                            @endif
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <input type="radio" name="is_indigenous_people" id="is_indigenous_people_yes"
+                                            value="1"
+                                            {{ old('is_indigenous_people', $child->is_indigenous_people) == '1' ? 'checked' : '' }}>
+                                        <label for="is_indigenous_people_yes">Yes</label>
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <input type="radio" name="is_indigenous_people" id="is_indigenous_people_no"
+                                            value="0"
+                                            {{ old('is_indigenous_people', $child->is_indigenous_people) == '0' ? 'checked' : '' }}>
+                                        <label for="is_indigenous_people_no">No</label>
+                                    </div>
+                                    <div class="col-md-6 mt-2" style="visibility: hidden">
+                                        <input type="text" class="form-control rounded border-gray-300" name="spaceonly">
+                                    </div>
+                                    <div class="col-md-4 mt-2">
+                                        <label for="is_child_of_soloparent">Child of Solo Parent:</label><b
+                                        class="text-red-600">*</b>
+                                        @if ($errors->has('is_child_of_soloparent'))
+                                                <span
+                                                    class="text-xs text-red-600">{{ $errors->first('is_child_of_soloparent') }}</span>
+                                            @endif
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <input type="radio" name="is_child_of_soloparent" id="is_child_of_soloparent_yes"
+                                            value="1"
+                                            {{ old('is_child_of_soloparent', $child->is_child_of_soloparent) == '1' ? 'checked' : '' }}>
+                                        <label for="is_child_of_soloparent_yes">Yes</label>
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <input type="radio" name="is_child_of_soloparent" id="is_child_of_soloparent_no"
+                                            value="0"
+                                            {{ old('is_child_of_soloparent', $child->is_child_of_soloparent) == '0' ? 'checked' : '' }}>
+                                        <label for="is_child_of_soloparent_no">No</label>
+                                    </div>
+                                    <div class="col-md-6 mt-2" style="visibility: hidden">
+                                        <input type="text" class="form-control rounded border-gray-300" name="spaceonly">
+                                    </div>
+                                    <div class="col-md-4 mt-2">
+                                        <label for="is_lactose_intolerant">Lactose Intolerant:</label><b
+                                        class="text-red-600">*</b>
+                                        @if ($errors->has('is_lactose_intolerant'))
+                                                <span
+                                                    class="text-xs text-red-600">{{ $errors->first('is_lactose_intolerant') }}</span>
+                                            @endif
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_yes"
+                                            value="1"
+                                            {{ old('is_lactose_intolerant', $child->is_lactose_intolerant) == '1' ? 'checked' : '' }}>
+                                        <label for="is_lactose_intolerant_yes">Yes</label>
+                                    </div>
+                                    <div class="col-md-1 mt-2">
+                                        <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_no"
+                                            value="0"
+                                            {{ old('is_lactose_intolerant', $child->is_lactose_intolerant) == '0' ? 'checked' : '' }}>
+                                        <label for="is_lactose_intolerant_no">No</label>
+                                    </div>
+                                    <div class="col-md-6 mt-2" style="visibility: hidden">
+                                        <input type="text" class="form-control rounded border-gray-300" name="spaceonly">
+                                    </div>
 
-                                <div class="col-md-4 mt-2">
-                                    <label for="is_person_with_disability">Person with
-                                        Disability:<b class="text-red-600">*</b></label>
-                                        @if ($errors->has('is_person_with_disability'))
-                                        <span
-                                            class="text-xs text-red-600">{{ $errors->first('is_person_with_disability') }}</span>
-                                        @endif
-                                </div>
-                                <div class="col-md-1 mt-2">
-                                    <input type="radio" id="is_person_with_disability_yes"
-                                        name="is_person_with_disability" value="1"
-                                        {{ old('is_person_with_disability', $isChildPWD) == true ? 'checked' : '' }}>
-                                    <label for="is_person_with_disability_yes">Yes</label>
-                                </div>
-                                <div class="col-md-1 mt-2">
-                                    <input type="radio" id="is_person_with_disability_no"
-                                        name="is_person_with_disability" value="0"
-                                        {{ old('is_person_with_disability', $isChildPWD) == false ? 'checked' : '' }}>
-                                    <label for="is_person_with_disability_no">No</label>
-                                </div>
-                                <div class="col-md-6 mt-2 additional-details" id="person_with_disability_additionalDetails">
-                                    <label for="person_with_disability_details">Disability Details:</label><b class="text-red-600">*</b>
-                                    <select class="form-control rounded border-gray-300"
-                                            id="person_with_disability_details"
-                                            name="person_with_disability_details"
-                                        {{ $isChildPWD ? '' : 'disabled' }}>
-                                        <option value="">-- Select Disability --</option>
-                                        @foreach ($disabilities as $disability)
-                                            <option value="{{ $disability }}"
-                                                {{ old('person_with_disability_details', $child->person_with_disability_details) == $disability ? 'selected' : '' }}>
-                                                {{ $disability }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('person_with_disability_details')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="col-md-4 mt-2">
-                                    <label for="is_indigenous_people">Indigenous People (IP):</label><b
-                                    class="text-red-600">*</b>
-                                    @if ($errors->has('is_indigenous_people'))
-                                            <span
-                                                class="text-xs text-red-600">{{ $errors->first('is_indigenous_people') }}</span>
-                                        @endif
-                                </div>
-                                <div class="col-md-1 mt-2">
-                                    <input type="radio" name="is_indigenous_people" id="is_indigenous_people_yes"
-                                        value="1"
-                                        {{ old('is_indigenous_people', $child->is_indigenous_people) == '1' ? 'checked' : '' }}>
-                                    <label for="is_indigenous_people_yes">Yes</label>
-                                </div>
-                                <div class="col-md-1 mt-2">
-                                    <input type="radio" name="is_indigenous_people" id="is_indigenous_people_no"
-                                        value="0"
-                                        {{ old('is_indigenous_people', $child->is_indigenous_people) == '0' ? 'checked' : '' }}>
-                                    <label for="is_indigenous_people_no">No</label>
-                                </div>
-                                <div class="col-md-6 mt-2" style="visibility: hidden">
-                                    <input type="text" class="form-control rounded border-gray-300" name="spaceonly">
-                                </div>
-                                <div class="col-md-4 mt-2">
-                                    <label for="is_child_of_soloparent">Child of Solo Parent:</label><b
-                                    class="text-red-600">*</b>
-                                    @if ($errors->has('is_child_of_soloparent'))
-                                            <span
-                                                class="text-xs text-red-600">{{ $errors->first('is_child_of_soloparent') }}</span>
-                                        @endif
-                                </div>
-                                <div class="col-md-1 mt-2">
-                                    <input type="radio" name="is_child_of_soloparent" id="is_child_of_soloparent_yes"
-                                        value="1"
-                                        {{ old('is_child_of_soloparent', $child->is_child_of_soloparent) == '1' ? 'checked' : '' }}>
-                                    <label for="is_child_of_soloparent_yes">Yes</label>
-                                </div>
-                                <div class="col-md-1 mt-2">
-                                    <input type="radio" name="is_child_of_soloparent" id="is_child_of_soloparent_no"
-                                        value="0"
-                                        {{ old('is_child_of_soloparent', $child->is_child_of_soloparent) == '0' ? 'checked' : '' }}>
-                                    <label for="is_child_of_soloparent_no">No</label>
-                                </div>
-                                <div class="col-md-6 mt-2" style="visibility: hidden">
-                                    <input type="text" class="form-control rounded border-gray-300" name="spaceonly">
-                                </div>
-                                <div class="col-md-4 mt-2">
-                                    <label for="is_lactose_intolerant">Lactose Intolerant:</label><b
-                                    class="text-red-600">*</b>
-                                    @if ($errors->has('is_lactose_intolerant'))
-                                            <span
-                                                class="text-xs text-red-600">{{ $errors->first('is_lactose_intolerant') }}</span>
-                                        @endif
-                                </div>
-                                <div class="col-md-1 mt-2">
-                                    <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_yes"
-                                        value="1"
-                                        {{ old('is_lactose_intolerant', $child->is_lactose_intolerant) == '1' ? 'checked' : '' }}>
-                                    <label for="is_lactose_intolerant_yes">Yes</label>
-                                </div>
-                                <div class="col-md-1 mt-2">
-                                    <input type="radio" name="is_lactose_intolerant" id="is_lactose_intolerant_no"
-                                        value="0"
-                                        {{ old('is_lactose_intolerant', $child->is_lactose_intolerant) == '0' ? 'checked' : '' }}>
-                                    <label for="is_lactose_intolerant_no">No</label>
-                                </div>
-                                <div class="col-md-6 mt-2" style="visibility: hidden">
-                                    <input type="text" class="form-control rounded border-gray-300" name="spaceonly">
-                                </div>
-
-                                <div class='col-md-12 mt-4 text-gray-400 text-xs'>Address<hr>
-                                </div>
+                                    <div class='col-md-12 mt-4 text-gray-400 text-xs'>Address<hr>
+                                    </div>
 
 
 
-                                <div class="col-md-6 mt-3 text-sm">
-                                    <label for="region">Region</label><label for="region"
-                                        class="text-red-600">*</label>
-                                    <select
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="region" disabled>
-                                        <option value="110000000" selected>Region XI</option>
-                                    </select>
-                                </div>
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="region">Region</label><label for="region"
+                                            class="text-red-600">*</label>
+                                        <select
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="region" disabled>
+                                            <option value="110000000" selected>Region XI</option>
+                                        </select>
+                                    </div>
 
-                                <div class="col-md-6 mt-3 text-sm">
-                                    <label for="province">Province<b class="text-red-600">*</b></label>
-                                    <select class="form-control rounded border-gray-300" id="province"
-                                        name="province_psgc">
-                                        <option value="" selected>Select Province</option>
-                                        @foreach ($provinces as $psgc => $name)
-                                            <option value="{{ $psgc }}"
-                                                {{ $psgc == old('province_psgc', $psgcRecord->province_psgc) ? 'selected' : '' }}>
-                                                {{ $name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('province_psgc')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="province">Province<b class="text-red-600">*</b></label>
+                                        <select class="form-control rounded border-gray-300" id="province"
+                                            name="province_psgc">
+                                            <option value="" selected>Select Province</option>
+                                            @foreach ($provinces as $psgc => $name)
+                                                <option value="{{ $psgc }}"
+                                                    {{ $psgc == old('province_psgc', $psgcRecord->province_psgc) ? 'selected' : '' }}>
+                                                    {{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('province_psgc')
+                                            <span class="text-xs text-red-600">{{ $errors->first('province_psgc') }}</span>
+                                        @enderror
+                                    </div>
 
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="city">City/Municipality<b class="text-red-600">*</b></label>
-                                    <select class="form-control rounded border-gray-300" id="city"
-                                        name="city_name_psgc">
-                                        <option value="" selected>Select City/Municipality</option>
-                                        @foreach ($cities as $psgc => $name)
-                                            <option value="{{ $psgc }}"
-                                                {{ $psgc == old('city_name_psgc', $psgcRecord->city_name_psgc) ? 'selected' : '' }}>
-                                                {{ $name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('city_name_psgc')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="city">City/Municipality<b class="text-red-600">*</b></label>
+                                        <select class="form-control rounded border-gray-300" id="city"
+                                            name="city_name_psgc">
+                                            <option value="" selected>Select City/Municipality</option>
+                                            @foreach ($cities as $psgc => $name)
+                                                <option value="{{ $psgc }}"
+                                                    {{ $psgc == old('city_name_psgc', $psgcRecord->city_name_psgc) ? 'selected' : '' }}>
+                                                    {{ $name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('city_name_psgc')
+                                            <span class="text-xs text-red-600">{{ $errors->first('city_name_psgc') }}</span>
+                                        @enderror
+                                    </div>
 
-                                <div class="col-md-6 mt-2 text-sm">
-                                    <label for="barangay">Barangay<b class="text-red-600">*</b></label>
-                                    <select class="form-control rounded border-gray-300" id="barangay" name="brgy_psgc">
-                                        <option value="" selected>Select Barangay</option>
-                                        @foreach ($barangays as $psgc => $name)
-                                            <option value="{{ $psgc }}"
-                                                {{ $psgc == old('brgy_psgc', $psgcRecord->brgy_psgc) ? 'selected' : '' }}>
-                                                {{ $name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('brgy_psgc')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                    <div class="col-md-6 mt-2 text-sm">
+                                        <label for="barangay">Barangay<b class="text-red-600">*</b></label>
+                                        <select class="form-control rounded border-gray-300" id="barangay" name="brgy_psgc">
+                                            <option value="" selected>Select Barangay</option>
+                                            @foreach ($barangays as $psgc => $name)
+                                                <option value="{{ $psgc }}"
+                                                    {{ $psgc == old('brgy_psgc', $psgcRecord->brgy_psgc) ? 'selected' : '' }}>
+                                                    {{ $name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('brgy_psgc')
+                                            <span class="text-xs text-red-600">{{ $errors->first('brgy_psgc') }}</span>
+                                        @enderror
+                                    </div>
 
 
-                                <input type="hidden" id="psgc_id" name="psgc_id" value="{{ $child->psgc_id }}">
+                                    <input type="hidden" id="psgc_id" name="psgc_id" value="{{ $child->psgc_id }}">
 
-                                <div class="col-md-12 mt-2 text-sm">
-                                    <label for="address">House No./ Street/ Purok<b class="text-red-600">*</b></label>
-                                    <input type="text" class="form-control rounded border-gray-300" id="address"
-                                        name='address' value="{{ old('address', $child->address) }}">
-                                    @error('address')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                    <div class="col-md-12 mt-2 text-sm">
+                                        <label for="address">House No./ Street/ Purok<b class="text-red-600">*</b></label>
+                                        <input type="text" class="form-control rounded border-gray-300" id="address"
+                                            name='address' value="{{ old('address', $child->address) }}">
+                                        @error('address')
+                                            <span class="text-xs text-red-600">{{ $errors->first('address') }}</span>
+                                        @enderror
+                                    </div>
+                                @endif
 
                                 <div class='col-md-12 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised
                                     Neighborhood Play<hr>
@@ -386,7 +387,8 @@
                                         @endforeach
                                     </select>
                                     @error('child_development_center_id')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                        <span class="text-xs text-red-600">1    qws2a`
+                                            /span>
                                     @enderror
                                 </div>
 
