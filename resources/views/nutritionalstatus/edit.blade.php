@@ -5,7 +5,7 @@
     <div class="pagetitle">
         <nav style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb mb-3 p-0">
-                <li class="breadcrumb-item"><a href="{{ route('child.index') }}">Children</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('child.index') }}" class="no-underline">Children</a></li>
                 <li class="breadcrumb-item active uppercase">{{ $child->full_name }}</li>
             </ol>
         </nav>

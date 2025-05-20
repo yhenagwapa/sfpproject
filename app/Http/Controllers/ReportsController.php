@@ -37,7 +37,9 @@ class ReportsController extends Controller
         $selectedCenter = null;
         $childCount = null;
 
-        $fundedChildren = Child::with('records','nutritionalStatus', 'sex');
+        $fundedChildren = Child::with('records','nutritionalStatus', 'sex')
+                            ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
+                            ->orderBy('lastname', 'asc');
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
@@ -48,12 +50,13 @@ class ReportsController extends Controller
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id)
                                 ->where('funded', 1)
-                                ->where('status', 'active');
-                })
-                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                    $query->where('implementation_id', $cycle->id);
-                })
-                ->paginate(10);
+                                ->where('status', 'active')
+                                ->orderBy('child_development_center_id', 'asc');
+                        })
+                        ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                            $query->where('implementation_id', $cycle->id);
+                        })
+                        ->paginate(10);
 
                 $childCount = $isFunded->count();
 
@@ -63,12 +66,14 @@ class ReportsController extends Controller
                         $query->where('child_development_center_id', $request->center_name)
                                 ->where('implementation_id', $cycle->id)
                                 ->where('funded', 1)
-                                ->where('status', 'active');
+                                ->where('status', 'active')
+                                ->orderBy('child_development_center_id', 'asc');
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);
                 })
                 ->paginate(10);
+
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
                 $childCount = $isFunded->count();
             }
@@ -86,7 +91,8 @@ class ReportsController extends Controller
                         $query->whereIn('child_development_center_id', $centerIDs)
                             ->where('implementation_id', $cycle->id)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('status', 'active')
+                            ->orderBy('child_development_center_id', 'asc');
                     }
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -101,12 +107,14 @@ class ReportsController extends Controller
                         $query->where('child_development_center_id', $cdcId)
                                 ->where('implementation_id', $cycle->id)
                                 ->where('funded', 1)
-                                ->where('status', 'active');
+                                ->where('status', 'active')
+                                ->orderBy('child_development_center_id', 'asc');
                 })
                 ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id);
                 })
                 ->paginate(10);
+                
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
                 $childCount = $isFunded->count();
             }

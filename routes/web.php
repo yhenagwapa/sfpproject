@@ -62,6 +62,7 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
     Route::get('/child', [ChildController::class, 'index'])->name('child.index');
     Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');
     Route::post('/child/store', [ChildController::class, 'store'])->name('child.store');
+    Route::post('/child/view', [ChildController::class, 'view'])->name('child.view');
     Route::post('/child/show', [ChildController::class, 'show'])->name('child.show');
     Route::get('/child/edit', [ChildController::class, 'edit'])->name('child.edit');
     Route::patch('/child/update', [ChildController::class, 'update'])->name('child.update');

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <style>
         .header {
@@ -36,12 +37,13 @@
             border-collapse: collapse;
         }
 
-        .monitoring-table th, .monitoring-table td {
+        .monitoring-table th,
+        .monitoring-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
         }
 
-        .monitoring-table td:nth-child(2){
+        .monitoring-table td:nth-child(2) {
             width: 15%;
         }
 
@@ -52,8 +54,9 @@
             border: 5px
         }
 
-        .footer-table p{
+        .footer-table p {
             margin: 0;
+            text-transform: uppercase;
         }
 
         .footer-table td {
@@ -83,26 +86,21 @@
             align-items: center;
             font-size: 12px;
         }
-
-        .pagenum:before {
-            content: "Page " counter(page) " of ";
-            text-align: center;
-            display: flex;
-        }
     </style>
 </head>
+
 <body>
     {{-- <input type="hidden" id="funded_center_name" name="funded_center_name" value="{{ $center->id}}"> --}}
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
-            {{ $cycle->name}} ( SY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )</p>
+            {{ $cycle->name }} ( SY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )</p>
         <p><b>WEIGHT AND HEIGHT MONITORING</b></p>
         <br>
     </div>
 
     <div class="header-section">
-        @if($selectedCenter)
+        @if ($selectedCenter)
             <table class="table">
                 <tr>
                     <td>
@@ -124,30 +122,30 @@
         <thead>
             <tr>
                 <th class="border border-white" rowspan="2">No.</th>
-                <th class="border border-white w-40" rowspan="2">Name of Child</th>
+                <th class="border border-white" rowspan="2">Name of Child</th>
                 <th class="border border-white" rowspan="2">Sex</th>
-                <th class="border border-white w-24" rowspan="2">Date of Birth</th>
-                <th class="border border-white w-24" rowspan="2">Actual Date <br>of Weighing</th>
+                <th class="border border-white" rowspan="2">Date <br>of<br> Birth</th>
+                <th class="border border-white" rowspan="2">Actual Date <br>of Weighing</th>
                 <th class="border border-white" rowspan="2">Weight <br>in kg.</th>
                 <th class="border border-white" rowspan="2">Height <br>in cm.</th>
-                <th class="border border-white" colspan="2">Age in month/year</th>
+                <th class="border border-white" colspan="2">Age in</th>
                 <th class="border border-white" colspan="3">Nutritional Status <br>Upon Entry</th>
-                <th class="border border-white w-10" rowspan="2">Summary of Under-<br>nourished Children</th>
-                <th class="border border-white w-24" rowspan="2">Actual Date <br>of Weighing</th>
+                <th class="border border-white" rowspan="2">Summary of Under-<br>nourished Children</th>
+                <th class="border border-white" rowspan="2">Actual Date <br>of Weighing</th>
                 <th class="border border-white" rowspan="2">Weight <br>in kg.</th>
                 <th class="border border-white" rowspan="2">Height <br>in cm.</th>
-                <th class="border border-white" colspan="2">Age in month/year</th>
+                <th class="border border-white" colspan="2">Age in</th>
                 <th class="border border-white" colspan="3">Nutritional Status <br>After 120 Feedings</th>
-                <th class="border border-white w-10" rowspan="2">Summary of Under-<br>nourished Children</th>
+                <th class="border border-white" rowspan="2">Summary of Under-<br>nourished Children</th>
             </tr>
             <tr>
-                <th class="border border-white">Month</th>
-                <th class="border border-white">Year</th>
+                <th class="border border-white" style="font-size: 8px;">Month</th>
+                <th class="border border-white" style="font-size: 8px;">Year</th>
                 <th class="border border-white">Weight for<br> Age</th>
                 <th class="border border-white">Weight for Height</th>
                 <th class="border border-white">Height for Age</th>
-                <th class="border border-white">Month</th>
-                <th class="border border-white">Year</th>
+                <th class="border border-white" style="font-size: 8px;">Month</th>
+                <th class="border border-white" style="font-size: 8px;">Year</th>
                 <th class="border border-white">Weight for<br> Age</th>
                 <th class="border border-white">Weight for Height</th>
                 <th class="border border-white">Height for Age</th>
@@ -160,81 +158,46 @@
             @forelse ($isFunded as $fundedChild)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $fundedChild->full_name }}</td>
+                    <td class="no-wrap">{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td>{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
+                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
 
-                    @if ($fundedChild->nutritionalStatus)
-                        @if ($fundedChild->nutritionalStatus->first() === null)
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        @else
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_months : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_years : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight_for_age : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight_for_height : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height_for_age : 'N/A' }}</td>
-                            <td>
-                                @if ($fundedChild->nutritionalStatus->isNotEmpty() && $fundedChild->nutritionalStatus->first()->is_undernourish)
-                                    1
-                                @elseif ($fundedChild->nutritionalStatus->isNotEmpty())
-                                    0
-                                @endif
-                            </td>
-                        @endif
-                        @if (isset($fundedChild->nutritionalStatus[1]))
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->actual_weighing_date : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->height : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->age_in_months : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->age_in_years : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight_for_age : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight_for_height : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->height_for_age : 'N/A' }}</td>
-                            <td>
-                                @if ($fundedChild->nutritionalStatus->isNotEmpty() && $fundedChild->nutritionalStatus[1]->is_undernourish)
-                                    1
-                                @elseif ($fundedChild->nutritionalStatus->isNotEmpty())
-                                    0
-                                @endif
-                            </td>
-                        @else
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        @endif
-                    @else
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    @endif
+
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_months : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_years : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight_for_age : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight_for_height : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height_for_age : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->first()->is_undernourish ? '1' : '0' }}</td>
+
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->actual_weighing_date : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->weight : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->height : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->age_in_months : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->age_in_years : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->weight_for_age : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->weight_for_height : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->height_for_age : 'N/A' }}
+                    </td>
+                    <td>{{ $fundedChild->nutritionalStatus->first()->is_undernourish ? '1' : '0' }}</td>
                 </tr>
             @empty
                 <tr>
@@ -256,7 +219,23 @@
                     <br>
                     <p>Prepare by:</p>
                     <br>
-                    <p>______________________________________</p>
+                    <p><u>
+                        @if($selectedCenter)
+                            @php
+                                $users = $selectedCenter->users->filter(function ($user) {
+                                    return $user->roles->contains('name', 'child development worker');
+                                });
+                            @endphp
+
+                            @if ($users->isNotEmpty())
+                                @foreach ($users as $user)
+                                    {{ $user->fullname }}
+                                @endforeach
+                            @else
+                                No Worker Assigned
+                            @endif
+                        @endif
+                    </u></p>
                     <p>Child Development Worker/Teacher</p>
                 </td>
                 <td>
@@ -264,7 +243,25 @@
                     <br>
                     <p>Noted by:</p>
                     <br>
-                    <p>______________________________________</p>
+                    <p>
+                        <u>
+                            @if($selectedCenter)
+                                @php
+                                    $users = $selectedCenter->users->filter(function ($user) {
+                                        return $user->roles->contains('name', 'lgu focal');
+                                    });
+                                @endphp
+
+                                @if ($users->isNotEmpty())
+                                    @foreach ($users as $user)
+                                        {{ $user->fullname }}
+                                    @endforeach
+                                @else
+                                    No Worker Assigned
+                                @endif
+                        @endif
+                        </u>
+                    </p>
                     <p>SFP Focal Person</p>
                 </td>
                 <td>
