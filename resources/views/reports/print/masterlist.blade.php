@@ -25,10 +25,6 @@
             vertical-align: top;
         }
 
-        .table td:first-child {
-            width: 70%;
-        }
-
         .p {
             margin: 5px 0;
         }
@@ -43,11 +39,6 @@
         .funded-table th, .funded-table td {
             border: 1px solid rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
-        }
-
-
-        .funded-table td:first-child{
-            width: 15%;
         }
 
         .footer-table {
@@ -65,6 +56,25 @@
         .footer-table td {
             padding: 10px;
             vertical-align: top;
+        }
+
+        @page {
+            margin-top: 20px;
+            margin-bottom: 0;
+            margin-right: 30px;
+            margin-left: 30px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
         }
 
         .no-wrap {
@@ -134,18 +144,17 @@
             @forelse ($isFunded as $fundedChild)
                 <tr>
                     <td style="width: 10px;">{{ $loop->iteration }}</td>
-                    <td>{{ $fundedChild->full_name }}</td>
+                    <td class="no-wrap">{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td style="white-space: nowrap;">{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
-
-                    <td style="white-space: nowrap;">{{ optional($fundedChild->nutritionalStatus->first())->actual_weighing_date }}</td>
-                    <td>{{ optional($fundedChild->nutritionalStatus->first())->weight }}</td>
-                    <td>{{ optional($fundedChild->nutritionalStatus->first())->height }}</td>
-                    <td>{{ optional($fundedChild->nutritionalStatus->first())->age_in_months }}</td>
-                    <td>{{ optional($fundedChild->nutritionalStatus->first())->age_in_years }}</td>
-                    <td>{{ optional($fundedChild->nutritionalStatus->first())->weight_for_age }}</td>
-                    <td>{{ optional($fundedChild->nutritionalStatus->first())->weight_for_height }}</td>
-                    <td>{{ optional($fundedChild->nutritionalStatus->first())->height_for_age }}</td>
+                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
+                    <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first()?->actual_weighing_date }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->first()?->weight }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->first()?->height }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->first()?->age_in_months }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->first()?->age_in_years }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->first()?->weight_for_age }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->first()?->weight_for_height }}</td>
+                    <td>{{ $fundedChild->nutritionalStatus->first()?->height_for_age }}</td>
                     <td>
                         @if ($fundedChild->nutritionalStatus->isNotEmpty() && $fundedChild->nutritionalStatus->first()->is_undernourish)
                             1
@@ -155,11 +164,11 @@
                     </td>
                     <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->deworming_date }}</td>
                     <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->vitamin_a_date }}</td>
-                    <td>{{ $fundedChild->pantawid_details ?  $fundedChild->pantawid_details : '0'}}</td>
-                    <td>{{ $fundedChild->is_indigenous_people ? '1' : '0' }}</td>
-                    <td>{{ $fundedChild->person_with_disability_details ? $fundedChild->person_with_disability_details : '0'}}</td>
-                    <td>{{ $fundedChild->is_child_of_soloparent ? '1' : '0' }}</td>
-                    <td>{{ $fundedChild->is_lactose_intolerant ? '1' : '0' }}</td>
+                    <td>{{ $fundedChild->pantawid_details ?  $fundedChild->pantawid_details : 'NO'}}</td>
+                    <td>{{ $fundedChild->is_indigenous_people ? 'YES' : 'NO' }}</td>
+                    <td>{{ $fundedChild->person_with_disability_details ? $fundedChild->person_with_disability_details : 'NO'}}</td>
+                    <td>{{ $fundedChild->is_child_of_soloparent ? 'YES' : 'NO' }}</td>
+                    <td>{{ $fundedChild->is_lactose_intolerant ? 'YES' : 'NO' }}</td>
                 </tr>
             @empty
                 <tr>
@@ -173,10 +182,8 @@
 
     <div class="footer-section">
         <table class="footer-table">
-            <tr></tr>
-            <tr></tr>
             <tr>
-                <td colspan="3">
+                <td>
                     <br>
                     <br>
                     <p>Prepare by:</p>
@@ -191,7 +198,7 @@
 
                             @if ($users->isNotEmpty())
                                 @foreach ($users as $user)
-                                    {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
+                                    {{ $user->fullname }}
                                 @endforeach
                             @else
                                 No Worker Assigned
@@ -205,7 +212,25 @@
                     <br>
                     <p>Noted by:</p>
                     <br>
-                    <p>______________________________________</p>
+                    <p>
+                        <u>
+                            @if($selectedCenter)
+                                @php
+                                    $users = $selectedCenter->users->filter(function ($user) {
+                                        return $user->roles->contains('name', 'lgu focal');
+                                    });
+                                @endphp
+
+                                @if ($users->isNotEmpty())
+                                    @foreach ($users as $user)
+                                        {{ $user->fullname }}
+                                    @endforeach
+                                @else
+                                    No Worker Assigned
+                                @endif
+                        @endif
+                        </u>
+                    </p>
                     <p>SFP Focal Person</p>
                 </td>
                 <td>
@@ -228,15 +253,7 @@
         </table>
     </div>
     <div class="footer">
-        <span class="pagenum"></span>
+        SFP Forms 1 (c/o CDW/CDT)
     </div>
 </body>
-{{-- <script type="text/php">
-    if (isset($pdf)) {
-        $pdf->page_script('
-            $font = $fontMetrics->get_font("Arial", "normal");
-            $pdf->text(520, 820, "Page {PAGE_NUM} of {PAGE_COUNT}", $font, 10);
-        ');
-    }
-</script> --}}
 </html>

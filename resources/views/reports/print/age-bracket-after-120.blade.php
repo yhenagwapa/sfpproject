@@ -539,14 +539,14 @@
                 $totalVitAFemale += $exitCountsPerNutritionalStatus[$age]['vitamin_a']['female'] ?? 0;
                 $totalPantawidMale += $exitCountsPerNutritionalStatus[$age]['pantawid']['male'] ?? 0;
                 $totalPantawidFemale += $exitCountsPerNutritionalStatus[$age]['pantawid']['female'] ?? 0;
-                $totalIPMale += $exitCountsPerNutritionalStatus[$age]['indigenous_people']['female'] ?? 0;
-                $totalIPFemale += $exitCountsPerNutritionalStatus[$age]['indigenous_people']['male'] ?? 0;
-                $totalPWDMale += $exitCountsPerNutritionalStatus[$age]['pwd']['female'] ?? 0;
-                $totalPWDFemale += $exitCountsPerNutritionalStatus[$age]['pwd']['male'] ?? 0;
+                $totalIPMale += $exitCountsPerNutritionalStatus[$age]['indigenous_people']['male'] ?? 0;
+                $totalIPFemale += $exitCountsPerNutritionalStatus[$age]['indigenous_people']['female'] ?? 0;
+                $totalPWDMale += $exitCountsPerNutritionalStatus[$age]['pwd']['male'] ?? 0;
+                $totalPWDFemale += $exitCountsPerNutritionalStatus[$age]['pwd']['female'] ?? 0;
                 $totalSoloParentMale += $exitCountsPerNutritionalStatus[$age]['child_of_soloparent']['male'] ?? 0;
                 $totalSoloParentFemale += $exitCountsPerNutritionalStatus[$age]['child_of_soloparent']['female'] ?? 0;
-                $totalLactoseIntolerantMale += $exitCountsPerNutritionalStatus[$age]['lactose_intolerant']['female'] ?? 0;
-                $totalLactoseIntolerantFemale += $exitCountsPerNutritionalStatus[$age]['lactose_intolerant']['male'] ?? 0;
+                $totalLactoseIntolerantMale += $exitCountsPerNutritionalStatus[$age]['lactose_intolerant']['male'] ?? 0;
+                $totalLactoseIntolerantFemale += $exitCountsPerNutritionalStatus[$age]['lactose_intolerant']['female'] ?? 0;
             }
         @endphp
 

@@ -78,7 +78,10 @@ class Child extends Model
 
     public function getFullNameAttribute()
     {
-        return trim("{$this->lastname}, {$this->firstname} {$this->middlename} {$this->extension_name}");
+        $middleInitial = $this->middlename ? strtoupper(substr($this->middlename, 0, 1)) . '.' : '';
+        $extension = $this->extension_name ?? '';
+
+        return trim("{$this->lastname}, {$this->firstname} {$middleInitial} {$extension}");
     }
 
     public function psgc()
@@ -86,13 +89,6 @@ class Child extends Model
         return $this->belongsTo(Psgc::class, 'psgc_id', 'psgc_id');
     }
 
-    public function getAgeAtWeighingAttribute()
-    {
-        if ($this->dob && $this->nutritionalStatus->entry_actual_date_of_weighing) {
-            return Carbon::parse($this->date_of_birth)->diffInYears(Carbon::parse($this->nutritionalStatus->entry_actual_date_of_weighing));
-        }
-        return null;
-    }
 
     /**
      * All center‐records for this child.

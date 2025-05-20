@@ -539,14 +539,14 @@
                 $totalVitAFemale += $countsPerNutritionalStatus[$age]['vitamin_a']['female'] ?? 0;
                 $totalPantawidMale += $countsPerNutritionalStatus[$age]['pantawid']['male'] ?? 0;
                 $totalPantawidFemale += $countsPerNutritionalStatus[$age]['pantawid']['female'] ?? 0;
-                $totalIPMale += $countsPerNutritionalStatus[$age]['indigenous_people']['female'] ?? 0;
-                $totalIPFemale += $countsPerNutritionalStatus[$age]['indigenous_people']['male'] ?? 0;
-                $totalPWDMale += $countsPerNutritionalStatus[$age]['pwd']['female'] ?? 0;
-                $totalPWDFemale += $countsPerNutritionalStatus[$age]['pwd']['male'] ?? 0;
+                $totalIPMale += $countsPerNutritionalStatus[$age]['indigenous_people']['male'] ?? 0;
+                $totalIPFemale += $countsPerNutritionalStatus[$age]['indigenous_people']['female'] ?? 0;
+                $totalPWDMale += $countsPerNutritionalStatus[$age]['pwd']['male'] ?? 0;
+                $totalPWDFemale += $countsPerNutritionalStatus[$age]['pwd']['female'] ?? 0;
                 $totalSoloParentMale += $countsPerNutritionalStatus[$age]['child_of_soloparent']['male'] ?? 0;
                 $totalSoloParentFemale += $countsPerNutritionalStatus[$age]['child_of_soloparent']['female'] ?? 0;
-                $totalLactoseIntolerantMale += $countsPerNutritionalStatus[$age]['lactose_intolerant']['female'] ?? 0;
-                $totalLactoseIntolerantFemale += $countsPerNutritionalStatus[$age]['lactose_intolerant']['male'] ?? 0;
+                $totalLactoseIntolerantMale += $countsPerNutritionalStatus[$age]['lactose_intolerant']['male'] ?? 0;
+                $totalLactoseIntolerantFemale += $countsPerNutritionalStatus[$age]['lactose_intolerant']['female'] ?? 0;
             }
         @endphp
         <tbody class="profile-table text-xs">

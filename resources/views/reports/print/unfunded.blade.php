@@ -59,6 +59,7 @@
 
         .footer-table p{
             margin: 0;
+            text-transform: uppercase;
         }
 
         .footer-table td {
@@ -103,6 +104,7 @@
     <table id='unfunded-table' class="table datatable unfunded-table w-full">
         <thead>
             <tr>
+                <th>No.</th>
                 <th class="no-wrap">Name of Child</th>
                 <th>Sex</th>
                 <th class="no-wrap">Date of Birth</th>
@@ -116,11 +118,12 @@
         </thead>
 
         <tbody class="funded-table text-xs">
-            @foreach ($isNotFunded as $unfundedChild)
+            @forelse ($isNotFunded as $unfundedChild)
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $unfundedChild->full_name }}</td>
                     <td>{{ $unfundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td>{{ $unfundedChild->date_of_birth }}</td>
+                    <td>{{ $unfundedChild->date_of_birth->format('Y-m-d') }}</td>
                     <td>{{ $unfundedChild->psgc->brgy_name }} {{ $unfundedChild->psgc->city_name }} {{ $unfundedChild->psgc->province_name }}</td>
                     <td>{{ $unfundedChild->pantawid_details ? $unfundedChild->pantawid_details : 'No' }}</td>
                     <td>{{ $unfundedChild->is_indigenous_people ? 'Yes' : 'No' }}</td>
@@ -128,16 +131,12 @@
                     <td>{{ $unfundedChild->is_child_of_soloparent ? 'Yes' : 'No' }}</td>
                     <td>{{ $unfundedChild->is_lactose_intolerant ? 'Yes' : 'No' }}</td>
                 </tr>
-            @endforeach
-            @if (count($isNotFunded) <= 0)
+            @empty
                 <tr>
-                    <td class="text-center" colspan="9">
-                        @if (empty($search))
-                            No Data found
-                        @endif
-                    </td>
+                    <td colspan="10">No Data Found.</td>
                 </tr>
-            @endif
+            @endforelse
+
         </tbody>
     </table>
 
@@ -152,7 +151,23 @@
                     <br>
                     <p>Prepare by:</p>
                     <br>
-                    <p>______________________________________</p>
+                    <p><u>
+                        @if($selectedCenter)
+                            @php
+                                $users = $selectedCenter->users->filter(function ($user) {
+                                    return $user->roles->contains('name', 'child development worker');
+                                });
+                            @endphp
+
+                            @if ($users->isNotEmpty())
+                                @foreach ($users as $user)
+                                    {{ $user->fullname }}
+                                @endforeach
+                            @else
+                                No Worker Assigned
+                            @endif
+                        @endif
+                    </u></p>
                     <p>Child Development Worker/Teacher</p>
                 </td>
                 <td>
@@ -160,7 +175,25 @@
                     <br>
                     <p>Noted by:</p>
                     <br>
-                    <p>______________________________________</p>
+                    <p>
+                        <u>
+                            @if($selectedCenter)
+                                @php
+                                    $users = $selectedCenter->users->filter(function ($user) {
+                                        return $user->roles->contains('name', 'lgu focal');
+                                    });
+                                @endphp
+
+                                @if ($users->isNotEmpty())
+                                    @foreach ($users as $user)
+                                        {{ $user->fullname }}
+                                    @endforeach
+                                @else
+                                    No Worker Assigned
+                                @endif
+                        @endif
+                        </u>
+                    </p>
                     <p>SFP Focal Person</p>
                 </td>
             </tr>
