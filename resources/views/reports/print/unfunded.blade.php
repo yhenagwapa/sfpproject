@@ -48,7 +48,7 @@
         }
 
         .unfunded-table td:first-child{
-            width: 20%;
+            width: 5%;
         }
 
         .footer-table {

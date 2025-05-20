@@ -85,6 +85,7 @@
     <table id='disability-table' class="table datatable disability-table w-full text-base">
         <thead>
             <tr>
+                <th>No.</th>
                 <th>Name of Child <br> <i class="text-sm">(Surname, First Name, M. I.)</i></th>
                 <th>Name of Child Development Center <br> <i class="text-sm">(CDC)</i></th>
                 <th>Sex<br> <i class="text-sm">(M/F)</i></th>
@@ -95,6 +96,7 @@
         <tbody class="disability-table text-xs">
             @foreach ($isPwdChildren as $childrenWithDisability)
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $childrenWithDisability->full_name }}</td>
                     <td>
                         {{ optional($childrenWithDisability->records->first()->center)->center_name ?? 'N/A' }}
