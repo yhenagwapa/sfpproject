@@ -17,7 +17,8 @@
             width: 100%;
             font-family: 'Arial', sans-serif;
             font-size: 10px;
-            border: 5px
+            border: 5px;
+            text-transform: uppercase;
         }
 
         .table td {

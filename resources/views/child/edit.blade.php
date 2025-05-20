@@ -378,7 +378,7 @@
                                         class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                         id="child_development_center_id" name='child_development_center_id'>
                                         <option value="" disabled selected>Select CDC or SNP</option>
-                                        @foreach ($centers as $center)
+                                        @foreach ($centerNames as $center)
                                             <option value="{{ $center->id }}"
                                                 {{ $center->id == old('child_development_center_id', $childCenterId->child_development_center_id) ? 'selected' : '' }}>
                                                 {{ $center->center_name }}
