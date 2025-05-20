@@ -431,24 +431,10 @@ class ChildController extends Controller
         // $centers = ChildDevelopmentCenter::all();
 
         $userID = auth()->id();
-        if (auth()->user()->hasRole('child development worker')) {
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
+        $centers = UserCenter::where('user_id', $userID)->get();
+        $centerIDs = $centers->pluck('child_development_center_id');
 
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
-
-        } elseif (auth()->user()->hasRole('encoder')) {
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
-
-        } elseif (auth()->user()->hasRole('lgu focal')) {
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
-        }
+        $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
         $centers = ChildDevelopmentCenter::all();
 
