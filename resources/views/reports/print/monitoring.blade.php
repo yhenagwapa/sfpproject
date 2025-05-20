@@ -166,9 +166,9 @@
 
                     <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date : 'N/A' }}
                     </td>
-                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight : 'N/A' }}
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? number_format($fundedChild->nutritionalStatus->first()->weight, 1) : 'N/A' }}
                     </td>
-                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height : 'N/A' }}
+                    <td>{{ $fundedChild->nutritionalStatus->first() ? number_format($fundedChild->nutritionalStatus->first()->height, 1) : 'N/A' }}
                     </td>
                     <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_months : 'N/A' }}
                     </td>
@@ -184,9 +184,9 @@
 
                     <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->actual_weighing_date : 'N/A' }}
                     </td>
-                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->weight : 'N/A' }}
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? number_format($fundedChild->nutritionalStatus->get(1)->weight, 1) : 'N/A' }}
                     </td>
-                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->height : 'N/A' }}
+                    <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? number_format($fundedChild->nutritionalStatus->get(1)->height, 1) : 'N/A' }}
                     </td>
                     <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus->get(1)->age_in_months : 'N/A' }}
                     </td>

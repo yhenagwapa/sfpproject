@@ -67,7 +67,7 @@
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
         <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
-        <p><b>LIST OF MALNOURISHED CHILDREN</b></p>
+        <p><b>LIST OF PWD CHILDREN</b></p>
         <br>
     </div>
 
