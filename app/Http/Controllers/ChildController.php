@@ -604,15 +604,22 @@ class ChildController extends Controller
         if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
             ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
 
-            $funded = $request->implementation_id ? true : false;
-
             ChildCenter::create([
                 'child_id' => $child->id,
                 'child_development_center_id' => $request->child_development_center_id,
                 'implementation_id' => $request->implementation_id,
                 'milk_feeding_id' => $request->implementation_id,
                 'status' => 'active',
-                'funded' => $funded
+                'funded' => $request->is_funded,
+            ]);
+        } else {
+            $currentChildCenter->update([
+                'child_id' => $child->id,
+                'child_development_center_id' => $request->child_development_center_id,
+                'implementation_id' => $request->implementation_id,
+                'milk_feeding_id' => $request->implementation_id,
+                'status' => 'active',
+                'funded' => $request->is_funded,
             ]);
         }
 

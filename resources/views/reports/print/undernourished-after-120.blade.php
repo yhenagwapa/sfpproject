@@ -183,7 +183,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td class="text-center" colspan="20">
+                    <td class="text-center" colspan="25">
                         No Data found
                     </td>
                 </tr>

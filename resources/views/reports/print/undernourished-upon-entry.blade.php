@@ -138,7 +138,7 @@
             </tr>
         </thead>
         <tbody class="undernourished-upon-entry-table text-xs">
-            @foreach ($centerNames as $center)
+            @forelse ($centerNames as $center)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $center->center_name }}</td>
@@ -181,16 +181,13 @@
                     <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a']['male'] ?? 0 }}</td>
                     <td>{{ $ageGroupsPerCenter[$center->id]['vitamin_a']['female'] ?? 0 }}</td>
                 </tr>
-            @endforeach
-            {{-- @if (count($centers) <= 0)
+            @empty
                 <tr>
-                    <td class="text-center" colspan="6">
-                        @if (empty($search))
-                            No Data found
-                        @endif
+                    <td class="text-center" colspan="25">
+                        No Data found
                     </td>
                 </tr>
-            @endif --}}
+            @endforelse
         </tbody>
     </table>
 
