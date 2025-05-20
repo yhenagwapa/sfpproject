@@ -92,6 +92,7 @@
     <table id='undernourished-upon-entry-table' class="table datatable undernourished-upon-entry-table w-full">
         <thead class="border bg-gray-200">
             <tr>
+                <th rowspan="3">No.</th>
                 <th rowspan="3">Name of Child Development Center</th>
                 <th rowspan="3">Name of Child Development Worker</th>
                 <th colspan="8">Summary of Undernourished Children</th>
@@ -139,6 +140,7 @@
         <tbody class="undernourished-upon-entry-table text-xs">
             @foreach ($centerNames as $center)
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $center->center_name }}</td>
                     <td>
                         @php

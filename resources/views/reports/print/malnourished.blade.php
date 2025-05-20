@@ -91,6 +91,7 @@
     <table id='malnourished-table' class="table datatable malnourished-table w-full">
         <thead>
             <tr>
+                <th rowspan="2">No.</th>
                 <th rowspan="2">Name of Child</th>
                 <th rowspan="2">Name of Child Development Center</th>
                 <th rowspan="2">Sex</th>
@@ -105,8 +106,6 @@
                 <th rowspan="2">Height in cm.</th>
                 <th colspan="2">Age in month/year</th>
                 <th colspan="3">NS AFTER 120 FEEDINGS</th>
-
-
             </tr>
             <tr>
                 <th>Month</th>
@@ -124,6 +123,7 @@
         <tbody class="malnourished-table text-xs ">
             @foreach ($isFunded as $fundedChild)
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td class="first">{{ $fundedChild->full_name }}</td>
                     <td class="first">{{ optional($fundedChild->records->first()->center)->center_name ?? 'N/A' }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
