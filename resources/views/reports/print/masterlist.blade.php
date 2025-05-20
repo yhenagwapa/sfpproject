@@ -149,8 +149,8 @@
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
                     <td class="no-wrap">{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
                     <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first()?->actual_weighing_date }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->first()?->weight }}</td>
-                    <td>{{ $fundedChild->nutritionalStatus->first()?->height }}</td>
+                    <td>{{ number_format($fundedChild->nutritionalStatus->first()?->weight, 1) }}</td>
+                    <td>{{ number_format($fundedChild->nutritionalStatus->first()?->height, 1) }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->first()?->age_in_months }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->first()?->age_in_years }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->first()?->weight_for_age }}</td>

@@ -103,7 +103,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="weight">Weight (kg)<b class="text-red-600">*</b></label>
                                         <input type="number" class="form-control rounded border-gray-300" id="weight"
-                                            name='weight' value="{{ old('weight') }}" step=".01">
+                                            name='weight' value="{{ old('weight') }}" step="0.1">
                                         @if ($errors->has('weight'))
                                             <span class="text-xs text-red-600">{{ $errors->first('weight') }}</span>
                                         @endif
@@ -111,7 +111,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="height">Height (cm)<b class="text-red-600">*</b></label>
                                         <input type="number" class="form-control rounded border-gray-300" id="height"
-                                            name='height' value="{{ old('height') }}" step=".01">
+                                            name='height' value="{{ old('height') }}" step="0.1">
                                         @if ($errors->has('height'))
                                             <span class="text-xs text-red-600">{{ $errors->first('height') }}</span>
                                         @endif
@@ -193,7 +193,7 @@
                                         <div class="col-md-12 mt-2 text-sm">
                                             <label for="exitweight">Weight (kg)<b class="text-red-600">*</b></label>
                                             <input type="number" class="form-control rounded border-gray-300" id="exitweight"
-                                                name='exitweight' value="{{ old('exitweight') }}" step=".01">
+                                                name='exitweight' value="{{ old('exitweight') }}" step="0.1">
                                             @if ($errors->has('exitweight'))
                                                 <span class="text-xs text-red-600">{{ $errors->first('weight') }}</span>
                                             @endif
@@ -202,7 +202,7 @@
                                         <div class="col-md-12 mt-2 text-sm">
                                             <label for="exitheight">Height (cm)<b class="text-red-600">*</b></label>
                                             <input type="number" class="form-control rounded border-gray-300" id="exitheight"
-                                                name='exitheight' value="{{ old('exitheight') }}" step=".01">
+                                                name='exitheight' value="{{ old('exitheight') }}" step="0.1">
                                             @if ($errors->has('exitheight'))
                                                 <span class="text-xs text-red-600">{{ $errors->first('exitheight') }}</span>
                                             @endif
