@@ -434,7 +434,11 @@ class ChildController extends Controller
         $centers = UserCenter::where('user_id', $userID)->get();
         $centerIDs = $centers->pluck('child_development_center_id');
 
-        $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+        $centerNames = ChildDevelopmentCenter::all();
+
+        if (!auth()->user()->hasRole('admin')) {
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+        }
 
         $centers = ChildDevelopmentCenter::all();
 
