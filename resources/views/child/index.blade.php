@@ -77,7 +77,7 @@
                                             <th>Sex</th>
                                             <th>Date of Birth</th>
                                             <th>CDC/SNP</th>
-                                            <th>Status</th>
+                                            <th>Funded</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
