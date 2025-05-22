@@ -97,7 +97,7 @@
                                             <span class="text-xs text-red-600">{{ $errors->first('firstname') }}</span>
                                         @enderror
                                     </div>
-                                    <div class="col-md-6 mt-2 text-sm">
+                                    <div class="col-md-6 mt-2 text-sm">!~
                                         <input type="text" class="form-control rounded border-gray-300" id="lastname"
                                             name='lastname' value="{{ old('lastname', $child->lastname) }}">
                                         @error('lastname')
@@ -376,7 +376,7 @@
                                     <label for="child_development_center_id">CDC or SNP</label><b
                                         class="text-red-600">*</b>
                                     <select
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                        class="form-control rounded border-gray-300 uppercase"
                                         id="child_development_center_id" name='child_development_center_id'>
                                         <option value="" disabled selected>Select CDC or SNP</option>
                                         @foreach ($centerNames as $center)
@@ -387,14 +387,13 @@
                                         @endforeach
                                     </select>
                                     @error('child_development_center_id')
-                                        <span class="text-xs text-red-600">1    qws2a`
-                                            /span>
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
                                     <input type="text"
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                        class="form-control rounded border-gray-300"
                                         name="spaceonly">
                                 </div>
 

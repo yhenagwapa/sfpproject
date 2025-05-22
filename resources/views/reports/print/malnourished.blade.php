@@ -171,7 +171,7 @@
             @endforeach
             @if (count($isFunded) <= 0)
                 <tr>
-                    <td class="text-center" colspan="6">
+                    <td class="text-center" colspan="21">
                         @if (empty($search))
                             No Data found
                         @endif

@@ -109,7 +109,7 @@
             @endforeach
             @if (count($isPwdChildren) <= 0)
                 <tr>
-                    <td class="text-center" colspan="5">
+                    <td class="text-center" colspan="6">
                         @if (empty($search))
                             No Data found
                         @endif
