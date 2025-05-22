@@ -43,11 +43,26 @@ class UserController extends Controller
         if (!$request->user()->hasRole('admin')) {
             $psgcCity = Psgc::find(auth()->user()->psgc_id)->city_name_psgc;
 
-            // Apply left join and where clause
-            $query->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
-                ->where('psgcs.city_name_psgc', $psgcCity)
-                ->select('users.*'); // Optional: make sure only User columns are selected
+            // if focal is from davao city, and has the role of sfp coordinator
+            if ($request->user()->hasRole('sfp coordinator')) {
+
+                // get user's district
+                $psgcDistrict = Psgc::find(auth()->user()->psgc_id)->subdistrict;
+
+                // Apply left join and where clause
+                $query->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                    ->where('psgcs.subdistrict', $psgcDistrict)
+                    ->select('users.*'); // Optional: make sure only User columns are selected
+            }
+            else {
+                // Apply left join and where clause
+                $query->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                    ->where('psgcs.city_name_psgc', $psgcCity)
+                    ->select('users.*'); // Optional: make sure only User columns are selected
+            }
         }
+
+
 
         // Get the result
         $users = $query->get();
