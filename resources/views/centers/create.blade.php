@@ -89,7 +89,7 @@
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="assigned_worker_user_id">Assigned Child Development Worker<b
                                         class='text-red-600'>*</b></label>
-                                <select class="form-control rounded border-gray-300" id="assigned_worker_user_id"
+                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_worker_user_id"
                                     name="assigned_worker_user_id">
                                     <option value="" selected>Select Worker</option>
                                     @foreach ($workers as $worker)
@@ -106,7 +106,7 @@
 
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="assigned_focal_user_id">Assigned LGU Focal<b class='text-red-600'>*</b></label>
-                                <select class="form-control rounded border-gray-300" id="assigned_focal_user_id"
+                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_focal_user_id"
                                     name="assigned_focal_user_id">
                                     <option value="" selected>Select LGU Focal</option>
                                     @foreach ($focals as $focal)
@@ -123,7 +123,7 @@
 
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="assigned_encoder_user_id">Assigned Encoder</label>
-                                <select class="form-control rounded border-gray-300" id="assigned_encoder_user_id"
+                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_encoder_user_id"
                                     name="assigned_encoder_user_id">
                                     <option value="" selected>Select Encoder</option>
                                     @foreach ($encoders as $encoder)

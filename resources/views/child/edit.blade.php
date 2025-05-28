@@ -97,7 +97,7 @@
                                             <span class="text-xs text-red-600">{{ $errors->first('firstname') }}</span>
                                         @enderror
                                     </div>
-                                    <div class="col-md-6 mt-2 text-sm">!~
+                                    <div class="col-md-6 mt-2 text-sm">
                                         <input type="text" class="form-control rounded border-gray-300" id="lastname"
                                             name='lastname' value="{{ old('lastname', $child->lastname) }}">
                                         @error('lastname')

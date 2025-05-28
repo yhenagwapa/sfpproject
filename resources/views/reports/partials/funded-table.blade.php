@@ -5,6 +5,7 @@
             <th rowspan="2">Child Name</th>
 	        <th rowspan="2">Sex</th>
             <th rowspan="2">Date of Birth</th>
+            <th rowspan="2">Funded</th>
             <th colspan="3" class="text-center no-sort">Nutritional Status<br>Upon Entry</th>
             <th colspan="3" class="text-center no-sort">Nutritional Status<br>Afte 120 Feedings</th>
         </tr>
@@ -24,9 +25,10 @@
                 <td><strong>{{ $fundedChild->full_name }}</strong></td>
                 <td>{{ $fundedChild->sex->name }}</td>
                 <td>{{ \Carbon\Carbon::parse($fundedChild->date_of_birth)->format('m-d-Y') }}</td>
-                <td>{{ $fundedChild->nutritionalStatus->first()->weight_for_age }}</td>
-                <td>{{ $fundedChild->nutritionalStatus->first()->height_for_age }}</td>
-                <td>{{ $fundedChild->nutritionalStatus->first()->weight_for_height }}</td>
+                <td>{{ $fundedChild->records->first()?->funded ? "Yes" : "No" }}</td>
+                <td>{{ $fundedChild->nutritionalStatus->first()?->weight_for_age }}</td>
+                <td>{{ $fundedChild->nutritionalStatus->first()?->height_for_age }}</td>
+                <td>{{ $fundedChild->nutritionalStatus->first()?->weight_for_height }}</td>
                 <td>{{ $fundedChild->nutritionalStatus->get(1)?->weight_for_age }}</td>
                 <td>{{ $fundedChild->nutritionalStatus->get(1)?->height_for_age }}</td>
                 <td>{{ $fundedChild->nutritionalStatus->get(1)?->weight_for_height }}</td>

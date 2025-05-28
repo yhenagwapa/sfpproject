@@ -70,6 +70,7 @@
 
         .footer-table p {
             margin: 0;
+            text-transform: uppercase;
         }
 
         .footer-table td {
@@ -671,21 +672,55 @@
         <tr></tr>
         <tr>
             <td colspan="3">
-                <br>
-                <br>
-                <p>Prepare by:</p>
-                <br>
-                <p>______________________________________</p>
-                <p>Child Development Worker/Teacher</p>
-            </td>
-            <td>
-                <br>
-                <br>
-                <p>Noted by:</p>
-                <br>
-                <p>______________________________________</p>
-                <p>SFP Focal Person</p>
-            </td>
+                    <br>
+                    <br>
+                    <p>Prepare by:</p>
+                    <br>
+                    <p><u>
+                        @if($selectedCenter)
+                            @php
+                                $users = $selectedCenter->users->filter(function ($user) {
+                                    return $user->roles->contains('name', 'child development worker');
+                                });
+                            @endphp
+
+                            @if ($users->isNotEmpty())
+                                @foreach ($users as $user)
+                                    {{ $user->fullname }}
+                                @endforeach
+                            @else
+                                No Worker Assigned
+                            @endif
+                        @endif
+                    </u></p>
+                    <p>Child Development Worker/Teacher</p>
+                </td>
+                <td>
+                    <br>
+                    <br>
+                    <p>Noted by:</p>
+                    <br>
+                    <p>
+                        <u>
+                            @if($selectedCenter)
+                                @php
+                                    $users = $selectedCenter->users->filter(function ($user) {
+                                        return $user->roles->contains('name', 'lgu focal');
+                                    });
+                                @endphp
+
+                                @if ($users->isNotEmpty())
+                                    @foreach ($users as $user)
+                                        {{ $user->fullname }}
+                                    @endforeach
+                                @else
+                                    No Worker Assigned
+                                @endif
+                        @endif
+                        </u>
+                    </p>
+                    <p>SFP Focal Person</p>
+                </td>
             <td>
                 <br>
                 <br>
