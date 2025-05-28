@@ -89,7 +89,15 @@
                         orderSequence: ["desc", "asc"]
                     },
                 ],
-                info: false
+                info: false,
+                rowCallback: function(row, data, index) {
+                    var table = $('#centers-table').DataTable();
+                    if (data && Object.keys(data).length !== 0) {
+                        $('td:eq(0)', row).html(table.page.info().start + index + 1);
+                    } else {
+                        $('td:eq(0)', row).html('');
+                    }
+                }
             });
         });
     </script>

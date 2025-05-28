@@ -528,9 +528,6 @@
                                             'isFunded' => $isFunded,
                                         ])
                                     </div>
-                                    <div class="mt-3">
-                                        {{ $isFunded->links() }}
-                                    </div>
 
                                     <script>
                                         function workerReport(reportType) {
@@ -613,6 +610,30 @@
                         }
                     });
                 });
+            });
+        });
+    </script>
+
+    <script>
+        jQuery(document).ready(function () {
+            jQuery("#funded-table").DataTable({
+                paging: true,             // Enable paging
+                pageLength: 20,           // Show 10 entries per page
+                lengthChange: false,      // Hide the dropdown to change entry count
+                searching: true,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    { orderable: false, targets: 'no-sort' }
+                ],
+                info: false,
+                rowCallback: function(row, data, index) {
+                    var table = $('#funded-table').DataTable();
+                    if (data && Object.keys(data).length !== 0) {
+                        $('td:eq(0)', row).html(table.page.info().start + index + 1);
+                    } else {
+                        $('td:eq(0)', row).html('');
+                    }
+                }
             });
         });
     </script>

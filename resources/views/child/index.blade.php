@@ -82,7 +82,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($children as $child)
+                                        @foreach ($children as $child)
                                             <tr>
                                                 <td class="text-center"></td>
                                                 <td>{{ $child->full_name }}</td>
@@ -158,15 +158,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @empty
-                                            <tr>
-                                                <td>No Data Found.</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        @endforelse
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -195,9 +187,12 @@
                 ],
                 info: false,
                 rowCallback: function(row, data, index) {
-                    // Display the correct row number based on pagination
                     var table = $('#children-table').DataTable();
-                    $('td:eq(0)', row).html(table.page.info().start + index + 1);
+                    if (data && Object.keys(data).length !== 0) {
+                        $('td:eq(0)', row).html(table.page.info().start + index + 1);
+                    } else {
+                        $('td:eq(0)', row).html('');
+                    }
                 }
             });
         });

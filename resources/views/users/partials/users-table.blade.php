@@ -32,7 +32,7 @@
     <tbody class='users-table'>
         @foreach ($users as $user)
             <tr>
-                <td>{{ $loop->iteration }}</td>
+                <td class="text-center"></td>
                 <td class="text-left">{{ $user->full_name }}</td>
                 <td>{{ $user->email }}</td>
 

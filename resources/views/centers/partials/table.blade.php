@@ -39,22 +39,20 @@
             <th>Child Development Worker</th>
             <th>Encoder</th>
             <th>LGU Focal</th>
-{{--            <th>PDO</th>--}}
             <th>Address</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody class="centers-table">
-        @forelse($centersWithRoles as $center)
+        @foreach($centersWithRoles as $center)
             <tr>
-                <td>{{ $loop->iteration }}</td>
+                <td class="text-center"></td>
                 <td>{{ $center['center_name'] }}</td>
                 <td>{{ $center['worker'] ? $center['worker']->getFullNameAttribute() : 'N/A' }}</td>
                 <td>{{ $center['encoder'] ? $center['encoder']->getFullNameAttribute() : 'N/A' }}</td>
                 <td>{{ $center['focal'] ? $center['focal']->getFullNameAttribute() : 'N/A' }}</td>
-{{--                <td>{{ $center['pdo'] ? $center['pdo']->getFullNameAttribute() : 'N/A' }}</td>--}}
                 <td>{{ $center['address'] }}</td>
-                <td class="">
+                <td>
                     <div class="flex space-x-3">
                         @can(['edit-child-development-center'])
                             <form id="center_id-{{ $center['center_id'] }}" action="{{ route('centers.show') }}" method="POST" class="inline">
@@ -74,21 +72,8 @@
                 </td>
             </tr>
         @endforeach
-        <script>
-            function editCenter(centerID) {
-                localStorage.setItem('center_id', centerID);
-
-                document.getElementById('center_id_' + centerID).value = centerID;
-
-                document.getElementById('center_id-' + centerID).submit();
-            }
-        </script>
     </tbody>
 </table>
-{{--<div>
-    {{ $centers->links() }}
-</div>--}}
-
 
 
 

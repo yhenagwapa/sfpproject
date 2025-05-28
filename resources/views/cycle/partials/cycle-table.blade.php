@@ -1,6 +1,7 @@
 <table id='cycle-table' class="table datatable mt-3 text-sm">
     <thead>
         <tr>
+            <th>No.</th>
             <th><b>Cycle Implementation</b></th>
             @if(auth()->user()->hasRole('admin'))
                 <th>Target</th>
@@ -13,6 +14,7 @@
     <tbody class="cycle-table">
         @foreach ($allCycles as $cycle)
             <tr>
+                <td class="text-center"></td>
                 <td>{{ $cycle->name }}</td>
                 @if(auth()->user()->hasRole('admin'))
                     <td>{{ number_format($cycle->target) }}</td>
@@ -81,7 +83,7 @@
                     });
                 </script>
 
-                <td class="">
+                <td>
                     <div class="inline-flex space-x-3">
                         @can('edit-cycle-implementation')
                             @if($cycle->status !== 'closed')
@@ -128,16 +130,5 @@
                 </td>
             </tr>
         @endforeach
-        @if (count($allCycles) <= 0)
-            <tr>
-                <td class="text-center" colspan="6">
-                    @if (empty($search))
-                        No Data found
-                    @else
-                        No search keyword match found.
-                    @endif
-                </td>
-            </tr>
-        @endif
     </tbody>
 </table>
