@@ -15,6 +15,7 @@ use App\Models\UserCenter;
 use App\Models\User;
 use App\Models\Implementation;
 
+
 class PDFController extends Controller
 {
     use WorkerReports, NutritionalStatusReport, FocalReports;
@@ -1101,7 +1102,7 @@ class PDFController extends Controller
             ]);
 
 
-        return $pdf->stream($cycle->name . ' Weight for Age Upon Entry.pdf');
+        return $pdf;
 
     }
     public function printWeightForAgeAfter120(Request $request)
@@ -1859,7 +1860,7 @@ class PDFController extends Controller
             ]);
 
 
-        return $pdf->stream($cycle->cycle_name . ' Weight for Height Upon Entry.pdf');
+        return $pdf;
     }
     public function printWeightForHeightAfter120(Request $request)
     {
@@ -2305,7 +2306,11 @@ class PDFController extends Controller
 
         } elseif (auth()->user()->hasRole('lgu focal')) {
             $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
+            $centers = ChildDevelopmentCenter::whereIn('id', function ($query) {
+                $query->select('child_development_center_id')
+                    ->from('user_centers')
+                    ->where('user_id', auth()->id());
+            })->with('users.roles')->get();
             $centerIDs = $centers->pluck('child_development_center_id');
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
@@ -2623,7 +2628,7 @@ class PDFController extends Controller
             ]);
 
 
-        return $pdf->stream($cycle->name . ' Height for Age Upon Entry.pdf');
+        return $pdf;
 
     }
     public function printHeightForAgeAfter120(Request $request)
@@ -3869,4 +3874,6 @@ class PDFController extends Controller
         return $pdf->stream($cycle->name . ' Unfunded Children.pdf');
 
     }
+
+
 }

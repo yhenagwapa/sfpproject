@@ -142,8 +142,11 @@ trait NutritionalStatusReport
                                     $center[$category][$gender][$age]++;
                                     $center['total'][$gender][$age]++;
                                 }
+                                $center['totalPerAge'][$age]++;
                             }
+                            $center['totalGenderAllAges'][$gender]++;
                         }
+                        $center['totalCategory'][$category];
                     }
                 }
             }

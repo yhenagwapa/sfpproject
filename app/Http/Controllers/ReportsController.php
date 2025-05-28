@@ -11,6 +11,7 @@ use App\Models\ChildCenter;
 use App\Models\UserCenter;
 use App\Models\Implementation;
 use Carbon\Carbon;
+use Clegginabox\PDFMerger\PDFMerger;
 
 class ReportsController extends Controller
 {
@@ -234,11 +235,30 @@ class ReportsController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function mergeNutrutionalStatusReport()
     {
-        //
+        $pdfA = app(PDFController::class)->printHeightForAgeUponEntry(Request $request);
+        $pdfB = app(PDFController::class)->printWeightForAgeUponEntry();
+        $pdfC = app(PDFController::class)->printWeightForHeightUponEntry();
+
+        // Save them temporarily
+        $pathA = storage_path('app/temp_a.pdf');
+        $pathB = storage_path('app/temp_b.pdf');
+        $pathC = storage_path('app/temp_c.pdf');
+
+        $pdfA->save($pathA);
+        $pdfB->save($pathB);
+        $pdfC->save($pathC);
+
+        // Merge them using PDFMerger
+        $merger = new PDFMerger;
+        $merger->addPDF($pathA, 'all');
+        $merger->addPDF($pathB, 'all');
+        $merger->addPDF($pathC, 'all');
+
+        $mergedPath = storage_path('app/final_report.pdf');
+        $merger->merge('file', $mergedPath);
+
+        return response()->download($mergedPath)->deleteFileAfterSend(true);
     }
 }
