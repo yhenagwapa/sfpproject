@@ -1094,7 +1094,7 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
+                'margin-bottom' => 1,
                 'margin-left' => 1,
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
@@ -1851,7 +1851,7 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
+                'margin-bottom' => 1,
                 'margin-left' => 1,
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
@@ -2615,7 +2615,7 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
+                'margin-bottom' => 1,
                 'margin-left' => 1,
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
