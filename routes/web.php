@@ -143,7 +143,7 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
     Route::post('/reports/print/undernourished-after-120', [PDFController::class, 'printUndernourishedAfter120'])->name('reports.print.undernourished-after-120');
     // Route::post('/reports/print/{reportType}', [PDFController::class, 'nutritionalStatusReport'])->name('reports.print');
 
-    // Route::post('/reports/print/nutritional-status-upon-entry', [ReportsController::class, 'mergeNutrutionalStatusReport'])->name('reports.print.nutritional-status-upon-entry');
+    Route::post('/reports/hfa', [ReportsController::class, 'hfa'])->name('reports.hfa');
     // Route::post('/reports/print/nutritional-status-after-120', [PDFController::class, 'printNutritionalStatusAfter120'])->name('reports.print.nutritional-status-after-120');
 
     Route::post('/reports/print/age-bracket-upon-entry', [PDFController::class, 'printAgeBracketUponEntry'])->name('reports.print.age-bracket-upon-entry');

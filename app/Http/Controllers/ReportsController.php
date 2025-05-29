@@ -12,6 +12,7 @@ use App\Models\UserCenter;
 use App\Models\Implementation;
 use Carbon\Carbon;
 use Clegginabox\PDFMerger\PDFMerger;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -266,5 +267,88 @@ class ReportsController extends Controller
 
         $mergedFile = 'Nutritional Status Upon Entry Report.pdf';
         $merger->merge('browser', $mergedFile);
+    }
+
+    public function hfa(Request $request)
+    {
+        $cycleID = $request->cycle_id;
+        $cycle = Implementation::where('id', $cycleID)->first();
+
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
+        $oldestNutritionalIds = DB::table('nutritional_statuses')
+            ->select(DB::raw('MIN(id) as id'))
+            ->groupBy('child_id');
+
+        $results = DB::table('nutritional_statuses')
+            ->joinSub($oldestNutritionalIds, 'oldest_nutritionals', function ($join) {
+                $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
+            })
+            ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
+            ->join('child_centers', 'children.id', '=', 'child_centers.child_id')
+            ->join('child_development_centers', 'child_development_centers.id', '=', 'child_centers.child_development_center_id')
+            ->select(columns: [
+                'child_development_centers.id as center_id',
+                'child_development_centers.center_name as center_name',
+                'children.sex_id',
+                'nutritional_statuses.age_in_years',
+                'nutritional_statuses.height_for_age',
+                'nutritional_statuses.weight_for_age',
+                'nutritional_statuses.weight_for_height',
+                DB::raw('COUNT(*) as total')
+            ])
+            ->groupBy(
+                'child_development_centers.id',
+                'child_development_centers.center_name',
+                'children.sex_id',
+                'nutritional_statuses.age_in_years',
+                'nutritional_statuses.height_for_age',
+                'nutritional_statuses.weight_for_age',
+                'nutritional_statuses.weight_for_height'
+            )
+        ->get();
+
+        $centers = ChildDevelopmentCenter::all();
+
+        $ages = [2, 3, 4, 5];
+        $sexes = [1, 2];
+        $categories = ['Normal', 'Underweight', 'Severely Underweight', 'Overweight'];
+
+        $hfaCounts = [];
+
+        foreach ($results as $row) {
+            $centerId = $row->center_id;
+            $centerName = $row->center_name;
+
+            if (!isset($hfaCounts[$centerId])) {
+                $hfaCounts[$centerId] = [
+                    'center_name' => $centerName,
+                    'data' => [],
+                ];
+
+                foreach ($categories as $category) {
+                    foreach ($sexes as $sexCode => $sexLabel) {
+                        foreach ($ages as $age) {
+                            $hfaCounts[$centerId]['data'][$category][$sexLabel][$age] = 0;
+                        }
+                    }
+                }
+            }
+
+            $category = strtolower($row->height_for_age);
+            $sex = $sexes[$row->sex_id] ?? null;
+            $age = $row->age_in_years;
+
+            if (isset($hfaCounts[$centerId]['data'][$category][$sex][$age])) {
+                $hfaCounts[$centerId]['data'][$category][$sex][$age] += $row->total;
+            }
+        }
+
+        $pdf = PDF::loadView('reports.hfa', compact('centers','hfaCounts', 'centerId', 'ages', 'sexes', 'categories'))
+            ->setPaper('folio', 'landscape');
+
+        return $pdf->stream();
     }
 }
