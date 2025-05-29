@@ -454,7 +454,7 @@
                     <td>{{ $totals[$center->id]['5']['female'] ?? 0 }}</td>
                 </tr>
             @endforeach
-            
+
         <tfoot>
 
             <tr>
@@ -612,9 +612,11 @@
                     <br>
                     <br>
                     <p>
-                        <u>
-                            {{ auth()->user()->full_name }}
-                        </u>
+                        @if (auth()->user()->hasRole('lgu focal'))
+                            <u>{{ auth()->user()->full_name }}</u>
+                        @else
+                            ______________________________________
+                        @endif
                     </p>
                     <p>SFP Focal Person</p>
                 </td>

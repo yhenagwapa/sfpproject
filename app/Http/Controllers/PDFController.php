@@ -761,13 +761,7 @@ class PDFController extends Controller
         $city = null;
 
         if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::with([
-                'users' => function ($query) {
-                    $query->whereHas('roles', function ($query) {
-                        $query->where('name', 'child development worker');
-                    });
-                }
-            ])->get()->keyBy('id');
+            $centers = ChildDevelopmentCenter::all();
             $centerIDs = $centers->pluck('id');
 
             $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
@@ -1470,13 +1464,7 @@ class PDFController extends Controller
         $city = null;
 
         if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::with([
-                'users' => function ($query) {
-                    $query->whereHas('roles', function ($query) {
-                        $query->where('name', 'child development worker');
-                    });
-                }
-            ])->get()->keyBy('id');
+            $centers = ChildDevelopmentCenter::all();
             $centerIDs = $centers->pluck('id');
 
             $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
@@ -2280,13 +2268,7 @@ class PDFController extends Controller
         $city = null;
 
         if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::with([
-                'users' => function ($query) {
-                    $query->whereHas('roles', function ($query) {
-                        $query->where('name', 'child development worker');
-                    });
-                }
-            ])->get()->keyBy('id');
+            $centers = ChildDevelopmentCenter::all();
             $centerIDs = $centers->pluck('id');
 
             $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
