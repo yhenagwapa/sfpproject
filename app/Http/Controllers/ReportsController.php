@@ -40,8 +40,8 @@ class ReportsController extends Controller
         $childCount = null;
 
         $fundedChildren = Child::with('records', 'sex')
-                            ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
-                            ->orderBy('lastname', 'asc');
+            ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
+            ->orderBy('lastname', 'asc');
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
@@ -50,23 +50,23 @@ class ReportsController extends Controller
 
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id)
-                                ->where('status', 'active')
-                                ->orderBy('child_development_center_id', 'asc');
-                        })
-                        ->paginate(10);
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('status', 'active')
+                        ->orderBy('child_development_center_id', 'asc');
+                })
+                    ->paginate(10);
 
                 $childCount = $isFunded->count();
 
             } else {
 
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($request, $cycle) {
-                        $query->where('child_development_center_id', $request->center_name)
-                                ->where('implementation_id', $cycle->id)
-                                ->where('status', 'active')
-                                ->orderBy('child_development_center_id', 'asc');
+                    $query->where('child_development_center_id', $request->center_name)
+                        ->where('implementation_id', $cycle->id)
+                        ->where('status', 'active')
+                        ->orderBy('child_development_center_id', 'asc');
                 })
-                ->paginate(10);
+                    ->paginate(10);
 
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
                 $childCount = $isFunded->count();
@@ -88,18 +88,18 @@ class ReportsController extends Controller
                             ->orderBy('child_development_center_id', 'asc');
                     }
                 })
-                ->paginate(10);
+                    ->paginate(10);
 
                 $childCount = $isFunded->count();
             } else {
 
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
-                        $query->where('child_development_center_id', $cdcId)
-                                ->where('implementation_id', $cycle->id)
-                                ->where('status', 'active')
-                                ->orderBy('child_development_center_id', 'asc');
+                    $query->where('child_development_center_id', $cdcId)
+                        ->where('implementation_id', $cycle->id)
+                        ->where('status', 'active')
+                        ->orderBy('child_development_center_id', 'asc');
                 })
-                ->paginate(10);
+                    ->paginate(10);
 
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
                 $childCount = $isFunded->count();
@@ -246,14 +246,14 @@ class ReportsController extends Controller
 
         $tempPath = storage_path('app/temp');
 
-    // Create the temp folder if it doesn't exist
-    if (!file_exists($tempPath)) {
-        mkdir($tempPath, 0777, true);
-    }
+        // Create the temp folder if it doesn't exist
+        if (!file_exists($tempPath)) {
+            mkdir($tempPath, 0777, true);
+        }
 
-    $pathA = $tempPath . '/partA.pdf';
-    $pathB = $tempPath . '/partB.pdf';
-    $pathC = $tempPath . '/partC.pdf';
+        $pathA = $tempPath . '/partA.pdf';
+        $pathB = $tempPath . '/partB.pdf';
+        $pathC = $tempPath . '/partC.pdf';
 
         file_put_contents($pathA, $pdfA);
         file_put_contents($pathB, $pdfB);
@@ -272,7 +272,7 @@ class ReportsController extends Controller
     public function hfa(Request $request)
     {
         $cycleID = $request->cycle_id;
-        $cycle = Implementation::where('id', $cycleID)->first();
+        $cycle = Implementation::find($cycleID);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -287,16 +287,18 @@ class ReportsController extends Controller
                 $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
-            ->join('child_centers', 'children.id', '=', 'child_centers.child_id')
+            ->join('child_centers', function ($join) {
+                $join->on('children.id', '=', 'child_centers.child_id')
+                    ->where('child_centers.status', '=', 'active')
+                    ->where('child_centers.funded', '=', 1);
+            })
             ->join('child_development_centers', 'child_development_centers.id', '=', 'child_centers.child_development_center_id')
-            ->select(columns: [
+            ->select([
                 'child_development_centers.id as center_id',
                 'child_development_centers.center_name as center_name',
                 'children.sex_id',
                 'nutritional_statuses.age_in_years',
-                'nutritional_statuses.height_for_age',
                 'nutritional_statuses.weight_for_age',
-                'nutritional_statuses.weight_for_height',
                 DB::raw('COUNT(*) as total')
             ])
             ->groupBy(
@@ -304,51 +306,97 @@ class ReportsController extends Controller
                 'child_development_centers.center_name',
                 'children.sex_id',
                 'nutritional_statuses.age_in_years',
-                'nutritional_statuses.height_for_age',
-                'nutritional_statuses.weight_for_age',
-                'nutritional_statuses.weight_for_height'
+                'nutritional_statuses.weight_for_age'
             )
-        ->get();
+            ->get();
 
         $centers = ChildDevelopmentCenter::all();
 
         $ages = [2, 3, 4, 5];
-        $sexes = [1, 2];
+        $sexMap = [1 => 'M', 2 => 'F'];
+        $sexLabels = ['M', 'F'];
         $categories = ['Normal', 'Underweight', 'Severely Underweight', 'Overweight'];
 
-        $hfaCounts = [];
+        $wfaCounts = [];
 
         foreach ($results as $row) {
             $centerId = $row->center_id;
             $centerName = $row->center_name;
 
-            if (!isset($hfaCounts[$centerId])) {
-                $hfaCounts[$centerId] = [
+            if (!isset($wfaCounts[$centerId])) {
+                $wfaCounts[$centerId] = [
                     'center_name' => $centerName,
                     'data' => [],
                 ];
 
                 foreach ($categories as $category) {
-                    foreach ($sexes as $sexCode => $sexLabel) {
+                    foreach ($sexLabels as $sex) {
                         foreach ($ages as $age) {
-                            $hfaCounts[$centerId]['data'][$category][$sexLabel][$age] = 0;
+                            $wfaCounts[$centerId]['data'][$category][$sex][$age] = 0;
                         }
                     }
                 }
             }
 
-            $category = strtolower($row->height_for_age);
-            $sex = $sexes[$row->sex_id] ?? null;
+            $category = $row->weight_for_age;
+            $sex = $sexMap[$row->sex_id] ?? null;
             $age = $row->age_in_years;
 
-            if (isset($hfaCounts[$centerId]['data'][$category][$sex][$age])) {
-                $hfaCounts[$centerId]['data'][$category][$sex][$age] += $row->total;
+            if (isset($wfaCounts[$centerId]['data'][$category][$sex][$age])) {
+                $wfaCounts[$centerId]['data'][$category][$sex][$age] += $row->total;
             }
         }
 
-        $pdf = PDF::loadView('reports.hfa', compact('centers','hfaCounts', 'centerId', 'ages', 'sexes', 'categories'))
-            ->setPaper('folio', 'landscape');
+        $agetotals = [];
+        foreach ($categories as $category) {
+            foreach ($sexLabels as $sex) {
+                foreach ($ages as $age) {
+                    $agetotals[$category][$sex][$age] = 0;
+                }
+            }
+        }
+
+        foreach ($wfaCounts as $center) {
+            foreach ($categories as $category) {
+                foreach ($sexLabels as $sex) {
+                    foreach ($ages as $age) {
+                        $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                    }
+                }
+            }
+        }
+
+        $ageTotalsPerCategory = [];
+        foreach ($categories as $category) {
+            foreach ($sexLabels as $sex) {
+                $ageTotalsPerCategory[$category][$sex] = 0;
+                foreach ($ages as $age) {
+                    $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
+                }
+            }
+        }
+
+        $totalsPerCategory = [];
+        foreach ($categories as $category) {
+            $totalsPerCategory[$category] = 0;
+            foreach ($sexLabels as $sex) {
+                $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
+            }
+        }
+
+        $pdf = PDF::loadView('reports.hfa', compact('results', 'centers', 'wfaCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory'))
+            ->setPaper('folio', 'landscape')
+            ->setOptions([
+                'margin-top' => 0.5,
+                'margin-right' => 1,
+                'margin-bottom' => 1,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
+            ]);
 
         return $pdf->stream();
     }
+
 }
