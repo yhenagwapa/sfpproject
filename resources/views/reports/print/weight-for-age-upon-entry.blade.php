@@ -138,7 +138,11 @@
             </tr>
         </table>
     </div>
-
+    @php
+        $chunks = $centers->chunk(2);
+        $count = 0;
+    @endphp
+    @foreach ($chunks as $chunk)
     <table id='weight-for-age-upon-entry-table' class="table datatable weight-for-age-upon-entry-table w-full">
         <thead>
             <tr>
@@ -212,8 +216,6 @@
         </thead>
         <tbody class="weight-for-age-upon-entry-table">
             @php
-                $count = 0;
-
                 $totalServed = 0;
                 $totalMale = 0;
                 $totalFemale = 0;
@@ -269,10 +271,9 @@
                 $totalAged5Female = 0;
             @endphp
 
-            @foreach ($centers as $center)
+            @foreach ($chunk as $center)
                 @php
                     $count += 1;
-
                     $totalServed += $totals[$center->id]['total_served'] ?? 0;
                     $totalMale += $totals[$center->id]['total_male'] ?? 0;
                     $totalFemale += $totals[$center->id]['total_female'] ?? 0;
@@ -582,6 +583,10 @@
             </tr>
         </tbody>
     </table>
+    @if (!$loop->last)
+                            <div style="page-break-after: always;"></div>
+                        @endif
+                    @endforeach
 
 
     <div class="footer-section">
