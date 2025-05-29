@@ -78,6 +78,7 @@
 
         .footer-table p {
             margin: 0;
+            text-transform: uppercase;
         }
 
         .footer-table td {
@@ -108,11 +109,13 @@
             font-size: 12px;
         }
 
-        .pagenum:before {
-            content: "Page " counter(page) " of ";
-            text-align: center;
-            display: flex;
+        /* .pagenum:before {
+            content: counter(page);
         }
+
+        .totalpages:before {
+            content: counter(pages);
+        } */
     </style>
 </head>
 
@@ -123,7 +126,8 @@
             Supplementary Feeding Program<br>
             {{ $cycle->name }} ( SY {{ $cycle->school_year }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS REPORT</b><br>
-            <i>(Weight-for-Height)<br>Upon Entry</i></p>
+            <i>(Weight-for-Height)<br>Upon Entry</i>
+        </p>
         <br>
     </div>
 
@@ -404,7 +408,8 @@
 
                         @if ($users->isNotEmpty())
                             @foreach ($users as $user)
-                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
+                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }}
+                                {{ $user->extension_name }}
                             @endforeach
                         @else
                             No Worker Assigned
@@ -661,7 +666,11 @@
                     <p>Prepared by:</p>
                     <br>
                     <br>
-                    <p>______________________________________</p>
+                    <p>
+                        <u>
+                            {{ auth()->user()->full_name }}
+                        </u>
+                    </p>
                     <p>SFP Focal Person</p>
                 </td>
                 <td>
@@ -679,9 +688,20 @@
 
     <div class="footer">
         SFP Forms 4.1 (c/o SFP Focal Person)
-        <span class="pagenum"></span>
     </div>
-
+    <script type="text/php">
+        if (isset($pdf)) {
+            $pdf->page_script('
+                $font = $fontMetrics->get_font("Arial", "normal");
+                $fontSize = 8;
+                $text = "Page $PAGE_NUM of $PAGE_COUNT";
+                $width = $fontMetrics->get_text_width($text, $font, $fontSize);
+                $x = (936 / 2) - ($width / 2);
+                $y = 580;
+                $pdf->text($x, $y, $text, $font, $fontSize);
+            ');
+        }
+    </script>
 </body>
 
 </html>

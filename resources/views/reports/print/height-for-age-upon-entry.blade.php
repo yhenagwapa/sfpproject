@@ -78,6 +78,7 @@
 
         .footer-table p {
             margin: 0;
+            text-transform: uppercase;
         }
 
         .footer-table td {
@@ -576,7 +577,11 @@
                     <p>Prepared by:</p>
                     <br>
                     <br>
-                    <p>______________________________________</p>
+                    <p>
+                        <u>
+                            {{ auth()->user()->full_name }}
+                        </u>
+                    </p>
                     <p>SFP Focal Person</p>
                 </td>
                 <td>
@@ -594,8 +599,20 @@
 
     <div class="footer">
         SFP Forms 4.1 (c/o SFP Focal Person)
-        <span class="pagenum"></span>
     </div>
+    <script type="text/php">
+        if (isset($pdf)) {
+            $pdf->page_script('
+                $font = $fontMetrics->get_font("Arial", "normal");
+                $fontSize = 8;
+                $text = "Page $PAGE_NUM of $PAGE_COUNT";
+                $width = $fontMetrics->get_text_width($text, $font, $fontSize);
+                $x = (936 / 2) - ($width / 2);
+                $y = 580;
+                $pdf->text($x, $y, $text, $font, $fontSize);
+            ');
+        }
+    </script>
 
 </body>
 

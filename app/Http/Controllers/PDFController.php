@@ -745,7 +745,8 @@ class PDFController extends Controller
     }
     public function printWeightForAgeUponEntry(Request $request)
     {
-        $cycle = Implementation::where('id', $request->cycle_id2)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -768,27 +769,27 @@ class PDFController extends Controller
                 }
             ])->get()->keyBy('id');
             $centerIDs = $centers->pluck('id');
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
                 $query->where('implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1);
+                    ->where('funded', 1)
+                    ->where('status', 'active');
             })
                 ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5])
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
                         ->whereIn('weight_for_age', ['Normal', 'Underweight', 'Severely Underweight', 'Overweight']);
                 })
-                ->with('records')
                 ->get();
 
         } elseif (auth()->user()->hasRole('lgu focal')) {
             $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+            $centers = ChildDevelopmentCenter::whereIn('id', function ($query) {
+                $query->select('child_development_center_id')
+                    ->from('user_centers')
+                    ->where('user_id', auth()->id());
+            })->with('users.roles')->get();
+            $centerIDs = $centers->pluck('id');
 
             $getPsgc = $centers->pluck('psgc_id');
 
@@ -803,20 +804,14 @@ class PDFController extends Controller
             $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
                 $query->where('implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1);
+                    ->where('funded', 1)
+                    ->where('status', 'active');
             })
                 ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5])
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
                         ->whereIn('weight_for_age', ['Normal', 'Underweight', 'Severely Underweight', 'Overweight']);
                 })
-                ->with([
-                    'records' => function ($query) {
-                        $query->select('child_id', 'child_development_center_id', 'status');
-                    }
-                ])
                 ->get();
-
         }
 
         $nutritionalStatusOccurrences = $fundedChildren->map(function ($child) {
@@ -836,7 +831,9 @@ class PDFController extends Controller
             ];
         });
 
-        $ageGroupsPerCenter = $fundedChildren->groupBy(function ($child) {
+        $ageGroupsPerCenter = $fundedChildren->filter(function ($child) {
+            return $child->records->firstWhere('status', 'active') !== null;
+        })->groupBy(function ($child) {
             $activeRecord = $child->records->firstWhere('status', 'active');
             return $activeRecord->child_development_center_id;
         })->mapWithKeys(function ($childrenByCenter, $centerID) use ($nutritionalStatusOccurrences) {
@@ -1096,10 +1093,14 @@ class PDFController extends Controller
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
-                'margin-right' => 0.5,
+                'margin-right' => 1,
                 'margin-bottom' => 0.5,
-                'margin-left' => 0.5
-            ]);
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
+            ])
+            ->output();
 
 
         return $pdf;
@@ -1457,7 +1458,8 @@ class PDFController extends Controller
     }
     public function printWeightForHeightUponEntry(Request $request)
     {
-        $cycle = Implementation::where('id', $request->cycle_id2)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -1477,27 +1479,27 @@ class PDFController extends Controller
                 }
             ])->get()->keyBy('id');
             $centerIDs = $centers->pluck('id');
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
                 $query->where('implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1);
+                    ->where('funded', 1)
+                    ->where('status', 'active');
             })
                 ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5])
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
                         ->whereIn('weight_for_height', ['Normal', 'Wasted', 'Severely Wasted', 'Overweight', 'Obese']);
                 })
-                ->with('records')
                 ->get();
 
         } elseif (auth()->user()->hasRole('lgu focal')) {
             $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+            $centers = ChildDevelopmentCenter::whereIn('id', function ($query) {
+                $query->select('child_development_center_id')
+                    ->from('user_centers')
+                    ->where('user_id', auth()->id());
+            })->with('users.roles')->get();
+            $centerIDs = $centers->pluck('id');
 
             $getPsgc = $centers->pluck('psgc_id');
 
@@ -1512,20 +1514,14 @@ class PDFController extends Controller
             $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
                 $query->where('implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1);
+                    ->where('funded', 1)
+                    ->where('status', 'active');
             })
                 ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5])
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
                         ->whereIn('weight_for_height', ['Normal', 'Wasted', 'Severely Wasted', 'Overweight', 'Obese']);
                 })
-                ->with([
-                    'records' => function ($query) {
-                        $query->select('child_id', 'child_development_center_id', 'status');
-                    }
-                ])
                 ->get();
-
         }
 
         $nutritionalStatusOccurrences = $fundedChildren->map(function ($child) {
@@ -1856,8 +1852,12 @@ class PDFController extends Controller
                 'margin-top' => 0.5,
                 'margin-right' => 1,
                 'margin-bottom' => 0.5,
-                'margin-left' => 1
-            ]);
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
+            ])
+            ->output();
 
 
         return $pdf;
@@ -2269,7 +2269,8 @@ class PDFController extends Controller
     }
     public function printHeightForAgeUponEntry(Request $request)
     {
-        $cycle = Implementation::where('id', $request->cycle_id2)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -2289,19 +2290,17 @@ class PDFController extends Controller
                 }
             ])->get()->keyBy('id');
             $centerIDs = $centers->pluck('id');
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
                 $query->where('implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1);
+                    ->where('funded', 1)
+                    ->where('status', 'active');
             })
                 ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5])
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
                         ->whereIn('height_for_age', ['Normal', 'Stunted', 'Severely Stunted', 'Tall']);
                 })
-                ->with('records')
                 ->get();
 
         } elseif (auth()->user()->hasRole('lgu focal')) {
@@ -2311,9 +2310,7 @@ class PDFController extends Controller
                     ->from('user_centers')
                     ->where('user_id', auth()->id());
             })->with('users.roles')->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+            $centerIDs = $centers->pluck('id');
 
             $getPsgc = $centers->pluck('psgc_id');
 
@@ -2328,18 +2325,13 @@ class PDFController extends Controller
             $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
                 $query->where('implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1);
+                    ->where('funded', 1)
+                    ->where('status', 'active');
             })
                 ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5])
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
                         ->whereIn('height_for_age', ['Normal', 'Stunted', 'Severely Stunted', 'Tall']);
                 })
-                ->with([
-                    'records' => function ($query) {
-                        $query->select('child_id', 'child_development_center_id', 'status');
-                    }
-                ])
                 ->get();
         }
 
@@ -2624,9 +2616,12 @@ class PDFController extends Controller
                 'margin-top' => 0.5,
                 'margin-right' => 1,
                 'margin-bottom' => 0.5,
-                'margin-left' => 1
-            ]);
-
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
+            ])
+            ->output();
 
         return $pdf;
 

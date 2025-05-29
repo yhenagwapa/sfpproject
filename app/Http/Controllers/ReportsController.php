@@ -235,30 +235,36 @@ class ReportsController extends Controller
         //
     }
 
-    public function mergeNutrutionalStatusReport()
+    public function mergeNutrutionalStatusReport(Request $request)
     {
-        $pdfA = app(PDFController::class)->printHeightForAgeUponEntry(Request $request);
-        $pdfB = app(PDFController::class)->printWeightForAgeUponEntry();
-        $pdfC = app(PDFController::class)->printWeightForHeightUponEntry();
+        session(['report_cycle_id' => $request->input('cycle_id2')]);
 
-        // Save them temporarily
-        $pathA = storage_path('app/temp_a.pdf');
-        $pathB = storage_path('app/temp_b.pdf');
-        $pathC = storage_path('app/temp_c.pdf');
+        $pdfA = app(\App\Http\Controllers\PDFController::class)->printHeightForAgeUponEntry($request);
+        $pdfB = app(\App\Http\Controllers\PDFController::class)->printWeightForAgeUponEntry($request);
+        $pdfC = app(\App\Http\Controllers\PDFController::class)->printWeightForHeightUponEntry($request);
 
-        $pdfA->save($pathA);
-        $pdfB->save($pathB);
-        $pdfC->save($pathC);
+        $tempPath = storage_path('app/temp');
 
-        // Merge them using PDFMerger
+    // Create the temp folder if it doesn't exist
+    if (!file_exists($tempPath)) {
+        mkdir($tempPath, 0777, true);
+    }
+
+    $pathA = $tempPath . '/partA.pdf';
+    $pathB = $tempPath . '/partB.pdf';
+    $pathC = $tempPath . '/partC.pdf';
+
+        file_put_contents($pathA, $pdfA);
+        file_put_contents($pathB, $pdfB);
+        file_put_contents($pathC, $pdfC);
+
+        // Merge
         $merger = new PDFMerger;
         $merger->addPDF($pathA, 'all');
         $merger->addPDF($pathB, 'all');
         $merger->addPDF($pathC, 'all');
 
-        $mergedPath = storage_path('app/final_report.pdf');
-        $merger->merge('file', $mergedPath);
-
-        return response()->download($mergedPath)->deleteFileAfterSend(true);
+        $mergedFile = 'Nutritional Status Upon Entry Report.pdf';
+        $merger->merge('browser', $mergedFile);
     }
 }
