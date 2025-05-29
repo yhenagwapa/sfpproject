@@ -1099,11 +1099,10 @@ class PDFController extends Controller
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
                 'isPhpEnabled' => true
-            ])
-            ->output();
+            ]);
 
 
-        return $pdf;
+        return $pdf->stream($cycle->name . 'Weight for Age.pdf');
 
     }
     public function printWeightForAgeAfter120(Request $request)
@@ -1856,11 +1855,10 @@ class PDFController extends Controller
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
                 'isPhpEnabled' => true
-            ])
-            ->output();
+            ]);
 
 
-        return $pdf;
+        return $pdf->stream($cycle->name . 'Weight for Height.pdf');
     }
     public function printWeightForHeightAfter120(Request $request)
     {
@@ -2620,10 +2618,9 @@ class PDFController extends Controller
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
                 'isPhpEnabled' => true
-            ])
-            ->output();
+            ]);
 
-        return $pdf;
+        return $pdf->stream($cycle->name . 'Height for Age.pdf');
 
     }
     public function printHeightForAgeAfter120(Request $request)
