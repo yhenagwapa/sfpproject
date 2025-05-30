@@ -241,6 +241,7 @@ class ReportsController extends Controller
 
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
+        $cycleStatus = $cycle->status;
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -280,9 +281,9 @@ class ReportsController extends Controller
                 $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
-            ->join('child_centers', function ($join) {
+            ->join('child_centers', function ($join) use ($cycle) {
                 $join->on('children.id', '=', 'child_centers.child_id')
-                    ->where('child_centers.status', '=', 'active')
+                    ->where('child_centers.implementation_id', '=', $cycle->id)
                     ->where('child_centers.funded', '=', 1);
             })
             ->join('child_development_centers', 'child_development_centers.id', '=', 'child_centers.child_development_center_id')
@@ -294,6 +295,7 @@ class ReportsController extends Controller
                 'nutritional_statuses.weight_for_age',
                 DB::raw('COUNT(*) as total')
             ])
+            ->where('nutritional_statuses.implementation_id', $cycle->id)
             ->groupBy(
                 'child_development_centers.id',
                 'child_development_centers.center_name',
@@ -302,6 +304,7 @@ class ReportsController extends Controller
                 'nutritional_statuses.weight_for_age'
             )
             ->get();
+
 
         $ages = [2, 3, 4, 5];
         $sexMap = [1 => 'M', 2 => 'F'];
