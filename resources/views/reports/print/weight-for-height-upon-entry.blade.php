@@ -140,8 +140,8 @@
                 @endforeach
                 <tr>
                     <td colspan="3">TOTAL PER AGE BRACKET ></td>
-                    <td rowspan="3">{{ $overallTotals['total_children'] }}</td>
-                    <td>{{ $overallTotals['total_male'] }}</td>
+                    <td class="centered" rowspan="3">{{ $overallTotals['total_children'] }}</td>
+                    <td class="centered" >{{ $overallTotals['total_male'] }}</td>
                     <td>{{ $overallTotals['total_female'] }}</td>
                     @foreach ($categories as $category)
                         @foreach ($sexLabels as $sex)
@@ -172,7 +172,7 @@
                     @endphp
 
                     <td colspan="3">TOTAL MALE/FEMALE ></td>
-                    <td rowspan="2" colspan="2">{{ $totalAllGender }}</td>
+                    <td class="centered" rowspan="2" colspan="2">{{ $totalAllGender }}</td>
 
                     @foreach ($categories as $category)
                         @foreach ($sexLabels as $sex)

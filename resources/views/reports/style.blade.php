@@ -48,6 +48,9 @@
         text-align: left;
     }
 
+    .nutritional-status-table .centered {
+        text-align: center;
+    }
 
     .nutritional-status-table th,
     .nutritional-status-table td {
