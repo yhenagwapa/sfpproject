@@ -31,7 +31,7 @@
         $count = 0;
         $no = 0;
     @endphp
-    <table id='nutritional-status-table' class="table datatable nutritional-status-table w-full">
+    <table id='nutritional-status-table' class="table datatable nutritional-status-table table-wrapper w-full">
         <thead>
             <tr>
                 <th class="border-bg" rowspan="3">No.</th>

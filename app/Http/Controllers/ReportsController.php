@@ -421,7 +421,7 @@ class ReportsController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 1,
+                'margin-bottom' => 50,
                 'margin-left' => 1,
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
@@ -616,7 +616,7 @@ class ReportsController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 1,
+                'margin-bottom' => 50,
                 'margin-left' => 1,
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
@@ -811,11 +811,11 @@ class ReportsController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 1,
+                'margin-bottom' => 50,
                 'margin-left' => 1,
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
-                'isPhpEnabled' => true
+                'isPhpEnabled' => true,
             ]);
 
         return $pdf->stream();

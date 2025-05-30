@@ -89,7 +89,7 @@
         font-size: 12px;
     }
 
-    .tr-page-break {
-        page-break-before: always;
+    tr, td, th {
+        page-break-inside: avoid;
     }
 </style>
