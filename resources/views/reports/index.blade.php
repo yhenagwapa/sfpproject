@@ -596,7 +596,7 @@
                                             </nav>
                                         </div>
 
-                                        <form action="{{ route('reports.hfa') }}" method="post">
+                                        {{-- <form action="{{ route('reports.hfa') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="cycle_id" value="{{ $cycle->id }}">
                                             <button
@@ -604,7 +604,7 @@
                                                 <span
                                                     class="dropdown-toggle text-white">hfa</span>
                                         </button>
-                                        </form>
+                                        </form> --}}
 
                                     </div>
 

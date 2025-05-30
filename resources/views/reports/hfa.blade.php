@@ -162,17 +162,18 @@
         </thead>
         <tbody>
             @php
-                $totalM = 0;
-                $totalF = 0;
+                $totalMale = 0;
+                $totalFemale = 0;
                 $overallTotal = 0;
-
-                $totals = [
-                    'M' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
-                    'F' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
-                ];
             @endphp
 
             @foreach ($centers as $center)
+                @php
+                    $totals = [
+                        'M' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
+                        'F' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
+                    ];
+                @endphp
                 <tr>
                     <td>{{ $center->center_name }}</td>
                     <td>
@@ -191,9 +192,17 @@
                             No Worker Assigned
                         @endif
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+
+                    @php
+                        $overallTotal = $wfaCounts[$center->id]['total_children'] ?? 0;
+                        $totalMale = $wfaCounts[$center->id]['total_male'] ?? 0;
+                        $totalFemale = $wfaCounts[$center->id]['total_female'] ?? 0;
+                    @endphp
+
+                    <td>{{ $overallTotal }}</td>
+                    <td>{{ $totalMale }}</td>
+                    <td>{{ $totalFemale }}</td>
+
                     @foreach ($categories as $category)
                         @foreach ($sexLabels as $sex)
                             @foreach ($ages as $age)
@@ -212,14 +221,14 @@
                         @endforeach
                     @endforeach
                 </tr>
-                
+
             @endforeach
             <tr>
                 <td></td>
                 <td></td>
-                <td rowspan="3"></td>
-                <td></td>
-                <td></td>
+                <td rowspan="3">{{ $overallTotals['total_children']}}</td>
+                <td>{{ $overallTotals['total_male']}}</td>
+                <td>{{ $overallTotals['total_female']}}</td>
                 @foreach ($categories as $category)
                     @foreach ($sexLabels as $sex)
                         @foreach ($ages as $age)
@@ -229,14 +238,29 @@
                 @endforeach
                 @foreach ($sexLabels as $sex)
                     @foreach ($ages as $age)
-                        <td>{{ $totals[$sex][$age] }}</td>
+                        @if($sex == 'M')
+                            <td>{{ $maleAgeTotals[$age] }}</td>
+                            @php
+                                $totalMale += $maleAgeTotals[$age];
+                            @endphp
+                        @else
+                            <td>{{ $femaleAgeTotals[$age] }}</td>
+                            @php
+                                $totalFemale += $femaleAgeTotals[$age];
+                            @endphp
+                        @endif
                     @endforeach
                 @endforeach
             </tr>
             <tr>
+                @php
+                    $totalAllGender = $overallTotals['total_male'] + $overallTotals['total_female'];
+                @endphp
+
                 <td></td>
                 <td></td>
-                <td rowspan="2" colspan="2"></td>
+                <td rowspan="2" colspan="2">{{ $totalAllGender }}</td>
+
                 @foreach ($categories as $category)
                     @foreach ($sexLabels as $sex)
                         <td colspan="{{ count($ages) }}" >
@@ -244,10 +268,13 @@
                         </td>
                     @endforeach
                 @endforeach
+
                 @foreach ($sexLabels as $sex)
-                    <td colspan="{{ count($ages) }}" >
-                        {{ array_sum($totals[$sex]) }}
-                    </td>
+                    @if($sex == 'M')
+                        <td colspan="{{ count($ages) }}" >{{ $totalMale }}</td>
+                    @else
+                        <td colspan="{{ count($ages) }}" >{{ $totalFemale }}</td>
+                    @endif
                 @endforeach
             </tr>
             <tr>
@@ -255,19 +282,19 @@
                 <td></td>
                 
                 @php
-                    $colspan = count($ages) * 2;
-                    $totalAgesAndGender = 0;
-                    foreach ($sexLabels as $sex) {
-                        $totalAgesAndGender += array_sum($totals[$sex] ?? []);
-                    }
+                    $colspan = count($ages) * count($sexLabels);
+                    $overallTotal = $totalMale + $totalFemale;
                 @endphp
+
                 @foreach ($categories as $category)
                     <td colspan="{{ $colspan }}" >
                         {{ $totalsPerCategory[$category] ?? 0 }}
                     </td>
                 @endforeach
+
+
                 <td colspan="{{ $colspan }}" >
-                    {{ $totalAgesAndGender }}
+                    {{ $overallTotal }}
                 </td>
             </tr>
 
