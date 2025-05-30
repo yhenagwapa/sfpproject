@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-    <style>
-        {!! file_get_contents(public_path('css/ns-report.css')) !!}
-    </style>
+    @includeIf('reports.style')
 </head>
 
 <body>

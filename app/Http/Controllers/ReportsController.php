@@ -237,6 +237,8 @@ class ReportsController extends Controller
     }
     public function nutritionalStatusWFA(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
 
@@ -430,6 +432,8 @@ class ReportsController extends Controller
     }
     public function nutritionalStatusHFA(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
 
@@ -623,6 +627,8 @@ class ReportsController extends Controller
     }
     public function nutritionalStatusWFH(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
 
