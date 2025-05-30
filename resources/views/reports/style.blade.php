@@ -43,6 +43,12 @@
         border-collapse: collapse;
     }
 
+    .nutritional-status-table td:nth-child(2),
+    .nutritional-status-table td:nth-child(3) {
+        text-align: left;
+    }
+
+
     .nutritional-status-table th,
     .nutritional-status-table td {
         border: 1px solid rgba(0, 0, 0, 0.5);
