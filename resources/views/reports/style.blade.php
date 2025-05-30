@@ -88,4 +88,8 @@
         align-items: center;
         font-size: 12px;
     }
+
+    .tr-page-break {
+        page-break-before: always;
+    }
 </style>
