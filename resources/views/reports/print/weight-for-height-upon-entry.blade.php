@@ -91,8 +91,8 @@
                     @endphp
                     <tr>
                         <td>{{ $no }}</td>
-                        <td class="no-wrap">{{ $center->center_name }}</td>
-                        <td class="no-wrap">
+                        <td>{{ $center->center_name }}</td>
+                        <td>
                             @php
                                 $users = $center->users->filter(function ($user) {
                                     return $user->roles->contains('name', 'child development worker');
