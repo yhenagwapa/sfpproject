@@ -181,10 +181,15 @@ class ChildController extends Controller
             $centerIds = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::all()->keyBy('id');
 
+            if (!$cycle) {
+                $children = null;
+                return view('child.index', compact('children', 'centerNames', 'cdcId'))->with('error', 'No active implementation.');
+            }
+
             if ($cdcId === 'all_center') {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                    $query->where('implementation_id', $cycle->id)
-                        ->where('status', 'active');
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('status', 'active');
                     })
                     ->orderBy('lastname', 'asc')
                     ->get();
@@ -204,8 +209,12 @@ class ChildController extends Controller
             $centerIDs = $centers->pluck('child_development_center_id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId === 'all_center') {
+            if (!$cycle) {
+                $children = null;
+                return view('child.index', compact('children','centerNames', 'cdcId'))->with('error', 'No active implementation.');
+            }
 
+            if ($cdcId === 'all_center') {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
                     $query->whereIn('child_development_center_id', $centerIDs)
                         ->where('implementation_id', $cycle->id)

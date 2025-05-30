@@ -235,40 +235,6 @@ class ReportsController extends Controller
     {
         //
     }
-
-    public function mergeNutrutionalStatusReport(Request $request)
-    {
-        session(['report_cycle_id' => $request->input('cycle_id2')]);
-
-        $pdfA = app(\App\Http\Controllers\PDFController::class)->printHeightForAgeUponEntry($request);
-        $pdfB = app(\App\Http\Controllers\PDFController::class)->printWeightForAgeUponEntry($request);
-        $pdfC = app(\App\Http\Controllers\PDFController::class)->printWeightForHeightUponEntry($request);
-
-        $tempPath = storage_path('app/temp');
-
-        // Create the temp folder if it doesn't exist
-        if (!file_exists($tempPath)) {
-            mkdir($tempPath, 0777, true);
-        }
-
-        $pathA = $tempPath . '/partA.pdf';
-        $pathB = $tempPath . '/partB.pdf';
-        $pathC = $tempPath . '/partC.pdf';
-
-        file_put_contents($pathA, $pdfA);
-        file_put_contents($pathB, $pdfB);
-        file_put_contents($pathC, $pdfC);
-
-        // Merge
-        $merger = new PDFMerger;
-        $merger->addPDF($pathA, 'all');
-        $merger->addPDF($pathB, 'all');
-        $merger->addPDF($pathC, 'all');
-
-        $mergedFile = 'Nutritional Status Upon Entry Report.pdf';
-        $merger->merge('browser', $mergedFile);
-    }
-
     public function nutritionalStatusWFA(Request $request)
     {
         $cycleID = session('report_cycle_id');
