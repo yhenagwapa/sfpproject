@@ -78,6 +78,7 @@
                                             <th>Date of Birth</th>
                                             <th>CDC/SNP</th>
                                             <th>Funded</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -94,6 +95,9 @@
                                                     </td>
                                                     <td>
                                                         {{ $child->records->first()->funded ? 'Yes' : 'No'}}
+                                                    </td>
+                                                    <td>
+                                                        {{ $child->records->first()->status}}
                                                     </td>
                                                     <td>
                                                         <div class="flex space-x-3">

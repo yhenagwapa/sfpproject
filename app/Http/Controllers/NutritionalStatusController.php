@@ -213,7 +213,7 @@ class NutritionalStatusController extends Controller
             $getHeight = cgs_wfh_boys::where('length_in_cm', $request->height)->first();
 
             if(!$getHeight){
-                return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
+                return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
             }
 
             if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
@@ -234,7 +234,7 @@ class NutritionalStatusController extends Controller
             $getHeight = cgs_wfh_girls::where('length_in_cm', $request->height)->first();
 
             if(!$getHeight){
-                return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
+                return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
             }
 
             if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
@@ -286,8 +286,22 @@ class NutritionalStatusController extends Controller
 
     public function storeExitDetails(Request $request)
     {
+        $child = Child::with( 'sex')
+            ->where('id', $request->exitchild_id)
+            ->first();
 
-        $exitRecord = NutritionalStatus::where('child_id', $request->exitchild_id)->count();
+        $childcenter = ChildCenter::with('implementation')
+            ->where('child_id', $child->id)
+            ->where('status', 'active')
+            ->first();
+
+        $childSex = $child->sex->id;
+
+        $cycleID = $childcenter->implementation_id;
+
+        $exitRecord = NutritionalStatus::where('child_id', $request->exitchild_id)
+            ->where('implementation_id', $cycleID)
+            ->count();
 
         if ($exitRecord >= 2 ) {
             return redirect()->back()->with(['error' => 'Exit details already exist for this child.']);
@@ -300,19 +314,6 @@ class NutritionalStatusController extends Controller
             $exitWeightForHeight = null;
             $exitIsMalnourished = false;
             $exitIsUndernourished = false;
-
-            $child = Child::with( 'sex')
-                ->where('id', $request->exitchild_id)
-                ->first();
-
-            $childcenter = ChildCenter::with('implementation')
-                ->where('child_id', $child->id)
-                ->where('status', 'active')
-                ->first();
-
-            $childSex = $child->sex->id;
-
-            $cycleID = $childcenter->implementation_id;
 
             // $childMilkFeeding = $child->milk_feeding_id;
             $childBirthDate = Carbon::parse($child->date_of_birth);
@@ -405,7 +406,7 @@ class NutritionalStatusController extends Controller
                 $getHeight = cgs_wfh_boys::where('length_in_cm', $request->exitheight)->first();
 
                 if(!$getHeight){
-                    return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
+                    return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
                 }
 
                 if ((float) $request->exitweight <= (float) $getHeight->severly_wasted) {
@@ -662,7 +663,7 @@ class NutritionalStatusController extends Controller
                 $entryWeightForHeight = 'Wasted';
             } elseif ((float) $request->weight >= (float) $getHeight->normal_from && (float) $request->weight <= (float) $getHeight->normal_to) {
                 $entryWeightForHeight = 'Normal';
-            } elseif ((float) $request->weight >= (float) $getHeight->overweight_from && (float) (float) $request->weight <= $getHeight->overweight_to) {
+            } elseif ((float) $request->weight >= (float) $getHeight->overweight_from && (float) $request->weight <= $getHeight->overweight_to) {
                 $entryWeightForHeight = 'Overweight';
             } elseif ((float) $request->weight >= (float) $getHeight->obese) {
                 $entryWeightForHeight = 'Obese';

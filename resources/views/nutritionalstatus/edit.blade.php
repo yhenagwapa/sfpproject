@@ -67,7 +67,7 @@
                                     <h5 class='col-md-12'>Upon entry details</h5>
                                 </div>
                                 <form id="main-form" method="POST"
-                                    action="{{ route('nutritionalstatus.updateUponEntryDetails') }}">
+                                    action="{{ route('nutritionalstatus.updateUponEntryDetails') }}" novalidate>
                                     @csrf
                                     @method('PATCH')
 
@@ -78,7 +78,7 @@
 
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
-                                        <input type="date" class="form-control rounded border-gray-300" id="deworming_date" max="{{ date('Y-m-d') }}"
+                                        <input type="date" class="form-control rounded border-gray-300" id="deworming_date" min="{{ $child->date_of_birth->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
                                             name='deworming_date' value="{{ old('deworming_date', $entryDetails->deworming_date) }}"
                                             >
                                         @if ($errors->has('deworming_date'))
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
-                                        <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date" max="{{ date('Y-m-d') }}"
+                                        <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date" min="{{ $child->date_of_birth->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
                                             name='vitamin_a_date' value="{{ old('vitamin_a_date', $entryDetails->vitamin_a_date) }}"
                                             >
                                         @if ($errors->has('vitamin_a_date'))
@@ -168,7 +168,7 @@
                                         <h5 class='col-md-12'>After 120-feeding details</h5>
                                     </div>
                                     <form method="POST"
-                                        action="{{ route('nutritionalstatus.updateAfter120Details') }}">
+                                        action="{{ route('nutritionalstatus.updateAfter120Details') }}" novalidate>
                                         @csrf
                                         @method('PATCH')
 
@@ -203,7 +203,7 @@
                                                     class="text-red-600">*</b></label>
                                             <input type="date"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="exitweighing_date" name='exitweighing_date' max="{{ date('Y-m-d') }}"
+                                                id="exitweighing_date" name='exitweighing_date' min="{{ $entryDetails->actual_weighing_date->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
                                                 value="{{ old('exitweighing_date', $exitDetails->actual_weighing_date) }}">
                                             @if ($errors->has('exitweighing_date'))
                                                 <span class="text-xs text-red-600">{{ $errors->first('exitweighing_date') }}</span>

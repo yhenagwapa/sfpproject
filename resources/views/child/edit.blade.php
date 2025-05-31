@@ -396,53 +396,54 @@
                                         class="form-control rounded border-gray-300"
                                         name="spaceonly">
                                 </div>
-
-                                <div class='col-md-12 mt-4 text-gray-400 text-xs'>Implementation<hr>
-                                </div>
-
-                                <div class="col-md-6 text-sm">
-                                    <label for="cycle_implementation_id">Cycle Implementation</label>
-                                    <select class="form-control rounded border-gray-300" id="implementation_select"
-                                        name='implementation_select' disabled>
-                                        <option value="{{ $cycle->id }}">{{ $cycle->name }}
-                                        </option>
-                                    </select>
-                                    <input type="hidden" id="implementation_id" name="implementation_id"
-                                        value="{{ $childCenterId->implementation_id }}" />
-                                </div>
-
-                                <div class="col-md-6 text-sm">
-                                    <label for="is_funded">Is child funded?<b class="text-red-600">*</b></label><br>
-                                    <input type="radio" class="ml-5" name="is_funded" id="is_funded_yes" value="1"
-                                        {{ old('is_funded', $childCenterId->funded) == '1' ? 'checked' : '' }}>
-                                    <label class="mt-2" for="is_funded_yes">Yes</label>
-
-                                    <input type="radio" class="ml-5" name="is_funded" id="is_funded_no" value="0"
-                                        {{ old('is_funded', $childCenterId->funded) == '0' ? 'checked' : '' }}>
-                                    <label class="mt-2" for="is_funded_no">No</label>
-                                    <div class="col-md-6 text-sm">
-                                        @if ($errors->has('is_funded'))
-                                            <span class="text-xs text-red-600">{{ $errors->first('is_funded') }}</span>
-                                        @endif
+                                @if(!auth()->user()->hasRole('lgu focal'))
+                                    <div class='col-md-12 mt-4 text-gray-400 text-xs'>Implementation<hr>
                                     </div>
-                                </div>
 
-                                <div class="col-md-6 mt-3 text-sm hidden">
-                                    <label for="milk_feeding_id">Milk Feeding Implementation</label>
-                                    <select
-                                        class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                        id="milk_feeding_id" name='milk_feeding_id'>
-                                        @if ($milkFeeding)
-                                            <option value="{{ $milkFeeding->id }}"
-                                                {{ $milkFeeding->id == old('milk_feeding_id', $childCenterId->milk_feeding_id) ? 'selected' : '' }}>
-                                                {{ $milkFeeding->name }}
+                                    <div class="col-md-6 text-sm">
+                                        <label for="cycle_implementation_id">Cycle Implementation</label>
+                                        <select class="form-control rounded border-gray-300" id="implementation_select"
+                                            name='implementation_select' disabled>
+                                            <option value="{{ $cycle->id }}">{{ $cycle->name }}
                                             </option>
-                                        @else
-                                            <option value="" disabled selected>No active milk feeding implementation
-                                            </option>
-                                        @endif
-                                    </select>
-                                </div>
+                                        </select>
+                                        <input type="hidden" id="implementation_id" name="implementation_id"
+                                            value="{{ $childCenterId->implementation_id }}" />
+                                    </div>
+
+                                    <div class="col-md-6 text-sm">
+                                        <label for="is_funded">Is child funded?<b class="text-red-600">*</b></label><br>
+                                        <input type="radio" class="ml-5" name="is_funded" id="is_funded_yes" value="1"
+                                            {{ old('is_funded', $childCenterId->funded) == '1' ? 'checked' : '' }}>
+                                        <label class="mt-2" for="is_funded_yes">Yes</label>
+
+                                        <input type="radio" class="ml-5" name="is_funded" id="is_funded_no" value="0"
+                                            {{ old('is_funded', $childCenterId->funded) == '0' ? 'checked' : '' }}>
+                                        <label class="mt-2" for="is_funded_no">No</label>
+                                        <div class="col-md-6 text-sm">
+                                            @if ($errors->has('is_funded'))
+                                                <span class="text-xs text-red-600">{{ $errors->first('is_funded') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mt-3 text-sm hidden">
+                                        <label for="milk_feeding_id">Milk Feeding Implementation</label>
+                                        <select
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                            id="milk_feeding_id" name='milk_feeding_id'>
+                                            @if ($milkFeeding)
+                                                <option value="{{ $milkFeeding->id }}"
+                                                    {{ $milkFeeding->id == old('milk_feeding_id', $childCenterId->milk_feeding_id) ? 'selected' : '' }}>
+                                                    {{ $milkFeeding->name }}
+                                                </option>
+                                            @else
+                                                <option value="" disabled selected>No active milk feeding implementation
+                                                </option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                @endif
 
                                 <div class="modal fade" id="verticalycentered" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered">

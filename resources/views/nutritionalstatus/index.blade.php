@@ -43,7 +43,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             var alert1 = document.getElementById('success-alert');
             var alert2 = document.getElementById('danger-alert');
-            var alert2 = document.getElementById('warning-alert');
+            var alert3 = document.getElementById('warning-alert');
             if (alert1) {
                 setTimeout(function() {
                     var bsAlert1 = new bootstrap.Alert(alert1);
@@ -56,12 +56,12 @@
                     bsAlert2.close();
                 }, 3000);
             }
-            // if (alert3) {
-            //     setTimeout(function() {
-            //         var bsAlert3 = new bootstrap.Alert(alert3);
-            //         bsAlert3.close();
-            //     }, 3000);
-            // }
+            if (alert3) {
+                setTimeout(function() {
+                    var bsAlert3 = new bootstrap.Alert(alert3);
+                    bsAlert3.close();
+                }, 3000);
+            }
         });
     </script>
 
@@ -85,16 +85,19 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300" id="deworming_date"
-                                            name='deworming_date' value="{{ old('deworming_date') }}" max="{{ date('Y-m-d') }}"
+                                            name='deworming_date' value="{{ old('deworming_date') }}" min="{{ $child->date_of_birth->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
                                             >
                                         @if ($errors->has('deworming_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
                                         @endif
+                                        @error('deworming_date')
+                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                @enderror
                                     </div>
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
                                         <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date"
-                                            name='vitamin_a_date' value="{{ old('vitamin_a_date') }}" max="{{ date('Y-m-d') }}"
+                                            name='vitamin_a_date' value="{{ old('vitamin_a_date') }}" min="{{ $child->date_of_birth->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
                                             >
                                         @if ($errors->has('vitamin_a_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
@@ -263,7 +266,9 @@
 
             <div class="@if (auth()->user()->hasRole('admin'))
                     col-lg-12
-                @elseif (!$hasUponEntryData || $today === $minDateExit)
+                @elseif ( $today === $minDateExit || !$hasUponEntryData)
+                    col-lg-9
+                @elseif ( $today === $minDateExit && !$hasUponExitData)
                     col-lg-9
                 @else
                     col-lg-12
