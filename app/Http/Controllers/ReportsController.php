@@ -305,7 +305,6 @@ class ReportsController extends Controller
             )
             ->get();
 
-
         $ages = [2, 3, 4, 5];
         $sexMap = [1 => 'M', 2 => 'F'];
         $sexLabels = ['M', 'F'];

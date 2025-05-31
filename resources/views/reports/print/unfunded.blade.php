@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="base-url" content="{{ url('https://172.31.176.49/sfpproject/public') }}">
+
+    <title>Unfunded Children</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
     <style>
         .header {
             font-family: 'Arial', sans-serif;
@@ -167,6 +183,8 @@
                             @else
                                 No Worker Assigned
                             @endif
+                        @else
+                            ______________________________________
                         @endif
                     </u></p>
                     <p>Child Development Worker/Teacher</p>
@@ -192,6 +210,8 @@
                                 @else
                                     No Worker Assigned
                                 @endif
+                        @else
+                            ______________________________________
                         @endif
                         </u>
                     </p>
@@ -201,9 +221,19 @@
         </table>
     </div>
 
-    <footer>
-
-    </footer>
+    <script type="text/php">
+        if (isset($pdf)) {
+            $pdf->page_script('
+                $font = $fontMetrics->get_font("Arial", "normal");
+                $fontSize = 8;
+                $text = "Page $PAGE_NUM of $PAGE_COUNT";
+                $width = $fontMetrics->get_text_width($text, $font, $fontSize);
+                $x = (936 / 2) - ($width / 2);
+                $y = 580;
+                $pdf->text($x, $y, $text, $font, $fontSize);
+            ');
+        }
+    </script>
 
 </body>
 </html>

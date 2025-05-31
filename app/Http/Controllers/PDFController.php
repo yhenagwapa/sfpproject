@@ -124,8 +124,11 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
-                'margin-left' => 1
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
             ]);
 
         return $pdf->stream($cycle->name . ' Masterlist.pdf');
@@ -216,8 +219,11 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
-                'margin-left' => 1
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
             ]);
 
         return $pdf->stream($cycle->cycle_name . ' Malnourished.pdf');
@@ -277,8 +283,11 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
-                'margin-left' => 1
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
             ]);
 
         return $pdf->stream($cycle->name . ' Persons with Disability.pdf');
@@ -428,11 +437,11 @@ class PDFController extends Controller
                     'indigenous_people' => [
                         'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
                             $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->is_indegenous_people == true && $child->sex_id == 1;
+                            return $firstStatus && $child->is_indigenous_people == true && $child->sex_id == 1;
                         })->count(),
                         'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
                             $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->is_indegenous_people == true && $child->sex_id == 2;
+                            return $firstStatus && $child->is_indigenous_people == true && $child->sex_id == 2;
                         })->count(),
                     ],
                     'pantawid' => [
@@ -505,8 +514,11 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
-                'margin-left' => 1
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
             ]);
 
         return $pdf->stream($cycle->name . ' Undernourished Upon Entry.pdf');
@@ -1072,8 +1084,11 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
-                'margin-left' => 1
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
             ]);
 
 
@@ -1550,8 +1565,11 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
-                'margin-left' => 1
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
             ]);
 
         return $pdf->stream($cycle->name . ' Weight and Height Monitoring.pdf');
@@ -1569,10 +1587,9 @@ class PDFController extends Controller
         $cdcId = $request->input('center_name', 'all_center');
         $selectedCenter = null;
 
-        $unfundedChildren = Child::with('records', 'sex', 'psgc')
+        $unfundedChildren = Child::with('records', 'sex', 'nutritionalStatus')
             ->whereHas('records', function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id)
-                    ->where('status', 'active')
                     ->where('status', 'active')
                     ->where('funded', 0);
             });
@@ -1619,8 +1636,11 @@ class PDFController extends Controller
             ->setOptions([
                 'margin-top' => 0.5,
                 'margin-right' => 1,
-                'margin-bottom' => 0.5,
-                'margin-left' => 1
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
             ]);
 
         return $pdf->stream($cycle->name . ' Unfunded Children.pdf');

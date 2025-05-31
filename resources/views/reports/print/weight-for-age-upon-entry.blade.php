@@ -2,6 +2,22 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="base-url" content="{{ url('https://172.31.176.49/sfpproject/public') }}">
+
+    <title>Weight for Age</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
     @includeIf('reports.style')
 </head>
 
@@ -79,6 +95,9 @@
                     $totalMale = 0;
                     $totalFemale = 0;
                     $overallTotal = 0;
+                    $maleAges = 0;
+                    $femaleAges = 0;
+                    $allAges = 0;
                 @endphp
 
                 @foreach ($centers as $center)
@@ -101,8 +120,7 @@
 
                             @if ($users->isNotEmpty())
                                 @foreach ($users as $user)
-                                    {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }}
-                                    {{ $user->extension_name }}
+                                    {{ $user->full_name }}
                                 @endforeach
                             @else
                                 No Worker Assigned
@@ -155,12 +173,12 @@
                             @if ($sex == 'M')
                                 <td>{{ $maleAgeTotals[$age] }}</td>
                                 @php
-                                    $totalMale += $maleAgeTotals[$age];
+                                    $maleAges += $maleAgeTotals[$age];
                                 @endphp
                             @else
                                 <td>{{ $femaleAgeTotals[$age] }}</td>
                                 @php
-                                    $totalFemale += $femaleAgeTotals[$age];
+                                    $femaleAges += $femaleAgeTotals[$age];
                                 @endphp
                             @endif
                         @endforeach
@@ -184,9 +202,9 @@
 
                     @foreach ($sexLabels as $sex)
                         @if ($sex == 'M')
-                            <td colspan="{{ count($ages) }}">{{ $totalMale }}</td>
+                            <td colspan="{{ count($ages) }}">{{ $maleAges }}</td>
                         @else
-                            <td colspan="{{ count($ages) }}">{{ $totalFemale }}</td>
+                            <td colspan="{{ count($ages) }}">{{ $femaleAges }}</td>
                         @endif
                     @endforeach
                 </tr>
@@ -194,7 +212,7 @@
                     <td colspan="3">TOTAL CHILD BENEFICIARIES > </td>
                     @php
                         $colspan = count($ages) * count($sexLabels);
-                        $overallTotal = $totalMale + $totalFemale;
+                        $overallTotal = $maleAges + $femaleAges;
                     @endphp
 
                     @foreach ($categories as $category)

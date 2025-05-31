@@ -236,6 +236,10 @@ class UserController extends Controller
 
         if ($role) {
             $user->syncRoles([$role->name]);
+
+            $user->update([
+                'status' => 'active',
+            ]);
         }
 
         return redirect()->back()
