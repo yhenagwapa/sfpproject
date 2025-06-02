@@ -152,7 +152,7 @@
                 </li><!-- End Child List Nav -->
 
 
-                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator'))
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('centers.index') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -179,7 +179,7 @@
                     </li><!-- End Cycle Nav -->
                 @endcanany
 
-                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator'))
                     <li class="nav-heading">Tools</li>
 
                     <li class="nav-item">

@@ -54,9 +54,6 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Child Development Center Details</h5>
-                        <form class="row" method="POST" action="{{ route('centers.update') }}" id="centerUpdateForm">
-                            @csrf
-                            @method('post')
 
                             <input type="hidden" name="center_id" value="{{ $center->id }}">
 
@@ -67,65 +64,20 @@
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="center_name">Center Name<b class="text-red-600">*</b></label>
                                 <input type="text" class="form-control rounded border-gray-300" id="center_name"
-                                    name="center_name" value="{{ old('center_name', $center->center_name) }}" autofocus>
-                                @error('center_name')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
+                                    name="center_name" value="{{ old('center_name', $center->center_name) }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="center_type">Center Type<b
                                         class='text-red-600'>*</b></label>
-                                <select class="form-control rounded border-gray-300 uppercase" id="center_type"
-                                    name="center_type">
-                                    <option value="" selected>Select Center Type</option>
-                                    <option value="CDC" {{ old('center_type', $center->center_type) === 'CDC' ? 'selected' : ''}}>Child Development Center</option>
-                                    <option value="SNP" {{ old('center_type', $center->center_type) === 'SNP' ? 'selected' : ''}}>Supervised Neighborhood Play</option>
-                                </select>
-                                @error('center_type')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <input id="assigned_pdo_user_id" name="assigned_pdo_user_id" value="1" type="hidden">
-                            <div class="col-md-6 mt-3 text-sm hidden">
-                                <label for="assigned_user_id">Assigned PDO<b class='text-red-600'>*</b></label>
-                                <select class="form-control rounded border-gray-300" id="assigned_pdo_user_id_"
-                                    name="assigned_pdo_user_id_">
-                                    <option value="" selected>Select PDO</option>
-                                    @foreach ($pdos as $pdo)
-                                        <option value="{{ $pdo->id }}"
-                                            @if (old('assigned_pdo_user_id')) {{ old('assigned_pdo_user_id') == $pdo->id ? 'selected' : '' }}
-                                                @elseif ($assignedPDO && $assignedPDO->id == $pdo->id)
-                                                    selected @endif>
-
-                                            {{ $pdo->full_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('assigned_pdo_user_id')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
+                                <input type="text" class="form-control rounded border-gray-300" id="center_type"
+                                    name="center_type" value="{{ old('center_type', $center->center_type) }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="assigned_user_id">Assigned LGU Focal<b class='text-red-600'>*</b></label>
-                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_focal_user_id"
-                                    name="assigned_focal_user_id">
-                                    <option value="" selected>Select LGU Focal</option>
-                                    @foreach ($focals as $focal)
-                                        <option value="{{ $focal->id }}"
-                                            @if (old('assigned_focal_user_id')) {{ old('assigned_focal_user_id') == $focal->id ? 'selected' : '' }}
-                                                @elseif ($assignedFocal && $assignedFocal->id == $focal->id)
-                                                    selected @endif>
-
-                                            {{ $focal->full_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('assigned_focal_user_id')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
+                                <input type="text" class="form-control rounded border-gray-300" id="center_type"
+                                    name="center_type" value="{{ old('center_type', $center->center_type) }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
@@ -280,7 +232,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form><!-- End floating Labels Form -->
+
                         <div class="col-md-12 flex mt-4 justify-end text-right">
                             <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
                                 data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>

@@ -33,7 +33,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = Role::all();
+        $roles = Role::all()->sortBy('name');
 
         $search = $request->get('search');
         // Start with the query builder

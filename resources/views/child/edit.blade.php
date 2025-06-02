@@ -368,38 +368,44 @@
                                     </div>
                                 @endif
 
-                                <div class='col-md-12 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised
-                                    Neighborhood Play<hr>
-                                </div>
+                                @if(auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('admin'))
 
-                                <div class="col-md-6 mt-3 text-sm">
-                                    <label for="child_development_center_id">CDC or SNP</label><b
-                                        class="text-red-600">*</b>
-                                    <select
-                                        class="form-control rounded border-gray-300 uppercase"
-                                        id="child_development_center_id" name='child_development_center_id'>
-                                        <option value="" disabled selected>Select CDC or SNP</option>
-                                        @foreach ($centerNames as $center)
-                                            <option value="{{ $center->id }}"
-                                                {{ $center->id == old('child_development_center_id', $childCenterId->child_development_center_id) ? 'selected' : '' }}>
-                                                {{ $center->center_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('child_development_center_id')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
-                                    <input type="text"
-                                        class="form-control rounded border-gray-300"
-                                        name="spaceonly">
-                                </div>
-                                @if(!auth()->user()->hasRole('lgu focal'))
-                                    <div class='col-md-12 mt-4 text-gray-400 text-xs'>Implementation<hr>
+                                    <div class='col-md-12 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised
+                                        Neighborhood Play<hr>
                                     </div>
 
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="child_development_center_id">CDC or SNP</label><b
+                                            class="text-red-600">*</b>
+                                        <select
+                                            class="form-control rounded border-gray-300 uppercase"
+                                            id="child_development_center_id" name='child_development_center_id'>
+                                            <option value="" disabled selected>Select CDC or SNP</option>
+                                            @foreach ($centerNames as $center)
+                                                <option value="{{ $center->id }}"
+                                                    {{ $center->id == old('child_development_center_id', $childCenterId->child_development_center_id) ? 'selected' : '' }}>
+                                                    {{ $center->center_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('child_development_center_id')
+                                            <span class="text-xs text-red-600">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
+                                        <input type="text"
+                                            class="form-control rounded border-gray-300"
+                                            name="spaceonly">
+                                    </div>
+
+                                @endif
+                                @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder'))
+                                    <div class='col-md-12 mt-4 text-gray-400 text-xs'>Implementation<hr>
+                                    </div>
+                                @endif
+
+                                @if(auth()->user()->hasRole('admin'))
                                     <div class="col-md-6 text-sm">
                                         <label for="cycle_implementation_id">Cycle Implementation</label>
                                         <select class="form-control rounded border-gray-300" id="implementation_select"
@@ -410,7 +416,8 @@
                                         <input type="hidden" id="implementation_id" name="implementation_id"
                                             value="{{ $childCenterId->implementation_id }}" />
                                     </div>
-
+                                @endif
+                                @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder'))
                                     <div class="col-md-6 text-sm">
                                         <label for="is_funded">Is child funded?<b class="text-red-600">*</b></label><br>
                                         <input type="radio" class="ml-5" name="is_funded" id="is_funded_yes" value="1"

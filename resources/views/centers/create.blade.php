@@ -45,6 +45,16 @@
         });
     </script>
 
+    {{-- @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif --}}
+
 
     <section class="section">
         <div class="row">
@@ -59,7 +69,7 @@
                                 <hr>
                             </div>
 
-                            <div class="col-md-12 mt-3 text-sm">
+                            <div class="col-md-6 mt-3 text-sm">
                                 <label for="center_name">Center Name<b class="text-red-600">*</b></label>
                                 <input type="text" class="form-control rounded border-gray-300" id="center_name"
                                     name="center_name" value="{{ old('center_name') }}" autofocus>
@@ -69,23 +79,19 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-6 mt-3 text-sm hidden">
-                                <label for="assigned_user_id">Assigned PDO<b class='text-red-600'>*</b></label>
-                                <select class="form-control rounded border-gray-300" id="assigned_pdo_user_id"
-                                    name="assigned_pdo_user_id">
-                                    <option value="" selected>Select PDO</option>
-                                    @foreach ($pdos as $pdo)
-                                        <option value="{{ $pdo->id }}"
-                                            {{ old('assigned_pdo_user_id') == $pdo->id ? 'selected' : '' }}>
-                                            {{ $pdo->full_name }}
-                                        </option>
-                                    @endforeach
+                            <div class="col-md-6 mt-3 text-sm">
+                                <label for="center_type">Center Type<b
+                                        class='text-red-600'>*</b></label>
+                                <select class="form-control rounded border-gray-300 uppercase" id="center_type"
+                                    name="center_type">
+                                    <option value="" selected>Select Center Type</option>
+                                    <option value="CDC" {{ old('center_type') === 'CDC' ? 'selected' : ''}}>Child Development Center</option>
+                                    <option value="SNP" {{ old('center_type') === 'SNP' ? 'selected' : ''}}>Supervised Neighborhood Play</option>
                                 </select>
-                                @error('assigned_pdo_user_id')
+                                @error('center_type')
                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                 @enderror
                             </div>
-
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="assigned_worker_user_id">Assigned Child Development Worker<b
                                         class='text-red-600'>*</b></label>
@@ -103,23 +109,45 @@
                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                 @enderror
                             </div>
+                            @if(!auth()->user()->hasRole('lgu focal'))
+                                <div class="col-md-6 mt-3 text-sm">
+                                    <label for="assigned_focal_user_id">Assigned LGU Focal<b class='text-red-600'>*</b></label>
+                                    <select class="form-control rounded border-gray-300 uppercase" id="assigned_focal_user_id"
+                                        name="assigned_focal_user_id">
+                                        <option value="" selected>Select LGU Focal</option>
+                                        @foreach ($focals as $focal)
+                                            <option value="{{ $focal->id }}"
+                                                {{ old('assigned_focal_user_id', auth()->user()->id) == $focal->id ? 'selected' : '' }}>
+                                                {{ $focal->full_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('assigned_focal_user_id'))
+                                        <span class="text-xs text-red-600">{{ $errors->first('assigned_focal_user_id') }}</span>
+                                    @endif
+                                </div>
+                            @endif
 
-                            <div class="col-md-6 mt-3 text-sm">
-                                <label for="assigned_focal_user_id">Assigned LGU Focal<b class='text-red-600'>*</b></label>
-                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_focal_user_id"
-                                    name="assigned_focal_user_id">
-                                    <option value="" selected>Select LGU Focal</option>
-                                    @foreach ($focals as $focal)
-                                        <option value="{{ $focal->id }}"
-                                            {{ auth()->user()->id == $focal->id ? 'selected' : '' }}>
-                                            {{ $focal->full_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('assigned_focal_user_id')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            @if(!auth()->user()->hasRole('sfp coordinator'))
+                                <div class="col-md-6 mt-3 text-sm">
+
+                                    <label for="assigned_coordinator_user_id">Assigned SFP Coordinator<b class='text-red-600'>*</b></label>
+                                    <select class="form-control rounded border-gray-300 uppercase" id="assigned_coordinator_user_id"
+                                        name="assigned_coordinator_user_id">
+                                        <option value="" selected>Select SFP Coordinator</option>
+                                        @foreach ($coordinators as $coordinator)
+                                            <option value="{{ $coordinator->id }}"
+                                                {{ old('assigned_coordinator_user_id', auth()->user()->id) == $coordinator->id ? 'selected' : '' }}>
+                                                {{ $coordinator->full_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('assigned_coordinator_user_id')
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            @endif
 
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="assigned_encoder_user_id">Assigned Encoder</label>
@@ -133,10 +161,11 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('assigned_focal_user_id')
+                                @error('assigned_encoder_user_id')
                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                 @enderror
                             </div>
+
                             <div class='col-md-12 mt-4 text-gray-400 text-xs'>Address
                                 <hr>
                             </div>

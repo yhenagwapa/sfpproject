@@ -15,7 +15,10 @@ class RoleSeeder extends Seeder
 
         $cdw = Role::firstOrCreate(['name' => 'child development worker',
                             'guard_name' => 'web']);
-        
+
+        $lguFocal= Role::firstOrCreate(['name' => 'lgu focal',
+                            'guard_name' => 'web']);
+
         $lguFocal= Role::firstOrCreate(['name' => 'lgu focal',
                             'guard_name' => 'web']);
 
@@ -59,5 +62,5 @@ class RoleSeeder extends Seeder
             'view-cycle-implementation'
         ]);
     }
-    
+
 }

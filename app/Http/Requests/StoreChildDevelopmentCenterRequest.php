@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 
 class StoreChildDevelopmentCenterRequest extends FormRequest
@@ -22,9 +23,19 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
      */
     public function rules(): array
     {
+        $user = auth()->user();
+
         return [
             'center_name' => ['required', 'unique:child_development_centers,center_name'],
-            'assigned_focal_user_id' => ['required', 'exists:users,id'],
+            'center_type' => ['required'],
+            'assigned_focal_user_id' => [
+                Rule::requiredIf($user->hasRole('sfp coordinator')),
+                'exists:users,id',
+            ],
+            'assigned_coordinator_user_id' => [
+                Rule::requiredIf($user->hasRole('lgu focal')),
+                'exists:users,id',
+            ],
             'assigned_worker_user_id' => ['required', 'exists:users,id'],
             'assigned_encoder_user_id' => ['nullable','exists:users,id'],
             'province_psgc' => ['required'],
@@ -38,8 +49,9 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
         return [
             'center_name.required' => 'Please fill in the name of the child development center.',
             'center_name.unique' => 'The center name has already been taken.',
-            'assigned_pdo_user_id.required' => 'Please select an assigned PDO.',
-            'assigned_focal_user_id.required' => 'Please select an assigned LGU Focal.',
+            'center_type.required' => 'Please select center type.',
+            'assigned_focal_user_id.required_if' => 'Please select an assigned LGU Focal.',
+            'assigned_coordinator_user_id.required_if' => 'Please select an assigned SFP Coordinator.',
             'assigned_worker_user_id.required' => 'Please select an assigned worker.',
             'province_psgc.required' => 'Please select a province.',
             'city_name_psgc.required' => 'Please select a city.',

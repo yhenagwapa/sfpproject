@@ -44,6 +44,7 @@ class ChildDevelopmentCenterController extends Controller
             $worker = $users->firstWhere(fn($user) => $user->hasRole('child development worker'));
             $encoder = $users->firstWhere(fn($user) => $user->hasRole('encoder'));
             $focal = $users->firstWhere(fn($user) => $user->hasRole('lgu focal'));
+            $coordinator = $users->firstWhere(fn($user) => $user->hasRole('sfp coordinator'));
             $pdo = $users->firstWhere(fn($user) => $user->hasRole('pdo'));
 
             $centersWithRoles[$center->id] = [
@@ -52,13 +53,13 @@ class ChildDevelopmentCenterController extends Controller
                 'worker' => $worker,
                 'encoder' => $encoder,
                 'focal' => $focal,
+                'coordinator' => $coordinator,
                 'pdo' => $pdo,
                 'address' => $center->getfulladdress(),
             ];
         }
 
         return view('centers.index', compact('centersWithRoles', 'centers'));
-
     }
 
     /**
@@ -69,10 +70,11 @@ class ChildDevelopmentCenterController extends Controller
         $this->authorize('create-child-development-center');
 
         $centers = ChildDevelopmentCenter::all();
-        $pdos = User::role('pdo')->get();
-        $workers = User::role('child development worker')->get();
-        $focals = User::role('lgu focal')->get();
-        $encoders = User::role('encoder')->get();
+        $pdos = User::role('pdo')->where('status','active')->get();
+        $workers = User::role('child development worker')->where('status','active')->get();
+        $focals = User::role('lgu focal')->where('status','active')->get();
+        $coordinators = User::role('sfp coordinator')->where('status','active')->get();
+        $encoders = User::role('encoder')->where('status','active')->get();
         $psgc = new Psgc();
 
 
@@ -84,19 +86,25 @@ class ChildDevelopmentCenterController extends Controller
         if (!$request->user()->hasRole('admin')) {
 
             $psgcCity = Psgc::find(auth()->user()->psgc_id)->city_name_psgc;
-            $focals = User::role('lgu focal') // still on query builder
+            $focals = User::role('lgu focal')->where('status','active') // still on query builder
             ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
                 ->where('psgcs.city_name_psgc', $psgcCity)
                 ->select('users.*') // optionally select fields from psgcs too
                 ->get();
 
-            $workers = User::role('child development worker') // still on query builder
+            $coordinators = User::role('sfp coordinator')->where('status','active') // still on query builder
             ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
                 ->where('psgcs.city_name_psgc', $psgcCity)
                 ->select('users.*') // optionally select fields from psgcs too
                 ->get();
 
-            $encoders = User::role('encoder') // still on query builder
+            $workers = User::role('child development worker')->where('status','active') // still on query builder
+            ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                ->where('psgcs.city_name_psgc', $psgcCity)
+                ->select('users.*') // optionally select fields from psgcs too
+                ->get();
+
+            $encoders = User::role('encoder')->where('status','active') // still on query builder
             ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
                 ->where('psgcs.city_name_psgc', $psgcCity)
                 ->select('users.*') // optionally select fields from psgcs too
@@ -131,7 +139,7 @@ class ChildDevelopmentCenterController extends Controller
             $barangays = $psgc->getBarangays($city_psgc);
         }
 
-        return view('centers.create', compact('centers', 'pdos','workers', 'focals', 'encoders', 'provinces', 'cities', 'barangays'));
+        return view('centers.create', compact('centers', 'pdos', 'workers', 'coordinators' ,'focals', 'encoders', 'provinces', 'cities', 'barangays'));
     }
 
     /**
@@ -165,16 +173,30 @@ class ChildDevelopmentCenterController extends Controller
 
         $center = ChildDevelopmentCenter::create([
             'center_name' => $request->center_name,
+            'center_type' => $request->center_type,
             'psgc_id' => $psgc_id,
             'address' => $request->address,
             'created_by_user_id' => auth()->id(),
         ]);
 
+        $focal = null;
+        $coordinator = null;
+        $worker = $request->input('assigned_worker_user_id');
+        $encoder = $request->input('assigned_encoder_user_id');
+
+        if(auth()->user()->hasRole('lgu focal')){
+            $focal = auth()->id();
+            $coordinator = $request->input('assigned_coordinator_user_id');
+        } elseif(auth()->user()->hasRole('sfp coordinator')){
+            $focal = $request->input('assigned_focal_user_id');
+            $coordinator = auth()->id();
+        }
+
         $userIds = array_filter([
-            $request->input('assigned_pdo_user_id'),
-            $request->input('assigned_focal_user_id'),
-            $request->input('assigned_worker_user_id'),
-            $request->input('assigned_encoder_user_id'),
+            $worker,
+            $encoder,
+            $focal,
+            $coordinator,
         ]);
 
         $center->users()->sync($userIds);
@@ -204,16 +226,19 @@ class ChildDevelopmentCenterController extends Controller
 
         $center = ChildDevelopmentCenter::findOrFail($centerID);
 
-        $workers = User::role('child development worker')->get();
+        $workers = User::role('child development worker')->where('status','active')->get();
         $assignedWorker = $center->users()->role('child development worker')->first();
 
-        $focals = User::role('lgu focal')->get();
+        $focals = User::role('lgu focal')->where('status','active')->get();
         $assignedFocal = $center->users()->role('lgu focal')->first();
 
-        $encoders = User::role('encoder')->get();
+        $coordinators = User::role('sfp coordinator')->where('status','active')->get();
+        $assignedCoordinator = $center->users()->role('sfp coordinator')->first();
+
+        $encoders = User::role('encoder')->where('status','active')->get();
         $assignedEncoder = $center->users()->role('encoder')->first();
 
-        $pdos = User::role('pdo')->get();
+        $pdos = User::role('pdo')->where('status','active')->get();
         $assignedPDO = $center->users()->role('pdo')->first();
 
         $psgc = new Psgc();
@@ -228,19 +253,25 @@ class ChildDevelopmentCenterController extends Controller
         if (!$request->user()->hasRole('admin')) {
 
             $psgcCity = Psgc::find(auth()->user()->psgc_id)->city_name_psgc;
-            $focals = User::role('lgu focal') // still on query builder
+            $focals = User::role('lgu focal')->where('status','active') // still on query builder
             ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
                 ->where('psgcs.city_name_psgc', $psgcCity)
                 ->select('users.*') // optionally select fields from psgcs too
                 ->get();
 
-            $workers = User::role('child development worker') // still on query builder
+            $coordinators = User::role('sfp coordinator')->where('status','active') // still on query builder
             ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
                 ->where('psgcs.city_name_psgc', $psgcCity)
                 ->select('users.*') // optionally select fields from psgcs too
                 ->get();
 
-            $encoders = User::role('encoder') // still on query builder
+            $workers = User::role('child development worker')->where('status','active') // still on query builder
+            ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                ->where('psgcs.city_name_psgc', $psgcCity)
+                ->select('users.*') // optionally select fields from psgcs too
+                ->get();
+
+            $encoders = User::role('encoder')->where('status','active') // still on query builder
             ->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
                 ->where('psgcs.city_name_psgc', $psgcCity)
                 ->select('users.*') // optionally select fields from psgcs too
@@ -267,11 +298,13 @@ class ChildDevelopmentCenterController extends Controller
         return view('centers.edit', [
             'center' => $center,
             'focals' => $focals,
+            'coordinators', $coordinators,
             'workers' => $workers,
             'encoders' => $encoders,
             'pdos' => $pdos,
             'assignedWorker' => $assignedWorker,
             'assignedFocal' => $assignedFocal,
+            'assignedCoordinator' => $assignedCoordinator,
             'assignedEncoder' => $assignedEncoder,
             'assignedPDO' => $assignedPDO,
             'psgcRecord' => $psgcRecord,
@@ -315,16 +348,30 @@ class ChildDevelopmentCenterController extends Controller
 
         $updated = $center->update([
             'center_name' => $validatedData['center_name'],
+            'center_type' => $validatedData['center_type'],
             'psgc_id' => $psgc_id,
             'address' => $validatedData['address'],
             'updated_by_user_id' => auth()->id(),
         ]);
 
+        $focal = null;
+        $coordinator = null;
+        $worker = $request->input('assigned_worker_user_id');
+        $encoder = $request->input('assigned_encoder_user_id');
+
+        if(auth()->user()->hasRole('lgu focal')){
+            $focal = auth()->id();
+            $coordinator = $request->input('assigned_coordinator_user_id');
+        } elseif(auth()->user()->hasRole('sfp coordinator')){
+            $focal = $request->input('assigned_focal_user_id');
+            $coordinator = auth()->id();
+        }
+
         $userIds = array_filter([
-            $request->input('assigned_pdo_user_id'),
-            $request->input('assigned_focal_user_id'),
-            $request->input('assigned_worker_user_id'),
-            $request->input('assigned_encoder_user_id'),
+            $worker,
+            $encoder,
+            $focal,
+            $coordinator,
         ]);
 
         $center->users()->sync($userIds);
@@ -335,8 +382,18 @@ class ChildDevelopmentCenterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ChildDevelopmentCenter $childDevelopmentCenter)
+    public function view(Request $request)
     {
-        //
+        session(['view_center_id' => $request->input('center_id')]);
+
+        $centerID = session('view_center_id');
+
+        $center = ChildDevelopmentCenter::findOrFail($centerID);
+
+        $psgc = new Psgc();
+
+        $psgcRecord = Psgc::where('psgc_id', $center->psgc_id)->first();
+
+        return view('centers.view', compact('center', 'psgc', 'psgcRecord'));
     }
 }
