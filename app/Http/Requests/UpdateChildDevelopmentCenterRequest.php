@@ -24,10 +24,9 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
     {
         $user = auth()->user();
 
-        if (session('center_id')){
             return [
                 'center_name' => ['required', 'string', 'max:255'],
-                'center_type' => ['required'],
+                'center_type' => ['required', 'string', 'max:255'],
                 'assigned_focal_user_id' => [
                     Rule::requiredIf($user->hasRole('sfp coordinator')),
                     'exists:users,id',
@@ -43,26 +42,7 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
                 'brgy_psgc' => ['required'],
                 'address' => ['required', 'string'],
             ];
-        }
 
-        return [
-            'center_name' => ['required', 'string', 'max:255'],
-            'center_type' => ['required'],
-            'assigned_focal_user_id' => [
-                Rule::requiredIf($user->hasRole('sfp coordinator')),
-                'exists:users,id',
-            ],
-            'assigned_coordinator_user_id' => [
-                Rule::requiredIf($user->hasRole('lgu focal')),
-                'exists:users,id',
-            ],
-            'assigned_worker_user_id' => ['required', 'exists:users,id'],
-            'assigned_encoder_user_id' => ['nullable','exists:users,id'],
-            'province_psgc' => ['required'],
-            'city_name_psgc' => ['required'],
-            'brgy_psgc' => ['required'],
-            'address' => ['required', 'string'],
-        ];
     }
     public function messages()
     {

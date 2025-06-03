@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('child_development_centers', function (Blueprint $table) {
-            $table->integer('center_type')->after('psgc_id')->nullable();
+            $table->string('center_type')->after('psgc_id')->nullable();
         });
     }
 

@@ -50,6 +50,7 @@ class ChildDevelopmentCenterController extends Controller
             $centersWithRoles[$center->id] = [
                 'center_id' => $center->id,
                 'center_name' => $center->center_name,
+                'center_type' => $center->center_type,
                 'worker' => $worker,
                 'encoder' => $encoder,
                 'focal' => $focal,
@@ -298,7 +299,7 @@ class ChildDevelopmentCenterController extends Controller
         return view('centers.edit', [
             'center' => $center,
             'focals' => $focals,
-            'coordinators', $coordinators,
+            'coordinators' => $coordinators,
             'workers' => $workers,
             'encoders' => $encoders,
             'pdos' => $pdos,
@@ -322,7 +323,7 @@ class ChildDevelopmentCenterController extends Controller
 
         $validatedData = $request->validated();
 
-        $centerID = $request->input('center_id'); //session('center_id');
+        $centerID = session('editing_center_id');
 
         $center = ChildDevelopmentCenter::findOrFail($centerID);
 
@@ -346,14 +347,6 @@ class ChildDevelopmentCenterController extends Controller
             return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
         }
 
-        $updated = $center->update([
-            'center_name' => $validatedData['center_name'],
-            'center_type' => $validatedData['center_type'],
-            'psgc_id' => $psgc_id,
-            'address' => $validatedData['address'],
-            'updated_by_user_id' => auth()->id(),
-        ]);
-
         $focal = null;
         $coordinator = null;
         $worker = $request->input('assigned_worker_user_id');
@@ -365,7 +358,19 @@ class ChildDevelopmentCenterController extends Controller
         } elseif(auth()->user()->hasRole('sfp coordinator')){
             $focal = $request->input('assigned_focal_user_id');
             $coordinator = auth()->id();
+        } else{
+            $focal = $request->input('assigned_focal_user_id');
+            $coordinator = $request->input('assigned_coordinator_user_id');
         }
+
+        // dd($validatedData);
+        $updated = $center->update([
+            'center_name' => $validatedData['center_name'],
+            'psgc_id' => $psgc_id,
+            'address' => $validatedData['address'],
+            'center_type' => $validatedData['center_type'],
+            'updated_by_user_id' => auth()->id(),
+        ]);
 
         $userIds = array_filter([
             $worker,
@@ -390,10 +395,15 @@ class ChildDevelopmentCenterController extends Controller
 
         $center = ChildDevelopmentCenter::findOrFail($centerID);
 
+        $assignedWorker = $center->users()->role('child development worker')->first();
+        $assignedFocal = $center->users()->role('lgu focal')->first();
+        $assignedCoordinator = $center->users()->role('sfp coordinator')->first();
+        $assignedEncoder = $center->users()->role('encoder')->first();
+
         $psgc = new Psgc();
 
         $psgcRecord = Psgc::where('psgc_id', $center->psgc_id)->first();
 
-        return view('centers.view', compact('center', 'psgc', 'psgcRecord'));
+        return view('centers.view', compact('center', 'assignedWorker', 'assignedFocal', 'assignedCoordinator', 'assignedEncoder', 'psgc', 'psgcRecord',));
     }
 }

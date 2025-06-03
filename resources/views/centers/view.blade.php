@@ -53,10 +53,20 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Child Development Center Details</h5>
 
-                            <input type="hidden" name="center_id" value="{{ $center->id }}">
+                        <div class="col-md-12 flex text-right">
+                            <a href={{ route('centers.index') }} class="flex italic" style="text-decoration: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1e9730" class="mr-1 mt-1 size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                                </svg>
+                                <span class="text-green-600">
+                                    Back
+                                </span>
+                            </a>
+                        </div>
 
+                        <h5 class="card-title">{{ $center->center_name }}</h5>
+                        <div class="row">
                             <div class='col-md-12 mt-2 text-gray-400 text-xs'>Child Development Center Information
                                 <hr>
                             </div>
@@ -64,295 +74,79 @@
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="center_name">Center Name<b class="text-red-600">*</b></label>
                                 <input type="text" class="form-control rounded border-gray-300" id="center_name"
-                                    name="center_name" value="{{ old('center_name', $center->center_name) }}" readonly>
+                                    name="center_name" value="{{ $center->center_name }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="center_type">Center Type<b
                                         class='text-red-600'>*</b></label>
                                 <input type="text" class="form-control rounded border-gray-300" id="center_type"
-                                    name="center_type" value="{{ old('center_type', $center->center_type) }}" readonly>
+                                    name="center_type" value="{{ $center->center_type }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
-                                <label for="assigned_user_id">Assigned LGU Focal<b class='text-red-600'>*</b></label>
-                                <input type="text" class="form-control rounded border-gray-300" id="center_type"
-                                    name="center_type" value="{{ old('center_type', $center->center_type) }}" readonly>
+                                <label for="assigned_focal_user_id">Assigned LGU Focal<b class='text-red-600'>*</b></label>
+                                <input type="text" class="form-control rounded border-gray-300" id="assigned_focal_user_id"
+                                    name="assigned_focal_user_id" value="{{ $assignedFocal?->full_name ?? 'N/A'  }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
-                                <label for="assigned_user_id">Assigned Child Development Worker<b
-                                        class='text-red-600'>*</b></label>
-                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_worker_user_id"
-                                    name="assigned_worker_user_id">
-                                    <option value="" selected>Select Worker</option>
-                                    @foreach ($workers as $worker)
-                                        <option value="{{ $worker->id }}"
-                                            @if (old('assigned_worker_user_id')) {{ old('assigned_worker_user_id') == $worker->id ? 'selected' : '' }}
-                                                @elseif ($assignedWorker && $assignedWorker->id == $worker->id)
-                                                    selected @endif>
-
-                                            {{ $worker->full_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('assigned_worker_user_id')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
+                                <label for="assigned_coordinator_user_id">Assigned SFP Coordinator<b class='text-red-600'>*</b></label>
+                                <input type="text" class="form-control rounded border-gray-300" id="assigned_coordinator_user_id"
+                                    name="assigned_coordinator_user_id" value="{{ $assignedCoordinator?->full_name ?? 'N/A' }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
-                                <label for="assigned_user_id">Assigned Encoder</label>
-                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_encoder_user_id"
-                                    name="assigned_encoder_user_id">
-                                    <option value="" selected>Select Encoder</option>
-                                    @foreach ($encoders as $encoder)
-                                        <option value="{{ $encoder->id }}"
-                                            @if (old('assigned_encoder_user_id')) {{ old('assigned_encoder_user_id') == $encoder->id ? 'selected' : '' }}
-                                                @elseif ($assignedEncoder && $assignedEncoder->id == $encoder->id)
-                                                    selected @endif>
-
-                                            {{ $encoder->full_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('assigned_encoder_user_id')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
+                                <label for="assigned_worker_user_id">Assigned Worker<b class='text-red-600'>*</b></label>
+                                <input type="text" class="form-control rounded border-gray-300" id="assigned_worker_user_id"
+                                    name="assigned_worker_user_id" value="{{ $assignedWorker?->full_name ?? 'N/A' }}" readonly>
                             </div>
+
+                            <div class="col-md-6 mt-3 text-sm">
+                                <label for="assigned_encoder_user_id">Assigned Encoder<b class='text-red-600'>*</b></label>
+                                <input type="text" class="form-control rounded border-gray-300" id="assigned_encoder_user_id"
+                                    name="assigned_encoder_user_id" value="{{ $assignedEncoder?->full_name ?? 'N/A' }}" readonly>
+                            </div>
+
+
 
                             <div class='col-md-12 mt-4 text-gray-400 text-xs'>Address<hr>
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="region">Region<b class="text-red-600">*</b></label>
-                                <select class="form-control rounded border-gray-300" id="region" name="region_psgc">
-                                    <option value="110000000" selected>Region XI</option>
-                                </select>
+                                <input type="text" class="form-control rounded border-gray-300" id="region"
+                                    name="region" value="{{ $psgcRecord->region_name }}" readonly>
                             </div>
-
-                            <!-- Hidden Region (pre-selected) -->
-                            <input type="hidden" name="region_psgc" value="110000000">
 
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="province">Province<b class="text-red-600">*</b></label>
-                                <select class="form-control rounded border-gray-300" id="province" name="province_psgc">
-                                    <option value="" selected>Select Province</option>
-                                    @foreach ($provinces as $psgc => $name)
-                                        <option value="{{ $psgc }}"
-                                            {{ old('province_psgc', $psgcRecord->province_psgc) == $psgc ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('province_psgc')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
+                                <input type="text" class="form-control rounded border-gray-300" id="province"
+                                    name="province" value="{{ $psgcRecord->province_name }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-2 text-sm">
                                 <label for="city">City/Municipality<b class="text-red-600">*</b></label>
-                                <select class="form-control rounded border-gray-300" id="city"
-                                    name="city_name_psgc">
-                                    <option value="">Select City/Municipality</option>
-                                    @foreach ($cities as $psgc => $name)
-                                        <option value="{{ $psgc }}"
-                                            {{ old('city_name_psgc', $psgcRecord->city_name_psgc) == $psgc ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('city_name_psgc')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
+                                <input type="text" class="form-control rounded border-gray-300" id="city"
+                                    name="city" value="{{ $psgcRecord->city_name }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-2 text-sm">
                                 <label for="barangay">Barangay<b class="text-red-600">*</b></label>
-                                <select class="form-control rounded border-gray-300" id="barangay" name="brgy_psgc">
-                                    <option value="">Select Barangay</option>
-                                    @foreach ($barangays as $psgc => $name)
-                                        <option value="{{ $psgc }}"
-                                            {{ old('brgy_psgc', $psgcRecord->brgy_psgc) == $psgc ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('brgy_psgc')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
+                                <input type="text" class="form-control rounded border-gray-300" id="barangay"
+                                    name="barangay" value="{{ $psgcRecord->brgy_name }}" readonly>
                             </div>
 
                             <div class="col-12 mt-2 text-sm">
                                 <label for="address">Address<b class="text-red-600">*</b></label>
                                 <input type="text" class="form-control rounded border-gray-300" id="address"
-                                    name='address' value="{{ old('address', $center->address) }}">
-                                @error('address')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
+                                    name="address" value="{{ $center->address }}" readonly>
                             </div>
-
-                            {{-- <div class='col-md-1 mt-4 text-gray-400 text-xs'>Areas</div>
-                                <div class='col-md-11 mt-8 text-gray-400 text-xs'>
-                                    <hr>
-                                </div> --}}
-
-                            {{-- <div class="col-md-12 mt-3 mb-0 text-sm">
-                                    <label for="cdcname" class="mr-2">Area/s</label>
-                                </div>
-                                <div class="col-md-12" id="input-container">
-                                    <div class="input-group mb-2">
-                                        <input type="text"
-                                            class="form-control rounded border-gray-300 rounded border-gray-300 mr-3"
-                                            name="cdcname[]" value="{{ old('cdcname') }}" autofocus>
-                                        <button type="button"
-                                            class="text-white bg-blue-600 rounded text-sm text-nowrap px-4 min-h-9 add-more">
-                                            Add More
-                                        </button>
-                                    </div>
-                                </div> --}}
-
-                            <div class="modal fade" id="verticalycentered" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-red-600">Confirmation</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to save these changes?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" id="centerUpdateConfirm"
-                                                class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                            <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                                data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        <div class="col-md-12 flex mt-4 justify-end text-right">
-                            <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
-                                data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
-{{--                            <form id="cancel-form" method="GET" action="{{ route('centers.index') }}">--}}
-{{--                            </form>--}}
-                            <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
-                                Cancel
-                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Location Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get dropdown elements
-            const provinceSelect = document.getElementById('province');
-            const citySelect = document.getElementById('city');
-            const barangaySelect = document.getElementById('barangay');
-
-            // Convert PHP arrays to JSON for JavaScript use
-            const locations = {
-                provinces: @json($provinces),
-                cities: {!! json_encode($cities, JSON_UNESCAPED_UNICODE) !!},
-                barangays: {!! json_encode($barangays, JSON_UNESCAPED_UNICODE) !!}
-            };
-
-            // Get old selected values (from Laravel session for form validation)
-            let selectedProvince = @json(old('province_psgc', $psgcRecord->province_psgc));
-            let selectedCity = @json(old('city_name_psgc', $psgcRecord->city_name_psgc));
-            let selectedBarangay = @json(old('brgy_psgc', $psgcRecord->brgy_psgc));
-
-            // Function to reset and populate cities when province changes
-            function populateCities(provincePsgc) {
-                citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
-                barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Reset barangay
-
-                citySelect.disabled = !provincePsgc; // Enable only if a province is selected
-                barangaySelect.disabled = true; // Always reset barangay when province changes
-
-                if (provincePsgc && locations.cities[provincePsgc]) {
-                    locations.cities[provincePsgc].forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city.psgc;
-                        option.text = city.name;
-                        citySelect.appendChild(option);
-                    });
-
-                    // Restore selected city after validation error
-                    if (selectedCity && locations.cities[provincePsgc].some(city => city.psgc == selectedCity)) {
-                        citySelect.value = selectedCity;
-                        populateBarangays(selectedCity); // Load barangays for selected city
-                    } else {
-                        selectedCity = ''; // Reset if no match
-                    }
-                }
-            }
-
-            // Function to reset and populate barangays when city changes
-            function populateBarangays(cityPsgc) {
-                barangaySelect.innerHTML = '<option value="">Select Barangay</option>'; // Always clear barangay
-
-                barangaySelect.disabled = !cityPsgc; // Enable only if a city is selected
-
-                if (cityPsgc && locations.barangays[cityPsgc]) {
-                    locations.barangays[cityPsgc].forEach(barangay => {
-                        const option = document.createElement('option');
-                        option.value = barangay.psgc;
-                        option.text = barangay.name;
-                        barangaySelect.appendChild(option);
-                    });
-
-                    // Restore selected barangay after validation error
-                    if (selectedBarangay && locations.barangays[cityPsgc].some(barangay => barangay.psgc ==
-                            selectedBarangay)) {
-                        barangaySelect.value = selectedBarangay;
-                    } else {
-                        selectedBarangay = ''; // Reset if no match
-                    }
-                }
-            }
-
-            // Load old selections if they exist (for validation errors)
-            if (selectedProvince) {
-                provinceSelect.value = selectedProvince;
-                populateCities(selectedProvince); // <-- This loads cities
-
-                // Delay populateBarangays until after cities are loaded
-                if (selectedCity) {
-                    citySelect.value = selectedCity;
-                    populateBarangays(selectedCity);
-
-                    if (selectedBarangay) {
-                        barangaySelect.value = selectedBarangay;
-                    }
-                }
-            }
-
-            // Event Listeners
-            provinceSelect.addEventListener('change', function() {
-                selectedProvince = this.value;
-                selectedCity = ''; // Reset city when province changes
-                selectedBarangay = ''; // Reset barangay when province changes
-                populateCities(this.value);
-            });
-
-            citySelect.addEventListener('change', function() {
-                selectedCity = this.value;
-                selectedBarangay = ''; // Reset barangay when city changes
-                populateBarangays(this.value);
-            });
-
-            document.getElementById('centerUpdateConfirm').addEventListener('click', function () {
-                document.getElementById('centerUpdateForm').submit();
-            });
-
-        });
-    </script>
 @endsection

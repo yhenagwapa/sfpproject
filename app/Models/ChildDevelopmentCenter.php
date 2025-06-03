@@ -16,6 +16,7 @@ class ChildDevelopmentCenter extends Model
         'center_name',
         'address',
         'psgc_id',
+        'center_type',
         'created_by_user_id',
         'updated_by_user_id',
     ];

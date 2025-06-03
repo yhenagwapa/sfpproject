@@ -129,6 +129,26 @@
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
+                                <label for="assigned_coordinator_user_id">Assigned SFP Coordinator<b class='text-red-600'>*</b></label>
+                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_coordinator_user_id"
+                                    name="assigned_coordinator_user_id">
+                                    <option value="" selected>Select SFP Coordinator</option>
+                                    @foreach ($coordinators as $coordinator)
+                                        <option value="{{ $coordinator->id }}"
+                                            @if (old('assigned_coordinator_user_id')) {{ old('assigned_coordinator_user_id') == $coordinator->id ? 'selected' : '' }}
+                                                @elseif ($assignedCoordinator && $assignedCoordinator->id == $coordinator->id)
+                                                    selected @endif>
+
+                                            {{ $coordinator->full_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('assigned_coordinator_user_id')
+                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6 mt-3 text-sm">
                                 <label for="assigned_user_id">Assigned Child Development Worker<b
                                         class='text-red-600'>*</b></label>
                                 <select class="form-control rounded border-gray-300 uppercase" id="assigned_worker_user_id"
@@ -232,7 +252,7 @@
                             </div>
 
                             <div class="col-12 mt-2 text-sm">
-                                <label for="address">Address<b class="text-red-600">*</b></label>
+                                <label for="address">House No./ Street/ Purok<b class="text-red-600">*</b></label>
                                 <input type="text" class="form-control rounded border-gray-300" id="address"
                                     name='address' value="{{ old('address', $center->address) }}">
                                 @error('address')
