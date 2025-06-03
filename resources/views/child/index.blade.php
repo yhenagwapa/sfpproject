@@ -11,6 +11,20 @@
         </nav>
     </div>
 
+    @if (session('error'))
+        <div class="alert alert-danger alert-primary alert-dismissible fade show" id="danger-alert" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show" id="warning-alert" role="alert">
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    @endif
+
     @if (session('success'))
         <div class="alert alert-success alert-primary alert-dismissible fade show" id="success-alert" role="alert">
             {{ session('success') }}
@@ -20,12 +34,26 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const alert = document.getElementById('success-alert');
-            if (alert) {
-                setTimeout(() => {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                }, 2000);
+            var alert1 = document.getElementById('success-alert');
+            var alert2 = document.getElementById('danger-alert');
+            var alert3 = document.getElementById('warning-alert');
+            if (alert1) {
+                setTimeout(function() {
+                    var bsAlert1 = new bootstrap.Alert(alert1);
+                    bsAlert1.close();
+                }, 3000);
+            }
+            if (alert2) {
+                setTimeout(function() {
+                    var bsAlert2 = new bootstrap.Alert(alert2);
+                    bsAlert2.close();
+                }, 3000);
+            }
+            if (alert3) {
+                setTimeout(function() {
+                    var bsAlert3 = new bootstrap.Alert(alert3);
+                    bsAlert3.close();
+                }, 3000);
             }
         });
     </script>
@@ -35,7 +63,9 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title text-blue-600">Children</h5>
+                            <h5 class="card-title">Center Name: <b>{{ $center_name->center_name }}</b><br>Total No. of Children:
+                            <b>{{ $childCount }}</b></b>
+                        </h5>
                             <div class="col-md-6">
                                 @can('create-child')
                                     <a href="{{ route('child.create') }}">
@@ -91,13 +121,13 @@
                                                     <td>{{ $child->sex->name }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') }}</td>
                                                     <td>
-                                                        {{ $child->records->first()->center->center_name}}
+                                                        {{ $child->records->first()?->center->center_name}}
                                                     </td>
                                                     <td>
-                                                        {{ $child->records->first()->funded ? 'Yes' : 'No'}}
+                                                        {{ $child->records->first()?->funded ? 'Yes' : 'No'}}
                                                     </td>
                                                     <td>
-                                                        {{ $child->records->first()->status}}
+                                                        {{ $child->records->first()?->status}}
                                                     </td>
                                                     <td>
                                                         <div class="flex space-x-3">

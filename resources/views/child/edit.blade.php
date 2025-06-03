@@ -368,7 +368,7 @@
                                     </div>
                                 @endif
 
-                                @if(auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('admin'))
+                                @if(auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator') || auth()->user()->hasRole('admin'))
 
                                     <div class='col-md-12 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised
                                         Neighborhood Play<hr>
@@ -399,6 +399,8 @@
                                             name="spaceonly">
                                     </div>
 
+                                    <input type="hidden" name="implementation_id" value="{{ $childCenterId->implementation_id }}">
+                                    <input type="hidden" name="is_funded" value="{{ $childCenterId->funded }}" />
                                 @endif
                                 @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder'))
                                     <div class='col-md-12 mt-4 text-gray-400 text-xs'>Implementation<hr>
@@ -409,12 +411,14 @@
                                     <div class="col-md-6 text-sm">
                                         <label for="cycle_implementation_id">Cycle Implementation</label>
                                         <select class="form-control rounded border-gray-300" id="implementation_select"
-                                            name='implementation_select' disabled>
+                                            name='implementation_select' readonly>
                                             <option value="{{ $cycle->id }}">{{ $cycle->name }}
                                             </option>
                                         </select>
                                         <input type="hidden" id="implementation_id" name="implementation_id"
                                             value="{{ $childCenterId->implementation_id }}" />
+
+
                                     </div>
                                 @endif
                                 @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder'))

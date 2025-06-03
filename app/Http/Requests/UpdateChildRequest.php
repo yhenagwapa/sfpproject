@@ -28,8 +28,6 @@ class UpdateChildRequest extends FormRequest
         if(auth()->user()->hasRole('lgu focal')){
             return [
             'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
-            'implementation_id' => ['nullable', 'exists:implementations,id'],
-            'is_funded' => ['required', 'boolean'],
             ];
         } else {
             return [

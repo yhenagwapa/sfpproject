@@ -176,6 +176,9 @@ class ChildController extends Controller
 
         $userID = auth()->id();
 
+        $center_name = null;
+        $childCount = null;
+
         if (auth()->user()->hasRole('admin')) {
             $centers = UserCenter::all();
             $centerIds = $centers->pluck('id');
@@ -194,15 +197,19 @@ class ChildController extends Controller
                     ->orderBy('lastname', 'asc')
                     ->get();
 
+                $center_name = "All CDC/SNP";
+
             } else {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                     $query->where('child_development_center_id', $cdcId)
                         ->where('implementation_id', $cycle->id)
                         ->where('status', 'active');
                     })
-            ->orderBy('lastname', 'asc')
-                    ->get();
-            }
+                    ->orderBy('lastname', 'asc')
+                            ->get();
+                    }
+
+                $center_name = ChildDevelopmentCenter::where('id', $cdcId)->first();
 
         } else {
             $centers = UserCenter::where('user_id', $userID)->get();
@@ -220,8 +227,10 @@ class ChildController extends Controller
                         ->where('implementation_id', $cycle->id)
                         ->where('status', 'active');
                     })
-            ->orderBy('lastname', 'asc')
+                    ->orderBy('lastname', 'asc')
                     ->get();
+
+                $center_name = "All CDC/SNP";
 
             } else {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
@@ -229,13 +238,17 @@ class ChildController extends Controller
                         ->where('implementation_id', $cycle->id)
                         ->where('status', 'active');
                     })
-            ->orderBy('lastname', 'asc')
+                    ->orderBy('lastname', 'asc')
                     ->get();
+
+                $center_name = ChildDevelopmentCenter::where('id', $cdcId)->first();
 
             }
         }
 
-        return view('child.index', compact('children', 'centerNames', 'centers', 'cdcId'));
+        $childCount = $children->count();
+
+        return view('child.index', compact('children', 'centerNames', 'centers', 'cdcId', 'center_name', 'childCount'));
     }
 
     /**
@@ -613,7 +626,7 @@ class ChildController extends Controller
             ->where('status', 'active')->first();
 
         if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
-            ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
+            ChildCenter::where('child_id', $child->id)->update(['status' => 'transfered']);
 
             ChildCenter::create([
                 'child_id' => $child->id,
