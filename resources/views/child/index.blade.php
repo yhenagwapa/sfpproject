@@ -63,7 +63,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Center Name: <b>{{ $center_name->center_name }}</b><br>Total No. of Children:
+                            <h5 class="card-title">Center Name: <b>{{ is_object($center_name) ? $center_name->center_name : $center_name }}</b><br>Total No. of Children:
                             <b>{{ $childCount }}</b></b>
                         </h5>
                             <div class="col-md-6">
