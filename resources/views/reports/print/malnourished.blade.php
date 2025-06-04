@@ -81,7 +81,7 @@
         .no-wrap {
             white-space: nowrap;
         }
-        
+
         @page {
             margin-top: 20px;
             margin-bottom: 0;
@@ -247,6 +247,10 @@
                 </td>
             </tr>
         </table>
+    </div>
+
+    <div class="footer">
+        SFP Forms 6 (c/o SFP Focal Person)
     </div>
 
     <script type="text/php">

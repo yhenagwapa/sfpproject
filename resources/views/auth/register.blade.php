@@ -315,13 +315,38 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                    <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+
+                                        <div class="flex flex-wrap">
+                                            <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
+                                                <input type="checkbox" name="privacy_notice" id="privacy_notice" value="1" {{ old('privamcy_notice') ? 'checked' : '' }}>
+                                                <label for="privacy_notice">Agree to <a class="hand-pointer" data-bs-toggle="modal" data-bs-target="#privacyNoticeModal"><u>Privacy Notice</u></a><b class="text-red-600">*</b></label>
+
+                                                @error('privacy_notice')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="flex flex-wrap">
+                                            <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
+                                                <input type="checkbox" name="service_agreement" id="service_agreement" value="1" {{ old('service_agreement') ? 'checked' : '' }}>
+                                                <label for="service_agreement">Agree to <a class="hand-pointer" data-bs-toggle="modal" data-bs-target="#userServiceAgreementModal"><u>User Service Agreement</u></a><b class="text-red-600">*</b></label>
+
+                                                @error('service_agreement')
+                                                    <span class="text-xs text-red-600">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                    {{-- <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
 
                                     @if ($errors->has('g-recaptcha-response'))
                                     <span class="text-red-500 text-sm">
                                         {{ $errors->first('g-recaptcha-response') }}
                                     </span>
-                                    @endif
+                                    @endif --}}
 
                                         <div class="flex flex-wrap justify-end w-full md:w-full">
                                             <div class="mt-4">
@@ -354,6 +379,43 @@
                                             </div>
                                         </div>
                                     </form>
+
+                                    <div class="modal fade" id="privacyNoticeModal" tabindex="-1">
+                                        <div class="modal-dialog modal-xl">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"><strong>PRIVACY NOTICE STATEMENT</strong></h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @include('auth.privacy-notice')
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button onclick="agreeToPrivacy()" class="px-4 py-2 bg-blue-600 text-white rounded">Agree</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" id="userServiceAgreementModal" tabindex="-1">
+                                        <div class="modal-dialog modal-xl">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"><strong>USER SERVICE AGREEMENT</strong></h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @include('auth.user-service-agreement')
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button onclick="agreeToUserService()" class="px-4 py-2 bg-blue-600 text-white rounded">Agree</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -508,5 +570,19 @@
     @vite(['resources/js/app.js'])
 
 </body>
+
+<script>
+    function agreeToPrivacy() {
+        document.getElementById('privacy_notice').checked = true;
+        const modal = bootstrap.Modal.getInstance(document.getElementById('privacyNoticeModal'));
+        modal.hide();
+    }
+    function agreeToUserService() {
+        document.getElementById('service_agreement').checked = true;
+        const modal = bootstrap.Modal.getInstance(document.getElementById('userServiceAgreementModal'));
+        modal.hide();
+    }
+</script>
+
 
 </html>

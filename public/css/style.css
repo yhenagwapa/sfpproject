@@ -71,6 +71,10 @@ td {
     text-transform: none;
 }
 
+.hand-pointer:hover {
+    cursor: pointer;
+}
+
 /* .container {
   margin-top: 60px;
   padding: 20px 15px;

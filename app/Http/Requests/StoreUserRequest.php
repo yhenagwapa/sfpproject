@@ -34,6 +34,8 @@ class StoreUserRequest extends FormRequest
             'brgy_psgc' => ['required'],
             'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::min(8)->mixedCase()->numbers()->symbols()],
+            'privacy_notice' => ['required', 'boolean'],
+            'service_agreement' => ['required', 'boolean'],
         ];
     }
 
@@ -64,6 +66,9 @@ class StoreUserRequest extends FormRequest
             'password.mixedCase' => 'Password must contain both uppercase and lowercase letters.',
             'password.numbers' => 'Password must contain at least one number.',
             'password.symbols' => 'Password must contain at least one special character.',
+
+            'privacy_notice.required' => 'Please agree to Privacy Notice to proceed with the registration.',
+            'service_agreement.required' => 'Please agree to User Service Agreement to proceed with the registration.',
 
         ];
     }

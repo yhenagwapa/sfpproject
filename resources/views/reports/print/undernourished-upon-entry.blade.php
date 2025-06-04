@@ -253,6 +253,10 @@
         </table>
     </div>
 
+    <div class="footer">
+        SFP Forms 5 (c/o SFP Focal Person)
+    </div>
+
     <script type="text/php">
         if (isset($pdf)) {
             $pdf->page_script('

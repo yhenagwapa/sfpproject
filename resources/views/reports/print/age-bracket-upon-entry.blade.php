@@ -747,7 +747,7 @@
     </table>
 
     <div class="footer">
-        SFP Forms 2.1 (c/o CDW/CDT)
+        SFP Forms 1.1 (c/o CDW/CDT)
         <span class="pagenum"></span>
     </div>
 
