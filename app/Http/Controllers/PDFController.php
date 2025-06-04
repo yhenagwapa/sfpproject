@@ -22,6 +22,8 @@ class PDFController extends Controller
 
     public function printMasterlist(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::where('id', $cycleID)->first();
 
@@ -136,6 +138,8 @@ class PDFController extends Controller
 
     public function printMalnourish(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::where('id', $cycleID)->first();
 
@@ -230,6 +234,8 @@ class PDFController extends Controller
     }
     public function printDisabilities(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycle = Implementation::where('id', $request->cycle_id2)->first();
 
         if (!$cycle) {
@@ -294,6 +300,8 @@ class PDFController extends Controller
     }
     public function printUndernourishedUponEntry(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycle = Implementation::where('id', $request->cycle_id2)->first();
 
         if (!$cycle) {
@@ -757,6 +765,8 @@ class PDFController extends Controller
     }
     public function printAgeBracketUponEntry(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycle = Implementation::where('id', $request->cycle_id)->first();
 
         if (!$cycle) {
@@ -1447,6 +1457,8 @@ class PDFController extends Controller
 
     public function printMonitoring(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycle = Implementation::where('id', $request->cycle_id)->first();
 
         if (!$cycle) {
@@ -1577,6 +1589,8 @@ class PDFController extends Controller
     }
     public function printUnfunded(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::where('id', $cycleID)->first();
 
