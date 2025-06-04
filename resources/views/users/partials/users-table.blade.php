@@ -40,7 +40,8 @@
                     <select class="form-control uppercase w-full border-none" id="role_id-{{ $user->id }}" name="role_id" @if (auth()->user()->id === $user->id) disabled @endif>
                         <option value="" disabled>Select role</option>
                         @foreach ($roles as $role)
-                            @if (!($role->name === 'admin' && !auth()->user()->hasRole('admin')))
+                            @if (!($role->name === 'admin' && !auth()->user()->hasRole('admin')) &&
+                                    !($role->name === 'pdo' && !auth()->user()->hasRole('admin')))
                                 <option value="{{ $role->id }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
                                     {{ $role->name }}
                                 </option>
