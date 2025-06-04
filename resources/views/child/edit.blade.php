@@ -54,7 +54,7 @@
             }
         });
     </script>
-    {{-- @if ($errors->any())
+    @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -62,7 +62,7 @@
                 @endforeach
             </ul>
         </div>
-    @endif --}}
+    @endif
 
         <section class="section">
             <div class="row">
@@ -98,6 +98,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mt-2 text-sm">
+                                        <label for="lastname">Last Name</label>
                                         <input type="text" class="form-control rounded border-gray-300" id="lastname"
                                             name='lastname' value="{{ old('lastname', $child->lastname) }}">
                                         @error('lastname')

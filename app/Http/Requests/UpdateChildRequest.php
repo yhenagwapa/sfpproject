@@ -25,11 +25,31 @@ class UpdateChildRequest extends FormRequest
         $minDate = Carbon::now()->subYears(6)->addDay()->format('Y-m-d');
         $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('Y-m-d');
 
-        if(auth()->user()->hasRole('lgu focal')){
+        if(auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')) {
             return [
             'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
             ];
-        } else {
+
+        } elseif(auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder')){
+            return [
+                'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+                'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+                'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+                'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
+                'date_of_birth' => ['required', 'date', 'after_or_equal:' . $minDate, 'before_or_equal:' . $maxDate,],
+                'sex_id' => ['required', 'string'],
+                'province_psgc' => ['required'],
+                'city_name_psgc' => ['required'],
+                'brgy_psgc' => ['required'],
+                'address' => ['required', 'string'],
+                'pantawid_details' => ['nullable','required_if:is_pantawid,1'],
+                'person_with_disability_details' => ['nullable','required_if:is_person_with_disability,1','string','max:255'],
+                'is_indigenous_people' => ['required', 'boolean'],
+                'is_child_of_soloparent' => ['required', 'boolean'],
+                'is_lactose_intolerant' => ['required', 'boolean'],
+                'is_funded' => ['required', 'boolean'],
+            ];
+        }else {
             return [
                 'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],

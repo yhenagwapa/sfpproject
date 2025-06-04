@@ -111,4 +111,16 @@ class Child extends Model
         return $isFunded ? 'Yes' : 'No';
     }
 
+    public function calculateAgeAt($date)
+    {
+        $dob = Carbon::parse($this->date_of_birth);
+
+        $ageInMonths = $dob->diffInMonths($date);
+        $ageInYears = floor($ageInMonths / 12);
+
+        return [
+            'years' => $ageInYears,
+            'months' => $ageInMonths,
+        ];
+    }
 }

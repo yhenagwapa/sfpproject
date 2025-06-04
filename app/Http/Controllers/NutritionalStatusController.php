@@ -124,8 +124,8 @@ class NutritionalStatusController extends Controller
         $childMilkFeeding = $child->milk_feeding_id ? $child->milk_feeding_id : null;
         $childBirthDate = Carbon::parse($child->date_of_birth);
 
-        $entryWeighingDate = Carbon::parse($request->weighing_date);
-        $entryAgeInMonths = $entryWeighingDate->diffInMonths($childBirthDate);
+        $entryWeighingDate = Carbon::parse($request->actual_weighing_date);
+        $entryAgeInMonths = $childBirthDate->diffInMonths($entryWeighingDate);
         $entryAgeInYears = floor($entryAgeInMonths / 12);
 
         //weight for age
@@ -319,7 +319,7 @@ class NutritionalStatusController extends Controller
             $childBirthDate = Carbon::parse($child->date_of_birth);
 
             $exitWeighingDate = Carbon::parse($request->exitweighing_date);
-            $exitAgeInMonths = $exitWeighingDate->diffInMonths($childBirthDate);
+            $exitAgeInMonths = $childBirthDate->diffInMonths($exitWeighingDate);
             $exitAgeInYears = floor($exitAgeInMonths / 12);
 
             //weight for age
@@ -566,7 +566,7 @@ class NutritionalStatusController extends Controller
         $childBirthDate = Carbon::parse($childInfo->date_of_birth);
 
         $entryWeighingDate = Carbon::parse($request->actual_weighing_date);
-        $entryAgeInMonths = $entryWeighingDate->diffInMonths($childBirthDate);
+        $entryAgeInMonths = $childBirthDate->diffInMonths($entryWeighingDate);
         $entryAgeInYears = floor($entryAgeInMonths / 12);
 
         //weight for age
@@ -776,7 +776,7 @@ class NutritionalStatusController extends Controller
 
             $exitWeighingDate = Carbon::parse($request->exitweighing_date);
 
-            $exitAgeInMonths = $exitWeighingDate->diffInMonths($childBirthDate);
+            $exitAgeInMonths = $childBirthDate->diffInMonths($exitWeighingDate);
             $exitAgeInYears = floor($exitAgeInMonths / 12);
 
             //weight for age

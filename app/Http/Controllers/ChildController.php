@@ -7,6 +7,12 @@ use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
 use App\Models\ChildDevelopmentCenter;
 use App\Models\NutritionalStatus;
+use App\Models\cgs_wfa_girls;
+use App\Models\cgs_wfa_boys;
+use App\Models\cgs_hfa_girls;
+use App\Models\cgs_hfa_boys;
+use App\Models\cgs_wfh_girls;
+use App\Models\cgs_wfh_boys;
 use App\Models\Sex;
 use App\Models\Attendance;
 use Illuminate\Support\Facades\Log;
@@ -568,6 +574,12 @@ class ChildController extends Controller
         $editCounter = 0;
 
         $child = Child::findOrFail($childID);
+        $oldDOB = $child->date_of_birth;
+        $childSex = $child->sex_id;
+
+        $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
+
+
 
         if(!auth()->user()->hasRole('lgu focal')){
             $query = Child::where('firstname', $validatedData['firstname'])
@@ -620,31 +632,199 @@ class ChildController extends Controller
                 'edit_counter' => $editCounter,
                 'updated_by_user_id' => auth()->id(),
             ]);
+
+            if ($request->date_of_birth != $oldDOB) {
+                $nutritionalStatus = NutritionalStatus::where('child_id', $child->id)->where('implementation_id', $cycle->id)->get();
+
+                foreach ($nutritionalStatus as $nutrition) {
+                    $weighingDate = $nutrition->actual_weighing_date;
+
+                    $age = $child->calculateAgeAt($weighingDate);
+                    $nutrition->age_in_years = $age['years'];
+                    $nutrition->age_in_months = $age['months'];
+
+                    $weight = $nutrition->weight;
+                    $height = $nutrition->height;
+                    $weightForAge = null;
+                    $heightForAge = null;
+                    $weightForHeight = null;
+                    $isMalnourished = false;
+                    $isUndernourished = false;
+
+                    if ($childSex == '1') {
+                        $getAge = cgs_wfa_boys::where('age_month', $nutrition->age_in_months)->first();
+
+                        if (!$getAge) {
+                            return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
+                        }
+
+                        if ((float) $weight <= (float) $getAge->severly_underweight) {
+                            $weightForAge = 'Severely Underweight';
+                        } elseif ((float) $weight >= (float) $getAge->underweight_from && (float) $weight <= (float) $getAge->underweight_to) {
+                            $weightForAge = 'Underweight';
+                        } elseif ((float) $weight >= (float) $getAge->normal_from && (float) $weight <= (float) $getAge->normal_to) {
+                            $weightForAge = 'Normal';
+                        } elseif ((float) $weight >= (float) $weight) {
+                            $weightForAge = 'Overweight';
+                        } else {
+                            $weightForAge = 'Not Applicable';
+                        }
+
+                    } else {
+                        $getAge = cgs_wfa_girls::where('age_month', $nutrition->age_in_months)->first();
+
+                        if (!$getAge) {
+                            return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
+                        }
+
+                        if ((float) $weight <= (float) $getAge->severly_underweight) {
+                            $weightForAge = 'Severely Underweight';
+                        } elseif ((float) $weight >= (float) $getAge->underweight_from && (float) $weight <= (float) $getAge->underweight_to) {
+                            $weightForAge = 'Underweight';
+                        } elseif ((float) $weight >= (float) $getAge->normal_from && (float) $weight <= (float) $getAge->normal_to) {
+                            $weightForAge = 'Normal';
+                        } elseif ((float) $weight >= (float) $weight) {
+                            $weightForAge = 'Overweight';
+                        } else {
+                            $weightForAge = 'Not Applicable';
+                        }
+                    }
+
+                    //height for age
+                    if ($childSex == '1') {
+                        $getAge = cgs_hfa_boys::where('age_month', $nutrition->age_in_months)->first();
+
+                        if (!$getAge) {
+                            return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
+                        }
+
+                        if ((float) $height <= (float) $getAge->severly_stunted) {
+                            $heightForAge = 'Severely Stunted';
+                        } elseif ((float) $height >= (float) $getAge->stunted_from && (float) $height <= (float) $getAge->stunted_to) {
+                            $heightForAge = 'Stunted';
+                        } elseif ((float) $height >= (float) $getAge->normal_from && (float) $height <= (float) $getAge->normal_to) {
+                            $heightForAge = 'Normal';
+                        } elseif ((float) $height >= (float) $getAge->tall) {
+                            $heightForAge = 'Tall';
+                        } else {
+                            $heightForAge = 'Not Applicable';
+                        }
+
+                    } else {
+                        $getAge = cgs_hfa_girls::where('age_month', $nutrition->age_in_months)->first();
+
+                        if (!$getAge) {
+                            return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
+                        }
+
+                        if ((float) $height <= (float) $getAge->severly_stunted) {
+                            $heightForAge = 'Severely Stunted';
+                        } elseif ((float) $height >= (float) $getAge->stunted_from && (float) $height <= (float) $getAge->stunted_to) {
+                            $heightForAge = 'Stunted';
+                        } elseif ((float) $height >= (float) $getAge->normal_from && (float) $height <= (float) $getAge->normal_to) {
+                            $heightForAge = 'Normal';
+                        } elseif ((float) $height >= (float) $getAge->tall) {
+                            $heightForAge = 'Tall';
+                        } else {
+                            $heightForAge = 'Not Applicable';
+                        }
+                    }
+
+                    //weight for height
+                    if ($childSex == '1') {
+                        $getHeight = cgs_wfh_boys::where('length_in_cm', $height)->first();
+
+                        if (!$getHeight) {
+                            return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
+                        }
+
+                        if ((float) $weight <= (float) $getHeight->severly_wasted) {
+                            $weightForHeight = 'Severely Wasted';
+                        } elseif ((float) $weight >= (float) $getHeight->wasted_from && (float) $weight <= (float) $getHeight->wasted_to) {
+                            $weightForHeight = 'Wasted';
+                        } elseif ((float) $weight >= (float) $getHeight->normal_from && (float) $weight <= (float) $getHeight->normal_to) {
+                            $weightForHeight = 'Normal';
+                        } elseif ((float) $weight >= (float) $getHeight->overweight_from && (float) $weight <= $getHeight->overweight_to) {
+                            $weightForHeight = 'Overweight';
+                        } elseif ((float) $weight >= (float) $getHeight->obese) {
+                            $weightForHeight = 'Obese';
+                        } else {
+                            $weightForHeight = 'Not Applicable';
+                        }
+
+                    } else {
+                        $getHeight = cgs_wfh_girls::where('length_in_cm', $height)->first();
+
+                        if (!$getHeight) {
+                            return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
+                        }
+
+                        if ((float) $weight <= (float) $getHeight->severly_wasted) {
+                            $weightForHeight = 'Severely Wasted';
+                        } elseif ((float) $weight >= (float) $getHeight->wasted_from && (float) $weight <= (float) $getHeight->wasted_to) {
+                            $weightForHeight = 'Wasted';
+                        } elseif ((float) $weight >= (float) $getHeight->normal_from && (float) $weight <= (float) $getHeight->normal_to) {
+                            $weightForHeight = 'Normal';
+                        } elseif ((float) $weight >= (float) $getHeight->overweight_from && (float) (float) $weight <= $getHeight->overweight_to) {
+                            $weightForHeight = 'Overweight';
+                        } elseif ((float) $weight >= (float) $getHeight->obese) {
+                            $weightForHeight = 'Obese';
+                        } else {
+                            $weightForHeight = 'Not Applicable';
+                        }
+
+                    }
+
+                    $isMalnourished = in_array($weightForAge, ['Underweight', 'Severely Underweight', 'Overweight']) ||
+                            in_array($heightForAge, ['Stunted', 'Severely Stunted']) ||
+                            in_array($weightForHeight, ['Wasted', 'Severely Wasted', 'Overweight', 'Obese']);
+
+
+                    $isUndernourished = in_array($weightForAge, ['Underweight', 'Severely Underweight']) ||
+                            in_array($heightForAge, ['Stunted', 'Severely Stunted']) ||
+                            in_array($weightForHeight, ['Wasted', 'Severely Wasted']);
+
+                    $nutrition->age_in_months = $age['months'];
+                    $nutrition->age_in_years = $age['years'];
+                    $nutrition->weight_for_age = $weightForAge;
+                    $nutrition->height_for_age = $heightForAge;
+                    $nutrition->weight_for_height = $weightForHeight;
+                    $nutrition->is_malnourish = $isMalnourished;
+                    $nutrition->is_undernourish = $isUndernourished;
+
+                    $nutrition->save();
+
+                    if ($nutrition->save()) {
+                        \Log::info('Nutrition update saved successfully');
+                    } else {
+                        \Log::warning('Nutrition update failed to save');
+                    }
+
+                }
+            }
         }
 
-        $currentChildCenter = ChildCenter::where('child_id', $child->id)
-            ->where('status', 'active')->first();
+        if(auth()->user()->hasRole('admin ')|| auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')){
 
-        if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
-            ChildCenter::where('child_id', $child->id)->update(['status' => 'transfered']);
+            $currentChildCenter = ChildCenter::where('child_id', $child->id)
+                ->where('status', 'active')->first();
 
-            ChildCenter::create([
-                'child_id' => $child->id,
-                'child_development_center_id' => $request->child_development_center_id,
-                'implementation_id' => $request->implementation_id,
-                'milk_feeding_id' => $request->implementation_id,
-                'status' => 'active',
-                'funded' => $request->is_funded,
-            ]);
-        } else {
-            $currentChildCenter->update([
-                'child_id' => $child->id,
-                'child_development_center_id' => $request->child_development_center_id,
-                'implementation_id' => $request->implementation_id,
-                'milk_feeding_id' => $request->implementation_id,
-                'status' => 'active',
-                'funded' => $request->is_funded,
-            ]);
+            if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
+                ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
+
+                ChildCenter::create([
+                    'child_id' => $child->id,
+                    'child_development_center_id' => $request->child_development_center_id,
+                    'implementation_id' => $request->implementation_id,
+                    'milk_feeding_id' => $request->implementation_id,
+                    'status' => 'active',
+                    'funded' => $request->is_funded,
+                ]);
+            }
+
+            if($request->is_funded != $currentChildCenter->funded){
+                ChildCenter::where('child_id', $child->id)->update(['funded' => $request->is_funded]);
+            }
         }
 
         return redirect()->route('child.index')->with('success', 'Child record updated successfully.');
