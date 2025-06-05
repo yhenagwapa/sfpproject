@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\MilkFeedingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\OtpController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -36,6 +37,8 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::get('/verify-otp', [OtpController::class, 'showOtpForm'])->name('verify.otp.form');
+Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])->name('verify.otp');
 
 
 Route::get('/child', [DashboardController::class, 'index'])
@@ -49,7 +52,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -57,7 +60,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware(['auth', 'temp.edit'])->group(function () {
+Route::middleware(['auth', 'verified', 'temp.edit'])->group(function () {
 
     Route::get('/child', [ChildController::class, 'index'])->name('child.index');
     Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');
@@ -72,24 +75,18 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
         // 'users' => UserController::class,
     ]);
 
-    Route::post('/clear-child-session', function (\Illuminate\Http\Request $request) {
-        session()->forget(['step', 'step1Data', 'step2Data']);
-        return redirect(request('redirect_url', '/'));
-    })->name('clear.child.session');
-
     Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
     Route::post('/users/show', [UserController::class, 'show'])->name('users.show');
     Route::get('/users/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/update', [UserController::class, 'update'])->name('users.update');
-    Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
-    Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
-    Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
-    Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+    // Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
+    // Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
+    // Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
+    // Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
 
-
-    Route::get('/attendance/index/{child}', [AttendanceController::class, 'index'])->name('attendance.index');
-    Route::post('/attendance/{child_id}/store-cycle-attendance', [AttendanceController::class, 'storeCycleAttendance'])->name('attendance.storeCycleAttendance');
-    Route::post('/attendance/{child_id}/store-milk-attendance', [AttendanceController::class, 'storeMilkAttendance'])->name('attendance.storeMilkAttendance');
+    // Route::get('/attendance/index/{child}', [AttendanceController::class, 'index'])->name('attendance.index');
+    // Route::post('/attendance/{child_id}/store-cycle-attendance', [AttendanceController::class, 'storeCycleAttendance'])->name('attendance.storeCycleAttendance');
+    // Route::post('/attendance/{child_id}/store-milk-attendance', [AttendanceController::class, 'storeMilkAttendance'])->name('attendance.storeMilkAttendance');
 
     Route::post('/nutritionalstatus/create', [NutritionalStatusController::class, 'create'])->name('nutritionalstatus.create');
     Route::get('/nutritionalstatus', [NutritionalStatusController::class, 'index'])->name('nutritionalstatus.index');
@@ -117,7 +114,6 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
     Route::patch('/cycle/update', [ImplementationController::class, 'update'])->name(name: 'cycle.update');
     Route::patch('/cycle/update-cycle-status', [ImplementationController::class, 'updateCycleStatus'])->name(name: 'cycle.update-cycle-status');
     Route::patch('/cycle/update-milkfeeding-status', [ImplementationController::class, 'updateMilkFeedingStatus'])->name(name: 'cycle.update-milkfeeding-status');
-
 
     //--------
     // Route::get('/cycle/reports', [ReportsController::class, 'index'])->name(name: 'cycle.reports.index');
@@ -155,7 +151,6 @@ Route::middleware(['auth', 'temp.edit'])->group(function () {
     Route::post('/reports/print/height-for-age-upon-entry', [ReportsController::class, 'nutritionalStatusHFA'])->name('reports.print.height-for-age-upon-entry');
     Route::post('/reports/print/weight-for-age-upon-entry', [ReportsController::class, 'nutritionalStatusWFA'])->name('reports.print.weight-for-age-upon-entry');
     Route::post('/reports/print/weight-for-height-upon-entry', [ReportsController::class, 'nutritionalStatusWFH'])->name('reports.print.weight-for-height-upon-entry');
-
 
 
     // Route::post('/milkfeedings/report/{milkfeeding}', [MilkFeedingController::class, 'reportIndex'])->name('milkfeedings.report');

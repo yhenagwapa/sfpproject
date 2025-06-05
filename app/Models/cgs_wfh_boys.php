@@ -10,7 +10,8 @@ class cgs_wfh_boys extends Model
     use HasFactory;
 
     protected $fillable = [
-        'length_in_cm',
+        'length_from',
+        'length_to',
         'severly_wasted',
         'wasted_from',
         'wasted_to',

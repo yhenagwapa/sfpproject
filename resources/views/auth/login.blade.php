@@ -53,7 +53,7 @@
                                 </div>
 
                                 @if (session('success'))
-                                    <div class="alert alert-success alert-primary alert-dismissible fade show"
+                                    <div class="alert alert-success alert-dismissible fade show"
                                         id="success-alert" role="alert">
                                         {{ session('success') }}
                                         <button type="button" class="btn-close" data-bs-dismiss="alert"
@@ -69,7 +69,7 @@
                                                     var bsAlert = new bootstrap.Alert(alert);
                                                     bsAlert.close();
                                                 },
-                                                5000);
+                                                3000);
                                         }
                                     });
                                 </script>

@@ -66,6 +66,10 @@ td {
     text-transform: uppercase;
 }
 
+input.no-uppercase {
+    text-transform: none;
+}
+
 .password,
 .email {
     text-transform: none;

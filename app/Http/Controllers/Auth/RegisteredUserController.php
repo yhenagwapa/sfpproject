@@ -44,16 +44,16 @@ class RegisteredUserController extends Controller
     {
         $request->validated();
 
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => config('services.recaptcha.secret_key'),
-            'response' => $request->input('g-recaptcha-response'),
-            'remoteip' => $request->ip(),
-        ]);
+        // $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        //     'secret' => config('services.recaptcha.secret_key'),
+        //     'response' => $request->input('g-recaptcha-response'),
+        //     'remoteip' => $request->ip(),
+        // ]);
 
 
-        if (! $response->json('success')) {
-            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA failed.'])->withInput();
-        }
+        // if (! $response->json('success')) {
+        //     return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA failed.'])->withInput();
+        // }
 
         $psgc = Psgc::where('region_psgc', $request->input('region_psgc'))
             ->where('province_psgc', $request->input('province_psgc'))
@@ -75,6 +75,8 @@ class RegisteredUserController extends Controller
 
         $user->assignRole('child development worker');
 
-        return redirect('login')->with('success', 'Registration successful. Kindly inform the admin to activate your account.');
+        event(new Registered($user));
+
+        return redirect('login')->with('status', 'Registration successful. Please verify your email. You can log in once your account is activated.');
     }
 }

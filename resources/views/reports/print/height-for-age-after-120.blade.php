@@ -121,7 +121,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
-            {{ $cycle->name }} ( SY {{ $cycle->school_year }} )<br>
+            {{ $cycle->name }} ( CY {{ $cycle->school_year }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS REPORT</b><br>
             <i>(Height-for-Age)<br>Upon Entry</i></p>
         <br>

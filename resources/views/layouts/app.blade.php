@@ -268,22 +268,13 @@
 
         @vite(['resources/js/app.js'])
 
-        <form id="clear-session-form" action="{{ route('clear.child.session') }}" method="POST">
+        {{-- <form id="clear-session-form" action="{{ route('clear.child.session') }}" method="POST">
             @csrf
             <input type="hidden" name="redirect_url" id="redirect_url">
-        </form>
+        </form> --}}
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                document.addEventListener("click", function (event) {
-                    let link = event.target.closest("a"); // Detect if a link is clicked
-                    if (link && !window.location.pathname.includes('/child/create')) {
-                        event.preventDefault(); // Stop normal navigation
-                        document.getElementById("redirect_url").value = link.href;
-                        document.getElementById("clear-session-form").submit();
-                    }
-                });
-
                 window.submitCancelForm = function () {
                     var cancelForm = document.getElementById('cancel-form');
 

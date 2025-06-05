@@ -25,15 +25,45 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $user = \App\Models\User::where('email', $request->email)->first();
 
-        $request->session()->regenerate();
-
-        if (auth()->user()->hasRole('encoder')) {
-            return redirect()->route('child.index');
+        if (! $user || ! \Hash::check($request->password, $user->password)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'email' => __('auth.failed'),
+            ]);
         }
 
-        return redirect()->route('child.index');
+        if (! $user->hasVerifiedEmail()) {
+            return back()->withErrors(['email' => 'Please verify your email first.']);
+        }
+
+        if ($user->status !== 'active') {
+            return back()->withErrors(['email' => 'Your account is not active. Please wait for admin approval.']);
+        }
+
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
+        $otp = '';
+        for ($i = 0; $i < 6; $i++) {
+            $otp .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        // You can create an OTP model or just store it in session for simplicity
+        session(['otp_email' => $user->email, 'otp_code' => $otp, 'otp_expires_at' => now()->addMinutes(10)]);
+
+        // Send the OTP via email
+        \Mail::to($user->email)->send(new \App\Mail\SendOtpMail($otp));
+
+        return redirect()->route('verify.otp.form')->with('status', 'An OTP has been sent to your email.');
+
+        // $request->authenticate();
+
+        // $request->session()->regenerate();
+
+        // if (auth()->user()->hasRole('encoder')) {
+        //     return redirect()->route('child.index');
+        // }
+
+        // return redirect()->route('child.index');
     }
 
     /**

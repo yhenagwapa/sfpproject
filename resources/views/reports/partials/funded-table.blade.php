@@ -7,7 +7,7 @@
             <th rowspan="2">Date of Birth</th>
             <th rowspan="2">Funded</th>
             <th colspan="3" class="text-center no-sort">Nutritional Status<br>Upon Entry</th>
-            <th colspan="3" class="text-center no-sort">Nutritional Status<br>Afte 120 Feedings</th>
+            <th colspan="3" class="text-center no-sort">Nutritional Status<br>After 120 Feedings</th>
         </tr>
         <tr>
             <th>Weight for Age</th>

@@ -108,16 +108,14 @@ class NutritionalStatusController extends Controller
         $entryIsMalnourished = false;
         $entryIsUndernourished = false;
 
-        $child = Child::with( 'sex')
-            ->where('id', $childID)
-            ->first();
+        $child = Child::where('id', $childID)->first();
 
         $childcenter = ChildCenter::with('implementation')
             ->where('child_id', $child->id)
             ->where('status', 'active')
             ->first();
 
-        $childSex = $child->sex->id;
+        $childSex = $child->sex_id;
 
         $cycleID = $childcenter->implementation_id;
 
@@ -210,7 +208,7 @@ class NutritionalStatusController extends Controller
 
         //weight for height
         if ($childSex == '1') {
-            $getHeight = cgs_wfh_boys::where('length_in_cm', $request->height)->first();
+            $getHeight = cgs_wfh_boys::whereBetween($request->height, ['length_from', 'length_to'])->first();
 
             if(!$getHeight){
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -231,7 +229,7 @@ class NutritionalStatusController extends Controller
             }
 
         } else {
-            $getHeight = cgs_wfh_girls::where('length_in_cm', $request->height)->first();
+            $getHeight = cgs_wfh_girls::whereBetween($request->height, ['length_from', 'length_to'])->first();
 
             if(!$getHeight){
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -286,16 +284,14 @@ class NutritionalStatusController extends Controller
 
     public function storeExitDetails(Request $request)
     {
-        $child = Child::with( 'sex')
-            ->where('id', $request->exitchild_id)
-            ->first();
+        $child = Child::where('id', $request->exitchild_id)->first();
 
         $childcenter = ChildCenter::with('implementation')
             ->where('child_id', $child->id)
             ->where('status', 'active')
             ->first();
 
-        $childSex = $child->sex->id;
+        $childSex = $child->sex_id;
 
         $cycleID = $childcenter->implementation_id;
 
@@ -403,7 +399,7 @@ class NutritionalStatusController extends Controller
 
             //weight for height
             if ($childSex == '1') {
-                $getHeight = cgs_wfh_boys::where('length_in_cm', $request->exitheight)->first();
+                $getHeight = cgs_wfh_boys::whereBetween($request->exitheight, ['length_from', 'length_to'])->first();
 
                 if(!$getHeight){
                     return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -424,7 +420,7 @@ class NutritionalStatusController extends Controller
                 }
 
             } else {
-                $getHeight = cgs_wfh_girls::where('length_in_cm', $request->exitheight)->first();
+                $getHeight = cgs_wfh_girls::whereBetween($request->exitheight, ['length_from', 'length_to'])->first();
 
                 if(!$getHeight){
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
@@ -560,8 +556,7 @@ class NutritionalStatusController extends Controller
             ->first();
 
         $childInfo = Child::findOrFail($child->child_id);
-        $childSex = Sex::where('id', $childInfo->sex_id)
-            ->first();
+        $childSex = $childInfo->sex_id;
 
         $childBirthDate = Carbon::parse($childInfo->date_of_birth);
 
@@ -651,7 +646,10 @@ class NutritionalStatusController extends Controller
 
         //weight for height
         if ($childSex == '1') {
-            $getHeight = cgs_wfh_boys::where('length_in_cm', $request->height)->first();
+            $getHeight = cgs_wfh_boys::where('length_from', '<=', $request->height)
+                          ->where('length_to', '>=', $request->height)
+                          ->first();
+
 
             if(!$getHeight){
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -672,7 +670,10 @@ class NutritionalStatusController extends Controller
             }
 
         } else {
-            $getHeight = cgs_wfh_girls::where('length_in_cm', $request->height)->first();
+            $getHeight = cgs_wfh_girls::where('length_from', '<=', $request->height)
+                          ->where('length_to', '>=', $request->height)
+                          ->first();
+
 
             if(!$getHeight){
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -769,8 +770,7 @@ class NutritionalStatusController extends Controller
                 // dd('child id',$child->child_id);
 
             $childInfo = Child::findOrFail($child->child_id);
-            $childSex = Sex::where('id', $childInfo->sex_id)
-                ->first();
+            $childSex = $childInfo->sex_id;
 
             $childBirthDate = Carbon::parse($childInfo->date_of_birth);
 
@@ -860,8 +860,7 @@ class NutritionalStatusController extends Controller
 
             //weight for height
             if ($childSex == '1') {
-                $getHeight = cgs_wfh_boys::where('length_in_cm', $request->exitheight)->first();
-
+                $getHeight = cgs_wfh_boys::whereBetween($request->exitheight, ['length_from', 'length_to'])->first();
                 if(!$getHeight){
                     return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
                 }
@@ -881,7 +880,7 @@ class NutritionalStatusController extends Controller
                 }
 
             } else {
-                $getHeight = cgs_wfh_girls::where('length_in_cm', $request->exitheight)->first();
+                $getHeight = cgs_wfh_girls::whereBetween($request->exitheight, ['length_from', 'length_to'])->first();
 
                 if(!$getHeight){
                     return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
