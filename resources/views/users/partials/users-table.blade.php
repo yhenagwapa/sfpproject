@@ -22,6 +22,7 @@
             <th>No.</th>
             <th class="text-left" scope="col">Name</th>
             <th scope="col">Email</th>
+            <th scope="col">Email Verified?</th>
             <th scope="col">Roles</th>
             <th scope="col">Status</th>
             @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') )
@@ -35,6 +36,7 @@
                 <td class="text-center"></td>
                 <td class="text-left">{{ $user->full_name }}</td>
                 <td>{{ $user->email }}</td>
+                <td>{{ $user->email_verified_at ? 'Yes' : 'No' }}
 
                 <td class="justify-items-center items-center">
                     <select class="form-control uppercase w-full border-none" id="role_id-{{ $user->id }}" name="role_id" @if (auth()->user()->id === $user->id) disabled @endif>
