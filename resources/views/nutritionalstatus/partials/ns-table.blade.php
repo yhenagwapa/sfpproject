@@ -38,7 +38,7 @@
                     <td class="{{ $entryDetails->is_undernourish ? 'text-red-500' : '' }}">{{ $entryDetails->is_undernourish ? 'Yes' : 'No' }}</td>
                     <td class="@if (Route::is('nutritionalstatus.edit')) hidden @endif">
                     @if(session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status'))
-                        @if(auth()->user()->hasRole('admin') || $entryDetails->edit_counter <= 2)
+                        @if(auth()->user()->hasRole('admin') || $entryDetails->edit_counter != 2)
                             <form action="{{ route('nutritionalstatus.show') }}" method="POST" class="inline">
                                 @csrf
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">
@@ -107,7 +107,7 @@
                 <td class="{{ $exitDetails->is_undernourish ? 'text-red-500' : '' }}">{{ $exitDetails->is_undernourish ? 'Yes' : 'No' }}</td>
                 <td class="@if (Route::is('nutritionalstatus.edit')) hidden @endif">
                     @if(session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status'))
-                        @if($exitDetails->edit_counter != 2 || auth()->user()->hasRole('admin'))
+                        @if(auth()->user()->hasRole('admin') || $exitDetails->edit_counter != 2)
                             <form action="{{ route('nutritionalstatus.show') }}" method="POST" class="inline">
                                 @csrf
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">

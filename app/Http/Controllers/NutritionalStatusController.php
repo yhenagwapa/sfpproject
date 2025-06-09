@@ -208,7 +208,9 @@ class NutritionalStatusController extends Controller
 
         //weight for height
         if ($childSex == '1') {
-            $getHeight = cgs_wfh_boys::whereBetween($request->height, ['length_from', 'length_to'])->first();
+            $getHeight = cgs_wfh_boys::where('length_from', '<=', $request->height)
+                          ->where('length_to', '>=', $request->height)
+                          ->first();
 
             if(!$getHeight){
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -229,7 +231,9 @@ class NutritionalStatusController extends Controller
             }
 
         } else {
-            $getHeight = cgs_wfh_girls::whereBetween($request->height, ['length_from', 'length_to'])->first();
+            $getHeight = cgs_wfh_girls::where('length_from', '<=', $request->height)
+                          ->where('length_to', '>=', $request->height)
+                          ->first();
 
             if(!$getHeight){
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -399,7 +403,9 @@ class NutritionalStatusController extends Controller
 
             //weight for height
             if ($childSex == '1') {
-                $getHeight = cgs_wfh_boys::whereBetween($request->exitheight, ['length_from', 'length_to'])->first();
+                $getHeight = cgs_wfh_boys::where('length_from', '<=', $request->exitheight)
+                          ->where('length_to', '>=', $request->exitheight)
+                          ->first();
 
                 if(!$getHeight){
                     return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -420,7 +426,9 @@ class NutritionalStatusController extends Controller
                 }
 
             } else {
-                $getHeight = cgs_wfh_girls::whereBetween($request->exitheight, ['length_from', 'length_to'])->first();
+                $getHeight = cgs_wfh_girls::where('length_from', '<=', $request->exitheight)
+                          ->where('length_to', '>=', $request->exitheight)
+                          ->first();
 
                 if(!$getHeight){
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
@@ -860,7 +868,10 @@ class NutritionalStatusController extends Controller
 
             //weight for height
             if ($childSex == '1') {
-                $getHeight = cgs_wfh_boys::whereBetween($request->exitheight, ['length_from', 'length_to'])->first();
+                $getHeight = cgs_wfh_boys::where('length_from', '<=', $request->exitheight)
+                          ->where('length_to', '>=', $request->exitheight)
+                          ->first();
+
                 if(!$getHeight){
                     return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
                 }
@@ -880,7 +891,9 @@ class NutritionalStatusController extends Controller
                 }
 
             } else {
-                $getHeight = cgs_wfh_girls::whereBetween($request->exitheight, ['length_from', 'length_to'])->first();
+                $getHeight = cgs_wfh_girls::where('length_from', '<=', $request->exitheight)
+                          ->where('length_to', '>=', $request->exitheight)
+                          ->first();
 
                 if(!$getHeight){
                     return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);

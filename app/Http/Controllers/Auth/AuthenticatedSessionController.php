@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
             return back()->withErrors(['email' => 'Your account is not active. Please wait for admin approval.']);
         }
 
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`';
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $otp = '';
         for ($i = 0; $i < 6; $i++) {
             $otp .= $characters[rand(0, strlen($characters) - 1)];

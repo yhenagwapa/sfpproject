@@ -147,11 +147,11 @@
                                                             </form>
 
                                                             @if(session('temp_can_edit') || auth()->user()?->can('edit-child'))
-                                                                @if($child->edit_counter != 2)
+                                                                @if(auth()->user()->hasRole('admin') || $child->edit_counter != 2)
                                                                     <form id="editChild-{{ $child->id }}" action="{{ route('child.show') }}" method="POST" class="inline">
                                                                         @csrf
                                                                         <input type="hidden" name="child_id" value="{{ $child->id }}">
-                                                                        <button type="submit"class="flex edit-child-btn relative group">
+                                                                        <button type="submit" class="flex edit-child-btn relative group">
                                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                                                 stroke-width="2" stroke="#00000099" class="w-5 h-5">
                                                                                 <path stroke-linecap="round" stroke-linejoin="round"
