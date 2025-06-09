@@ -60,7 +60,7 @@
         <div class="row">
             <div class="col-lg-3">
                 @if(session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status'))
-                    @if($entryDetails->edit_counter != 2)
+                    @if(auth()->user()->hasRole('admin') || $entryDetails->edit_counter != 2)
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title">
@@ -161,7 +161,7 @@
                         </div>
                     @endif
                     @if($hasUponExitData)
-                        @if($exitDetails->edit_counter != 2)
+                        @if(auth()->user()->hasRole('admin') || $exitDetails->edit_counter != 2)
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-title">
