@@ -77,6 +77,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        return redirect('login')->with('status', 'Registration successful. Please verify your email. You can log in once your account is activated.');
+        return redirect('login')->with('success', 'Registration successful. Please verify your email. You can log in once your account is activated.');
     }
 }

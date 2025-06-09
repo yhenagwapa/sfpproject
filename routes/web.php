@@ -79,10 +79,10 @@ Route::middleware(['auth', 'verified', 'temp.edit'])->group(function () {
     Route::post('/users/show', [UserController::class, 'show'])->name('users.show');
     Route::get('/users/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/update', [UserController::class, 'update'])->name('users.update');
-    // Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
-    // Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
-    // Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
-    // Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+    Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
+    Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
+    Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
+    Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
 
     // Route::get('/attendance/index/{child}', [AttendanceController::class, 'index'])->name('attendance.index');
     // Route::post('/attendance/{child_id}/store-cycle-attendance', [AttendanceController::class, 'storeCycleAttendance'])->name('attendance.storeCycleAttendance');
