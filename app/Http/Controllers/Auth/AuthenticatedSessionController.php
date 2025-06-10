@@ -34,7 +34,11 @@ class AuthenticatedSessionController extends Controller
         }
 
         if (! $user->hasVerifiedEmail()) {
-            return back()->withErrors(['email' => 'Please verify your email first.']);
+            $user->sendEmailVerificationNotification();
+
+            return back()->withErrors([
+                'email' => 'Please verify your email address. A new verification link has been sent to your email.',
+            ]);
         }
 
         if ($user->status !== 'active') {
