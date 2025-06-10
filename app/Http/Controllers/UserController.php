@@ -172,7 +172,13 @@ class UserController extends Controller
 
         $request->merge(['psgc_id' => $psgc->psgc_id]);
 
-        $user->fill($request->only(['firstname', 'middlename', 'lastname','extension_name', 'contact_number', 'psgc_id']));
+        $data = $request->only(['firstname', 'middlename', 'lastname','extension_name', 'contact_number', 'psgc_id']);
+
+        if($request->filled('password')){
+            $data['password'] = Hash::make($request->input('password'));
+        }
+
+        $user->fill($data);
 
         if($user->isClean()){
             return redirect()->route('child.index')->with('warning', 'No changes were made.');
