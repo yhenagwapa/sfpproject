@@ -56,7 +56,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Implementation</h5>
-                                <form id="cycleForm" class="row" method="post" action="{{ route('cycle.checkActiveStatus') }} ">
+                                <form id="cycleForm" class="row" method="post" action="{{ route('cycle.checkActiveStatus') }}" novalidate>
                                     @csrf
 
                                     <div class='col-md-12 mt-2 text-gray-400 text-xs'>
@@ -73,38 +73,14 @@
                                         @endif
                                     </div>
 
-                                    @php
-                                        $currentYear = date('Y');
-                                        $startYear = $currentYear + 1;
-                                        $endYear = $currentYear + 2;
-                                        $endYearForSYTo = $currentYear + 3;
-                                    @endphp
+                                    <div class="col-md-6 mt-3 text-sm">
+                                        <label for="cycle_school_year_from">Calendar Year<b class="text-red-600">*</b></label>
+                                        <input type="number" class="form-control rounded border-gray-300"
+                                            id="cycle_school_year_from" name='cycle_school_year_from'
+                                            value="{{ old('cycle_school_year_from') }}" required oninput="limitLength(this, 4)">
 
-                                    <div class="col-md-3 mt-3 text-sm">
-                                        <label for="cycle_school_year_from">School Year From<b class="text-red-600">*</b></label>
-                                        <select name="cycle_school_year_from" id="cycle_school_year_from" class="form-control rounded border-gray-300" required>
-                                            @for ($year = $currentYear; $year <= $endYear; $year++)
-                                                <option value="{{ $year }}" {{ old('cycle_school_year_from') == $year ? 'selected' : '' }}>
-                                                    {{ $year }}
-                                                </option>
-                                            @endfor
-                                        </select>
                                         @if ($errors->has('cycle_school_year_from'))
                                             <span class="text-xs text-red-600">{{ $errors->first('cycle_school_year_from') }}</span>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-3 mt-3 text-sm">
-                                        <label for="cycle_school_year_to">School Year To<b class="text-red-600">*</b></label>
-                                            <select name="cycle_school_year_to" id="cycle_school_year_to" class="form-control rounded border-gray-300" required>
-                                                @for ($year = $startYear; $year <= $endYearForSYTo; $year++)
-                                                    <option value="{{ $year }}" {{ old('cycle_school_year_to') == $year ? 'selected' : '' }}>
-                                                        {{ $year }}
-                                                    </option>
-                                                @endfor
-                                            </select>
-                                        @if ($errors->has('cycle_school_year_to'))
-                                            <span class="text-xs text-red-600">{{ $errors->first('cycle_school_year_to') }}</span>
                                         @endif
                                     </div>
 
@@ -198,11 +174,10 @@
                                                 {{ session('message') }}
                                             </div>
                                             <div class="modal-footer">
-                                                <form method="POST" action="{{ route('cycle.store') }}">
+                                                <form method="POST" action="{{ route('cycle.store') }}" novalidate>
                                                     @csrf
                                                     <input type="hidden" name="cycle_name" value="{{ old('cycle_name') }}">
                                                     <input type="hidden" name="cycle_school_year_from" value="{{ old('cycle_school_year_from') }}">
-                                                    <input type="hidden" name="cycle_school_year_to" value="{{ old('cycle_school_year_to') }}">
                                                     <input type="hidden" name="cycle_target" value="{{ old('cycle_target') }}">
                                                     <input type="hidden" name="cycle_allocation" value="{{ old('cycle_allocation') }}">
                                                     <input type="hidden" name="cycle_type" value="{{ old('cycle_type') }}">
@@ -226,25 +201,11 @@
             </section>
 
             <script>
-                const startYearSelect = document.getElementById('cycle_school_year_from');
-                const endYearSelect = document.getElementById('cycle_school_year_to');
-
-                function updateEndYearOptions() {
-                    const startYear = parseInt(startYearSelect.value);
-                    const nextYear = startYear + 1;
-
-                    Array.from(endYearSelect.options).forEach(option => {
-                        const year = parseInt(option.value);
-                        option.disabled = year !== nextYear;
-                    });
-
-                    // Set end year to next year
-                    endYearSelect.value = nextYear;
+                function limitLength(input, maxLength) {
+                    if (input.value.length > maxLength) {
+                        input.value = input.value.slice(0, maxLength);
+                    }
                 }
-
-                startYearSelect.addEventListener('change', updateEndYearOptions);
-                window.addEventListener('DOMContentLoaded', updateEndYearOptions);
-
             </script>
 
     @include('cycle.script')

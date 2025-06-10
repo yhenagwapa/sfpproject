@@ -85,7 +85,6 @@ class ImplementationController extends Controller
             Implementation::create([
                 'name' => $request->cycle_name,
                 'school_year_from' => $request->cycle_school_year_from,
-                'school_year_to' => $request->cycle_school_year_to,
                 'target' => $request->cycle_target,
                 'allocation' => $request->cycle_allocation,
                 'type' => $request->cycle_type,
@@ -99,7 +98,6 @@ class ImplementationController extends Controller
         Implementation::create([
             'name' => $request->cycle_name,
             'school_year_from' => $request->cycle_school_year_from,
-            'school_year_to' => $request->cycle_school_year_to,
             'target' => $request->cycle_target,
             'allocation' => $request->cycle_allocation,
             'type' => $request->cycle_type,
@@ -178,7 +176,6 @@ class ImplementationController extends Controller
         $cycle->update([
             'name' => $validatedData['cycle_name'],
             'school_year_from' => $validatedData['cycle_school_year_from'],
-            'school_year_to' => $validatedData['cycle_school_year_to'],
             'target' => $validatedData['cycle_target'],
             'allocation' => $validatedData['cycle_allocation'],
             'type' => $validatedData['cycle_type'],

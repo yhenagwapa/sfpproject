@@ -125,7 +125,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
-            {{ $cycle->name }} ( CY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )<br>
+            {{ $cycle->name }} ( CY {{ $cycle->school_year_from }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS (NS) PER AGE BRACKET</b><br>
             <i>UPON ENTRY</i>
         </p>

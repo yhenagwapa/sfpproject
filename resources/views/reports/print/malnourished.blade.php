@@ -107,7 +107,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
-        <p>{{ $cycle->name}} ( CY {{ $cycle->school_year }} )</p>
+        <p>{{ $cycle->name}} ( CY {{ $cycle->school_year_from }} )</p>
         <p><b>LIST OF MALNOURISHED CHILDREN</b></p>
         <br>
     </div>
