@@ -263,6 +263,16 @@ input.no-uppercase {
     margin: auto;
 }
 
+.dropdown-menu .sub-menu {
+    padding: 8px 15px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.dropdown-menu .sub-menu:hover {
+    margin: auto;
+}
+
 @media (min-width: 768px) {
     .dropdown-menu-arrow::before {
         content: "";
