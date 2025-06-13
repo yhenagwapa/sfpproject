@@ -530,6 +530,7 @@
                                                                                     <span>WFH</span>
                                                                                 </button>
                                                                             </li>
+
                                                                         @endif
                                                                 </ul>
                                                             </li>
@@ -537,53 +538,23 @@
                                                     </div>
                                                     </form>
                                                 @endif
-                                                {{-- @if (auth()->user()->hasRole('admin'))
-                                                        <form id="printAdminForm" action="" method="POST"
+                                                        <form action="{{ route('export-report')}}" method="POST"
                                                             target="_blank">
                                                             @csrf
+
                                                             <input type="hidden" name="cycle_id" id="cycle_id"
                                                                 value="">
-                                                            <input type="hidden" name="center_name" id="center_id"
-                                                                value="">
 
-                                                            <ul class="d-flex list-unstyled">
-                                                                <li class="nav-item dropdown pe-3">
-                                                                    <a class="nav-link nav-profile align-items-center pe-0"
-                                                                        href="#" data-bs-toggle="dropdown">
-                                                                        <button type="button"
-                                                                            class="bg-blue-600 text-white rounded px-3 min-h-9">
-                                                                            <span
-                                                                                class="d-none d-md-block dropdown-toggle text-white">Admin
-                                                                                Report</span>
-                                                                        </button>
-                                                                    </a>
-                                                                    <ul
-                                                                        class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                                                                        @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('child development worker'))
-                                                                            <li>
-                                                                                <a class="dropdown-item d-flex align-items-center"
-                                                                                    id="printButtonAdminReport">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                        fill="none" viewBox="0 0 24 24"
-                                                                                        stroke-width="2"
-                                                                                        stroke="currentColor"
-                                                                                        class="size-5 mr-2">
-                                                                                        <path stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-                                                                                    </svg>
-                                                                                    <span>Admin Report</span>
-                                                                                </a>
-                                                                            </li>
-                                                                            <li>
-                                                                                <hr class="dropdown-divider">
-                                                                            </li>
-                                                                        @endif
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>
+                                                            <button type="submit"
+                                                                class="bg-blue-600 text-white flex align-items-center rounded px-3 min-h-9">
+                                                                <span>Export Report</span>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="size-5">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                                                                </svg>
+
+
+                                                            </button>
                                                         </form>
-                                                    @endif --}}
                                             </nav>
                                         </div>
 

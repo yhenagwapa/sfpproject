@@ -152,6 +152,7 @@ Route::middleware(['auth', 'verified', 'temp.edit'])->group(function () {
     Route::post('/reports/print/weight-for-age-upon-entry', [ReportsController::class, 'nutritionalStatusWFA'])->name('reports.print.weight-for-age-upon-entry');
     Route::post('/reports/print/weight-for-height-upon-entry', [ReportsController::class, 'nutritionalStatusWFH'])->name('reports.print.weight-for-height-upon-entry');
 
+    Route::post('/export-report', [ReportsController::class, 'exportReport'])->name('export-report');
 
     // Route::post('/milkfeedings/report/{milkfeeding}', [MilkFeedingController::class, 'reportIndex'])->name('milkfeedings.report');
     // Route::get('/milkfeedings/report/{milkfeeding}/print/masterlist', [MilkFeedingController::class, 'printMasterlist'])->name('milkfeedings.print.masterlist');
