@@ -17,8 +17,7 @@ class ChildCenterSeeder extends Seeder
         $assignment1 = ChildCenter::create([
             'child_id' => '1',
             'child_development_center_id' => '2',
-            'implementation_id' => '3',
-            'milk_feeding_id' => '4',
+            'implementation_id' => 1,
             'status' => 'active',
             'funded' => true,
         ]);
@@ -26,8 +25,7 @@ class ChildCenterSeeder extends Seeder
         $assignment2 = ChildCenter::create([
             'child_id' => '2',
             'child_development_center_id' => '2',
-            'implementation_id' => '3',
-            'milk_feeding_id' => '4',
+            'implementation_id' => 1,
             'status' => 'inactive',
             'funded' => true,
         ]);
@@ -42,8 +40,7 @@ class ChildCenterSeeder extends Seeder
         $assignment4 = ChildCenter::create([
             'child_id' => '4',
             'child_development_center_id' => '1',
-            'implementation_id' => '3',
-            'milk_feeding_id' => '4',
+            'implementation_id' => 1,
             'status' => 'active',
             'funded' => true,
         ]);
@@ -51,8 +48,7 @@ class ChildCenterSeeder extends Seeder
         $assignment5 = ChildCenter::create([
             'child_id' => '5',
             'child_development_center_id' => '2',
-            'implementation_id' => '3',
-            'milk_feeding_id' => '4',
+            'implementation_id' => 1,
             'status' => 'active',
             'funded' => true,
         ]);
@@ -60,8 +56,7 @@ class ChildCenterSeeder extends Seeder
         $assignment6 = ChildCenter::create([
             'child_id' => '6',
             'child_development_center_id' => '3',
-            'implementation_id' => '3',
-            'milk_feeding_id' => '4',
+            'implementation_id' => 1,
             'status' => 'active',
             'funded' => true,
         ]);

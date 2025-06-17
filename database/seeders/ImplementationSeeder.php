@@ -14,8 +14,10 @@ class ImplementationSeeder extends Seeder
     public function run(): void
     {
         $cycle = Implementation::create([
+            'id' => 1,
             'name' => 'Sample Cycle Implementation',
-            'school_year' => '2024-2025',
+            'school_year_from' => '2024',
+            'school_year_to' => '2025',
             'target' => '20000',
             'allocation' => '200000',
             'status' => 'active',
@@ -25,8 +27,10 @@ class ImplementationSeeder extends Seeder
         ]);
 
         $milk = Implementation::create([
+            'id' => 2,
             'name' => 'Sample Milk Feeding',
-            'school_year' => '2024-2025',
+            'school_year_from' => '2024',
+            'school_year_to' => '2025',
             'target' => '10000',
             'allocation' => '100000',
             'status' => 'active',
