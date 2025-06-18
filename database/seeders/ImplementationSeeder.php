@@ -16,27 +16,13 @@ class ImplementationSeeder extends Seeder
         $cycle = Implementation::create([
             'id' => 1,
             'name' => 'Sample Cycle Implementation',
-            'school_year_from' => '2024',
-            'school_year_to' => '2025',
-            'target' => '20000',
-            'allocation' => '200000',
+            'school_year_from' => '2025',
+            'school_year_to' => '2026',
+            'target' => '150000',
+            'allocation' => '15000000',
             'status' => 'active',
             'type' => 'regular',
-            'created_by_user_id' => '1',
-            'updated_by_user_id' => '1',
         ]);
 
-        $milk = Implementation::create([
-            'id' => 2,
-            'name' => 'Sample Milk Feeding',
-            'school_year_from' => '2024',
-            'school_year_to' => '2025',
-            'target' => '10000',
-            'allocation' => '100000',
-            'status' => 'active',
-            'type' => 'milk',
-            'created_by_user_id' => '1',
-            'updated_by_user_id' => '1',
-        ]);
     }
 }

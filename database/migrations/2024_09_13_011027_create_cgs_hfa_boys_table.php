@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cgs_hfa_boys', function (Blueprint $table) {
             $table->id();
             $table->double(column: 'age_month')->nullable();
-            $table->double('severly_stunted')->nullable();
+            $table->double('severely_stunted')->nullable();
             $table->double('stunted_from')->nullable();
             $table->double('stunted_to')->nullable();
             $table->double('normal_from')->nullable();

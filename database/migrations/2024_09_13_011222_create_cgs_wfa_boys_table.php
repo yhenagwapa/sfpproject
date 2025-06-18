@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('cgs_wfa_boys', function (Blueprint $table) {
             $table->id();
             $table->double(column: 'age_month')->nullable();
-            $table->double('severly_underweight')->nullable();
+            $table->double('severely_underweight')->nullable();
             $table->double('underweight_from')->nullable();
             $table->double('underweight_to')->nullable();
             $table->double('normal_from')->nullable();
             $table->double('normal_to')->nullable();
+            $table->double('overweight')->nullable();
             $table->year('year')->nullable();
             $table->timestamps();
         });

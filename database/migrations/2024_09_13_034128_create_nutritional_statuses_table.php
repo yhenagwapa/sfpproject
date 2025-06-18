@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean('is_undernourish');
             $table->date('deworming_date')->nullable();
             $table->date('vitamin_a_date')->nullable();
+            $table->integer('edit_counter')->nullable();
             $table->foreignId('created_by_user_id')->nullable()->constrained('users');
             $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
             $table->timestamps();

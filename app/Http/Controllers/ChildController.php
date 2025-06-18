@@ -658,7 +658,7 @@ class ChildController extends Controller
                             return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                         }
 
-                        if ((float) $weight <= (float) $getAge->severly_underweight) {
+                        if ((float) $weight <= (float) $getAge->severely_underweight) {
                             $weightForAge = 'Severely Underweight';
                         } elseif ((float) $weight >= (float) $getAge->underweight_from && (float) $weight <= (float) $getAge->underweight_to) {
                             $weightForAge = 'Underweight';
@@ -677,7 +677,7 @@ class ChildController extends Controller
                             return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                         }
 
-                        if ((float) $weight <= (float) $getAge->severly_underweight) {
+                        if ((float) $weight <= (float) $getAge->severely_underweight) {
                             $weightForAge = 'Severely Underweight';
                         } elseif ((float) $weight >= (float) $getAge->underweight_from && (float) $weight <= (float) $getAge->underweight_to) {
                             $weightForAge = 'Underweight';
@@ -698,7 +698,7 @@ class ChildController extends Controller
                             return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                         }
 
-                        if ((float) $height <= (float) $getAge->severly_stunted) {
+                        if ((float) $height <= (float) $getAge->severely_stunted) {
                             $heightForAge = 'Severely Stunted';
                         } elseif ((float) $height >= (float) $getAge->stunted_from && (float) $height <= (float) $getAge->stunted_to) {
                             $heightForAge = 'Stunted';
@@ -717,7 +717,7 @@ class ChildController extends Controller
                             return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                         }
 
-                        if ((float) $height <= (float) $getAge->severly_stunted) {
+                        if ((float) $height <= (float) $getAge->severely_stunted) {
                             $heightForAge = 'Severely Stunted';
                         } elseif ((float) $height >= (float) $getAge->stunted_from && (float) $height <= (float) $getAge->stunted_to) {
                             $heightForAge = 'Stunted';
@@ -732,13 +732,15 @@ class ChildController extends Controller
 
                     //weight for height
                     if ($childSex == '1') {
-                        $getHeight = cgs_wfh_boys::where('length_in_cm', $height)->first();
+                        $getHeight = cgs_wfh_boys::where('length_from', '<=', $request->height)
+                                        ->where('length_to', '>=', $request->height)
+                                        ->first();
 
                         if (!$getHeight) {
                             return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
                         }
 
-                        if ((float) $weight <= (float) $getHeight->severly_wasted) {
+                        if ((float) $weight <= (float) $getHeight->severely_wasted) {
                             $weightForHeight = 'Severely Wasted';
                         } elseif ((float) $weight >= (float) $getHeight->wasted_from && (float) $weight <= (float) $getHeight->wasted_to) {
                             $weightForHeight = 'Wasted';
@@ -753,13 +755,15 @@ class ChildController extends Controller
                         }
 
                     } else {
-                        $getHeight = cgs_wfh_girls::where('length_in_cm', $height)->first();
+                        $getHeight = cgs_wfh_girls::where('length_from', '<=', $request->height)
+                                        ->where('length_to', '>=', $request->height)
+                                        ->first();
 
                         if (!$getHeight) {
                             return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
                         }
 
-                        if ((float) $weight <= (float) $getHeight->severly_wasted) {
+                        if ((float) $weight <= (float) $getHeight->severely_wasted) {
                             $weightForHeight = 'Severely Wasted';
                         } elseif ((float) $weight >= (float) $getHeight->wasted_from && (float) $weight <= (float) $getHeight->wasted_to) {
                             $weightForHeight = 'Wasted';

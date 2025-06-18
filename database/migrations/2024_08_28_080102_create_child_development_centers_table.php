@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('psgc_id')
                   ->references('psgc_id')
                   ->on('psgcs');
+            $table->string('center_type');
             $table->foreignId('created_by_user_id')->nullable()->constrained('users');
             $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
             $table->timestamps();

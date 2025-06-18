@@ -56,6 +56,9 @@ class PermissionSeeder extends Seeder
         $pdo= Role::firstOrCreate(['name' => 'pdo',
                             'guard_name' => 'web']);
 
+        $sfpcoordinator = Role::firstOrCreate(['name' => 'sfp coordinator',
+                            'guard_name' => 'web']);
+
         $admin->givePermissionTo([
             'edit-child',
             'view-child',
@@ -78,6 +81,7 @@ class PermissionSeeder extends Seeder
             'view-child',
             'add-attendance',
             'create-nutritional-status',
+            'edit-nutritional-status',
             'view-report',
             'print-report',
             'register',
@@ -101,10 +105,23 @@ class PermissionSeeder extends Seeder
             'create-child',
             'view-child',
             'create-nutritional-status',
+            'edit-nutritional-status',
         ]);
 
         $pdo->givePermissionTo([
             'view-child',
+        ]);
+
+        $sfpcoordinator->givePermissionTo([
+            'edit-child',
+            'view-report',
+            'view-child',
+            'print-report',
+            'register',
+            'edit-user-profile',
+            'view-cycle-implementation',
+            'create-child-development-center',
+            'edit-child-development-center',
         ]);
     }
 }

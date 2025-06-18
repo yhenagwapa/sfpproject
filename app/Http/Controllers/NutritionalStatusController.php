@@ -134,7 +134,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
             }
 
-            if ((float) $request->weight <=(float) $getAge->severly_underweight) {
+            if ((float) $request->weight <=(float) $getAge->severely_underweight) {
                 $entryWeightForAge = 'Severely Underweight';
             } elseif ((float) $request->weight >= (float) $getAge->underweight_from && (float) $request->weight <= (float) $getAge->underweight_to) {
                 $entryWeightForAge = 'Underweight';
@@ -153,7 +153,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
             }
 
-            if ((float) $request->weight <=(float) $getAge->severly_underweight) {
+            if ((float) $request->weight <=(float) $getAge->severely_underweight) {
                 $entryWeightForAge = 'Severely Underweight';
             } elseif ((float) $request->weight >= (float) $getAge->underweight_from && (float) $request->weight <= (float) $getAge->underweight_to) {
                 $entryWeightForAge = 'Underweight';
@@ -174,7 +174,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
             }
 
-            if ((float) $request->height <= (float) $getAge->severly_stunted) {
+            if ((float) $request->height <= (float) $getAge->severely_stunted) {
                 $entryHeightForAge = 'Severely Stunted';
             } elseif ((float) $request->height >= (float) $getAge->stunted_from && (float) $request->height <= (float) $getAge->stunted_to) {
                 $entryHeightForAge = 'Stunted';
@@ -193,7 +193,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
             }
 
-            if ((float) $request->height <= (float) $getAge->severly_stunted) {
+            if ((float) $request->height <= (float) $getAge->severely_stunted) {
                 $entryHeightForAge = 'Severely Stunted';
             } elseif ((float) $request->height >= (float) $getAge->stunted_from && (float) $request->height <= (float) $getAge->stunted_to) {
                 $entryHeightForAge = 'Stunted';
@@ -216,7 +216,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
             }
 
-            if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
+            if ((float) $request->weight <= (float) $getHeight->severely_wasted) {
                 $entryWeightForHeight = 'Severely Wasted';
             } elseif ((float) $request->weight >= (float) $getHeight->wasted_from && (float) $request->weight <= (float) $getHeight->wasted_to) {
                 $entryWeightForHeight = 'Wasted';
@@ -239,7 +239,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
             }
 
-            if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
+            if ((float) $request->weight <= (float) $getHeight->severely_wasted) {
                 $entryWeightForHeight = 'Severely Wasted';
             } elseif ((float) $request->weight >= (float) $getHeight->wasted_from && (float) $request->weight <= (float) $getHeight->wasted_to) {
                 $entryWeightForHeight = 'Wasted';
@@ -330,7 +330,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                 }
 
-                if ((float) $request->exitweight <= (float) $getAge->severly_underweight) {
+                if ((float) $request->exitweight <= (float) $getAge->severely_underweight) {
                     $exitWeightForAge = 'Severely Underweight';
                 } elseif ((float) $request->exitweight >= (float) $getAge->underweight_from && (float) $request->exitweight <= (float) $getAge->underweight_to) {
                     $exitWeightForAge = 'Underweight';
@@ -349,7 +349,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                 }
 
-                if ((float) $request->exitweight <= (float) $getAge->severly_underweight) {
+                if ((float) $request->exitweight <= (float) $getAge->severely_underweight) {
                     $exitWeightForAge = 'Severely Underweight';
                 } elseif ((float) $request->exitweight >= (float) $getAge->underweight_from && (float) $request->exitweight <= (float) $getAge->underweight_to) {
                     $exitWeightForAge = 'Underweight';
@@ -370,7 +370,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                 }
 
-                if ((float) $request->exitheight <= (float) $getAge->severly_stunted) {
+                if ((float) $request->exitheight <= (float) $getAge->severely_stunted) {
                     $exitHeightForAge = 'Severely Stunted';
                 } elseif ((float) $request->exitheight >= (float) $getAge->stunted_from && (float) $request->exitheight <= (float) $getAge->stunted_to) {
                     $exitHeightForAge = 'Stunted';
@@ -388,7 +388,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                 }
 
-                if ((float) $request->exitheight <= (float) $getAge->severly_stunted) {
+                if ((float) $request->exitheight <= (float) $getAge->severely_stunted) {
                     $exitHeightForAge = 'Severely Stunted';
                 } elseif ((float) $request->exitheight >= (float) $getAge->stunted_from && (float) $request->exitheight <= (float) $getAge->stunted_to) {
                     $exitHeightForAge = 'Stunted';
@@ -411,7 +411,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
                 }
 
-                if ((float) $request->exitweight <= (float) $getHeight->severly_wasted) {
+                if ((float) $request->exitweight <= (float) $getHeight->severely_wasted) {
                     $exitWeightForHeight = 'Severely Wasted';
                 } elseif ((float) $request->exitweight >= (float) $getHeight->wasted_from && (float) $request->exitweight <= (float) $getHeight->wasted_to) {
                     $exitWeightForHeight = 'Wasted';
@@ -434,7 +434,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                 }
 
-                if ((float) $request->exitweight <= (float) $getHeight->severly_wasted) {
+                if ((float) $request->exitweight <= (float) $getHeight->severely_wasted) {
                     $exitWeightForHeight = 'Severely Wasted';
                 } elseif ((float) $request->exitweight >= (float) $getHeight->wasted_from && (float) $request->exitweight <= (float) $getHeight->wasted_to) {
                     $exitWeightForHeight = 'Wasted';
@@ -580,7 +580,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
             }
 
-            if ((float) $request->weight <=(float) $getAge->severly_underweight) {
+            if ((float) $request->weight <=(float) $getAge->severely_underweight) {
                 $entryWeightForAge = 'Severely Underweight';
             } elseif ((float) $request->weight >= (float) $getAge->underweight_from && (float) $request->weight <= (float) $getAge->underweight_to) {
                 $entryWeightForAge = 'Underweight';
@@ -599,7 +599,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
             }
 
-            if ((float) $request->weight <=(float) $getAge->severly_underweight) {
+            if ((float) $request->weight <=(float) $getAge->severely_underweight) {
                 $entryWeightForAge = 'Severely Underweight';
             } elseif ((float) $request->weight >= (float) $getAge->underweight_from && (float) $request->weight <= (float) $getAge->underweight_to) {
                 $entryWeightForAge = 'Underweight';
@@ -620,7 +620,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
             }
 
-            if ((float) $request->height <= (float) $getAge->severly_stunted) {
+            if ((float) $request->height <= (float) $getAge->severely_stunted) {
                 $entryHeightForAge = 'Severely Stunted';
             } elseif ((float) $request->height >= (float) $getAge->stunted_from && (float) $request->height <= (float) $getAge->stunted_to) {
                 $entryHeightForAge = 'Stunted';
@@ -639,7 +639,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
             }
 
-            if ((float) $request->height <= (float) $getAge->severly_stunted) {
+            if ((float) $request->height <= (float) $getAge->severely_stunted) {
                 $entryHeightForAge = 'Severely Stunted';
             } elseif ((float) $request->height >= (float) $getAge->stunted_from && (float) $request->height <= (float) $getAge->stunted_to) {
                 $entryHeightForAge = 'Stunted';
@@ -663,7 +663,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
             }
 
-            if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
+            if ((float) $request->weight <= (float) $getHeight->severely_wasted) {
                 $entryWeightForHeight = 'Severely Wasted';
             } elseif ((float) $request->weight >= (float) $getHeight->wasted_from && (float) $request->weight <= (float) $getHeight->wasted_to) {
                 $entryWeightForHeight = 'Wasted';
@@ -687,7 +687,7 @@ class NutritionalStatusController extends Controller
                 return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
             }
 
-            if ((float) $request->weight <= (float) $getHeight->severly_wasted) {
+            if ((float) $request->weight <= (float) $getHeight->severely_wasted) {
                 $entryWeightForHeight = 'Severely Wasted';
             } elseif ((float) $request->weight >= (float) $getHeight->wasted_from && (float) $request->weight <= (float) $getHeight->wasted_to) {
                 $entryWeightForHeight = 'Wasted';
@@ -795,7 +795,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                 }
 
-                if ((float) $request->exitweight <= (float) $getAge->severly_underweight) {
+                if ((float) $request->exitweight <= (float) $getAge->severely_underweight) {
                     $exitWeightForAge = 'Severely Underweight';
                 } elseif ((float) $request->exitweight >= (float) $getAge->underweight_from && (float) $request->exitweight <= (float) $getAge->underweight_to) {
                     $exitWeightForAge = 'Underweight';
@@ -814,7 +814,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                 }
 
-                if ((float) $request->exitweight <= (float) $getAge->severly_underweight) {
+                if ((float) $request->exitweight <= (float) $getAge->severely_underweight) {
                     $exitWeightForAge = 'Severely Underweight';
                 } elseif ((float) $request->exitweight >= (float) $getAge->underweight_from && (float) $request->exitweight <= (float) $getAge->underweight_to) {
                     $exitWeightForAge = 'Underweight';
@@ -835,7 +835,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                 }
 
-                if ((float) $request->exitheight <= (float) $getAge->severly_stunted) {
+                if ((float) $request->exitheight <= (float) $getAge->severely_stunted) {
                     $exitHeightForAge = 'Severely Stunted';
                 } elseif ((float) $request->exitheight >= (float) $getAge->stunted_from && (float) $request->exitheight <= (float) $getAge->stunted_to) {
                     $exitHeightForAge = 'Stunted';
@@ -853,7 +853,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Age is out of range.']);
                 }
 
-                if ((float) $request->exitheight <= (float) $getAge->severly_stunted) {
+                if ((float) $request->exitheight <= (float) $getAge->severely_stunted) {
                     $exitHeightForAge = 'Severely Stunted';
                 } elseif ((float) $request->exitheight >= (float) $getAge->stunted_from && (float) $request->exitheight <= (float) $getAge->stunted_to) {
                     $exitHeightForAge = 'Stunted';
@@ -876,7 +876,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
                 }
 
-                if ((float) $request->exitweight <= (float) $getHeight->severly_wasted) {
+                if ((float) $request->exitweight <= (float) $getHeight->severely_wasted) {
                     $exitWeightForHeight = 'Severely Wasted';
                 } elseif ((float) $request->exitweight >= (float) $getHeight->wasted_from && (float) $request->exitweight <= (float) $getHeight->wasted_to) {
                     $exitWeightForHeight = 'Wasted';
@@ -899,7 +899,7 @@ class NutritionalStatusController extends Controller
                     return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
                 }
 
-                if ((float) $request->exitweight <= (float) $getHeight->severly_wasted) {
+                if ((float) $request->exitweight <= (float) $getHeight->severely_wasted) {
                     $exitWeightForHeight = 'Severely Wasted';
                 } elseif ((float) $request->exitweight >= (float) $getHeight->wasted_from && (float) $request->exitweight <= (float) $getHeight->wasted_to) {
                     $exitWeightForHeight = 'Wasted';

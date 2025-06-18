@@ -20,7 +20,7 @@ class WfaGirlsSeeder extends Seeder
         foreach ($csv as $record) {
             DB::table('cgs_wfa_girls')->insert([
                 'age_month' => $record['age_month'],
-                'severly_underweight' => $record['severly_underweight'],
+                'severely_underweight' => $record['severely_underweight'],
                 'underweight_from' => $record['underweight_from'],
                 'underweight_to' => $record['underweight_to'],
                 'normal_from' => $record['normal_from'],

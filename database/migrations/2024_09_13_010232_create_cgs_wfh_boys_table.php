@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('cgs_wfh_boys', function (Blueprint $table) {
             $table->id();
-            $table->double(column: 'length_in_cm')->nullable();
-            $table->double('severly_wasted')->nullable();
+            $table->double(column: 'length_from')->nullable();
+            $table->double(column: 'length_to')->nullable();
+            $table->double('severely_wasted')->nullable();
             $table->double('wasted_from')->nullable();
             $table->double('wasted_to')->nullable();
             $table->double('normal_from')->nullable();

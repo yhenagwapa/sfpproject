@@ -22,7 +22,7 @@ class RevisedWFHBoysSeeder extends Seeder
             DB::table('cgs_wfh_boys')->insert([
                 'length_from' => $record['length_from'],
                 'length_to' => $record['length_to'],
-                'severly_wasted' => $record['severely_wasted'],
+                'severely_wasted' => $record['severely_wasted'],
                 'wasted_from' => $record['wasted_from'],
                 'wasted_to' => $record['wasted_to'],
                 'normal_from' => $record['normal_from'],

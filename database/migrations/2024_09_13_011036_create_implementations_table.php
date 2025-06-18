@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->integer('target');
             $table->decimal('allocation', 12, 2)->nullable();
-            $table->string('school_year');
+            $table->string('school_year_from');
+            $table->string('school_year_to');
             $table->string('type');
             $table->string('status');
             $table->foreignId('created_by_user_id')->nullable()->constrained('users');
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cycle_implementations');
+        Schema::dropIfExists('implementations');
     }
 };

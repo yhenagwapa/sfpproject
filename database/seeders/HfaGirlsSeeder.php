@@ -20,7 +20,7 @@ class HfaGirlsSeeder extends Seeder
         foreach ($csv as $record) {
             DB::table('cgs_hfa_girls')->insert([
                 'age_month' => $record['age_month'],
-                'severly_stunted' => $record['severly_stunted'],
+                'severely_stunted' => $record['severely_stunted'],
                 'stunted_from' => $record['stunted_from'],
                 'stunted_to' => $record['stunted_to'],
                 'normal_from' => $record['normal_from'],

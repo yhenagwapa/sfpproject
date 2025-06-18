@@ -29,6 +29,7 @@ return new class extends Migration
             $table->boolean('is_indigenous_people');
             $table->boolean('is_child_of_soloparent');
             $table->boolean('is_lactose_intolerant');
+            $table->integer('edit_counter')->nullable();
             $table->foreignId('created_by_user_id')->nullable()->constrained('users');
             $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
             $table->timestamps();

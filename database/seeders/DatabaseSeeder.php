@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Child;
+use App\Models\NutritionalStatus;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -16,25 +17,26 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // PermissionSeeder::class,
+            PermissionSeeder::class,
             PsgcSeeder::class,
-            // UserSeeder::class,
-            // ImplementationSeeder::class,
-            // CenterSeeder::class,
+            ImplementationSeeder::class,
             SexSeeder::class,
-            // ChildSeeder::class,
-            // UserCenterSeeder::class,
-            // ChildCenterSeeder::class,
-            // HfaBoysSeeder::class,
-            // HfaGirlsSeeder::class,
-            // WfaBoysSeeder::class,
-            // WfaGirlsSeeder::class,
-            // WfhBoysSeeder::class,
-            // WfhGirlsSeeder::class,
+            AdminSeeder::class,
+            HfaBoysSeeder::class,
+            HfaGirlsSeeder::class,
+            WfaBoysSeeder::class,
+            WfaGirlsSeeder::class,
+            RevisedWFHBoysSeeder::class,
+            RevisedWFHGirlsSeeder::class,
         ]);
 
         // for loadtesting
-        User::factory()->count(10)->create();
-        Child::factory()->count(100)->create();
+        // User::factory()->count(10)->create(); // 1000
+        // Child::factory()->count(100)->create(); // 149,500
+        // NutritionalStatus::factory()->count(100)->create(); // 149,500
+
+        // $this->call([
+        //     NutritionalStatusSeeder::class,
+        // ]);
     }
 }

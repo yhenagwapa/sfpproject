@@ -19,9 +19,6 @@ class RoleSeeder extends Seeder
         $lguFocal= Role::firstOrCreate(['name' => 'lgu focal',
                             'guard_name' => 'web']);
 
-        $lguFocal= Role::firstOrCreate(['name' => 'lgu focal',
-                            'guard_name' => 'web']);
-
         $admin->givePermissionTo([
             'edit-child',
             'delete-child',

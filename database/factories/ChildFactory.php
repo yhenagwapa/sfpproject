@@ -47,7 +47,7 @@ class ChildFactory extends Factory
             'lastname' => fake()->lastName(),
             'middlename' => fake()->firstName(),
             'extension_name' => fake()->randomElement($extNameOptions),
-            'date_of_birth' => fake()->dateTimeBetween('2020-01-01', '2023-12-30'),
+            'date_of_birth' => fake()->dateTimeBetween('2020-01-01', '2023-06-30'),
             'sex_id' => fake()->numberBetween(1, 2),
             'address' => fake()->address(),
             'psgc_id' => $psgcId,
