@@ -140,7 +140,7 @@ class NutritionalStatusController extends Controller
                 $entryWeightForAge = 'Underweight';
             } elseif ((float) $request->weight >= (float) $getAge->normal_from && (float) $request->weight <= (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Normal';
-            } elseif ((float) $request->weight >= (float) $request->weight) {
+            } elseif ((float) $request->weight > (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Overweight';
             } else {
                 $entryWeightForAge = 'Not Applicable';
@@ -159,7 +159,7 @@ class NutritionalStatusController extends Controller
                 $entryWeightForAge = 'Underweight';
             } elseif ((float) $request->weight >= (float) $getAge->normal_from && (float) $request->weight <= (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Normal';
-            } elseif ((float) $request->weight >= (float) $request->weight) {
+            } elseif ((float) $request->weight > (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Overweight';
             } else {
                 $entryWeightForAge = 'Not Applicable';
@@ -336,7 +336,7 @@ class NutritionalStatusController extends Controller
                     $exitWeightForAge = 'Underweight';
                 } elseif ((float) $request->exitweight >= (float) $getAge->normal_from && (float) $request->exitweight <= (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Normal';
-                } elseif ((float) $request->exitweight >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Overweight';
                 } else {
                     $exitWeightForAge = 'Not Applicable';
@@ -355,7 +355,7 @@ class NutritionalStatusController extends Controller
                     $exitWeightForAge = 'Underweight';
                 } elseif ((float) $request->exitweight >= (float) $getAge->normal_from && (float) $request->exitweight <= (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Normal';
-                } elseif ((float) $request->exitweight >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Overweight';
                 } else {
                     $exitWeightForAge = 'Not Applicable';
@@ -586,7 +586,7 @@ class NutritionalStatusController extends Controller
                 $entryWeightForAge = 'Underweight';
             } elseif ((float) $request->weight >= (float) $getAge->normal_from && (float) $request->weight <= (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Normal';
-            } elseif ((float) $request->weight >= (float) $request->weight) {
+            } elseif ((float) $request->weight > (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Overweight';
             } else {
                 $entryWeightForAge = 'Not Applicable';
@@ -605,7 +605,7 @@ class NutritionalStatusController extends Controller
                 $entryWeightForAge = 'Underweight';
             } elseif ((float) $request->weight >= (float) $getAge->normal_from && (float) $request->weight <= (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Normal';
-            } elseif ((float) $request->weight >= (float) $request->weight) {
+            } elseif ((float) $request->weight > (float) $getAge->normal_to) {
                 $entryWeightForAge = 'Overweight';
             } else {
                 $entryWeightForAge = 'Not Applicable';
@@ -801,7 +801,7 @@ class NutritionalStatusController extends Controller
                     $exitWeightForAge = 'Underweight';
                 } elseif ((float) $request->exitweight >= (float) $getAge->normal_from && (float) $request->exitweight <= (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Normal';
-                } elseif ((float) $request->exitweight >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Overweight';
                 } else {
                     $exitWeightForAge = 'Not Applicable';
@@ -820,7 +820,7 @@ class NutritionalStatusController extends Controller
                     $exitWeightForAge = 'Underweight';
                 } elseif ((float) $request->exitweight >= (float) $getAge->normal_from && (float) $request->exitweight <= (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Normal';
-                } elseif ((float) $request->exitweight >= (float) $request->exitweight) {
+                } elseif ((float) $request->exitweight > (float) $getAge->normal_to) {
                     $exitWeightForAge = 'Overweight';
                 } else {
                     $exitWeightForAge = 'Not Applicable';
