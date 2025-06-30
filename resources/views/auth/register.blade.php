@@ -340,13 +340,13 @@
                                             </div>
                                         </div>
 
-                                    {{-- <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                                    <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
 
                                     @if ($errors->has('g-recaptcha-response'))
-                                    <span class="text-red-500 text-sm">
-                                        {{ $errors->first('g-recaptcha-response') }}
-                                    </span>
-                                    @endif --}}
+                                        <span class="text-red-500 text-sm">
+                                            {{ $errors->first('g-recaptcha-response') }}
+                                        </span>
+                                    @endif
 
                                         <div class="flex flex-wrap justify-end w-full md:w-full">
                                             <div class="mt-4">
@@ -415,6 +415,7 @@
                                             </div>
                                         </div>
                                     </div>
+
 
                                 </div>
                             </div>
