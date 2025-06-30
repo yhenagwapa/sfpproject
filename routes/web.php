@@ -42,7 +42,7 @@ Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])->name('verify.ot
 
 
 Route::get('/child', [DashboardController::class, 'index'])
-    ->middleware(['auth'])
+    ->middleware(['auth','verified'])
     ->name('child');
 
 // Route::get('/register', [ProfileController::class, 'index'])->name('register');
@@ -52,7 +52,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -60,7 +60,7 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware(['auth', 'temp.edit'])->group(function () {
+Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
 
     Route::get('/child', [ChildController::class, 'index'])->name('child.index');
     Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');

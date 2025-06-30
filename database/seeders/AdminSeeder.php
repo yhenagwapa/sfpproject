@@ -23,6 +23,7 @@ class AdminSeeder extends Seeder
                 'psgc_id' => '368',
                 'password' => Hash::make('dswd12345'),
                 'email' => 'yvvillamil@dswd.gov.ph',
+                'email_verified_at' => now(),
                 'status' => 'active',
             ]);
             $admin->assignRole('admin');

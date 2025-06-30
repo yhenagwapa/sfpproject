@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,
             PsgcSeeder::class,
-            ImplementationSeeder::class,
+            // ImplementationSeeder::class, for load testing only
             SexSeeder::class,
             AdminSeeder::class,
             HfaBoysSeeder::class,
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             RevisedWFHGirlsSeeder::class,
         ]);
 
-        // for loadtesting
+        // for load testing
         // User::factory()->count(10)->create(); // 1000
         // Child::factory()->count(100)->create(); // 149,500
         // NutritionalStatus::factory()->count(100)->create(); // 149,500

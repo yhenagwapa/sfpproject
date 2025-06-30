@@ -63,8 +63,9 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Center Name: <b class="uppercase">{{ is_object($center_name) ? $center_name->center_name : $center_name }}</b><br>Total No. of Children:
-                            <b class="uppercase">{{ $childCount }}</b></b>
+                            <h5 class="card-title">Center Name: <b class="uppercase">{{ isset($center_name) ? (is_object($center_name) ? $center_name->center_name : $center_name) : 'No Data Available' }}
+</b><br>Total No. of Children:
+                            <b class="uppercase">{{ $childCount ?? 0 }}</b></b>
                         </h5>
                             <div class="col-md-6">
                                 @can('create-child')
