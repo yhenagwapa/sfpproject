@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="base-url" content="{{ url('https://172.31.176.49/sfpproject/public') }}">
 
-    <title>SFP Onse</title>
+    <title>SFP IS</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -49,7 +49,7 @@
                                         <img src="{{ asset('img/SFP-LOGO-2024.png') }}" alt=""
                                             style="width: 25%;" class="ml-0 mr-auto mb-auto mt-auto">
                                     </a>
-                                    <h5 class="card-title text-center pt-0 pb-0 fs-1 mt-4">SFP ONSE</h5>
+                                    <h5 class="card-title text-center pt-0 pb-0 fs-1 mt-4">SFP IS</h5>
                                 </div>
 
                                 @if (session('success'))

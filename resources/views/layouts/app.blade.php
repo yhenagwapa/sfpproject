@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="base-url" content="{{ url('https://172.31.176.49/sfpproject/public') }}">
 
-    <title>SFP Onse</title>
+    <title>SFP IS</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
