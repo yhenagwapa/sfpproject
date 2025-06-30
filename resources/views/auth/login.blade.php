@@ -49,7 +49,7 @@
                                         <img src="{{ asset('img/SFP-LOGO-2024.png') }}" alt=""
                                             style="width: 25%;" class="ml-0 mr-auto mb-auto mt-auto">
                                     </a>
-                                    <h5 class="card-title text-center pt-0 pb-0 fs-1 mt-4">SFP IS</h5>
+                                    <h5 class="text-center pt-0 pb-0 fs-2 fw-semibold mt-4">SFP Information System</h5>
                                 </div>
 
                                 @if (session('success'))
