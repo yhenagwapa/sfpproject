@@ -23,7 +23,7 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = auth()->user();
+        $user = $this->user();
 
         return [
             'center_name' => ['required', 'unique:child_development_centers,center_name'],
