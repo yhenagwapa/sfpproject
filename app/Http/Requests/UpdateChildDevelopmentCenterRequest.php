@@ -27,14 +27,8 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
             return [
                 'center_name' => ['required', 'string', 'max:255'],
                 'center_type' => ['required', 'string', 'max:255'],
-                'assigned_focal_user_id' => [
-                    Rule::requiredIf($user->hasRole('sfp coordinator')),
-                    'exists:users,id',
-                ],
-                'assigned_coordinator_user_id' => [
-                    Rule::requiredIf($user->hasRole('lgu focal')),
-                    'exists:users,id',
-                ],
+                'assigned_focal_user_id' => ['required', 'exists:users,id'],
+                'assigned_coordinator_user_id' => ['nullable', 'exists:users,id'],
                 'assigned_worker_user_id' => ['required', 'exists:users,id'],
                 'assigned_encoder_user_id' => ['nullable','exists:users,id'],
                 'province_psgc' => ['required'],
@@ -50,8 +44,7 @@ class UpdateChildDevelopmentCenterRequest extends FormRequest
             'center_name.required' => 'Please fill in the name of the child development center.',
             'center_name.string' => 'Invalid entry for center name.',
             'center_type.required' => 'Please select center type.',
-            'assigned_focal_user_id.required_if' => 'Please select an assigned LGU Focal.',
-            'assigned_coordinator_user_id.required_if' => 'Please select an assigned SFP Coordinator.',
+            'assigned_focal_user_id.required' => 'Please select an assigned LGU Focal.',
             'assigned_worker_user_id.required' => 'Please select an assigned worker.',
             'province_psgc.required' => 'Please select a province.',
             'city_name_psgc.required' => 'Please select a city.',
