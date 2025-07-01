@@ -33,6 +33,7 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
                 Rule::requiredIf(function () use ($user) {
                     return $user->hasRole('lgu focal') && $user->city_name_psgc === '112402000';
                 }),
+                'nullable',
                 'exists:users,id',
             ],
             'assigned_worker_user_id' => ['required', 'exists:users,id'],
