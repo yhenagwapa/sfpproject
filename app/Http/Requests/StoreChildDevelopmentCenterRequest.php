@@ -28,12 +28,11 @@ class StoreChildDevelopmentCenterRequest extends FormRequest
         return [
             'center_name' => ['required', 'unique:child_development_centers,center_name'],
             'center_type' => ['required'],
-            'assigned_focal_user_id' => [
-                Rule::requiredIf($user->hasRole('sfp coordinator')),
-                'exists:users,id',
-            ],
+            'assigned_focal_user_id' => ['required', 'exists:users,id'],
             'assigned_coordinator_user_id' => [
-                Rule::requiredIf($user->hasRole('lgu focal')),
+                Rule::requiredIf(function () use ($user) {
+                    return $user->hasRole('lgu focal') && $user->city_name_psgc === '112402000';
+                }),
                 'exists:users,id',
             ],
             'assigned_worker_user_id' => ['required', 'exists:users,id'],

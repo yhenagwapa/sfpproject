@@ -131,7 +131,7 @@
                             @if(!auth()->user()->hasRole('sfp coordinator'))
                                 <div class="col-md-6 mt-3 text-sm">
 
-                                    <label for="assigned_coordinator_user_id">Assigned SFP Coordinator<b class='text-red-600'>*</b></label>
+                                    <label for="assigned_coordinator_user_id">Assigned SFP Coordinator</label>
                                     <select class="form-control rounded border-gray-300 uppercase" id="assigned_coordinator_user_id"
                                         name="assigned_coordinator_user_id">
                                         <option value="" selected>Select SFP Coordinator</option>
