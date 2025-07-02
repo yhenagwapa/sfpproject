@@ -199,6 +199,7 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'User already exists.');
         }
 
+
         if ($psgc) {
             $validatedData['psgc_id'] = $psgc->psgc_id;
         } else {

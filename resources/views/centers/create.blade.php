@@ -45,7 +45,7 @@
         });
     </script>
 
-    {{-- @if ($errors->any())
+    @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)
@@ -53,7 +53,7 @@
             @endforeach
         </ul>
     </div>
-@endif --}}
+@endif
 
 
     <section class="section">
@@ -109,45 +109,37 @@
                                     <span class="text-xs text-red-600">{{ $message }}</span>
                                 @enderror
                             </div>
-                            @if(!auth()->user()->hasRole('lgu focal'))
-                                <div class="col-md-6 mt-3 text-sm">
-                                    <label for="assigned_focal_user_id">Assigned LGU Focal<b class='text-red-600'>*</b></label>
-                                    <select class="form-control rounded border-gray-300 uppercase" id="assigned_focal_user_id"
-                                        name="assigned_focal_user_id">
-                                        <option value="" selected>Select LGU Focal</option>
-                                        @foreach ($focals as $focal)
-                                            <option value="{{ $focal->id }}"
-                                                {{ old('assigned_focal_user_id', auth()->user()->id) == $focal->id ? 'selected' : '' }}>
-                                                {{ $focal->full_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('assigned_focal_user_id'))
-                                        <span class="text-xs text-red-600">{{ $errors->first('assigned_focal_user_id') }}</span>
-                                    @endif
-                                </div>
-                            @endif
 
-                            @if(!auth()->user()->hasRole('sfp coordinator'))
-                                <div class="col-md-6 mt-3 text-sm">
+                            <div class="col-md-6 mt-3 text-sm">
+                                <label for="assigned_focal_user_id">Assigned LGU Focal<b class='text-red-600'>*</b></label>
+                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_focal_user_id"
+                                    name="assigned_focal_user_id">
+                                    <option value="" selected>Select LGU Focal</option>
+                                    @foreach ($focals as $focal)
+                                        <option value="{{ $focal->id }}"
+                                            {{ old('assigned_focal_user_id', auth()->user()->id) == $focal->id ? 'selected' : '' }}>
+                                            {{ $focal->full_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('assigned_focal_user_id'))
+                                    <span class="text-xs text-red-600">{{ $errors->first('assigned_focal_user_id') }}</span>
+                                @endif
+                            </div>
 
-                                    <label for="assigned_coordinator_user_id">Assigned SFP Coordinator</label>
-                                    <select class="form-control rounded border-gray-300 uppercase" id="assigned_coordinator_user_id"
-                                        name="assigned_coordinator_user_id">
-                                        <option value="" selected>Select SFP Coordinator</option>
-                                        @foreach ($coordinators as $coordinator)
-                                            <option value="{{ $coordinator->id }}"
-                                                {{ old('assigned_coordinator_user_id', auth()->user()->id) == $coordinator->id ? 'selected' : '' }}>
-                                                {{ $coordinator->full_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-
-                                    @error('assigned_coordinator_user_id')
-                                        <span class="text-xs text-red-600">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            @endif
+                            <div class="col-md-6 mt-3 text-sm">
+                                <label for="assigned_coordinator_user_id">Assigned SFP Coordinator</label>
+                                <select class="form-control rounded border-gray-300 uppercase" id="assigned_coordinator_user_id"
+                                    name="assigned_coordinator_user_id">
+                                    <option value="" selected>Select SFP Coordinator</option>
+                                    @foreach ($coordinators as $coordinator)
+                                        <option value="{{ $coordinator->id }}"
+                                            {{ old('assigned_coordinator_user_id', auth()->user()->id) == $coordinator->id ? 'selected' : '' }}>
+                                            {{ $coordinator->full_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                             <div class="col-md-6 mt-3 text-sm">
                                 <label for="assigned_encoder_user_id">Assigned Encoder</label>
