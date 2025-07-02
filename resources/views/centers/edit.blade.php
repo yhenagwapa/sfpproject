@@ -129,7 +129,7 @@
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
-                                <label for="assigned_coordinator_user_id">Assigned SFP Coordinator<b class='text-red-600'>*</b></label>
+                                <label for="assigned_coordinator_user_id">Assigned SFP Coordinator</label>
                                 <select class="form-control rounded border-gray-300 uppercase" id="assigned_coordinator_user_id"
                                     name="assigned_coordinator_user_id">
                                     <option value="" selected>Select SFP Coordinator</option>
@@ -143,9 +143,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('assigned_coordinator_user_id')
-                                    <span class="text-xs text-red-600">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             <div class="col-md-6 mt-3 text-sm">
@@ -159,7 +156,6 @@
                                             @if (old('assigned_worker_user_id')) {{ old('assigned_worker_user_id') == $worker->id ? 'selected' : '' }}
                                                 @elseif ($assignedWorker && $assignedWorker->id == $worker->id)
                                                     selected @endif>
-
                                             {{ $worker->full_name }}
                                         </option>
                                     @endforeach

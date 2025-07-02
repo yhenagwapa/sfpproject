@@ -170,8 +170,6 @@ class ChildDevelopmentCenterController extends Controller
             return redirect()->back()->withErrors(['msg' => 'Location not found']);
         }
 
-        // dd($validatedData);
-
         $center = ChildDevelopmentCenter::create([
             'center_name' => $request->center_name,
             'center_type' => $request->center_type,
@@ -180,18 +178,10 @@ class ChildDevelopmentCenterController extends Controller
             'created_by_user_id' => auth()->id(),
         ]);
 
-        $focal = null;
-        $coordinator = null;
+        $focal = $request->input('assigned_focal_user_id');
+        $coordinator = $request->input('assigned_coordinator_user_id');
         $worker = $request->input('assigned_worker_user_id');
         $encoder = $request->input('assigned_encoder_user_id');
-
-        if(auth()->user()->hasRole('lgu focal')){
-            $focal = auth()->id();
-            $coordinator = $request->input('assigned_coordinator_user_id');
-        } elseif(auth()->user()->hasRole('sfp coordinator')){
-            $focal = $request->input('assigned_focal_user_id');
-            $coordinator = auth()->id();
-        }
 
         $userIds = array_filter([
             $worker,
@@ -320,7 +310,6 @@ class ChildDevelopmentCenterController extends Controller
      */
     public function update(UpdateChildDevelopmentCenterRequest $request)
     {
-
         $validatedData = $request->validated();
 
         $centerID = session('editing_center_id');
@@ -347,23 +336,11 @@ class ChildDevelopmentCenterController extends Controller
             return redirect()->back()->withErrors(['psgc' => 'Selected location is not valid.']);
         }
 
-        $focal = null;
-        $coordinator = null;
+        $focal = $request->input('assigned_focal_user_id');
+        $coordinator = $request->input('assigned_coordinator_user_id');
         $worker = $request->input('assigned_worker_user_id');
         $encoder = $request->input('assigned_encoder_user_id');
 
-        if(auth()->user()->hasRole('lgu focal')){
-            $focal = auth()->id();
-            $coordinator = $request->input('assigned_coordinator_user_id');
-        } elseif(auth()->user()->hasRole('sfp coordinator')){
-            $focal = $request->input('assigned_focal_user_id');
-            $coordinator = auth()->id();
-        } else{
-            $focal = $request->input('assigned_focal_user_id');
-            $coordinator = $request->input('assigned_coordinator_user_id');
-        }
-
-        // dd($validatedData);
         $updated = $center->update([
             'center_name' => $validatedData['center_name'],
             'psgc_id' => $psgc_id,
