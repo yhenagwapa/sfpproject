@@ -17,7 +17,7 @@ class AllowTemporaryEdit
     public function handle(Request $request, Closure $next)
     {
         $currentMonth = Carbon::now()->format('F');
-        if (($request->user()?->hasRole('child development worker') || $request->user()?->hasRole('encoder')) && strtolower($currentMonth) === 'june') {
+        if (($request->user()?->hasRole('child development worker') || $request->user()?->hasRole('encoder'))) {
             session(['temp_can_edit' => true]);
         }
 
