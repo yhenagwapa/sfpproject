@@ -65,7 +65,7 @@
                             </a>
                         </div>
 
-                        <h5 class="card-title">{{ $center->center_name }}</h5>
+                        <h5 class="card-title uppercase">{{ $center->center_name }}</h5>
                         <div class="row">
                             <div class='col-md-12 mt-2 text-gray-400 text-xs'>Child Development Center Information
                                 <hr>

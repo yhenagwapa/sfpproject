@@ -26,7 +26,7 @@
                             </a>
                         </div>
 
-                        <h5 class='card-title'>{{ $child->full_name }}</h5>
+                        <h5 class='card-title uppercase'>{{ $child->full_name }}</h5>
                         <div class="row">
                             <div class='col-md-2 mt-2 text-gray-400 text-xs'>Personal Information</div>
                             <div class='col-md-10 text-gray-400'>

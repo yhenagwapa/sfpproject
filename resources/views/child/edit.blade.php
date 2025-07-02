@@ -69,7 +69,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class='card-title'>{{ $child->full_name }}</h5>
+                            <h5 class='card-title uppercase'>{{ $child->full_name }}</h5>
 
                             <!-- Personal Information Form -->
                             <form class="row" method="post" action="{{ route('child.update') }}" novalidate>
