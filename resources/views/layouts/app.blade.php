@@ -180,7 +180,7 @@
                 @endcanany
 
                 @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator'))
-                    <li class="nav-heading">Tools</li>
+                    <li class="nav-heading">Admin Tools</li>
 
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="{{ route('users.index') }}">

@@ -50,7 +50,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $user->full_name}}</h5>
+                            <h5 class="card-title uppercase">{{ $user->full_name}}</h5>
 
                             <form class="row" action="{{ route('users.update') }}" method="POST" autocomplete="off">
                                 @csrf

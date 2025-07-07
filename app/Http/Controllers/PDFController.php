@@ -331,8 +331,8 @@ class PDFController extends Controller
                     ->where('funded', 1);
                 })
                 ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
+                        ->where('is_undernourish', true);
                 })
                 ->with('records')
                 ->get();
@@ -363,8 +363,8 @@ class PDFController extends Controller
                     ->where('funded', 1);
             })
                 ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5]);
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
+                        ->where('is_undernourish', true);
                 })
                 ->with([
                     'records' => function ($query) {
@@ -381,8 +381,9 @@ class PDFController extends Controller
                     'entry' => null,
                 ];
             }
-            $statuses = $child->nutritionalStatus->where('is_undernourish', true)
-                ->whereIn('age_in_years', [2, 3, 4, 5]);
+            $statuses = $child->nutritionalStatus->whereIn('age_in_years', [2, 3, 4, 5])
+                ->where('is_undernourish', true);
+
             $entry = $statuses->first();
 
             return [
@@ -908,7 +909,9 @@ class PDFController extends Controller
         }
 
         $countsPerNutritionalStatus = $allCountsPerNutritionalStatus->groupBy(function ($child) {
-            return $child->nutritionalStatus->first()->age_in_years ?? null;
+            $oldestStatus = $child->nutritionalStatus()->oldest()->first();
+            $ageInYears = $oldestStatus->age_in_years;
+            return $ageInYears ?? null;
         })
             ->map(function ($childrenByAge) {
                 return [

@@ -71,6 +71,7 @@
 
         .footer-table p{
             margin: 0;
+            text-transform: uppercase;
         }
 
         .footer-table td {
@@ -117,8 +118,16 @@
         <table class="table">
             <tr>
                 <td>
-                    <p>Province: <u>{{ $province ? $province->implode(', ') : 'All Provinces' }}</u></p>
-                    <p>City / Municipality: <u>{{ $city ? $city->implode(', ') : 'All Cities' }}</u></p>
+                    <p>Province:
+                        @if (auth()->user()->hasRole('lgu focal'))
+                            <u>{{ auth()->user()->psgc->province_name }}</u>
+                        @endif
+                    </p>
+                    <p>City / Municipality:
+                        @if (auth()->user()->hasRole('lgu focal'))
+                            <u>{{ auth()->user()->psgc->city_name }}</u>
+                        @endif
+                    </p>
                 </td>
             </tr>
         </table>
@@ -237,7 +246,13 @@
                     <p>Prepared by:</p>
                     <br>
                     <br>
-                    <p>______________________________________</p>
+                    <p>
+                        @if (auth()->user()->hasRole('lgu focal'))
+                            <u>{{ auth()->user()->full_name }}</u>
+                        @else
+                            ______________________________________
+                        @endif
+                    </p>
                     <p>SFP Focal Person</p>
                 </td>
                 <td>

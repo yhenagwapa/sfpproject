@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CycleStatus;
 use App\Models\Child;
 use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
@@ -264,7 +265,10 @@ class ChildController extends Controller
     {
         $this->authorize('create-child');
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
-        $milkFeedings = Implementation::where('status', 'active')->where('type', 'milk')->get();
+
+        if(!$cycle){
+            return redirect()->back()->with('error', 'There is no active implementation.');
+        }
 
         $userID = auth()->id();
         if (auth()->user()->hasRole('child development worker')) {
@@ -311,7 +315,7 @@ class ChildController extends Controller
 //        )->pluck('full_name', 'id');
 //        dd($allChildren);
 
-        return view('child.create', compact('cycle', 'milkFeedings', 'centerNames', 'minDate', 'maxDate', 'sexOptions', 'provinces', 'cities', 'barangays', 'disabilities'));
+        return view('child.create', compact('cycle', 'centerNames', 'minDate', 'maxDate', 'sexOptions', 'provinces', 'cities', 'barangays', 'disabilities'));
     }
 
     /**

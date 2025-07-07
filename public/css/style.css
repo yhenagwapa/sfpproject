@@ -269,6 +269,15 @@ input.no-uppercase {
     white-space: nowrap;
 }
 
+.dropdown-menu .nav-heading {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #899bbd;
+    font-weight: 600;
+    margin: 10px 10px 5px 15px;
+    white-space: nowrap;
+}
+
 .dropdown-menu .sub-menu:hover {
     margin: auto;
 }

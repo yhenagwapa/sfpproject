@@ -114,7 +114,7 @@
     <div class="header">
         <p>Department of Social Welfare and Development, Field Office XI<br>
             Supplementary Feeding Program<br>
-            {{ $cycle->name }} ( SY {{ $cycle->school_year_from }} - {{ $cycle->school_year_to }} )<br>
+            {{ $cycle->name }} ( CY {{ $cycle->school_year_from }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS (NS) PER AGE BRACKET</b><br>
             <i>AFTER 120 FEEDING DAYS</i>
         </p>
@@ -672,21 +672,59 @@
         <tr></tr>
         <tr>
             <td colspan="3">
-                <br>
-                <br>
-                <p>Prepare by:</p>
-                <br>
-                <p>______________________________________</p>
-                <p>Child Development Worker/Teacher</p>
-            </td>
-            <td>
-                <br>
-                <br>
-                <p>Noted by:</p>
-                <br>
-                <p>______________________________________</p>
-                <p>SFP Focal Person</p>
-            </td>
+                    <br>
+                    <br>
+                    <p>Prepare by:</p>
+                    <br>
+                    <p><u>
+                        @if($selectedCenter)
+                            @php
+                                $users = $selectedCenter->users->filter(function ($user) {
+                                    return $user->roles->contains('name', 'child development worker');
+                                });
+                            @endphp
+
+                            @if ($users->isNotEmpty())
+                                @foreach ($users as $user)
+                                    {{ $user->fullname }}
+                                @endforeach
+                            @else
+                                No Worker Assigned
+                            @endif
+                        @else
+                            ______________________________________
+                        @endif
+                    </u></p>
+                    <p>Child Development Worker/Teacher</p>
+                </td>
+                <td>
+                    <br>
+                    <br>
+                    <p>Noted by:</p>
+                    <br>
+                    <p>
+                        <u>
+                            @if($selectedCenter)
+                                @php
+                                    $users = $selectedCenter->users->filter(function ($user) {
+                                        return $user->roles->contains('name', 'lgu focal');
+                                    });
+                                @endphp
+
+                                @if ($users->isNotEmpty())
+                                    @foreach ($users as $user)
+                                        {{ $user->fullname }}
+                                    @endforeach
+                                @else
+                                    No Worker Assigned
+                                @endif
+                            @else
+                                ______________________________________
+                            @endif
+                        </u>
+                    </p>
+                    <p>SFP Focal Person</p>
+                </td>
             <td>
                 <br>
                 <br>

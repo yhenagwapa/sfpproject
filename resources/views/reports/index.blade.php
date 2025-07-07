@@ -171,27 +171,12 @@
                                                                         <hr class="dropdown-divider">
                                                                     </li>
 
-                                                                    <li class="sub-menu d-flex align-items-center">
-                                                                        <svg class="h-2 w-2 mr-2"
-                                                                                    viewBox="0 0 24 24"
-                                                                                    stroke-width="2"
-                                                                                    stroke="currentColor"
-                                                                                    fill="none"
-                                                                                    stroke-linecap="round"
-                                                                                    stroke-linejoin="round">
-                                                                                    <path stroke="none"
-                                                                                        d="M0 0h24v24H0z" />
-                                                                                    <circle cx="12"
-                                                                                        cy="12" r="6" />
-                                                                                </svg>
+                                                                    <li class="nav-heading d-flex align-items-center">
                                                                         Age Bracket
                                                                     </li>
                                                                     <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li>
                                                                         <button
-                                                                            class="dropdown-item d-flex align-items-center ml-3"
+                                                                            class="dropdown-item d-flex align-items-center"
                                                                             onclick="workerReport('age-bracket-upon-entry'); return false;">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
@@ -204,12 +189,9 @@
                                                                             <span>Upon Entry</span>
                                                                         </button>
                                                                     </li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
                                                                     <li class="hidden">
                                                                         <button
-                                                                            class="dropdown-item d-flex align-items-center ml-3"
+                                                                            class="dropdown-item d-flex align-items-center"
                                                                             onclick="workerReport('age-bracket-after-120'); return false;">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
@@ -327,27 +309,12 @@
                                                                             <li>
                                                                                 <hr class="dropdown-divider">
                                                                             </li>
-                                                                            <li class="sub-menu d-flex align-items-center">
-                                                                                <svg class="h-2 w-2 mr-2"
-                                                                                    viewBox="0 0 24 24"
-                                                                                    stroke-width="2"
-                                                                                    stroke="currentColor"
-                                                                                    fill="none"
-                                                                                    stroke-linecap="round"
-                                                                                    stroke-linejoin="round">
-                                                                                    <path stroke="none"
-                                                                                        d="M0 0h24v24H0z" />
-                                                                                    <circle cx="12"
-                                                                                        cy="12" r="6" />
-                                                                                </svg>
+                                                                            <li class="nav-heading d-flex align-items-center">
                                                                                 Undernourish
                                                                             </li>
                                                                             <li>
-                                                                                <hr class="dropdown-divider">
-                                                                            </li>
-                                                                            <li>
                                                                                 <button
-                                                                                    class="dropdown-item d-flex align-items-center ml-3"
+                                                                                    class="dropdown-item d-flex align-items-center"
                                                                                     onclick="focalReport('undernourished-upon-entry'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -361,12 +328,9 @@
                                                                                     <span>Upon Entry</span>
                                                                                 </button>
                                                                             </li>
-                                                                            <li>
-                                                                                <hr class="dropdown-divider">
-                                                                            </li>
                                                                             <li class="hidden">
                                                                                 <button
-                                                                                    class="dropdown-item d-flex align-items-center ml-3"
+                                                                                    class="dropdown-item d-flex align-items-center"
                                                                                     onclick="focalReport('undernourished-after-120'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -383,26 +347,11 @@
                                                                             <li>
                                                                                 <hr class="dropdown-divider">
                                                                             </li>
-                                                                            <li class="sub-menu d-flex align-items-center">
-                                                                                <svg class="h-2 w-2 mr-2"
-                                                                                    viewBox="0 0 24 24"
-                                                                                    stroke-width="2"
-                                                                                    stroke="currentColor"
-                                                                                    fill="none"
-                                                                                    stroke-linecap="round"
-                                                                                    stroke-linejoin="round">
-                                                                                    <path stroke="none"
-                                                                                        d="M0 0h24v24H0z" />
-                                                                                    <circle cx="12"
-                                                                                        cy="12" r="6" />
-                                                                                </svg>
-                                                                                Nutritional Status Upon Entry                                                                            </li>
-                                                                            <li>
-                                                                                <hr class="dropdown-divider">
-                                                                            </li>
+                                                                            <li class="nav-heading d-flex align-items-center">
+                                                                                Nutritional Status Upon Entry
                                                                             <li>
                                                                                 <button
-                                                                                    class="dropdown-item d-flex align-items-center ml-3"
+                                                                                    class="dropdown-item d-flex align-items-center"
                                                                                     onclick="focalReport('weight-for-age-upon-entry'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -417,11 +366,8 @@
                                                                                 </button>
                                                                             </li>
                                                                             <li>
-                                                                                <hr class="dropdown-divider">
-                                                                            </li>
-                                                                            <li>
                                                                                 <button
-                                                                                    class="dropdown-item d-flex align-items-center ml-3"
+                                                                                    class="dropdown-item d-flex align-items-center"
                                                                                     onclick="focalReport('height-for-age-upon-entry'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -436,11 +382,8 @@
                                                                                 </button>
                                                                             </li>
                                                                             <li>
-                                                                                <hr class="dropdown-divider">
-                                                                            </li>
-                                                                            <li>
                                                                                 <button
-                                                                                    class="dropdown-item d-flex align-items-center ml-3"
+                                                                                    class="dropdown-item d-flex align-items-center"
                                                                                     onclick="focalReport('weight-for-height-upon-entry'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -454,50 +397,15 @@
                                                                                     <span>Weight for Height</span>
                                                                                 </button>
                                                                             </li>
-                                                                            <li class="hidden">
-                                                                                <label
-                                                                                    class="dropdown-item d-flex align-items-center">
-                                                                                    <svg class="h-2 w-2 mr-2"
-                                                                                        width="24" height="24"
-                                                                                        viewBox="0 0 24 24"
-                                                                                        stroke-width="2"
-                                                                                        stroke="currentColor"
-                                                                                        fill="none"
-                                                                                        stroke-linecap="round"
-                                                                                        stroke-linejoin="round">
-                                                                                        <path stroke="none"
-                                                                                            d="M0 0h24v24H0z" />
-                                                                                        <circle cx="12"
-                                                                                            cy="12" r="6" />
-                                                                                    </svg>
-                                                                                    Nutritional Status After 120 Feedings
-                                                                                </label>
-                                                                            </li>
                                                                             <li>
                                                                                 <hr class="dropdown-divider">
                                                                             </li>
                                                                             <li class="hidden">
-                                                                                <button
-                                                                                    class="dropdown-item d-flex align-items-center ml-3"
-                                                                                    onclick="focalReport('height-for-age-after-120'); return false;">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                        fill="none" viewBox="0 0 24 24"
-                                                                                        stroke-width="2"
-                                                                                        stroke="currentColor"
-                                                                                        class="size-5 mr-2">
-                                                                                        <path stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-                                                                                    </svg>
-                                                                                    <span>HFA</span>
-                                                                                </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <hr class="dropdown-divider">
+                                                                                NS After 120 Feedings
                                                                             </li>
                                                                             <li class="hidden">
                                                                                 <button
-                                                                                    class="dropdown-item d-flex align-items-center ml-3"
+                                                                                    class="dropdown-item d-flex align-items-center"
                                                                                     onclick="focalReport('weight-for-age-after-120'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -508,15 +416,28 @@
                                                                                             stroke-linejoin="round"
                                                                                             d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
                                                                                     </svg>
-                                                                                    <span>WFA</span>
+                                                                                    <span>Weight for Age</span>
                                                                                 </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <hr class="dropdown-divider">
                                                                             </li>
                                                                             <li class="hidden">
                                                                                 <button
-                                                                                    class="dropdown-item d-flex align-items-center ml-3"
+                                                                                    class="dropdown-item d-flex align-items-center"
+                                                                                    onclick="focalReport('height-for-age-after-120'); return false;">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                        fill="none" viewBox="0 0 24 24"
+                                                                                        stroke-width="2"
+                                                                                        stroke="currentColor"
+                                                                                        class="size-5 mr-2">
+                                                                                        <path stroke-linecap="round"
+                                                                                            stroke-linejoin="round"
+                                                                                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                                                    </svg>
+                                                                                    <span>Height for Age</span>
+                                                                                </button>
+                                                                            </li>
+                                                                            <li class="hidden">
+                                                                                <button
+                                                                                    class="dropdown-item d-flex align-items-center"
                                                                                     onclick="focalReport('weight-for-height-after-120'); return false;">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                                         fill="none" viewBox="0 0 24 24"
@@ -527,7 +448,7 @@
                                                                                             stroke-linejoin="round"
                                                                                             d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
                                                                                     </svg>
-                                                                                    <span>WFH</span>
+                                                                                    <span>Weight for Height</span>
                                                                                 </button>
                                                                             </li>
 
