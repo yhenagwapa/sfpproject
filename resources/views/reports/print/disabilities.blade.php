@@ -165,7 +165,13 @@
                     <p>Prepared by:</p>
                     <br>
                     <br>
-                    <p>______________________________________</p>
+                    <p>
+                        @if (auth()->user()->hasRole('lgu focal'))
+                            <u>{{ auth()->user()->full_name }}</u>
+                        @else
+                            ______________________________________
+                        @endif
+                    </p>
                     <p>SFP Focal Person</p>
                 </td>
                 <td>
