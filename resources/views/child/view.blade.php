@@ -71,14 +71,14 @@
                             <div class="col-md-6 mt-1 text-sm">
                                 <label for="pantawid_details">Pantawid Member:</label>
                                 <input type="text" class="form-control rounded border-gray-300" name='pantawid_details'
-                                    value="{{ $child->pantawid_details }}" readonly>
+                                    value="{{ $child->pantawid_details ? $child->pantawid_details : 'NO' }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-1 text-sm">
                                 <label for="person_with_disability_details">Person with Disability:</label>
                                 <input type="text" class="form-control rounded border-gray-300"
                                     name='person_with_disability_details'
-                                    value="{{ $child->person_with_disability_details }}" readonly>
+                                    value="{{ $child->person_with_disability_details ? $child->person_with_disability_details : 'NO' }}" readonly>
                             </div>
 
                             <div class="col-md-6 mt-1 text-sm">
