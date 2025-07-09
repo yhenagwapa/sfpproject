@@ -55,6 +55,7 @@
 
         .footer-table p{
             margin: 0;
+            text-transform: uppercase;
         }
 
         .footer-table td {
@@ -138,7 +139,7 @@
             </tr>
         </thead>
         <tbody class="undernourished-after-120-table text-xs">
-            @forelse ($centers as $center)
+            @forelse ($centerNames as $center)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $center->center_name }}</td>
@@ -203,7 +204,13 @@
                     <p>Prepared by:</p>
                     <br>
                     <br>
-                    <p>______________________________________</p>
+                    <p>
+                        @if (auth()->user()->hasRole('lgu focal'))
+                            <u>{{ auth()->user()->full_name }}</u>
+                        @else
+                            ______________________________________
+                        @endif
+                    </p>
                     <p>SFP Focal Person</p>
                 </td>
                 <td>

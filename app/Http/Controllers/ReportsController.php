@@ -115,7 +115,7 @@ class ReportsController extends Controller
      */
     public function show(Request $request)
     {
-        session(['report_cycle_id' => $request->input('cycle_id')]);
+        session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
 
         return redirect()->route('reports.index');
     }
@@ -383,12 +383,18 @@ class ReportsController extends Controller
 
         return response()->download($filepath)->deleteFileAfterSend(true);
     }
+    public function showNutritionalStatusWFA(Request $request)
+    {
+        session(['report_cycle_id' => $request->input(key: 'ns_cycle_id')]);
+        session(['ns_type' => $request->input(key: 'ns_type')]);
 
+        return redirect()->route('reports.print.weight-for-age-upon-entry');
+    }
     public function nutritionalStatusWFA(Request $request)
     {
-        ini_set('memory_limit', '512M');
-
+        $nsType = session('ns_type');
         $cycleID = session('report_cycle_id');
+
         $cycle = Implementation::find($cycleID);
         $cycleStatus = $cycle->status;
 
@@ -421,13 +427,19 @@ class ReportsController extends Controller
                 ->unique();
         }
 
-        $oldestNutritionalIds = DB::table('nutritional_statuses')
+        if($nsType == 'entry'){
+            $nutritionalIds = DB::table('nutritional_statuses')
             ->select(DB::raw('MIN(id) as id'))
             ->groupBy('child_id');
+        } else{
+            $nutritionalIds = DB::table('nutritional_statuses')
+            ->select(DB::raw('MAX(id) as id'))
+            ->groupBy('child_id');
+        }
 
         $results = DB::table('nutritional_statuses')
-            ->joinSub($oldestNutritionalIds, 'oldest_nutritionals', function ($join) {
-                $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
+            ->joinSub($nutritionalIds, 'nutritionals', function ($join) {
+                $join->on('nutritional_statuses.id', '=', 'nutritionals.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
             ->join('child_centers', function ($join) use ($cycle) {

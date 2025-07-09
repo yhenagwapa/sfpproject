@@ -472,6 +472,8 @@ class NutritionalStatusController extends Controller
                 'weight_for_height' => $exitWeightForHeight,
                 'is_malnourish' => $exitIsMalnourished,
                 'is_undernourish' => $exitIsUndernourished,
+                'deworming_date' => $request->deworming_date,
+                'vitamin_a_date' => $request->vitamin_a_date,
                 'created_by_user_id' => auth()->id(),
                 'updated_by_user_id' => auth()->id(),
             ]);
