@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="base-url" content="{{ url('https://172.31.176.49/sfpproject/public') }}">
+
+    <title>Summary of Undernourished Children</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
     <style>
         .header {
             font-family: 'Arial', sans-serif;
@@ -74,7 +90,7 @@
         <p>Department of Social Welfare and Development, Field Office XI</p>
         <p>Supplementary Feeding Program</p>
         <p>{{ $cycle->name}} ( SY {{ $cycle->school_year }} )</p>
-        <p><b>Summary of Undernourished Children, Ethnicity, $Ps, Deworming & Vitamin A</b></p>
+        <p><b>Summary of Undernourished Children, Ethnicity, 4Ps, Deworming & Vitamin A</b></p>
         <p><i>After 120 Feedings</i></p>
         <br>
     </div>
@@ -83,8 +99,16 @@
         <table class="table">
             <tr>
                 <td>
-                    <p>Province: <u>{{ $province ? $province->implode(', ') : 'All Provinces' }}</u></p>
-                    <p>City / Municipality: <u>{{ $city ? $city->implode(', ') : 'All Cities' }}</u></p>
+                    <p>Province:
+                        @if (auth()->user()->hasRole('lgu focal'))
+                            <u>{{ auth()->user()->psgc->province_name }}</u>
+                        @endif
+                    </p>
+                    <p>City / Municipality:
+                        @if (auth()->user()->hasRole('lgu focal'))
+                            <u>{{ auth()->user()->psgc->city_name }}</u>
+                        @endif
+                    </p>
                 </td>
             </tr>
         </table>
@@ -152,7 +176,7 @@
 
                         @if ($users->isNotEmpty())
                             @foreach ($users as $user)
-                                {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }} {{ $user->extension_name }}
+                                {{ $user->full_name }}
                             @endforeach
                         @else
                             No Worker Assigned

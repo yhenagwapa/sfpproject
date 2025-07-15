@@ -62,7 +62,7 @@
                                 <div id="funded-content">
                                     <div class="row">
                                         <div class="col-md-6 mt-3 text-sm">
-                                            <form action="{{ route('reports.index') }}" method="post">
+                                            <form action="{{ route('reports.show') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="cycle_id" value="{{ $cycle->id }}">
 
@@ -487,8 +487,6 @@
                             let center_name = centerInput.value;
 
                             ns_type.value = nsType;
-
-                            console.log(nsType);
 
                             printNSForm.action = `/reports/show-${reportType}`;
                             printNSForm.target = "_blank";

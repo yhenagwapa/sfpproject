@@ -29,14 +29,11 @@ class ReportsController extends Controller
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::where('id', $cycleID)->first();
 
-        // add filter to session
-        session(['filter_cdc_id' => $request->center_name]);
-
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
         $childCount = null;
 
@@ -80,6 +77,8 @@ class ReportsController extends Controller
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
+            // dd($cdcId);
+
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
                     if ($cycle) {
@@ -93,7 +92,6 @@ class ReportsController extends Controller
 
                 $childCount = $isFunded->count();
             } else {
-
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                     $query->where('child_development_center_id', $cdcId)
                         ->where('implementation_id', $cycle->id)
@@ -116,14 +114,12 @@ class ReportsController extends Controller
     public function show(Request $request)
     {
         session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input('center_name')]);
 
         return redirect()->route('reports.index');
     }
     public function exportReport(Request $request)
     {
-        ini_set('memory_limit', '512M');
-
-
 
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
@@ -429,11 +425,11 @@ class ReportsController extends Controller
 
         if($nsType == 'entry'){
             $nutritionalIds = DB::table('nutritional_statuses')
-            ->select(DB::raw('MIN(id) as id'))
+            ->select(DB::raw('MIN(actual_weighing_date) as oldest_date'), 'child_id')
             ->groupBy('child_id');
         } else{
             $nutritionalIds = DB::table('nutritional_statuses')
-            ->select(DB::raw('MAX(id) as id'))
+            ->select(DB::raw('MAX(actual_weighing_date) as latest_date'), 'child_id')
             ->groupBy('child_id');
         }
 

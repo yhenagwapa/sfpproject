@@ -23,6 +23,7 @@ class PDFController extends Controller
     public function showMasterlist(Request $request)
     {
         session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
 
         return redirect()->route('reports.print.masterlist');
     }
@@ -36,7 +37,7 @@ class PDFController extends Controller
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
@@ -144,6 +145,7 @@ class PDFController extends Controller
     public function showAgeBracketUponEntry(Request $request)
     {
         session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
 
         return redirect()->route('reports.print.age-bracket-upon-entry');
     }
@@ -156,7 +158,7 @@ class PDFController extends Controller
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
@@ -493,6 +495,7 @@ class PDFController extends Controller
     public function showAgeBracketAfter120(Request $request)
     {
         session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
 
         return redirect()->route('reports.print.age-bracket-after-120');
     }
@@ -505,7 +508,7 @@ class PDFController extends Controller
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
@@ -849,19 +852,20 @@ class PDFController extends Controller
     public function showMonitoring(Request $request)
     {
         session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
 
         return redirect()->route('reports.print.monitoring');
     }
     public function printMonitoring(Request $request)
     {
-
-        $cycle = Implementation::where('id', $request->cycle_id)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex')
@@ -986,12 +990,12 @@ class PDFController extends Controller
     public function showUnfunded(Request $request)
     {
         session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
 
         return redirect()->route('reports.print.unfunded');
     }
     public function printUnfunded(Request $request)
     {
-
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::where('id', $cycleID)->first();
 
@@ -999,7 +1003,7 @@ class PDFController extends Controller
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $unfundedChildren = Child::with('records', 'sex', 'nutritionalStatus')
@@ -1164,6 +1168,7 @@ class PDFController extends Controller
     public function showDisabilities(Request $request)
     {
         session(['report_cycle_id2' => $request->input(key: 'cycle_id2')]);
+        session(['center_name2' => $request->input(key: 'center_name2')]);
 
         return redirect()->route('reports.print.disabilities');
     }
@@ -1629,11 +1634,11 @@ class PDFController extends Controller
                     'indigenous_people' => [
                         'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
                             $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $child->is_indegenous_people == true && $child->sex_id == 1;
+                            return $exitStatus && $child->is_indigenous_people == true && $child->sex_id == 1;
                         })->count(),
                         'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
                             $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $child->is_indegenous_people == true && $child->sex_id == 2;
+                            return $exitStatus && $child->is_indigenous_people == true && $child->sex_id == 2;
                         })->count(),
                     ],
                     'pantawid' => [

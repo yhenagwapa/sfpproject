@@ -203,7 +203,8 @@
                                                     class="text-red-600">*</b></label>
                                             <input type="date"
                                                 class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                                id="exitweighing_date" name='exitweighing_date' min="{{ $entryDetails->actual_weighing_date->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
+                                                id="exitweighing_date" name='exitweighing_date' min="{{ \Carbon\Carbon::parse($entryDetails->actual_weighing_date)->addDay()->format('Y-m-d') }}"
+ max="{{ date('Y-m-d') }}"
                                                 value="{{ old('exitweighing_date', $exitDetails->actual_weighing_date) }}">
                                             @if ($errors->has('exitweighing_date'))
                                                 <span class="text-xs text-red-600">{{ $errors->first('exitweighing_date') }}</span>

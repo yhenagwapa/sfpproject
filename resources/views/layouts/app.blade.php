@@ -60,7 +60,7 @@
             </div>
             <div class="d-flex align-items-center justify-content-between">
                 <i class="bi bi-list toggle-sidebar-btn"></i>
-                <span class="header-title d-none d-lg-block">SFP ONSE</span>
+                <span class="header-title d-none d-lg-block">SFP IS</span>
             </div>
 
             <!-- End Search Bar -->
