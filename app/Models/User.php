@@ -58,7 +58,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->logAll();
+        return LogOptions::defaults()
+            ->logOnly(['lastname', 'firstname', 'middlename', 'extension_name', 'contact_number', 'address', 'psgc_id', 'email', 'status', 'created_at', 'updated_at'])
+            ->logOnlyDirty();
     }
 
     public function assignRoleAndPermissionsToUser($userId)
