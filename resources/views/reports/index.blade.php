@@ -475,7 +475,7 @@
 
                                             centerHiddenInput.value = center_name;
 
-                                            printCDWForm.action = `/reports/show-${reportType}`;
+                                            printCDWForm.action = `{{ url('') }}/reports/show-${reportType}`;
                                             printCDWForm.target = "_blank";
                                             printCDWForm.submit();
                                         }
@@ -488,7 +488,7 @@
 
                                             let center_name = centerInput.value;
 
-                                            printFocalForm.action = `/reports/show-${reportType}`;
+                                            printFocalForm.action = `{{ url('') }}/reports/show-${reportType}`;
                                             printFocalForm.target = "_blank";
                                             printFocalForm.submit();
                                         }
@@ -504,7 +504,7 @@
 
                                             ns_type.value = nsType;
 
-                                            printNSForm.action = `/reports/show-${reportType}/${nsType}`;
+                                            printNSForm.action = `{{ url('') }}/reports/show-${reportType}/${nsType}`;
                                             printNSForm.target = "_blank";
                                             printNSForm.submit();
                                         }
