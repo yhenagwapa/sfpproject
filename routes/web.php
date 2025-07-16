@@ -149,14 +149,14 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/reports/print/undernourished-after-120', [PDFController::class, 'printUndernourishedAfter120'])->name('reports.print.undernourished-after-120');
 
     //focal ns reports
-    Route::post('/reports/show-weight-for-age-upon-entry', [ReportsController::class, 'showNutritionalStatusWFA'])->name('reports.show-weight-for-age-upon-entry');
-    Route::get('/reports/print/weight-for-age-upon-entry', [ReportsController::class, 'nutritionalStatusWFA'])->name('reports.print.weight-for-age-upon-entry');
+    Route::post('/reports/show-weight-for-age/{nsType}', [ReportsController::class, 'showNutritionalStatusWFA'])->name('reports.show-weight-for-age');
+    Route::get('/reports/print/weight-for-age/{nsType}', [ReportsController::class, 'nutritionalStatusWFA'])->name('reports.print.weight-for-age');
 
-    Route::post('/reports/show-height-for-age-upon-entry', [ReportsController::class, 'showNutritionalStatusHFA'])->name('reports.show-height-for-age-upon-entry');
-    Route::get('/reports/print/height-for-age-upon-entry', [ReportsController::class, 'nutritionalStatusHFA'])->name('reports.print.height-for-age-upon-entry');
+    Route::post('/reports/show-height-for-age/{nsType}', [ReportsController::class, 'showNutritionalStatusHFA'])->name('reports.show-height-for-age');
+    Route::get('/reports/print/height-for-age/{nsType}', [ReportsController::class, 'nutritionalStatusHFA'])->name('reports.print.height-for-age');
 
-    Route::post('/reports/show-weight-for-height-upon-entry', [ReportsController::class, 'showNutritionalStatusWFH'])->name('reports.show-weight-for-height-upon-entry');
-    Route::get('/reports/print/weight-for-height-upon-entry', [ReportsController::class, 'nutritionalStatusWFH'])->name('reports.print.weight-for-height-upon-entry');
+    Route::post('/reports/show-weight-for-height/{nsType}', [ReportsController::class, 'showNutritionalStatusWFH'])->name('reports.show-weight-for-height');
+    Route::get('/reports/print/weight-for-height/{nsType}', [ReportsController::class, 'nutritionalStatusWFH'])->name('reports.print.weight-for-height');
 
     Route::post('/export-report', [ReportsController::class, 'exportReport'])->name('export-report');
 

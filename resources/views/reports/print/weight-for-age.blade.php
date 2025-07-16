@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="base-url" content="{{ url('https://172.31.176.49/sfpproject/public') }}">
 
-    <title>Weight for Height</title>
+    <title>Weight for Age</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -28,7 +28,11 @@
             Supplementary Feeding Program<br>
             {{ $cycle->name }} ( CY {{ $cycle->school_year_from }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS REPORT</b><br>
-            <i>(Weight-for-Height)<br>Upon Entry</i>
+            @if($nsType == 'upon-entry')
+                <i>(Weight-for-Age)<br>Upon Entry</i>
+            @else
+                <i>(Weight-for-Age)<br>After 120 Feedings</i>
+            @endif
         </p>
         <br>
     </div>
@@ -48,7 +52,7 @@
         $no = 0;
     @endphp
     <div style="margin-bottom: 50px;">
-        <table id='nutritional-status-table' class="table datatable nutritional-status-table w-full">
+        <table id='nutritional-status-table' class="table datatable nutritional-status-table table-wrapper w-full">
             <thead>
                 <tr>
                     <th class="border-bg" rowspan="3">No.</th>
@@ -120,8 +124,7 @@
 
                             @if ($users->isNotEmpty())
                                 @foreach ($users as $user)
-                                    {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }}
-                                    {{ $user->extension_name }}
+                                    {{ $user->full_name }}
                                 @endforeach
                             @else
                                 No Worker Assigned
@@ -129,9 +132,9 @@
                         </td>
 
                         @php
-                            $overallTotal = $wfhCounts[$center->id]['total_children'] ?? 0;
-                            $totalMale = $wfhCounts[$center->id]['total_male'] ?? 0;
-                            $totalFemale = $wfhCounts[$center->id]['total_female'] ?? 0;
+                            $overallTotal = $wfaCounts[$center->id]['total_children'] ?? 0;
+                            $totalMale = $wfaCounts[$center->id]['total_male'] ?? 0;
+                            $totalFemale = $wfaCounts[$center->id]['total_female'] ?? 0;
                         @endphp
 
                         <td>{{ $overallTotal }}</td>
@@ -142,7 +145,7 @@
                             @foreach ($sexLabels as $sex)
                                 @foreach ($ages as $age)
                                     @php
-                                        $count = $wfhCounts[$center->id]['data'][$category][$sex][$age] ?? 0;
+                                        $count = $wfaCounts[$center->id]['data'][$category][$sex][$age] ?? 0;
                                         $totals[$sex][$age] += $count;
                                     @endphp
                                     <td>{{ $count }}</td>
@@ -160,24 +163,24 @@
                 <tr>
                     <td colspan="3">TOTAL PER AGE BRACKET ></td>
                     <td class="centered" rowspan="3">{{ $overallTotals['total_children'] }}</td>
-                    <td class="centered" >{{ $overallTotals['total_male'] }}</td>
-                    <td>{{ $overallTotals['total_female'] }}</td>
+                    <td class="centered">{{ $overallTotals['total_male'] }}</td>
+                    <td class="centered">{{ $overallTotals['total_female'] }}</td>
                     @foreach ($categories as $category)
                         @foreach ($sexLabels as $sex)
                             @foreach ($ages as $age)
-                                <td>{{ $agetotals[$category][$sex][$age] ?? 0 }}</td>
+                                <td class="centered">{{ $agetotals[$category][$sex][$age] ?? 0 }}</td>
                             @endforeach
                         @endforeach
                     @endforeach
                     @foreach ($sexLabels as $sex)
                         @foreach ($ages as $age)
                             @if ($sex == 'M')
-                                <td>{{ $maleAgeTotals[$age] }}</td>
+                                <td class="centered">{{ $maleAgeTotals[$age] }}</td>
                                 @php
                                     $maleAges += $maleAgeTotals[$age];
                                 @endphp
                             @else
-                                <td>{{ $femaleAgeTotals[$age] }}</td>
+                                <td class="centered">{{ $femaleAgeTotals[$age] }}</td>
                                 @php
                                     $femaleAges += $femaleAgeTotals[$age];
                                 @endphp
@@ -195,7 +198,7 @@
 
                     @foreach ($categories as $category)
                         @foreach ($sexLabels as $sex)
-                            <td colspan="{{ count($ages) }}">
+                            <td class="centered" colspan="{{ count($ages) }}">
                                 {{ $ageTotalsPerCategory[$category][$sex] ?? 0 }}
                             </td>
                         @endforeach
@@ -203,27 +206,27 @@
 
                     @foreach ($sexLabels as $sex)
                         @if ($sex == 'M')
-                            <td colspan="{{ count($ages) }}">{{ $maleAges }}</td>
+                            <td class="centered" colspan="{{ count($ages) }}">{{ $maleAges }}</td>
                         @else
-                            <td colspan="{{ count($ages) }}">{{ $femaleAges }}</td>
+                            <td class="centered" colspan="{{ count($ages) }}">{{ $femaleAges }}</td>
                         @endif
                     @endforeach
                 </tr>
                 <tr>
-                    <td colspan="3">TOTAL CHILD BENEFICIARIES > </td>
+                    <td class="centered" colspan="3">TOTAL CHILD BENEFICIARIES > </td>
                     @php
                         $colspan = count($ages) * count($sexLabels);
                         $overallTotal = $maleAges + $femaleAges;
                     @endphp
 
                     @foreach ($categories as $category)
-                        <td colspan="{{ $colspan }}">
+                        <td class="centered" colspan="{{ $colspan }}">
                             {{ $totalsPerCategory[$category] ?? 0 }}
                         </td>
                     @endforeach
 
 
-                    <td colspan="{{ $colspan }}">
+                    <td class="centered" colspan="{{ $colspan }}">
                         {{ $overallTotal }}
                     </td>
                 </tr>
@@ -231,6 +234,8 @@
             </tbody>
         </table>
     </div>
+
+
     <div class="footer-section">
         <table class="footer-table">
             <tr></tr>

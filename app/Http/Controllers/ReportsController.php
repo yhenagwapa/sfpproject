@@ -14,6 +14,7 @@ use App\Models\Implementation;
 use Carbon\Carbon;
 use Clegginabox\PDFMerger\PDFMerger;
 use Illuminate\Support\Facades\DB;
+use Storage;
 
 class ReportsController extends Controller
 {
@@ -382,13 +383,13 @@ class ReportsController extends Controller
     public function showNutritionalStatusWFA(Request $request)
     {
         session(['report_cycle_id' => $request->input(key: 'ns_cycle_id')]);
-        session(['ns_type' => $request->input(key: 'ns_type')]);
 
-        return redirect()->route('reports.print.weight-for-age-upon-entry');
+        $nsType = $request->input('ns_type');
+
+        return redirect()->route('reports.print.weight-for-age', ['nsType' => $nsType]);
     }
-    public function nutritionalStatusWFA(Request $request)
+    public function nutritionalStatusWFA($nsType)
     {
-        $nsType = session('ns_type');
         $cycleID = session('report_cycle_id');
 
         $cycle = Implementation::find($cycleID);
@@ -423,19 +424,19 @@ class ReportsController extends Controller
                 ->unique();
         }
 
-        if($nsType == 'entry'){
+        if($nsType == 'upon-entry'){
             $nutritionalIds = DB::table('nutritional_statuses')
-            ->select(DB::raw('MIN(actual_weighing_date) as oldest_date'), 'child_id')
+            ->select(DB::raw('MIN(id) as id'))
             ->groupBy('child_id');
         } else{
             $nutritionalIds = DB::table('nutritional_statuses')
-            ->select(DB::raw('MAX(actual_weighing_date) as latest_date'), 'child_id')
+            ->select(DB::raw('MAX(id) as id'))
             ->groupBy('child_id');
         }
 
         $results = DB::table('nutritional_statuses')
-            ->joinSub($nutritionalIds, 'nutritionals', function ($join) {
-                $join->on('nutritional_statuses.id', '=', 'nutritionals.id');
+            ->joinSub($nutritionalIds, 'nutritionalstatus', function ($join) {
+                $join->on('nutritional_statuses.id', '=', 'nutritionalstatus.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
             ->join('child_centers', function ($join) use ($cycle) {
@@ -575,7 +576,7 @@ class ReportsController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('reports.print.weight-for-age-upon-entry', compact('cycle', 'province', 'city', 'results', 'centers', 'wfaCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
+        $pdf = PDF::loadView('reports.print.weight-for-age', ['nsType' => $nsType], compact('cycle', 'province', 'city', 'results', 'centers', 'wfaCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -589,11 +590,18 @@ class ReportsController extends Controller
 
         return $pdf->stream();
     }
-    public function nutritionalStatusHFA(Request $request)
+    public function showNutritionalStatusHFA(Request $request)
     {
-        ini_set('memory_limit', '512M');
+        session(['report_cycle_id' => $request->input(key: 'ns_cycle_id')]);
 
+        $nsType = $request->input('ns_type');
+
+        return redirect()->route('reports.print.height-for-age', ['nsType' => $nsType]);
+    }
+    public function nutritionalStatusHFA($nsType)
+    {
         $cycleID = session('report_cycle_id');
+
         $cycle = Implementation::find($cycleID);
 
         if (!$cycle) {
@@ -625,13 +633,19 @@ class ReportsController extends Controller
                 ->unique();
         }
 
-        $oldestNutritionalIds = DB::table('nutritional_statuses')
+        if($nsType == 'upon-entry'){
+            $nutritionalIds = DB::table('nutritional_statuses')
             ->select(DB::raw('MIN(id) as id'))
             ->groupBy('child_id');
+        } else{
+            $nutritionalIds = DB::table('nutritional_statuses')
+            ->select(DB::raw('MAX(id) as id'))
+            ->groupBy('child_id');
+        }
 
         $results = DB::table('nutritional_statuses')
-            ->joinSub($oldestNutritionalIds, 'oldest_nutritionals', function ($join) {
-                $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
+            ->joinSub($nutritionalIds, 'nutritionalstatus', function ($join) {
+                $join->on('nutritional_statuses.id', '=', 'nutritionalstatus.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
             ->join('child_centers', function ($join) {
@@ -770,7 +784,7 @@ class ReportsController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('reports.print.height-for-age-upon-entry', compact('cycle', 'province', 'city', 'results', 'centers', 'hfaCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
+        $pdf = PDF::loadView('reports.print.height-for-age', ['nsType' => $nsType], compact('cycle', 'province', 'city', 'results', 'centers', 'hfaCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -784,11 +798,18 @@ class ReportsController extends Controller
 
         return $pdf->stream();
     }
-    public function nutritionalStatusWFH(Request $request)
+    public function showNutritionalStatusWFH(Request $request)
     {
-        ini_set('memory_limit', '512M');
+        session(['report_cycle_id' => $request->input(key: 'ns_cycle_id')]);
 
+        $nsType = $request->input('ns_type');
+
+        return redirect()->route('reports.print.weight-for-height', ['nsType' => $nsType]);
+    }
+    public function nutritionalStatusWFH($nsType)
+    {
         $cycleID = session('report_cycle_id');
+
         $cycle = Implementation::find($cycleID);
 
         if (!$cycle) {
@@ -820,13 +841,19 @@ class ReportsController extends Controller
                 ->unique();
         }
 
-        $oldestNutritionalIds = DB::table('nutritional_statuses')
+        if($nsType == 'upon-entry'){
+            $nutritionalIds = DB::table('nutritional_statuses')
             ->select(DB::raw('MIN(id) as id'))
             ->groupBy('child_id');
+        } else{
+            $nutritionalIds = DB::table('nutritional_statuses')
+            ->select(DB::raw('MAX(id) as id'))
+            ->groupBy('child_id');
+        }
 
         $results = DB::table('nutritional_statuses')
-            ->joinSub($oldestNutritionalIds, 'oldest_nutritionals', function ($join) {
-                $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
+            ->joinSub($nutritionalIds, 'nutritionalstatus', function ($join) {
+                $join->on('nutritional_statuses.id', '=', 'nutritionalstatus.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
             ->join('child_centers', function ($join) {
@@ -965,7 +992,7 @@ class ReportsController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('reports.print.weight-for-height-upon-entry', compact('cycle', 'province', 'city', 'results', 'centers', 'wfhCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
+        $pdf = PDF::loadView('reports.print.weight-for-height', ['nsType' => $nsType], compact('cycle', 'province', 'city', 'results', 'centers', 'wfhCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,

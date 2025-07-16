@@ -86,6 +86,7 @@
                                         </div>
                                         <div class="col-md-6 text-base inline">
                                             <nav class="d-flex header-nav mt-4 mb-5">
+                                                {{-- worker report button --}}
                                                 @if (auth()->user()->hasRole('admin') ||
                                                         auth()->user()->hasRole('lgu focal') ||
                                                         auth()->user()->hasRole('child development worker'))
@@ -203,6 +204,7 @@
 
                                                     </ul>
                                                 @endif
+                                                {{-- focal report button --}}
                                                 @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                                     <div id="focal-dropdown">
                                                         <ul class="d-flex list-unstyled">
@@ -225,86 +227,100 @@
                                                                             id="cycle_id2" value="{{ $cycle->id }}">
                                                                         <input type="hidden" name="center_name2"
                                                                             id="center_id2" value="">
-                                                                        @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-                                                                            <li>
-                                                                                <button
-                                                                                    class="dropdown-item d-flex align-items-center"
-                                                                                    onclick="focalReport('malnourished'); return false;">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                        fill="none" viewBox="0 0 24 24"
-                                                                                        stroke-width="2"
-                                                                                        stroke="currentColor"
-                                                                                        class="size-5 mr-2">
-                                                                                        <path stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-                                                                                    </svg>
-                                                                                    <span>Malnourished Children</span>
-                                                                                </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <hr class="dropdown-divider">
-                                                                            </li>
-                                                                            <li>
-                                                                                <button
-                                                                                    class="dropdown-item d-flex align-items-center"
-                                                                                    onclick="focalReport('disabilities'); return false;">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                        fill="none" viewBox="0 0 24 24"
-                                                                                        stroke-width="2"
-                                                                                        stroke="currentColor"
-                                                                                        class="size-5 mr-2">
-                                                                                        <path stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-                                                                                    </svg>
-                                                                                    <span>Persons with
-                                                                                        Disability</span>
-                                                                                </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <hr class="dropdown-divider">
-                                                                            </li>
-                                                                            <li
-                                                                                class="nav-heading d-flex align-items-center">
-                                                                                Undernourish
-                                                                            </li>
-                                                                            <li>
-                                                                                <button
-                                                                                    class="dropdown-item d-flex align-items-center"
-                                                                                    onclick="focalReport('undernourished-upon-entry'); return false;">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                        fill="none" viewBox="0 0 24 24"
-                                                                                        stroke-width="2"
-                                                                                        stroke="currentColor"
-                                                                                        class="size-5 mr-2">
-                                                                                        <path stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-                                                                                    </svg>
-                                                                                    <span>Upon Entry</span>
-                                                                                </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <button
-                                                                                    class="dropdown-item d-flex align-items-center"
-                                                                                    onclick="focalReport('undernourished-after-120'); return false;">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                        fill="none" viewBox="0 0 24 24"
-                                                                                        stroke-width="2"
-                                                                                        stroke="currentColor"
-                                                                                        class="size-5 mr-2">
-                                                                                        <path stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-                                                                                    </svg>
-                                                                                    <span>After 120 Feedings</span>
-                                                                                </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <hr class="dropdown-divider">
-                                                                            </li>
+
+                                                                        <li>
+                                                                            <button
+                                                                                class="dropdown-item d-flex align-items-center"
+                                                                                onclick="focalReport('malnourished'); return false;">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    fill="none" viewBox="0 0 24 24"
+                                                                                    stroke-width="2" stroke="currentColor"
+                                                                                    class="size-5 mr-2">
+                                                                                    <path stroke-linecap="round"
+                                                                                        stroke-linejoin="round"
+                                                                                        d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                                                </svg>
+                                                                                <span>Malnourished Children</span>
+                                                                            </button>
+                                                                        </li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
+                                                                        <li>
+                                                                            <button
+                                                                                class="dropdown-item d-flex align-items-center"
+                                                                                onclick="focalReport('disabilities'); return false;">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    fill="none" viewBox="0 0 24 24"
+                                                                                    stroke-width="2" stroke="currentColor"
+                                                                                    class="size-5 mr-2">
+                                                                                    <path stroke-linecap="round"
+                                                                                        stroke-linejoin="round"
+                                                                                        d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                                                </svg>
+                                                                                <span>Persons with
+                                                                                    Disability</span>
+                                                                            </button>
+                                                                        </li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
+                                                                        <li class="nav-heading d-flex align-items-center">
+                                                                            Undernourish
+                                                                        </li>
+                                                                        <li>
+                                                                            <button
+                                                                                class="dropdown-item d-flex align-items-center"
+                                                                                onclick="focalReport('undernourished-upon-entry'); return false;">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    fill="none" viewBox="0 0 24 24"
+                                                                                    stroke-width="2" stroke="currentColor"
+                                                                                    class="size-5 mr-2">
+                                                                                    <path stroke-linecap="round"
+                                                                                        stroke-linejoin="round"
+                                                                                        d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                                                </svg>
+                                                                                <span>Upon Entry</span>
+                                                                            </button>
+                                                                        </li>
+                                                                        <li>
+                                                                            <button
+                                                                                class="dropdown-item d-flex align-items-center"
+                                                                                onclick="focalReport('undernourished-after-120'); return false;">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    fill="none" viewBox="0 0 24 24"
+                                                                                    stroke-width="2" stroke="currentColor"
+                                                                                    class="size-5 mr-2">
+                                                                                    <path stroke-linecap="round"
+                                                                                        stroke-linejoin="round"
+                                                                                        d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                                                </svg>
+                                                                                <span>After 120 Feedings</span>
+                                                                            </button>
+                                                                        </li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
                                                                     </form>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    {{-- ns report button --}}
+                                                    <div id="ns-dropdown">
+                                                        <ul class="d-flex list-unstyled">
+                                                            <li class="nav-item dropdown pe-3" x-data="{ open: false }">
+                                                                <a class="nav-link nav-profile align-items-center pe-0"
+                                                                    @click.prevent="open = !open; $event.stopPropagation()"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <button type="button"
+                                                                        class="bg-blue-600 text-white rounded px-3 min-h-9">
+                                                                        <span class="dropdown-toggle text-white">NS
+                                                                            Reports</span>
+                                                                    </button>
+                                                                </a>
+                                                                <ul id="dropdown-ns"
+                                                                    class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                                                                     <form id="printNSForm" action="" method="POST"
                                                                         target="_blank">
                                                                         @csrf
@@ -319,7 +335,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('weight-for-age-upon-entry', 'entry'); return false;">
+                                                                                onclick="nsReport('weight-for-age', 'upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -334,7 +350,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('height-for-age-upon-entry', 'entry'); return false;">
+                                                                                onclick="nsReport('height-for-age', 'upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -349,7 +365,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('weight-for-height-upon-entry', 'entry'); return false;">
+                                                                                onclick="nsReport('weight-for-height', 'upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -370,7 +386,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('weight-for-age-upon-entry', 'exit'); return false;">
+                                                                                onclick="nsReport('weight-for-age', 'after-120'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -385,7 +401,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('height-for-age-upon-entry', 'exit'); return false;">
+                                                                                onclick="nsReport('height-for-age', 'after-120'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -400,7 +416,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('weight-for-height-upon-entry', 'exit'); return false;">
+                                                                                onclick="nsReport('weight-for-height', 'after-120'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -412,94 +428,94 @@
                                                                                 <span>Weight for Height</span>
                                                                             </button>
                                                                         </li>
+                                                                    </form>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 @endif
+                                                {{-- export report for CO --}}
+                                                <form action="{{ route('export-report') }}" method="POST"
+                                                    target="_blank">
+                                                    @csrf
+
+                                                    <input type="hidden" name="cycle_id" id="cycle_id" value="">
+
+                                                    <button type="submit"
+                                                        class="bg-blue-600 text-white flex align-items-center rounded px-3 min-h-9">
+                                                        <span>Export Report</span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="2" stroke="white"
+                                                            class="size-5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                                                        </svg>
+                                                    </button>
                                                 </form>
-                                                </ul>
-                                                </li>
-                                                </ul>
+                                            </nav>
                                         </div>
+
+                                    </div>
+
+
+                                    <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
+                                        @include('reports.partials.funded-table', [
+                                            'isFunded' => $isFunded,
+                                        ])
+                                    </div>
+
+                                    <script>
+                                        function workerReport(reportType) {
+                                            let printCDWForm = document.getElementById('printCDWForm');
+                                            let centerInput = document.getElementById('center_name');
+                                            let centerHiddenInput = document.getElementById('center_id');
+                                            let cycle_id = document.getElementById('cycle_id');
+
+                                            let center_name = centerInput.value;
+
+                                            centerHiddenInput.value = center_name;
+
+                                            printCDWForm.action = `/reports/show-${reportType}`;
+                                            printCDWForm.target = "_blank";
+                                            printCDWForm.submit();
+                                        }
+
+                                        function focalReport(reportType) {
+                                            let printFocalForm = document.getElementById('printFocalForm');
+                                            let centerInput = document.getElementById('center_name');
+                                            let centerHiddenInput = document.getElementById('center_id');
+                                            let cycle_id = document.getElementById('cycle_id2');
+
+                                            let center_name = centerInput.value;
+
+                                            printFocalForm.action = `/reports/show-${reportType}`;
+                                            printFocalForm.target = "_blank";
+                                            printFocalForm.submit();
+                                        }
+
+                                        function nsReport(reportType, nsType) {
+                                            let printNSForm = document.getElementById('printNSForm');
+                                            let centerInput = document.getElementById('center_name');
+                                            let centerHiddenInput = document.getElementById('ns_center_id');
+                                            let cycle_id = document.getElementById('ns_cycle_id');
+                                            let ns_type = document.getElementById('ns_type');
+
+                                            let center_name = centerInput.value;
+
+                                            ns_type.value = nsType;
+
+                                            printNSForm.action = `/reports/show-${reportType}/${nsType}`;
+                                            printNSForm.target = "_blank";
+                                            printNSForm.submit();
+                                        }
+                                    </script>
+                                </div>
                             @endif
-                            <form action="{{ route('export-report') }}" method="POST" target="_blank">
-                                @csrf
-
-                                <input type="hidden" name="cycle_id" id="cycle_id" value="">
-
-                                <button type="submit"
-                                    class="bg-blue-600 text-white flex align-items-center rounded px-3 min-h-9">
-                                    <span>Export Report</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="white" class="size-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-                                    </svg>
-
-
-                                </button>
-                            </form>
-                            </nav>
                         </div>
-
                     </div>
-
-
-                    <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
-                        @include('reports.partials.funded-table', [
-                            'isFunded' => $isFunded,
-                        ])
-                    </div>
-
-                    <script>
-                        function workerReport(reportType) {
-                            let printCDWForm = document.getElementById('printCDWForm');
-                            let centerInput = document.getElementById('center_name');
-                            let centerHiddenInput = document.getElementById('center_id');
-                            let cycle_id = document.getElementById('cycle_id');
-
-                            let center_name = centerInput.value;
-
-                            centerHiddenInput.value = center_name;
-
-                            printCDWForm.action = `/reports/show-${reportType}`;
-                            printCDWForm.target = "_blank";
-                            printCDWForm.submit();
-                        }
-
-                        function focalReport(reportType) {
-                            let printFocalForm = document.getElementById('printFocalForm');
-                            let centerInput = document.getElementById('center_name');
-                            let centerHiddenInput = document.getElementById('center_id');
-                            let cycle_id = document.getElementById('cycle_id2');
-
-                            let center_name = centerInput.value;
-
-                            printFocalForm.action = `/reports/show-${reportType}`;
-                            printFocalForm.target = "_blank";
-                            printFocalForm.submit();
-                        }
-
-                        function nsReport(reportType, nsType) {
-                            let printNSForm = document.getElementById('printNSForm');
-                            let centerInput = document.getElementById('ns_center_name');
-                            let centerHiddenInput = document.getElementById('ns_center_id');
-                            let cycle_id = document.getElementById('ns_cycle_id');
-                            let ns_type = document.getElementById('ns_type');
-
-                            let center_name = centerInput.value;
-
-                            ns_type.value = nsType;
-
-                            printNSForm.action = `/reports/show-${reportType}`;
-                            printNSForm.target = "_blank";
-                            printNSForm.submit();
-                        }
-                    </script>
                 </div>
-                @endif
-            </div>
-        </div>
-        </div>
 
-        </div>
+            </div>
 
 
     </section>
