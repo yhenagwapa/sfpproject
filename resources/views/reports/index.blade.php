@@ -330,6 +330,8 @@
                                                                             id="ns_center_id" value="">
                                                                         <input type="hidden" name="ns_type"
                                                                             id="ns_type">
+                                                                        <input type="hidden" name="report_type"
+                                                                            id="report_type">
                                                                         <li class="nav-heading d-flex align-items-center">
                                                                             Nutritional Status Upon Entry
                                                                         <li>
@@ -499,12 +501,15 @@
                                             let centerHiddenInput = document.getElementById('ns_center_id');
                                             let cycle_id = document.getElementById('ns_cycle_id');
                                             let ns_type = document.getElementById('ns_type');
+                                            let report_type = document.getElementById('report_type');
 
                                             let center_name = centerInput.value;
 
                                             ns_type.value = nsType;
+                                            report_type.value = reportType;
 
                                             printNSForm.action = `{{ url('') }}/reports/show-${reportType}/${nsType}`;
+                                            printNSForm.method = "POST";
                                             printNSForm.target = "_blank";
                                             printNSForm.submit();
                                         }

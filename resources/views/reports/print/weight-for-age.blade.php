@@ -132,9 +132,9 @@
                         </td>
 
                         @php
-                            $overallTotal = $wfaCounts[$center->id]['total_children'] ?? 0;
-                            $totalMale = $wfaCounts[$center->id]['total_male'] ?? 0;
-                            $totalFemale = $wfaCounts[$center->id]['total_female'] ?? 0;
+                            $overallTotal = $nsCounts[$center->id]['total_children'] ?? 0;
+                            $totalMale = $nsCounts[$center->id]['total_male'] ?? 0;
+                            $totalFemale = $nsCounts[$center->id]['total_female'] ?? 0;
                         @endphp
 
                         <td>{{ $overallTotal }}</td>
@@ -145,7 +145,7 @@
                             @foreach ($sexLabels as $sex)
                                 @foreach ($ages as $age)
                                     @php
-                                        $count = $wfaCounts[$center->id]['data'][$category][$sex][$age] ?? 0;
+                                        $count = $nsCounts[$center->id]['data'][$category][$sex][$age] ?? 0;
                                         $totals[$sex][$age] += $count;
                                     @endphp
                                     <td>{{ $count }}</td>
