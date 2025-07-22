@@ -76,30 +76,32 @@
             </div>
         </section>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> --}}
     @vite(['resources/js/app.js'])
     <script>
-        jQuery(document).ready(function () {
-            jQuery("#cycle-table").DataTable({
-                paging: true,             // Enable paging
-                pageLength: 10,           // Show 10 entries per page
-                lengthChange: false,      // Hide the dropdown to change entry count
-                searching: true,
-                order: [[0, 'asc']],
-                columnDefs: [
-                    {
-                        orderSequence: ["desc", "asc"]
-                    },
-                ],
-                info: false,
-                rowCallback: function(row, data, index) {
-                    var table = $('#cycle-table').DataTable();
-                    if (data && Object.keys(data).length !== 0) {
-                        $('td:eq(0)', row).html(table.page.info().start + index + 1);
-                    } else {
-                        $('td:eq(0)', row).html('');
+        window.addEventListener('load', function () {
+            $(document).ready(function () {
+                $("#cycle-table").DataTable({
+                    paging: true,             // Enable paging
+                    pageLength: 10,           // Show 10 entries per page
+                    lengthChange: false,      // Hide the dropdown to change entry count
+                    searching: true,
+                    order: [[0, 'asc']],
+                    columnDefs: [
+                        {
+                            orderSequence: ["desc", "asc"]
+                        },
+                    ],
+                    info: false,
+                    rowCallback: function(row, data, index) {
+                        var table = $('#cycle-table').DataTable();
+                        if (data && Object.keys(data).length !== 0) {
+                            $('td:eq(0)', row).html(table.page.info().start + index + 1);
+                        } else {
+                            $('td:eq(0)', row).html('');
+                        }
                     }
-                }
+                });
             });
         });
     </script>

@@ -24,13 +24,6 @@
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Bootstrap Icons CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
     <x-auth-session-status class="mb-4" :status="session('status')" />
 </head>
 
@@ -89,7 +82,7 @@
                                     </div>
 
                                     <!-- Password Field -->
-                                    <div class="col-12">
+                                    <div class="col-12 relative">
                                         <label for="password" class="form-label">Password</label>
                                         <input type="password" name="password"
                                             class="password form-control @error('password') is-invalid @enderror" id="password"
@@ -162,7 +155,7 @@
         </script>
     </main><!-- End #main -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> --}}
 
 </body>
 

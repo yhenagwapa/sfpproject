@@ -6,8 +6,8 @@
 // * License: https://bootstrapmade.com/license/
 // */
 
-import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import 'datatables.net-bs5';
+// import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+// import 'datatables.net-bs5';
 
 (function() {
     "use strict";

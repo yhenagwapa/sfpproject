@@ -353,7 +353,8 @@ input.no-uppercase {
     margin-bottom: 30px;
     border: none;
     border-radius: 5px;
-    box-shadow: 0px 0 30px rgba(161, 180, 212, 0.1);
+    box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
+    background-color: #fff;
     max-width: 100%;
 }
 

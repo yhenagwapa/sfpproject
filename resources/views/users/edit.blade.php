@@ -289,6 +289,8 @@
             </div>
         </section>
     </div>
+
+    @vite(['resources/js/app.js'])
     {{-- city and barangay  --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
