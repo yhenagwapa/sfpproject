@@ -69,7 +69,7 @@
         <div class="row">
             <div class="col-lg-3">
                 @can(['create-nutritional-status'])
-                    @if (!$hasUponEntryData)
+                    @if (!$hasUponEntryData && $childStatus != 'dropped')
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title">
@@ -180,7 +180,7 @@
                     @endphp
 
                     @if ($today === $minDateExit) --}}
-                        @if ($hasUponEntryData && !$hasUponExitData)
+                        @if ($hasUponEntryData && !$hasUponExitData && $childStatus != 'dropped')
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-title">
