@@ -119,12 +119,12 @@
                 </ul>
             </nav><!-- End Icons Navigation --> --}}
             <nav class="header-nav ml-auto flex items-center">
-                <ul class="flex list-none mt-2 p">
-                    <li class="relative inline-block" x-data="{ open: false }">
+                <ul class="flex list-none mt-2">
+                    <li class="nav-item relative" x-data="{ open: false }">
                         <button
                             @click="open = !open"
                             @click.away="open = false"
-                            class="d-flex items-center uppercase focus:outline-none"
+                            class="d-flex nav-link nav-profile items-center uppercase focus:outline-none"
                         >
                             @auth
                                 @php
@@ -144,14 +144,14 @@
                         <ul
                             x-show="open"
                             x-transition
-                            class="absolute left-0 mt-2 w-47 bg-white rounded-md shadow-lg z-50"
+                            class="absolute left-0 mt-2 px-2 w-60 bg-white rounded-md shadow-lg z-50 profile"
                             @click.away="open = false"
                         >
                             <li>
                                 <form action="{{ route('users.show') }}" method="POST" class="block w-full">
                                     @csrf
                                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                                    <button class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 d-flex items-center">
+                                    <button class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="mr-2 w-5 h-5">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -165,7 +165,7 @@
                             <li>
                                 <form method="POST" action="{{ route('logout') }}" class="block w-full">
                                     @csrf
-                                    <button type="submit" class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 d-flex items-center">
+                                    <button type="submit" class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mb-1 items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="mr-2 w-5 h-5">
                                             <path stroke-linecap="round" stroke-linejoin="round"

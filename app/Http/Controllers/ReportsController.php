@@ -165,14 +165,16 @@ class ReportsController extends Controller
                 ])
                 ->orderBy('lastname', 'asc')
                 ->get();
-
+            
+            $filename =  'Region XI Report.csv';
+            $users = \App\Models\User::role('child development worker')->with('psgc')->get();
 
         } else {
             $centers = UserCenter::where('user_id', $userID)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            $user = User::with('psgc')->find($userID);
+            $users = User::with('psgc')->find($userID)->get();
 
             if (!$cycle) {
                 $children = null;
@@ -195,9 +197,10 @@ class ReportsController extends Controller
                 ->orderBy('lastname', 'asc')
                 ->get();
 
+            $filename = $users->psgc->city_name . ' Report.csv';
+
         }
 
-        $filename = $user->psgc->city_name . ' Report.csv';
         $filepath = storage_path("app/public/{$filename}");
 
         $handle = fopen($filepath, 'w');
@@ -300,82 +303,163 @@ class ReportsController extends Controller
                 $childAge = 0;
             }
 
+            if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')){
+                foreach($users as $user){
+                    fputcsv($handle, [
+                        $user->psgc->province_name,
+                        $user->psgc->district,
+                        $user->psgc->city_name,
+                        $user->psgc->brgy_name,
+                        '', //ppan are
+                        '', // implementation scheme
+                        '', // pr mode
+                        $centerName,
+                        '', // registration date
+                        '', // facility category
+                        $worker->first()?->lastname ?? '',
+                        $worker->first()?->firstname ?? '',
+                        $worker->first()?->middlename ?? '',
+                        $worker->first()?->extension_name ?? '',
+                        '', //with wash facility
+                        '', // with community garden
+                        $child->psgc->brgy_name,
+                        $child->lastname,
+                        $child->firstname,
+                        $child->middlename,
+                        $child->extension_name,
+                        '', // duplication checking
+                        $child->sex->name,
+                        $child->person_with_disability_details ? '1' : '0',
+                        $child->person_with_disability_details,
+                        $child->is_child_of_soloparent ? '1' : '0',
+                        '', // type of bene
+                        $child->date_of_birth->format('m-d-Y'),
+                        $childAge,
+                        $child->nutritionalStatus->first()?->actual_weighing_date,
+                        $child->nutritionalStatus->first()?->age_in_months,
+                        $child->nutritionalStatus->first()?->height,
+                        $child->nutritionalStatus->first()?->weight,
+                        $child->nutritionalStatus->first()?->weight_for_height,
+                        $child->nutritionalStatus->first()?->height_for_age,
+                        $child->nutritionalStatus->first()?->weight_for_age,
+                        $child->nutritionalStatus->get(1)?->actual_weighing_date,
+                        $child->nutritionalStatus->get(1)?->age_in_months,
+                        $child->nutritionalStatus->get(1)?->height,
+                        $child->nutritionalStatus->get(1)?->weight,
+                        $child->nutritionalStatus->get(1)?->weight_for_height,
+                        $child->nutritionalStatus->get(1)?->height_for_age,
+                        $child->nutritionalStatus->get(1)?->weight_for_age,
+                        $child->nutritionalStatus->first()?->deworming_date ? '1' : '0',
+                        $child->nutritionalStatus->first()?->vitamin_a_date ? '1' : '0',
+                        '', // food allergies
+                        '', // other medical conditions
+                        '', // referred to other social services
+                        '', // parent lastname
+                        '', // parent firstname
+                        '', // parent middlename
+                        '', // parent extname
+                        '', // sex
+                        '', // parent philsys no
+                        '', // source of income
+                        '', // ip affiliation
+                        '', // pantawid
+                        '', // disability
+                        '', // prev attended pes
+                        '', // pes modules completed
+                        '', // start of feeding meals
+                        '', // frequency
+                        '', // no of feeding
+                        '', // status
+                        '', // end of feeding meals
+                        '', // with milk
+                        '', // start of milk feeding
+                        '', // frequency
+                        '', // no of milk feeding
+                        '', // status
+                        '', // end of milk feeding
+                        '', // pes manual
+                        '', // status
+                    ]);
+                }
+            } else{
+                fputcsv($handle, [
+                    $users->psgc->province_name,
+                    $users->psgc->district,
+                    $users->psgc->city_name,
+                    $users->psgc->brgy_name,
+                    '', //ppan are
+                    '', // implementation scheme
+                    '', // pr mode
+                    $centerName,
+                    '', // registration date
+                    '', // facility category
+                    $worker->first()?->lastname ?? '',
+                    $worker->first()?->firstname ?? '',
+                    $worker->first()?->middlename ?? '',
+                    $worker->first()?->extension_name ?? '',
+                    '', //with wash facility
+                    '', // with community garden
+                    $child->psgc->brgy_name,
+                    $child->lastname,
+                    $child->firstname,
+                    $child->middlename,
+                    $child->extension_name,
+                    '', // duplication checking
+                    $child->sex->name,
+                    $child->person_with_disability_details ? '1' : '0',
+                    $child->person_with_disability_details,
+                    $child->is_child_of_soloparent ? '1' : '0',
+                    '', // type of bene
+                    $child->date_of_birth->format('m-d-Y'),
+                    $childAge,
+                    $child->nutritionalStatus->first()?->actual_weighing_date,
+                    $child->nutritionalStatus->first()?->age_in_months,
+                    $child->nutritionalStatus->first()?->height,
+                    $child->nutritionalStatus->first()?->weight,
+                    $child->nutritionalStatus->first()?->weight_for_height,
+                    $child->nutritionalStatus->first()?->height_for_age,
+                    $child->nutritionalStatus->first()?->weight_for_age,
+                    $child->nutritionalStatus->get(1)?->actual_weighing_date,
+                    $child->nutritionalStatus->get(1)?->age_in_months,
+                    $child->nutritionalStatus->get(1)?->height,
+                    $child->nutritionalStatus->get(1)?->weight,
+                    $child->nutritionalStatus->get(1)?->weight_for_height,
+                    $child->nutritionalStatus->get(1)?->height_for_age,
+                    $child->nutritionalStatus->get(1)?->weight_for_age,
+                    $child->nutritionalStatus->first()?->deworming_date ? '1' : '0',
+                    $child->nutritionalStatus->first()?->vitamin_a_date ? '1' : '0',
+                    '', // food allergies
+                    '', // other medical conditions
+                    '', // referred to other social services
+                    '', // parent lastname
+                    '', // parent firstname
+                    '', // parent middlename
+                    '', // parent extname
+                    '', // sex
+                    '', // parent philsys no
+                    '', // source of income
+                    '', // ip affiliation
+                    '', // pantawid
+                    '', // disability
+                    '', // prev attended pes
+                    '', // pes modules completed
+                    '', // start of feeding meals
+                    '', // frequency
+                    '', // no of feeding
+                    '', // status
+                    '', // end of feeding meals
+                    '', // with milk
+                    '', // start of milk feeding
+                    '', // frequency
+                    '', // no of milk feeding
+                    '', // status
+                    '', // end of milk feeding
+                    '', // pes manual
+                    '', // status
+                ]);
+            }
+            
 
-            fputcsv($handle, [
-                $user->psgc->province_name,
-                $user->psgc->district,
-                $user->psgc->city_name,
-                $user->psgc->brgy_name,
-                '', //ppan are
-                '', // implementation scheme
-                '', // pr mode
-                $centerName,
-                '', // registration date
-                '', // facility category
-                $worker->first()?->lastname ?? '',
-                $worker->first()?->firstname ?? '',
-                $worker->first()?->middlename ?? '',
-                $worker->first()?->extension_name ?? '',
-                '', //with wash facility
-                '', // with community garden
-                $child->psgc->brgy_name,
-                $child->lastname,
-                $child->firstname,
-                $child->middlename,
-                $child->extension_name,
-                '', // duplication checking
-                $child->sex->name,
-                $child->person_with_disability_details ? '1' : '0',
-                $child->person_with_disability_details,
-                $child->is_child_of_soloparent ? '1' : '0',
-                '', // type of bene
-                $child->date_of_birth->format('m-d-Y'),
-                $childAge,
-                $child->nutritionalStatus->first()?->actual_weighing_date,
-                $child->nutritionalStatus->first()?->age_in_months,
-                $child->nutritionalStatus->first()?->height,
-                $child->nutritionalStatus->first()?->weight,
-                $child->nutritionalStatus->first()?->weight_for_height,
-                $child->nutritionalStatus->first()?->height_for_age,
-                $child->nutritionalStatus->first()?->weight_for_age,
-                $child->nutritionalStatus->get(1)?->actual_weighing_date,
-                $child->nutritionalStatus->get(1)?->age_in_months,
-                $child->nutritionalStatus->get(1)?->height,
-                $child->nutritionalStatus->get(1)?->weight,
-                $child->nutritionalStatus->get(1)?->weight_for_height,
-                $child->nutritionalStatus->get(1)?->height_for_age,
-                $child->nutritionalStatus->get(1)?->weight_for_age,
-                $child->nutritionalStatus->first()?->deworming_date ? '1' : '0',
-                $child->nutritionalStatus->first()?->vitamin_a_date ? '1' : '0',
-                '', // food allergies
-                '', // other medical conditions
-                '', // referred to other social services
-                '', // parent lastname
-                '', // parent firstname
-                '', // parent middlename
-                '', // parent extname
-                '', // sex
-                '', // parent philsys no
-                '', // source of income
-                '', // ip affiliation
-                '', // pantawid
-                '', // disability
-                '', // prev attended pes
-                '', // pes modules completed
-                '', // start of feeding meals
-                '', // frequency
-                '', // no of feeding
-                '', // status
-                '', // end of feeding meals
-                '', // with milk
-                '', // start of milk feeding
-                '', // frequency
-                '', // no of milk feeding
-                '', // status
-                '', // end of milk feeding
-                '', // pes manual
-                '', // status
-            ]);
         }
 
         fclose($handle);

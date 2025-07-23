@@ -85,7 +85,7 @@
                                     <form class="row" id="search-form" action="{{ route('child.index') }}" method="GET">
                                         <div class="col-md-6 text-sm flex">
                                             <label for="center_name" class="text-base mt-2 mr-2">CDC/SNP:</label>
-                                            <select class="form-control uppercase" name="center_name" id="center_name" onchange="clearSearchAndSubmit(this)">
+                                            <select class="form-control uppercase" name="center_name" id="center_name" onchange="this.form.submit()">
                                                 <option value="all_center" {{ request('cdcId') == 'all_center' ? 'selected' : '' }}>All Child Development Center</option>
                                                 @foreach ($centerNames as $center)
                                                     <option value="{{ $center->id }}"
@@ -233,13 +233,6 @@
                     }
                 });
             });
-
-            function clearSearchAndSubmit(selectElement) {
-                const form = selectElement.form;
-                const searchInput = form.querySelector('input[name="search"]');
-                if (searchInput) searchInput.value = '';
-                form.submit();
-            }
         });
     </script>
 @endsection <!-- End section -->
