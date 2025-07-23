@@ -11,7 +11,7 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    {{-- <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" /> --}}
 
     <meta content="" name="description">
     <meta content="" name="keywords">
@@ -30,10 +30,10 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script> --}}
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> --}}
 
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
 
     <!-- Vite -->
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
      {{-- * Template Name: NiceAdmin
     * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -65,21 +65,20 @@
 
             <!-- End Logo -->
 
-            <nav class="header-nav ml-auto align-items-center justify-end">
-
+            {{-- <nav class="header-nav ml-auto align-items-center justify-end">
                 <ul class="d-flex list-unstyled mt-2">
                     <li class="nav-item dropdown pe-3">
-                        <button type="button" class="nav-link nav-profile d-flex align-items-center pe-0 uppercase" href="#"
+                        <a href="#" role="button" class="nav-link nav-profile d-flex align-items-center pe-0 dropdown-toggle uppercase"
                             data-bs-toggle="dropdown">
                             @auth
                                 @php
                                     $user = Auth::user();
                                     $fullName = trim("{$user->firstname} {$user->middlename} {$user->lastname}");
                                 @endphp
-                                <span class="d-none d-md-block dropdown-toggle ps-2">{{ $fullName }}</span>
+                                <span class="d-none d-md-block ps-2">{{ $fullName }}</span>
                             @endauth
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        </a>
+                        <ul class="dropdown-menu profile">
                             <li>
                                 <form action="{{ route('users.show') }}" method="POST">
                                     @csrf
@@ -118,7 +117,69 @@
                         </ul>
                     </li>
                 </ul>
-            </nav><!-- End Icons Navigation -->
+            </nav><!-- End Icons Navigation --> --}}
+            <nav class="header-nav ml-auto flex items-center">
+                <ul class="flex list-none mt-2 p">
+                    <li class="relative inline-block" x-data="{ open: false }">
+                        <button
+                            @click="open = !open"
+                            @click.away="open = false"
+                            class="d-flex items-center uppercase focus:outline-none"
+                        >
+                            @auth
+                                @php
+                                    $user = Auth::user();
+                                    $fullName = trim("{$user->firstname} {$user->middlename} {$user->lastname}");
+                                @endphp
+                                <span class="d-none d-md-block ps-2">{{ $fullName }}</span>
+                            @endauth
+                            <svg class="ml-2 mr-10 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <ul
+                            x-show="open"
+                            x-transition
+                            class="absolute left-0 mt-2 w-47 bg-white rounded-md shadow-lg z-50"
+                            @click.away="open = false"
+                        >
+                            <li>
+                                <form action="{{ route('users.show') }}" method="POST" class="block w-full">
+                                    @csrf
+                                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                                    <button class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 d-flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="mr-2 w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                        </svg>
+                                        Profile
+                                    </button>
+                                </form>
+                            </li>
+                            <li><hr class="border-t my-1"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" class="block w-full">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 d-flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="mr-2 w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                                        </svg>
+                                        Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
         </header>
 
         <aside id="sidebar" class="sidebar">
@@ -264,7 +325,7 @@
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
 
-        @vite(['resources/js/app.js'])
+
 
         {{-- <form id="clear-session-form" action="{{ route('clear.child.session') }}" method="POST">
             @csrf
@@ -284,6 +345,8 @@
                 };
             });
         </script>
+
+        {{-- @vite(['resources/js/app.js']) --}}
 </body>
 
 </html>
