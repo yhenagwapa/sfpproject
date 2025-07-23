@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <!-- Vite -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css'])
 
      {{-- * Template Name: NiceAdmin
     * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/

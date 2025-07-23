@@ -58,7 +58,7 @@
         </section>
 
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-    @vite(['resources/js/app.js'])
+    {{-- @vite(['resources/js/app.js']) --}}
 
     <script>
         window.addEventListener('load', function () {

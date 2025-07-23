@@ -11,37 +11,24 @@ use App\Models\UserCenter;
 
 class ChildCenterController extends Controller
 {
-    public function additionalInfo(Request $request, Implementation $cycle, $id)
+    public function updateStatus(Request $request)
     {
-        $this->authorize('create-child');
+        $childID = $request->input('child_id');
+        $cycle = Implementation::where('status', 'active')->where('type', 'regular')->value('id');
 
-        $cycles = Implementation::where('status', 'active')->where('type', 'regular')->get();
-        $milkFeedings = Implementation::where('status', 'active')->where('type', 'milk')->get();
+        $request->validate([
+            'status' => 'required|string|in:active,transferred,dropped',
+        ]);
 
-        $child = Child::findOrFail($id);
+        $childStatus = ChildCenter::where('child_id' , $childID)
+            ->where('implementation_id', $cycle)
+            ->first();
 
-        $centers = ChildDevelopmentCenter::all();
+        $childStatus->update([
+            'status' => $request->input('status')
+        ]);
 
-        $userID = auth()->id();
-        if (auth()->user()->hasRole('child development worker')){
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
-
-        } elseif(auth()->user()->hasRole('encoder')){
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
-        }
-
-        return view('child.additional-info',
-        compact([
-            'child',
-            'cycles',
-            'milkFeedings',
-            'centerNames'
-        ]));
+        return redirect()->back()
+                ->withSuccess('User status updated successfully.');
     }
 }

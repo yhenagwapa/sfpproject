@@ -70,6 +70,8 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/child/edit', [ChildController::class, 'edit'])->name('child.edit');
     Route::patch('/child/update', [ChildController::class, 'update'])->name('child.update');
 
+    Route::put('/child/update-status', [ChildCenterController::class, 'updateStatus'])->name('child.update-status');
+
     Route::resources([
         'roles' => RoleController::class
         // 'users' => UserController::class,
