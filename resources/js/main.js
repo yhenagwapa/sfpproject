@@ -1,11 +1,3 @@
-// /**
-// * Template Name: NiceAdmin
-// * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-// * Updated: Apr 20 2024 with Bootstrap v5.3.3
-// * Author: BootstrapMade.com
-// * License: https://bootstrapmade.com/license/
-// */
-
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-bs5';
 
