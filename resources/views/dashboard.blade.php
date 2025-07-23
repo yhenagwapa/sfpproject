@@ -350,5 +350,5 @@
     </section>
 
     {{-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> --}}
-    @vite(['resources/js/app.js'])
+    {{-- @vite(['resources/js/app.js']) --}}
 @endsection

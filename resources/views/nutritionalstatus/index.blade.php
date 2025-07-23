@@ -300,7 +300,7 @@
         </div>
     </section>
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-    @vite(['resources/js/app.js'])
+    {{-- @vite(['resources/js/app.js']) --}}
     <script>
         document.getElementById('statusAfter120Submit').addEventListener('click', function () {
             document.getElementById('statusAfter120Form').submit();
