@@ -21,11 +21,6 @@
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Bootstrap Icons CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -86,20 +81,14 @@
                             </div>
                         </div>
                         <div class="credits mt-5 text-xs text-center">
-                            <!-- All the links in the footer should remain intact. -->
-                            <!-- You can delete the links only if you purchased the pro version. -->
-                            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                            &copy; {{ now()->year }} Department of Social Welfare and Development. <br />
+                            &copy; 2025 Department of Social Welfare and Development. <br />
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     </main><!-- End #main -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
+    @vite(['resources/js/app.js'])
 </body>
 
 </html>
