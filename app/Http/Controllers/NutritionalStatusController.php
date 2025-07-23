@@ -77,8 +77,13 @@ class NutritionalStatusController extends Controller
             $today = Carbon::today()->format('Y-m-d');
         }
 
+        $childStatus = ChildCenter::where('child_id', $child->id)
+            ->value('status');
 
-        return view('nutritionalstatus.index', compact('child', 'implementation', 'minDate', 'maxDate', 'minDateExit', 'today', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData'));
+
+
+
+        return view('nutritionalstatus.index', compact('child', 'implementation', 'minDate', 'maxDate', 'minDateExit', 'today', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData', 'childStatus'));
     }
 
 
@@ -89,6 +94,8 @@ class NutritionalStatusController extends Controller
     public function create(Request $request)
     {
         session(['child_id' => $request->input('child_id')]);
+
+
 
         return redirect()->route('nutritionalstatus.index');
     }
@@ -472,6 +479,8 @@ class NutritionalStatusController extends Controller
                 'weight_for_height' => $exitWeightForHeight,
                 'is_malnourish' => $exitIsMalnourished,
                 'is_undernourish' => $exitIsUndernourished,
+                'deworming_date' => $request->deworming_date,
+                'vitamin_a_date' => $request->vitamin_a_date,
                 'created_by_user_id' => auth()->id(),
                 'updated_by_user_id' => auth()->id(),
             ]);

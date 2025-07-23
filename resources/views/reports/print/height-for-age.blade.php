@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="base-url" content="{{ url('https://172.31.176.49/sfpproject/public') }}">
 
-    <title>Weight for Height</title>
+    <title>Height for Age</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -28,7 +28,11 @@
             Supplementary Feeding Program<br>
             {{ $cycle->name }} ( CY {{ $cycle->school_year_from }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS REPORT</b><br>
-            <i>(Weight-for-Height)<br>Upon Entry</i>
+            @if($nsType == 'upon-entry')
+                <i>(Height-for-Age)<br>Upon Entry</i>
+            @else
+                <i>(Height-for-Age)<br>After 120 Feedings</i>
+            @endif
         </p>
         <br>
     </div>
@@ -129,9 +133,9 @@
                         </td>
 
                         @php
-                            $overallTotal = $wfhCounts[$center->id]['total_children'] ?? 0;
-                            $totalMale = $wfhCounts[$center->id]['total_male'] ?? 0;
-                            $totalFemale = $wfhCounts[$center->id]['total_female'] ?? 0;
+                            $overallTotal = $hfaCounts[$center->id]['total_children'] ?? 0;
+                            $totalMale = $hfaCounts[$center->id]['total_male'] ?? 0;
+                            $totalFemale = $hfaCounts[$center->id]['total_female'] ?? 0;
                         @endphp
 
                         <td>{{ $overallTotal }}</td>
@@ -142,7 +146,7 @@
                             @foreach ($sexLabels as $sex)
                                 @foreach ($ages as $age)
                                     @php
-                                        $count = $wfhCounts[$center->id]['data'][$category][$sex][$age] ?? 0;
+                                        $count = $hfaCounts[$center->id]['data'][$category][$sex][$age] ?? 0;
                                         $totals[$sex][$age] += $count;
                                     @endphp
                                     <td>{{ $count }}</td>
