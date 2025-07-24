@@ -165,7 +165,7 @@ class ReportsController extends Controller
                 ])
                 ->orderBy('lastname', 'asc')
                 ->get();
-            
+
             $filename =  'Region XI Report.csv';
             $users = \App\Models\User::role('child development worker')->with('psgc')->get();
 
@@ -174,7 +174,7 @@ class ReportsController extends Controller
             $centerIDs = $centers->pluck('child_development_center_id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            $users = User::with('psgc')->find($userID)->get();
+            $users = User::with('psgc')->find($userID);
 
             if (!$cycle) {
                 $children = null;
@@ -458,7 +458,7 @@ class ReportsController extends Controller
                     '', // status
                 ]);
             }
-            
+
 
         }
 
