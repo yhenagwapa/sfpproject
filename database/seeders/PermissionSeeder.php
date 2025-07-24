@@ -104,6 +104,7 @@ class PermissionSeeder extends Seeder
         $encoder->givePermissionTo([
             'create-child',
             'view-child',
+            'edit-user-profile',
             'create-nutritional-status',
             'edit-nutritional-status',
         ]);

@@ -148,7 +148,7 @@
                             <label for="date_of_birth">Date of Birth</label><label for="date_of_birth"
                                 class="text-red-600">*</label>
                             <input type="date"
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300 date-field"
                                 id="date_of_birth" name='date_of_birth'
                                 value="{{ old('date_of_birth') }}" min="{{ $minDate }}" max="{{ $maxDate }}">
                             @if ($errors->has('date_of_birth'))

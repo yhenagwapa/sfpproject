@@ -736,8 +736,8 @@ class ChildController extends Controller
 
                     //weight for height
                     if ($childSex == '1') {
-                        $getHeight = cgs_wfh_boys::where('length_from', '<=', $request->height)
-                                        ->where('length_to', '>=', $request->height)
+                        $getHeight = cgs_wfh_boys::where('length_from', '<=', $height)
+                                        ->where('length_to', '>=', $height)
                                         ->first();
 
                         if (!$getHeight) {
@@ -759,8 +759,8 @@ class ChildController extends Controller
                         }
 
                     } else {
-                        $getHeight = cgs_wfh_girls::where('length_from', '<=', $request->height)
-                                        ->where('length_to', '>=', $request->height)
+                        $getHeight = cgs_wfh_girls::where('length_from', '<=', $height)
+                                        ->where('length_to', '>=', $height)
                                         ->first();
 
                         if (!$getHeight) {

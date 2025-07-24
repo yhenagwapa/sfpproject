@@ -9,22 +9,11 @@
 
     <title>SFP IS</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
     <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
@@ -336,13 +325,13 @@
                                             </div>
                                         </div>
 
-                                    <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                                    {{-- <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
 
                                     @if ($errors->has('g-recaptcha-response'))
                                         <span class="text-red-500 text-sm">
                                             {{ $errors->first('g-recaptcha-response') }}
                                         </span>
-                                    @endif
+                                    @endif --}}
 
                                         <div class="flex flex-wrap justify-end w-full md:w-full">
                                             <div class="mt-4">

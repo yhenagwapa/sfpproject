@@ -126,7 +126,7 @@
                                     @endphp --}}
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="date_of_birth">Date of Birth<b class="text-red-600">*</b></label>
-                                        <input type="date" class="form-control rounded border-gray-300" id="date_of_birth"
+                                        <input type="date" class="form-control rounded border-gray-300 date-field" id="date_of_birth"
                                             name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('Y-m-d')) }}" min="{{ $minDate }}" max="{{ $maxDate }}">
                                         @error('date_of_birth')
                                             <span class="text-xs text-red-600">{{ $errors->first('date_of_birth') }}</span>
