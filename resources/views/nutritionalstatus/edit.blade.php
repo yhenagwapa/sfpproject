@@ -78,7 +78,7 @@
 
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
-                                        <input type="date" class="form-control rounded border-gray-300" id="deworming_date" min="{{ $child->date_of_birth->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
+                                        <input type="date" class="form-control rounded border-gray-300 date-field" id="deworming_date" min="{{ $child->date_of_birth->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
                                             name='deworming_date' value="{{ old('deworming_date', $entryDetails->deworming_date) }}"
                                             >
                                         @if ($errors->has('deworming_date'))
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
-                                        <input type="date" class="form-control rounded border-gray-300" id="vitamin_a_date" min="{{ $child->date_of_birth->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
+                                        <input type="date" class="form-control rounded border-gray-300 date-field" id="vitamin_a_date" min="{{ $child->date_of_birth->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
                                             name='vitamin_a_date' value="{{ old('vitamin_a_date', $entryDetails->vitamin_a_date) }}"
                                             >
                                         @if ($errors->has('vitamin_a_date'))
@@ -117,8 +117,8 @@
                                         <label for="actual_weighing_date">Actual date of weighing<b
                                                 class="text-red-600">*</b></label>
                                         <input type="date"
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="actual_weighing_date" name='actual_weighing_date' max="{{ date('Y-m-d') }}"
+                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300 date-field"
+                                            id="actual_weighing_date" name='actual_weighing_date' max="{{ date('m-d-Y') }}"
                                             value="{{ old('actual_weighing_date', $entryDetails->actual_weighing_date) }}">
                                         @if ($errors->has('actual_weighing_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('actual_weighing_date') }}</span>
@@ -202,7 +202,7 @@
                                             <label for="exitweighing_date">Actual date of weighing<b
                                                     class="text-red-600">*</b></label>
                                             <input type="date"
-                                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300 date-field"
                                                 id="exitweighing_date" name='exitweighing_date' min="{{ $entryDetails->actual_weighing_date->addDay()->format('Y-m-d') }}" max="{{ date('Y-m-d') }}"
                                                 value="{{ old('exitweighing_date', $exitDetails->actual_weighing_date) }}">
                                             @if ($errors->has('exitweighing_date'))
@@ -253,7 +253,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" style="text-transform: uppercase;">{{ $child->full_name }} <span>| Date of
-                            Birth: {{ $child->date_of_birth->format('Y-m-d') }} | {{ $child->sex->name }}</span></h5>
+                            Birth: {{ $child->date_of_birth->format('m-d-Y') }} | {{ $child->sex->name }}</span></h5>
                         <div class="table-responsive">
                             @include('nutritionalstatus.partials.ns-table')
                         </div>

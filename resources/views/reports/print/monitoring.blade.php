@@ -177,7 +177,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td class="no-wrap">{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
+                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('m-d-Y') }}</td>
 
 
                     <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date : '-' }}

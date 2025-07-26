@@ -26,7 +26,7 @@
                 </tr>
             @else
                 <tr>
-                    <td>{{ $entryDetails->actual_weighing_date }}</td>
+                    <td>{{ $entryDetails->actual_weighing_date->format('m-d-Y') }}</td>
                     <td>{{ $entryDetails->weight }}</td>
                     <td>{{ $entryDetails->height }}</td>
                     <td>{{ $entryDetails->age_in_months }}</td>
@@ -95,7 +95,7 @@
                     </td>
                 </tr>
             @else
-                <td>{{ $exitDetails->actual_weighing_date }}</td>
+                <td>{{ $exitDetails->actual_weighing_date->format('m-d-Y') }}</td>
                 <td>{{ $exitDetails->weight }}</td>
                 <td>{{ $exitDetails->height }}</td>
                 <td>{{ $exitDetails->age_in_months }}</td>

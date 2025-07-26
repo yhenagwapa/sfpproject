@@ -201,18 +201,6 @@ import 'datatables.net-bs5';
         }, false)
       })
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.querySelector('[data-bs-toggle="dropdown"]');
-        if (btn) {
-            console.log('Dropdown button found');
-            new bootstrap.Dropdown(btn); // optional init
-        } else {
-            console.warn('Dropdown button NOT found');
-        }
-    });
-
-
-
     /**
      * Initiate Datatables
      */

@@ -163,7 +163,7 @@
                     <td class="first">{{ $fundedChild->full_name }}</td>
                     <td class="first">{{ optional($fundedChild->records->first()->center)->center_name ?? 'N/A' }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
+                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('m-d-Y') }}</td>
 
                     @if ($fundedChild->nutritionalStatus->first() === null)
                             <td></td>
