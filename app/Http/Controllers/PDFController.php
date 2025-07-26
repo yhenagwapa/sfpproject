@@ -24,7 +24,7 @@ class PDFController extends Controller
     {
 
         $cycleID = session('report_cycle_id');
-        $cycle = Implementation::where('id', $cycleID)->first();
+        $cycle = Implementation::find($cycleID);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -139,7 +139,7 @@ class PDFController extends Controller
     {
 
         $cycleID = session('report_cycle_id');
-        $cycle = Implementation::where('id', $cycleID)->first();
+        $cycle = Implementation::find($cycleID);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -1590,7 +1590,7 @@ class PDFController extends Controller
     {
 
         $cycleID = session('report_cycle_id');
-        $cycle = Implementation::where('id', $cycleID)->first();
+        $cycle = Implementation::find($cycleID);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');

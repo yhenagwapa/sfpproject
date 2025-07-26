@@ -27,10 +27,10 @@ class ReportsController extends Controller
     public function index(Request $request)
     {
         $cycleID = session('report_cycle_id');
-        $cycle = Implementation::where('id', $cycleID)->first();
+        $cycle = Implementation::find($cycleID);
 
         // add filter to session
-        session(['filter_cdc_id' => $request->center_name]);
+        session(['filter_cdc_id' => $request->input('center_name')]);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
