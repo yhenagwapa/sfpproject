@@ -27,15 +27,17 @@
                     </td>
                     <td>
                         <select id="statusSelect-{{ $child->id }}" name="status" class="form-control uppercase w-full border-none"
-                            @if ($child->records->first()?->status == 'dropped') disabled @endif>
+                            @if ($child->records->first()?->status == 'dropped') disabled @endif onchange="handleSelectChange(this, {{ $sample->id }})">
                             <option value="" disabled>Select status</option>
                             <option value="active"
                                 {{ $child->records->first()?->status === 'active' ? 'selected' : '' }}>
                                 Active
                             </option>
-                            {{-- <option value="transferred" {{ $child->records->first()?->status === 'transferred' ? 'selected' : '' }}>
-                                Transferred
-                            </option> --}}
+                            @if (!auth()->user()->hasRole(['child development worker', 'encoder']))
+                                <option value="transferred" {{ $child->records->first()?->status === 'transferred' ? 'selected' : '' }}>
+                                    Transferred
+                                </option>
+                            @endif
                             <option value="dropped"
                                 {{ $child->records->first()?->status === 'dropped' ? 'selected' : '' }}>
                                 Dropped
@@ -43,8 +45,8 @@
                         </select>
                     </td>
 
-                    {{-- modal for status change --}}
-                    <div class="modal fade" id="statusConfirmationModal-{{ $child->id }}" tabindex="-1">
+                    {{-- modal for drop student --}}
+                    <div class="modal fade" id="dropStudentModal-{{ $child->id }}" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -55,6 +57,44 @@
                                 <div class="modal-body">
                                     Are you sure you want to change <b class="text-red-600 uppercase">{{ $child->full_name }}</b>'s
                                     status?
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="confirmStatusChange-{{ $child->id }}" type="button"
+                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                    <button id="cancelStatusChange-{{ $child->id }}" type="button"
+                                        class="text-white bg-gray-600 rounded px-3 min-h-9"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- modal for transfer student --}}
+                    <div class="modal fade" id="transferStudentModal-{{ $child->id }}" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-red-600">Confirmation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="child_development_center_id">CDC or SNP <span
+                                        class="text-red-600">*</span></label>
+                                    <select class="form-control rounded border-gray-300 uppercase" id="child_development_center_id"
+                                        name='child_development_center_id' required>
+                                        <option value="" selected>Select CDC or SNP</option>
+                                        @foreach ($centerNames as $center)
+                                            <option value="{{ $center->id }}"
+                                                {{ $center->id == old('child_development_center_id') ? 'selected' : '' }}>
+                                                {{ $center->center_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('child_development_center_id'))
+                                        <span
+                                            class="text-xs text-red-600">{{ $errors->first('child_development_center_id') }}</span>
+                                    @endif
                                 </div>
                                 <div class="modal-footer">
                                     <button id="confirmStatusChange-{{ $child->id }}" type="button"
@@ -83,7 +123,7 @@
                         document.getElementById('statusSelect-{{ $child->id }}').addEventListener('change', function() {
                             selectedStatus{{ $child->id }} = this.value;
                             let modal = new bootstrap.Modal(document.getElementById(
-                                'statusConfirmationModal-{{ $child->id }}'));
+                                'dropStudentModal-{{ $child->id }}'));
                             modal.show();
                         });
 
@@ -186,3 +226,17 @@
         @endif
     </tbody>
 </table>
+
+<script>
+    function handleTypeChange(select, childId) {
+        const value = select.value;
+
+        if (value === 'dropped') {
+            const modal = new bootstrap.Modal(document.getElementById(`dropStudentModal-${childId}`));
+            modal.show();
+        } else if (value === 'transferred') {
+            const modal = new bootstrap.Modal(document.getElementById(`transferStudentModal-${childId}`));
+            modal.show();
+        }
+    }
+</script>
