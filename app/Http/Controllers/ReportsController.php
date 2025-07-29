@@ -14,6 +14,7 @@ use App\Models\Implementation;
 use Carbon\Carbon;
 use Clegginabox\PDFMerger\PDFMerger;
 use Illuminate\Support\Facades\DB;
+use Str;
 
 class ReportsController extends Controller
 {
@@ -123,8 +124,6 @@ class ReportsController extends Controller
     {
         ini_set('memory_limit', '512M');
 
-
-
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
 
@@ -137,14 +136,14 @@ class ReportsController extends Controller
             'records.center',
             'psgc',
             'nutritionalStatus'
-        ])
-            ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END");
+        ])->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
+        ->get();
 
         $userID = auth()->id();
 
         if (auth()->user()->hasRole('admin')) {
             $centers = UserCenter::all();
-            $centerIds = $centers->pluck('id');
+            $centerIDs = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::all()->keyBy('id');
 
             if (!$cycle) {
@@ -152,22 +151,16 @@ class ReportsController extends Controller
                 return view('reports.index', compact('children', 'centerNames', 'cdcId'))->with('error', 'No active implementation.');
             }
 
-            $children = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                $query->where('implementation_id', $cycle->id)
-                    ->where('status', 'active');
-            })
-                ->with([
-                    'records' => function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id)
-                            ->where('status', 'active')
-                            ->with('center');
-                    }
-                ])
-                ->orderBy('lastname', 'asc')
-                ->get();
+            $children = $fundedChildren->filter(function ($child) use ($centerIDs, $cycle) {
+                return $child->records->contains(function ($record) use ($centerIDs, $cycle) {
+                    return $centerIDs->contains($record->child_development_center_id)
+                        && $record->implementation_id === $cycle->id
+                        && $record->status === 'active';
+                });
+            });
 
-            $filename =  'Region XI Report.csv';
-            $users = \App\Models\User::role('child development worker')->with('psgc')->get();
+
+            $filename = 'Region XI Report.csv';
 
         } else {
             $centers = UserCenter::where('user_id', $userID)->get();
@@ -181,25 +174,31 @@ class ReportsController extends Controller
                 return view('child.index', compact('children', 'centerNames', 'cdcId'))->with('error', 'No active implementation.');
             }
 
-            $children = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
-                $query->whereIn('child_development_center_id', $centerIDs)
-                    ->where('implementation_id', $cycle->id)
-                    ->where('status', 'active');
-            })
-                ->with([
-                    'records' => function ($query) use ($centerIDs, $cycle) {
-                        $query->whereIn('child_development_center_id', $centerIDs)
-                            ->where('implementation_id', $cycle->id)
-                            ->where('status', 'active')
-                            ->with('center');
-                    }
-                ])
-                ->orderBy('lastname', 'asc')
-                ->get();
+            $children = $fundedChildren->filter(function ($child) use ($centerIDs, $cycle) {
+                return $child->records->contains(function ($record) use ($centerIDs, $cycle) {
+                    return $centerIDs->contains($record->child_development_center_id)
+                        && $record->implementation_id === $cycle->id
+                        && $record->status === 'active';
+                });
+            });
 
             $filename = $users->psgc->city_name . ' Report.csv';
 
         }
+
+        $groupedChildren = $children->filter(function ($child) {
+            return $child->records->first()?->center !== null;
+        })->groupBy(function ($child) {
+            return optional($child->records->first()->center)->id;
+        });
+
+        $groupedChildren = $groupedChildren->map(function ($childrenGroup) {
+            return $childrenGroup
+                ->sortBy(function ($child) {
+                return [$child->sex_id, Str::lower($child->lastname)];
+            });
+        });
+
 
         $filepath = storage_path("app/public/{$filename}");
 
@@ -282,111 +281,40 @@ class ReportsController extends Controller
             'STATUS'
         ]);
         // Write data rows
-        foreach ($children as $child) {
+        foreach ($groupedChildren as $centerId => $childrenGroup) {
+            // $centerName = optional($childrenGroup->records->first()->center)->center_name ?? 'N/A';
+            // $centerId = $child->records->first()->center->id;
 
-            $centerName = optional($child->records->first()->center)->center_name ?? 'N/A';
-            $centerId = $child->records->first()->center->id;
+            foreach ($childrenGroup as $child) {
+                $centerName = optional($child->records->first()->center)->center_name ?? 'N/A';
+                $centerId = $child->records->first()->center->id;
 
-            $center = ChildDevelopmentCenter::with([
-                'users' => function ($query) {
-                    $query->role('child development worker'); // Using Spatie's role scope
+                $centerWorker = ChildDevelopmentCenter::with([
+                    'users' => function ($query) {
+                        $query->role('child development worker');
+                    }
+                ])
+                ->findOrFail($centerId);
+
+                $worker = $centerWorker->users;
+                $province = $centerWorker->psgc->province_name;
+                $district = $centerWorker->psgc->district;
+                $city = $centerWorker->psgc->city_name;
+                $brgy = $centerWorker->psgc->brgy_name;
+
+                $age_in_months = optional($child->nutritionalStatus->first())->age_in_months ?? 0;
+
+                if ($age_in_months) {
+                    $childAge = floor($age_in_months / 12);
+                } else {
+                    $childAge = 0;
                 }
-            ])->findOrFail($centerId);
 
-            $worker = $center->users;
-
-            $age_in_months = optional($child->nutritionalStatus->first())->age_in_months ?? 0;
-
-            if ($age_in_months) {
-                $childAge = floor($age_in_months / 12);
-            } else {
-                $childAge = 0;
-            }
-
-            if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')){
-                foreach($users as $user){
-                    fputcsv($handle, [
-                        $user->psgc->province_name,
-                        $user->psgc->district,
-                        $user->psgc->city_name,
-                        $user->psgc->brgy_name,
-                        '', //ppan are
-                        '', // implementation scheme
-                        '', // pr mode
-                        $centerName,
-                        '', // registration date
-                        '', // facility category
-                        $worker->first()?->lastname ?? '',
-                        $worker->first()?->firstname ?? '',
-                        $worker->first()?->middlename ?? '',
-                        $worker->first()?->extension_name ?? '',
-                        '', //with wash facility
-                        '', // with community garden
-                        $child->psgc->brgy_name,
-                        $child->lastname,
-                        $child->firstname,
-                        $child->middlename,
-                        $child->extension_name,
-                        '', // duplication checking
-                        $child->sex->name,
-                        $child->person_with_disability_details ? '1' : '0',
-                        $child->person_with_disability_details,
-                        $child->is_child_of_soloparent ? '1' : '0',
-                        '', // type of bene
-                        $child->date_of_birth->format('m-d-Y'),
-                        $childAge,
-                        $child->nutritionalStatus->first()?->actual_weighing_date,
-                        $child->nutritionalStatus->first()?->age_in_months,
-                        $child->nutritionalStatus->first()?->height,
-                        $child->nutritionalStatus->first()?->weight,
-                        $child->nutritionalStatus->first()?->weight_for_height,
-                        $child->nutritionalStatus->first()?->height_for_age,
-                        $child->nutritionalStatus->first()?->weight_for_age,
-                        $child->nutritionalStatus->get(1)?->actual_weighing_date,
-                        $child->nutritionalStatus->get(1)?->age_in_months,
-                        $child->nutritionalStatus->get(1)?->height,
-                        $child->nutritionalStatus->get(1)?->weight,
-                        $child->nutritionalStatus->get(1)?->weight_for_height,
-                        $child->nutritionalStatus->get(1)?->height_for_age,
-                        $child->nutritionalStatus->get(1)?->weight_for_age,
-                        $child->nutritionalStatus->first()?->deworming_date ? '1' : '0',
-                        $child->nutritionalStatus->first()?->vitamin_a_date ? '1' : '0',
-                        '', // food allergies
-                        '', // other medical conditions
-                        '', // referred to other social services
-                        '', // parent lastname
-                        '', // parent firstname
-                        '', // parent middlename
-                        '', // parent extname
-                        '', // sex
-                        '', // parent philsys no
-                        '', // source of income
-                        '', // ip affiliation
-                        '', // pantawid
-                        '', // disability
-                        '', // prev attended pes
-                        '', // pes modules completed
-                        '', // start of feeding meals
-                        '', // frequency
-                        '', // no of feeding
-                        '', // status
-                        '', // end of feeding meals
-                        '', // with milk
-                        '', // start of milk feeding
-                        '', // frequency
-                        '', // no of milk feeding
-                        '', // status
-                        '', // end of milk feeding
-                        '', // pes manual
-                        '', // status
-                    ]);
-                }
-            } else{
                 fputcsv($handle, [
-                    $users->psgc->province_name,
-                    $users->psgc->district,
-                    $users->psgc->city_name,
-                    $users->psgc->brgy_name,
+                    $province,
+                    $district,
+                    $city,
+                    $brgy,
                     '', //ppan are
                     '', // implementation scheme
                     '', // pr mode
@@ -457,9 +385,10 @@ class ReportsController extends Controller
                     '', // pes manual
                     '', // status
                 ]);
+
+
+
             }
-
-
         }
 
         fclose($handle);

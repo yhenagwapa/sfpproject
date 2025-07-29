@@ -67,6 +67,13 @@
             width: 5%;
         }
 
+        @page {
+            margin-top: 20px;
+            margin-bottom: 50px;
+            margin-right: 30px;
+            margin-left: 30px;
+        }
+
         .footer-table {
             width: 100%;
             font-family: 'Arial', sans-serif;

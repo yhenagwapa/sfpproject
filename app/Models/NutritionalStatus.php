@@ -33,6 +33,9 @@ class NutritionalStatus extends Model
     protected $casts = [
         'is_malnourish' => 'boolean',
         'is_undernourish' => 'boolean',
+        'actual_weighing_date' => 'date',
+        'deworming_date' => 'date',
+        'vitamin_a_date' => 'date',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -51,5 +54,5 @@ class NutritionalStatus extends Model
         return $this->belongsTo(Implementation::class);
     }
 
-    
+
 }

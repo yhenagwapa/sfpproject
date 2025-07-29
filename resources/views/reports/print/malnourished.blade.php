@@ -85,7 +85,7 @@
 
         @page {
             margin-top: 20px;
-            margin-bottom: 0;
+            margin-bottom: 50px;
             margin-right: 30px;
             margin-left: 30px;
         }
@@ -175,7 +175,7 @@
                             <td></td>
                             <td></td>
                         @else
-                            <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date : 'N/A' }}</td>
+                            <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date->format('m-d-Y') : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->first() ? number_format($fundedChild->nutritionalStatus->first()->weight, 1) : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->first() ? number_format($fundedChild->nutritionalStatus->first()->height, 1) : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_months : 'N/A' }}</td>
@@ -185,7 +185,7 @@
                             <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height_for_age : 'N/A' }}</td>
                         @endif
                         @if (isset($fundedChild->nutritionalStatus[1]))
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->actual_weighing_date : 'N/A' }}</td>
+                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->actual_weighing_date->format('m-d-Y') : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? number_format($fundedChild->nutritionalStatus[1]->weight, 1) : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? number_format($fundedChild->nutritionalStatus[1]->height, 1) : 'N/A' }}</td>
                             <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->age_in_months : 'N/A' }}</td>

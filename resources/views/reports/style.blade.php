@@ -81,7 +81,7 @@
 
     @page {
         margin-top: 20px;
-        margin-bottom: 0;
+        margin-bottom: 50px;
         margin-right: 30px;
         margin-left: 30px;
     }

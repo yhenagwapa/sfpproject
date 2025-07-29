@@ -77,6 +77,8 @@ class NutritionalStatusController extends Controller
             $today = Carbon::today()->format('Y-m-d');
         }
 
+        // dd($entryDetails);
+
 
         return view('nutritionalstatus.index', compact('child', 'implementation', 'minDate', 'maxDate', 'minDateExit', 'today', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData'));
     }
