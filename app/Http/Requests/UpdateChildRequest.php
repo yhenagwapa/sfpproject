@@ -22,8 +22,8 @@ class UpdateChildRequest extends FormRequest
      */
     public function rules(): array
     {
-        $minDate = Carbon::now()->subYears(6)->addDay()->format('Y-m-d');
-        $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('Y-m-d');
+        $minDate = Carbon::now()->subYears(6)->addDay()->format('m-d-Y');
+        $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('m-d-Y');
 
         if(auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')) {
             return [
@@ -36,7 +36,7 @@ class UpdateChildRequest extends FormRequest
                 'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
-                'date_of_birth' => ['required', 'date', 'after_or_equal:' . $minDate, 'before_or_equal:' . $maxDate,],
+                'date_of_birth' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:' . $minDate, 'before_or_equal:' . $maxDate,],
                 'sex_id' => ['required', 'string'],
                 'province_psgc' => ['required'],
                 'city_name_psgc' => ['required'],
@@ -55,7 +55,7 @@ class UpdateChildRequest extends FormRequest
                 'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
-                'date_of_birth' => ['required', 'date', 'after_or_equal:' . $minDate, 'before_or_equal:' . $maxDate,],
+                'date_of_birth' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:' . $minDate, 'before_or_equal:' . $maxDate,],
                 'sex_id' => ['required', 'string'],
                 'province_psgc' => ['required'],
                 'city_name_psgc' => ['required'],
@@ -75,8 +75,8 @@ class UpdateChildRequest extends FormRequest
 
     public function messages()
     {
-        $minDate = Carbon::now()->subYears(6)->addDay()->format('Y-m-d');
-        $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('Y-m-d');
+        $minDate = Carbon::now()->subYears(6)->addDay()->format('m-d-Y');
+        $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('m-d-Y');
 
         return [
             'lastname.required' => 'Please fill in this field.',

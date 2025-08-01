@@ -62,7 +62,7 @@
                         <div class="col-md-6 mt-3 text-sm">
                             <label for="firstname">First Name</label><label for="firstname" class="text-red-600">*</label>
                             <input type="text"
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control rounded border-gray-300"
                                 id="firstname" name='firstname'
                                 value="{{ old('firstname') }}" autofocus>
                             @if ($errors->has('firstname'))
@@ -81,7 +81,7 @@
                         <div class="col-md-6 mt-2 text-sm">
                             <label for="lastname">Last Name</label><label for="lastname" class="text-red-600">*</label>
                             <input type="text"
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control rounded border-gray-300"
                                 id="lastname" name='lastname' value="{{ old('lastname') }}">
                             @if ($errors->has('lastname'))
                                 <span class="text-xs text-red-600">{{ $errors->first('lastname') }}</span>
@@ -90,7 +90,7 @@
                         <div class="col-md-6 mt-2 text-sm">
                             <label for="extension_name">Extension Name</label>
                             <select
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control rounded border-gray-300"
                                 id="extension_name" name='extension_name'>
                                 <option value="" disabled selected></option>
                                 <option value="Jr"
@@ -147,8 +147,8 @@
                         <div class="col-md-6 mt-2 text-sm">
                             <label for="date_of_birth">Date of Birth</label><label for="date_of_birth"
                                 class="text-red-600">*</label>
-                            <input type="date"
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300 date-field"
+                            <input type="text"
+                                class="form-control rounded border-gray-300 date-field"
                                 id="date_of_birth" name='date_of_birth'
                                 value="{{ old('date_of_birth') }}" min="{{ $minDate }}" max="{{ $maxDate }}">
                             @if ($errors->has('date_of_birth'))
@@ -159,7 +159,7 @@
                         <div class="col-md-6 mt-2 text-sm">
                             <label for="sex">Sex</label><label for="sex" class="text-red-600">*</label>
                             <select
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control rounded border-gray-300"
                                 id="sex_id" name="sex_id">
                                 <option value="" disabled
                                     {{ old('sex_id') == '' ? 'selected' : '' }}>
@@ -270,7 +270,7 @@
                         </div>
                         <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
                             <input type="text"
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control rounded border-gray-300"
                                 name="spaceonly">
                         </div>
 
@@ -294,7 +294,7 @@
                         </div>
                         <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
                             <input type="text"
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control rounded border-gray-300"
                                 name="spaceonly">
                         </div>
 
@@ -318,7 +318,7 @@
                         </div>
                         <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
                             <input type="text"
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control rounded border-gray-300"
                                 name="spaceonly">
                         </div>
 
@@ -329,7 +329,7 @@
                         <div class="col-md-6 mt-3 text-sm">
                             <label for="region">Region</label><label for="region" class="text-red-600">*</label>
                             <select
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control rounded border-gray-300"
                                 id="region_psgc" name="region_psgc" disabled>
                                 <option value="110000000" selected>Region XI</option>
                             </select>
@@ -390,7 +390,7 @@
                             <label for="address">House No./ Street/ Purok</label><label for="address"
                                 class="text-red-600">*</label>
                             <input type="text"
-                                class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
+                                class="form-control rounded border-gray-300"
                                 id="address" name='address'
                                 value="{{ old('address') }}">
                             @if ($errors->has('address'))

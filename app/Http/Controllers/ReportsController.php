@@ -411,6 +411,15 @@ class ReportsController extends Controller
 
         $province = null;
         $city = null;
+        $status = null;
+
+        if($cycleStatus == 'closed'){
+            $status = 'inactive';
+        } elseif($cycleStatus == 'active'){
+            $status = 'active';
+        } else{
+            $status = null;
+        }
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all();
@@ -443,9 +452,10 @@ class ReportsController extends Controller
                 $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
-            ->join('child_centers', function ($join) use ($cycle) {
+            ->join('child_centers', function ($join) use ($cycle, $status) {
                 $join->on('children.id', '=', 'child_centers.child_id')
                     ->where('child_centers.implementation_id', '=', $cycle->id)
+                    ->where('child_centers.status', '=', $status)
                     ->where('child_centers.funded', '=', 1);
             })
             ->join('child_development_centers', 'child_development_centers.id', '=', 'child_centers.child_development_center_id')
@@ -516,12 +526,13 @@ class ReportsController extends Controller
                 }
             }
 
-            $category = $row->weight_for_age;
+            $cat = $row->weight_for_age;
             $sex = $sexMap[$row->sex_id] ?? null;
             $age = $row->age_in_years;
 
-            if (isset($wfaCounts[$centerId]['data'][$category][$sex][$age])) {
-                $wfaCounts[$centerId]['data'][$category][$sex][$age] += $row->total;
+            if (isset($wfaCounts[$centerId]['data'][$cat][$sex][$age])) {
+                $wfaCounts[$centerId]['data'][$cat][$sex][$age] += $row->total;
+
             }
 
             $wfaCounts[$centerId]['total_children'] += $row->total;
@@ -541,46 +552,78 @@ class ReportsController extends Controller
                 $femaleAgeTotals[$age] += $row->total;
             }
 
-        }
+            // $agetotals = [];
+            // $ageTotalsPerCategory = [];
+            // $totalsPerCategory = [];
+            // foreach ($categories as $category) {
+            //     $totalsPerCategory[$category] = 0;
+            //     foreach ($sexLabels as $sex) {
+            //         $ageTotalsPerCategory[$category][$sex] = 0;
+            //         $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
+            //         foreach ($ages as $age) {
+            //             $agetotals[$category][$sex][$age] = 0;
+            //             $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
+            //         }
+            //     }
+            // }
 
-        $agetotals = [];
-        foreach ($categories as $category) {
-            foreach ($sexLabels as $sex) {
-                foreach ($ages as $age) {
-                    $agetotals[$category][$sex][$age] = 0;
-                }
-            }
-        }
+            // foreach ($wfaCounts as $center) {
+            //     foreach ($categories as $category) {
+            //         $totalsPerCategory[$category] = 0;
+            //         foreach ($sexLabels as $sex) {
+            //             $ageTotalsPerCategory[$category][$sex] = 0;
+            //             $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
+            //             foreach ($ages as $age) {
+            //                 $agetotals[$category][$sex][$age] = 0;
+            //                 $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+            //                 $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
+            //             }
+            //         }
+            //     }
+            // }
 
-        foreach ($wfaCounts as $center) {
+            $agetotals = [];
             foreach ($categories as $category) {
                 foreach ($sexLabels as $sex) {
                     foreach ($ages as $age) {
-                        $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                        $agetotals[$category][$sex][$age] = 0;
                     }
                 }
             }
-        }
 
-        $ageTotalsPerCategory = [];
-        foreach ($categories as $category) {
-            foreach ($sexLabels as $sex) {
-                $ageTotalsPerCategory[$category][$sex] = 0;
-                foreach ($ages as $age) {
-                    $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
+            foreach ($wfaCounts as $center) {
+                foreach ($categories as $category) {
+                    foreach ($sexLabels as $sex) {
+                        foreach ($ages as $age) {
+                            $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                        }
+                    }
                 }
             }
-        }
 
-        $totalsPerCategory = [];
-        foreach ($categories as $category) {
-            $totalsPerCategory[$category] = 0;
-            foreach ($sexLabels as $sex) {
-                $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
+            $ageTotalsPerCategory = [];
+            foreach ($categories as $category) {
+                foreach ($sexLabels as $sex) {
+                    $ageTotalsPerCategory[$category][$sex] = 0;
+                    foreach ($ages as $age) {
+                        $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
+                    }
+                }
             }
+
+            $totalsPerCategory = [];
+            foreach ($categories as $category) {
+                $totalsPerCategory[$category] = 0;
+                foreach ($sexLabels as $sex) {
+                    $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
+                }
+            }
+
         }
 
-        $pdf = PDF::loadView('reports.print.weight-for-age-upon-entry', compact('cycle', 'province', 'city', 'results', 'centers', 'wfaCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
+
+
+        $pdf = PDF::loadView('reports.print.weight-for-age-upon-entry', compact('cycle', 'province', 'city', 'results', 'centers', 'wfaCounts', 'ages', 'sexLabels', 'cat', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -600,6 +643,7 @@ class ReportsController extends Controller
 
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
+        $cycleStatus = $cycle->status;
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -607,6 +651,15 @@ class ReportsController extends Controller
 
         $province = null;
         $city = null;
+        $status = null;
+
+        if($cycleStatus == 'closed'){
+            $status = 'inactive';
+        } elseif($cycleStatus == 'active'){
+            $status = 'active';
+        } else{
+            $status = null;
+        }
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all();
@@ -639,9 +692,10 @@ class ReportsController extends Controller
                 $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
-            ->join('child_centers', function ($join) {
+            ->join('child_centers', function ($join) use ($cycle, $status) {
                 $join->on('children.id', '=', 'child_centers.child_id')
-                    ->where('child_centers.status', '=', 'active')
+                    ->where('child_centers.implementation_id', '=', $cycle->id)
+                    ->where('child_centers.status', '=', $status)
                     ->where('child_centers.funded', '=', 1);
             })
             ->join('child_development_centers', 'child_development_centers.id', '=', 'child_centers.child_development_center_id')
@@ -653,6 +707,7 @@ class ReportsController extends Controller
                 'nutritional_statuses.height_for_age',
                 DB::raw('COUNT(*) as total')
             ])
+            ->where('nutritional_statuses.implementation_id', $cycle->id)
             ->groupBy(
                 'child_development_centers.id',
                 'child_development_centers.center_name',
@@ -795,6 +850,7 @@ class ReportsController extends Controller
 
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
+        $cycleStatus = $cycle->status;
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -802,6 +858,15 @@ class ReportsController extends Controller
 
         $province = null;
         $city = null;
+        $status = null;
+
+        if($cycleStatus == 'closed'){
+            $status = 'inactive';
+        } elseif($cycleStatus == 'active'){
+            $status = 'active';
+        } else{
+            $status = null;
+        }
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all();
@@ -834,9 +899,10 @@ class ReportsController extends Controller
                 $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
-            ->join('child_centers', function ($join) {
+            ->join('child_centers', function ($join) use ($cycle, $status) {
                 $join->on('children.id', '=', 'child_centers.child_id')
-                    ->where('child_centers.status', '=', 'active')
+                    ->where('child_centers.implementation_id', '=', $cycle->id)
+                    ->where('child_centers.status', '=', $status)
                     ->where('child_centers.funded', '=', 1);
             })
             ->join('child_development_centers', 'child_development_centers.id', '=', 'child_centers.child_development_center_id')
@@ -848,6 +914,7 @@ class ReportsController extends Controller
                 'nutritional_statuses.weight_for_height',
                 DB::raw('COUNT(*) as total')
             ])
+            ->where('nutritional_statuses.implementation_id', $cycle->id)
             ->groupBy(
                 'child_development_centers.id',
                 'child_development_centers.center_name',

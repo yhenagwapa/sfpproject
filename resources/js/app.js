@@ -17,9 +17,15 @@ window.bootstrap = bootstrap;
 window.Alpine = Alpine;
 Alpine.start();
 
-flatpickr(".date-field", {
-  dateFormat: "m-d-Y",
-  allowInput: false
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".date-field").forEach(input => {
+        flatpickr(input, {
+            dateFormat: "m-d-Y",
+            minDate: input.getAttribute("min"),
+            maxDate: input.getAttribute("max"),
+            allowInput: false
+        });
+    });
 });
 
 import './main';

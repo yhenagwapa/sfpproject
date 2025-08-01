@@ -126,8 +126,8 @@
                                     @endphp --}}
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="date_of_birth">Date of Birth<b class="text-red-600">*</b></label>
-                                        <input type="date" class="form-control rounded border-gray-300 date-field" id="date_of_birth"
-                                            name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('Y-m-d')) }}" min="{{ $minDate }}" max="{{ $maxDate }}">
+                                        <input type="text" class="form-control rounded border-gray-300 date-field" id="date_of_birth"
+                                            name='date_of_birth' value="{{ old('date_of_birth', \Carbon\Carbon::parse($child->date_of_birth))->format('m-d-Y') }}" min="{{ $minDate }}" max="{{ $maxDate }}">
                                         @error('date_of_birth')
                                             <span class="text-xs text-red-600">{{ $errors->first('date_of_birth') }}</span>
                                         @enderror
@@ -488,12 +488,12 @@
                             <div class="col-md-12 flex mt-4 justify-end text-right">
                                 <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
                                     data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
-                                    <form id="cancel-form" method="GET" action="{{ route('child.index') }}">
-                                    </form>
 
-                                    <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
-                                        Cancel
-                                    </button>
+                                <form id="cancel-form" method="GET" action="{{ route('child.index') }}">
+                                </form>
+                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                    Cancel
+                                </button>
                             </div>
                         </div>
                     </div>

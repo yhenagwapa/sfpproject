@@ -251,15 +251,6 @@
                                     @enderror
                                 </div>
 
-
-
-                                <div class="col-md-12 mt-4 text-right">
-                                    <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9"
-                                        data-bs-toggle="modal" data-bs-target="#verticalycentered">Submit</button>
-                                    <button type="reset"
-                                        class="text-white bg-gray-600 rounded px-3 min-h-9">Cancel</button>
-                                </div>
-
                                 <div class="modal fade" id="verticalycentered" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
@@ -276,13 +267,23 @@
                                             <div class="modal-footer">
                                                     <button type="submit" class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
 
-                                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Cancel</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </form>
+
+                            <div class="col-md-12 flex mt-4 justify-end text-right">
+                                <button type="button" class="text-white bg-blue-600 rounded px-3 mr-1 min-h-9"
+                                    data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
+
+                                <form id="cancel-form" method="GET" action="{{ route('child.index') }}">
+                                </form>
+                                <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

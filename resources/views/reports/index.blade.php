@@ -56,9 +56,7 @@
                             <b>{{ $childCount }}</b></b>
                         </h5>
                         <div id="report-content">
-                            @if (auth()->user()->hasRole('admin') ||
-                                    auth()->user()->hasRole('lgu focal') ||
-                                    auth()->user()->hasRole('child development worker'))
+                            @if (!auth()->user()->hasRole('encoder'))
                                 <div id="funded-content">
                                     <div class="row">
                                         <div class="col-md-6 mt-3 text-sm">
@@ -86,9 +84,7 @@
                                         </div>
                                         <div class="col-md-6 text-base inline">
                                             <nav class="header-nav ml-auto flex gap-3 mt-2 items-center">
-                                                @if (auth()->user()->hasRole('admin') ||
-                                                        auth()->user()->hasRole('lgu focal') ||
-                                                        auth()->user()->hasRole('child development worker'))
+                                                @if (!auth()->user()->hasRole('encoder'))
                                                     <ul class="flex list-none">
                                                         <li class="nav-item relative" x-data="{ open: false }">
                                                             <button @click="open = !open" @click.away="open = false"
@@ -208,7 +204,7 @@
 
                                                     </ul>
                                                 @endif
-                                                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                                                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator'))
                                                     <ul class="flex list-none">
                                                         <li class="nav-item relative" x-data="{ open: false }">
                                                             <button @click="open = !open" @click.away="open = false"

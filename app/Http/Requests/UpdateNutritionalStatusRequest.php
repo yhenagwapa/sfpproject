@@ -46,7 +46,7 @@ class UpdateNutritionalStatusRequest extends FormRequest
                 'weight' => ['required', 'numeric'],
                 'height' => ['required', 'numeric'],
                 'exitWeighing' => ['nullable', 'date'],
-                'actual_weighing_date' => ['required', 'date', 'after_or_equal:'. $minWeighingDate, $this->filled('exitWeighing') ? 'before:exitWeighing' : 'before_or_equal:' . $maxDate],
+                'actual_weighing_date' => ['required', 'date_format:m-d-Y', 'date', 'after_or_equal:'. $minWeighingDate, $this->filled('exitWeighing') ? 'before:exitWeighing' : 'before_or_equal:' . $maxDate],
                 'deworming_date' => ['required', 'date', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
                 'vitamin_a_date' => ['required', 'date', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
             ];
@@ -63,7 +63,7 @@ class UpdateNutritionalStatusRequest extends FormRequest
                 'exitchild_id' => ['required', 'exists:children,id'],
                 'exitweight' => ['required', 'numeric'],
                 'exitheight' => ['required', 'numeric'],
-                'exitweighing_date' => ['required', 'date', 'after_or_equal:'. $minDateForExit, 'before_or_equal:'. $maxDate],
+                'exitweighing_date' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:'. $minDateForExit, 'before_or_equal:'. $maxDate],
             ];
         }
 
