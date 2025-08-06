@@ -78,7 +78,7 @@
 
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">
 
-                                @if(!auth()->user()->hasRole('lgu focal'))
+                                @if(auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder') || auth()->user()->hasRole('admin'))
                                     <div class='col-md-12 mt-3 text-gray-400 text-xs'>Personal Information<hr></div>
 
                                     <div class="col-md-6 mt-3 text-sm">

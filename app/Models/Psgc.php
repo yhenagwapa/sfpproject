@@ -13,11 +13,11 @@ class Psgc extends Model
 
     protected $table = 'psgcs';
 
-    
+
     protected $fillable = [
         'region_psgc',
         'region_name',
-        'province_psgc', 
+        'province_psgc',
         'province_name',
         'city_name_psgc',
         'city_psgc',
@@ -85,6 +85,25 @@ public function getBarangays($city_psgc)
     return $groupedCities;
 }
 
+public function allCitiesWithPsgcId()
+{
+    // Get all cities with their actual row ID (psgc_id is stored in `id`)
+    $cities = Psgc::whereNotNull('city_name_psgc')
+        ->orderBy('city_name')
+        ->get(['psgc_id', 'city_name', 'city_name_psgc', 'province_psgc']);
+
+    // Group them by province
+    return $cities->groupBy('province_psgc')->map(function ($group) {
+        return $group->map(function ($item) {
+            return [
+                'psgc_id' => $item->psgc_id, // this is the psgc_id (primary key in table)
+                'psgc_code' => $item->city_name_psgc,
+                'name' => $item->city_name,
+            ];
+        });
+    });
+}
+
 
     // Fetch all barangays grouped by city PSGC
     public function allBarangays()
@@ -128,7 +147,7 @@ public function getBarangays($city_psgc)
                     ->whereNotNull('city_name_psgc')
                     ->pluck('city_name', 'city_name_psgc');
     }
-    
+
     public static function getBarangaysByCity($city_psgc)
     {
         return self::where('city_name_psgc', $city_psgc)

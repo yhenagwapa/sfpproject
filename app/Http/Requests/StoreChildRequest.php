@@ -31,7 +31,7 @@ class StoreChildRequest extends FormRequest
                 'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'middlename' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'extension_name' => ['nullable', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
-                'date_of_birth' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:' . $minDate, 'before_or_equal:' . $maxDate,],
+                'date_of_birth' => ['required', 'date_format:m-d-Y', 'after_or_equal:' . $minDate, 'before_or_equal:' . $maxDate,],
                 'sex_id' => ['required', 'exists:sexes,id'],
                 'region_psgc' => ['required'],
                 'province_psgc' => ['required'],

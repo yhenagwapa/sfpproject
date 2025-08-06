@@ -583,7 +583,7 @@ class ChildController extends Controller
 
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
-        if(!auth()->user()->hasRole('lgu focal')){
+        if(!auth()->user()->hasAnyRole(['lgu focal', 'sfp coordinator'])){
 
             $validatedDate = Carbon::createFromFormat('m-d-Y', $validatedData['date_of_birth'])->format('Y-m-d');
 
@@ -625,7 +625,7 @@ class ChildController extends Controller
                 'middlename' => $request->middlename,
                 'lastname' => $request->lastname,
                 'extension_name' => $request->extension_name,
-                'date_of_birth' => $request->date_of_birth,
+                'date_of_birth' => $validatedDate,
                 'sex_id' => $request->sex_id,
                 'address' => $request->address,
                 'psgc_id' => $psgc->psgc_id,

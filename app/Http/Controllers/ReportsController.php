@@ -25,10 +25,18 @@ class ReportsController extends Controller
         $this->middleware('permission:create-cycle-implementation', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-cycle-implementation', ['only' => ['edit', 'update']]);
     }
-    public function index(Request $request)
+        public function index(Request $request)
     {
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
+        $cycleStatus = $cycle->status;
+        $childStatus = [];
+
+        if($cycleStatus == 'active'){
+            $childStatus = ['active', 'transferred', 'dropped'];
+        } else{
+            $childStatus = ['inactive'];
+        }
 
         // add filter to session
         session(['filter_cdc_id' => $request->input('center_name')]);
@@ -41,9 +49,9 @@ class ReportsController extends Controller
         $selectedCenter = null;
         $childCount = null;
 
-        $fundedChildren = Child::with('records', 'sex')
+        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex')
             ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
-            ->orderBy('lastname', 'asc');
+            ->orderByRaw("LOWER(lastname) ASC");
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
@@ -51,24 +59,31 @@ class ReportsController extends Controller
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                    $query->where('implementation_id', $cycle->id)
-                        ->where('status', 'active')
-                        ->orderBy('child_development_center_id', 'asc');
-                })
-                    ->paginate(10);
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $childStatus) {
+                        $query->where('implementation_id', $cycle->id)
+                        ->whereIn('status', $childStatus)
+                        ->where('funded', 1);
+                    })
+                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                        $query->where('implementation_id', $cycle->id);
+                    })
+                    ->orderBy('lastname', 'asc')
+                    ->get();
 
                 $childCount = $isFunded->count();
 
             } else {
-
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($request, $cycle) {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($request, $cycle, $childStatus) {
                     $query->where('child_development_center_id', $request->center_name)
                         ->where('implementation_id', $cycle->id)
-                        ->where('status', 'active')
-                        ->orderBy('child_development_center_id', 'asc');
-                })
-                    ->paginate(10);
+                        ->whereIn('status', $childStatus)
+                        ->where('funded', 1);
+                    })
+                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                        $query->where('implementation_id', $cycle->id);
+                    })
+                    ->orderBy('lastname', 'asc')
+                    ->get();
 
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
                 $childCount = $isFunded->count();
@@ -82,26 +97,34 @@ class ReportsController extends Controller
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle, $childStatus) {
                     if ($cycle) {
                         $query->whereIn('child_development_center_id', $centerIDs)
                             ->where('implementation_id', $cycle->id)
-                            ->where('status', 'active')
-                            ->orderBy('child_development_center_id', 'asc');
+                            ->whereIn('status', $childStatus)
+                            ->where('funded', 1);
                     }
-                })
-                    ->paginate(10);
+                    })
+                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                        $query->where('implementation_id', $cycle->id);
+                    })
+                    ->orderBy('lastname', 'asc')
+                    ->get();
 
                 $childCount = $isFunded->count();
             } else {
 
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle, $childStatus) {
                     $query->where('child_development_center_id', $cdcId)
                         ->where('implementation_id', $cycle->id)
-                        ->where('status', 'active')
-                        ->orderBy('child_development_center_id', 'asc');
-                })
-                    ->paginate(10);
+                        ->whereIn('status', $childStatus)
+                        ->where('funded', 1);
+                    })
+                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                        $query->where('implementation_id', $cycle->id);
+                    })
+                    ->orderBy('lastname', 'asc')
+                    ->get();
 
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
                 $childCount = $isFunded->count();
@@ -137,7 +160,7 @@ class ReportsController extends Controller
             'psgc',
             'nutritionalStatus'
         ])->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
-        ->get();
+            ->get();
 
         $userID = auth()->id();
 
@@ -195,8 +218,8 @@ class ReportsController extends Controller
         $groupedChildren = $groupedChildren->map(function ($childrenGroup) {
             return $childrenGroup
                 ->sortBy(function ($child) {
-                return [$child->sex_id, Str::lower($child->lastname)];
-            });
+                    return [$child->sex_id, Str::lower($child->lastname)];
+                });
         });
 
 
@@ -294,7 +317,7 @@ class ReportsController extends Controller
                         $query->role('child development worker');
                     }
                 ])
-                ->findOrFail($centerId);
+                    ->findOrFail($centerId);
 
                 $worker = $centerWorker->users;
                 $province = $centerWorker->psgc->province_name;
@@ -411,24 +434,25 @@ class ReportsController extends Controller
 
         $province = null;
         $city = null;
+        $adminDistrict = null;
         $status = null;
 
-        if($cycleStatus == 'closed'){
+        if ($cycleStatus == 'closed') {
             $status = 'inactive';
-        } elseif($cycleStatus == 'active'){
+        } elseif ($cycleStatus == 'active') {
             $status = 'active';
-        } else{
+        } else {
             $status = null;
         }
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all();
-        } elseif (auth()->user()->hasRole('lgu focal')) {
+        } elseif (auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')) {
             $userID = auth()->id();
-            $centers = ChildDevelopmentCenter::whereIn('id', function ($query) {
+            $centers = ChildDevelopmentCenter::whereIn('id', function ($query) use ($userID) {
                 $query->select('child_development_center_id')
                     ->from('user_centers')
-                    ->where('user_id', auth()->id());
+                    ->where('user_id', $userID);
             })->with('users.roles')->get();
             $centerIDs = $centers->pluck('id');
 
@@ -440,6 +464,10 @@ class ReportsController extends Controller
 
             $city = Psgc::whereIn('psgc_id', $getPsgc)
                 ->pluck('city_name')
+                ->unique();
+
+            $adminDistrict = Psgc::whereIn('psgc_id', $getPsgc)
+                ->pluck('subdistrict')
                 ->unique();
         }
 
@@ -490,20 +518,6 @@ class ReportsController extends Controller
             'total_female' => 0,
         ];
 
-        $maleAgeTotals = [
-            2 => 0,
-            3 => 0,
-            4 => 0,
-            5 => 0,
-        ];
-
-        $femaleAgeTotals = [
-            2 => 0,
-            3 => 0,
-            4 => 0,
-            5 => 0,
-        ];
-
         foreach ($results as $row) {
             $centerId = $row->center_id;
             $centerName = $row->center_name;
@@ -546,42 +560,6 @@ class ReportsController extends Controller
                 $overallTotals['total_female'] += $row->total;
             }
 
-            if ($sex === 'M' && isset($maleAgeTotals[$age])) {
-                $maleAgeTotals[$age] += $row->total;
-            } elseif ($sex === 'F' && isset($femaleAgeTotals[$age])) {
-                $femaleAgeTotals[$age] += $row->total;
-            }
-
-            // $agetotals = [];
-            // $ageTotalsPerCategory = [];
-            // $totalsPerCategory = [];
-            // foreach ($categories as $category) {
-            //     $totalsPerCategory[$category] = 0;
-            //     foreach ($sexLabels as $sex) {
-            //         $ageTotalsPerCategory[$category][$sex] = 0;
-            //         $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
-            //         foreach ($ages as $age) {
-            //             $agetotals[$category][$sex][$age] = 0;
-            //             $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
-            //         }
-            //     }
-            // }
-
-            // foreach ($wfaCounts as $center) {
-            //     foreach ($categories as $category) {
-            //         $totalsPerCategory[$category] = 0;
-            //         foreach ($sexLabels as $sex) {
-            //             $ageTotalsPerCategory[$category][$sex] = 0;
-            //             $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
-            //             foreach ($ages as $age) {
-            //                 $agetotals[$category][$sex][$age] = 0;
-            //                 $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
-            //                 $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
-            //             }
-            //         }
-            //     }
-            // }
-
             $agetotals = [];
             foreach ($categories as $category) {
                 foreach ($sexLabels as $sex) {
@@ -591,15 +569,45 @@ class ReportsController extends Controller
                 }
             }
 
-            foreach ($wfaCounts as $center) {
-                foreach ($categories as $category) {
-                    foreach ($sexLabels as $sex) {
-                        foreach ($ages as $age) {
-                            $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+            foreach ($wfaCounts as $centerId => $center) {
+                if (
+                    auth()->user()->hasRole('admin') ||
+                    (isset($centerIDs) && $centerIDs->contains($centerId))
+                ) {
+                    foreach ($categories as $category) {
+                        foreach ($sexLabels as $sex) {
+                            foreach ($ages as $age) {
+                                $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                            }
                         }
                     }
                 }
             }
+
+            $sexAgeTotals = [
+                'M' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
+                'F' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
+            ];
+
+            foreach ($wfaCounts as $centerId => $center) {
+                if (
+                    auth()->user()->hasRole('admin') ||
+                    (isset($centerIDs) && $centerIDs->contains($centerId))
+                ) {
+                    foreach ($sexLabels as $sex) {
+                        foreach ($ages as $age) {
+                            foreach ($categories as $category) {
+                                $sexAgeTotals[$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $totalPerSex = [
+                'M' => array_sum($sexAgeTotals['M']),
+                'F' => array_sum($sexAgeTotals['F']),
+            ];
 
             $ageTotalsPerCategory = [];
             foreach ($categories as $category) {
@@ -623,7 +631,7 @@ class ReportsController extends Controller
 
 
 
-        $pdf = PDF::loadView('reports.print.weight-for-age-upon-entry', compact('cycle', 'province', 'city', 'results', 'centers', 'wfaCounts', 'ages', 'sexLabels', 'cat', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
+        $pdf = PDF::loadView('reports.print.weight-for-age-upon-entry', compact('cycle', 'province', 'city', 'adminDistrict', 'results', 'centers', 'wfaCounts', 'ages', 'sexLabels', 'cat', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'sexAgeTotals', 'totalPerSex'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -651,24 +659,25 @@ class ReportsController extends Controller
 
         $province = null;
         $city = null;
+        $adminDistrict = null;
         $status = null;
 
-        if($cycleStatus == 'closed'){
+        if ($cycleStatus == 'closed') {
             $status = 'inactive';
-        } elseif($cycleStatus == 'active'){
+        } elseif ($cycleStatus == 'active') {
             $status = 'active';
-        } else{
+        } else {
             $status = null;
         }
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all();
-        } elseif (auth()->user()->hasRole('lgu focal')) {
+        } elseif (auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')) {
             $userID = auth()->id();
-            $centers = ChildDevelopmentCenter::whereIn('id', function ($query) {
+            $centers = ChildDevelopmentCenter::whereIn('id', function ($query) use ($userID) {
                 $query->select('child_development_center_id')
                     ->from('user_centers')
-                    ->where('user_id', auth()->id());
+                    ->where('user_id', $userID);
             })->with('users.roles')->get();
             $centerIDs = $centers->pluck('id');
 
@@ -680,6 +689,10 @@ class ReportsController extends Controller
 
             $city = Psgc::whereIn('psgc_id', $getPsgc)
                 ->pluck('city_name')
+                ->unique();
+
+            $adminDistrict = Psgc::whereIn('psgc_id', $getPsgc)
+                ->pluck('subdistrict')
                 ->unique();
         }
 
@@ -730,20 +743,6 @@ class ReportsController extends Controller
             'total_female' => 0,
         ];
 
-        $maleAgeTotals = [
-            2 => 0,
-            3 => 0,
-            4 => 0,
-            5 => 0,
-        ];
-
-        $femaleAgeTotals = [
-            2 => 0,
-            3 => 0,
-            4 => 0,
-            5 => 0,
-        ];
-
         foreach ($results as $row) {
             $centerId = $row->center_id;
             $centerName = $row->center_name;
@@ -766,12 +765,12 @@ class ReportsController extends Controller
                 }
             }
 
-            $category = $row->height_for_age;
+            $cat = $row->height_for_age;
             $sex = $sexMap[$row->sex_id] ?? null;
             $age = $row->age_in_years;
 
-            if (isset($hfaCounts[$centerId]['data'][$category][$sex][$age])) {
-                $hfaCounts[$centerId]['data'][$category][$sex][$age] += $row->total;
+            if (isset($hfaCounts[$centerId]['data'][$cat][$sex][$age])) {
+                $hfaCounts[$centerId]['data'][$cat][$sex][$age] += $row->total;
             }
 
             $hfaCounts[$centerId]['total_children'] += $row->total;
@@ -791,46 +790,76 @@ class ReportsController extends Controller
                 $femaleAgeTotals[$age] += $row->total;
             }
 
-        }
-
-        $agetotals = [];
-        foreach ($categories as $category) {
-            foreach ($sexLabels as $sex) {
-                foreach ($ages as $age) {
-                    $agetotals[$category][$sex][$age] = 0;
-                }
-            }
-        }
-
-        foreach ($hfaCounts as $center) {
+            $agetotals = [];
             foreach ($categories as $category) {
                 foreach ($sexLabels as $sex) {
                     foreach ($ages as $age) {
-                        $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                        $agetotals[$category][$sex][$age] = 0;
                     }
                 }
             }
-        }
 
-        $ageTotalsPerCategory = [];
-        foreach ($categories as $category) {
-            foreach ($sexLabels as $sex) {
-                $ageTotalsPerCategory[$category][$sex] = 0;
-                foreach ($ages as $age) {
-                    $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
+            foreach ($hfaCounts as $centerId => $center) {
+                if (
+                    auth()->user()->hasRole('admin') ||
+                    (isset($centerIDs) && $centerIDs->contains($centerId))
+                ) {
+                    foreach ($categories as $category) {
+                        foreach ($sexLabels as $sex) {
+                            foreach ($ages as $age) {
+                                $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                            }
+                        }
+                    }
                 }
             }
-        }
 
-        $totalsPerCategory = [];
-        foreach ($categories as $category) {
-            $totalsPerCategory[$category] = 0;
-            foreach ($sexLabels as $sex) {
-                $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
+            $sexAgeTotals = [
+                'M' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
+                'F' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
+            ];
+
+            foreach ($hfaCounts as $centerId => $center) {
+                if (
+                    auth()->user()->hasRole('admin') ||
+                    (isset($centerIDs) && $centerIDs->contains($centerId))
+                ) {
+                    foreach ($sexLabels as $sex) {
+                        foreach ($ages as $age) {
+                            foreach ($categories as $category) {
+                                $sexAgeTotals[$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                            }
+                        }
+                    }
+                }
             }
+
+            $totalPerSex = [
+                'M' => array_sum($sexAgeTotals['M']),
+                'F' => array_sum($sexAgeTotals['F']),
+            ];
+
+            $ageTotalsPerCategory = [];
+            foreach ($categories as $category) {
+                foreach ($sexLabels as $sex) {
+                    $ageTotalsPerCategory[$category][$sex] = 0;
+                    foreach ($ages as $age) {
+                        $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
+                    }
+                }
+            }
+
+            $totalsPerCategory = [];
+            foreach ($categories as $category) {
+                $totalsPerCategory[$category] = 0;
+                foreach ($sexLabels as $sex) {
+                    $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
+                }
+            }
+
         }
 
-        $pdf = PDF::loadView('reports.print.height-for-age-upon-entry', compact('cycle', 'province', 'city', 'results', 'centers', 'hfaCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
+        $pdf = PDF::loadView('reports.print.height-for-age-upon-entry', compact('cycle', 'province', 'city', 'adminDistrict', 'results', 'centers', 'hfaCounts', 'ages', 'sexLabels', 'cat', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'sexAgeTotals', 'totalPerSex'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
@@ -858,24 +887,25 @@ class ReportsController extends Controller
 
         $province = null;
         $city = null;
+        $adminDistrict = null;
         $status = null;
 
-        if($cycleStatus == 'closed'){
+        if ($cycleStatus == 'closed') {
             $status = 'inactive';
-        } elseif($cycleStatus == 'active'){
+        } elseif ($cycleStatus == 'active') {
             $status = 'active';
-        } else{
+        } else {
             $status = null;
         }
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all();
-        } elseif (auth()->user()->hasRole('lgu focal')) {
+        } elseif (auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')) {
             $userID = auth()->id();
-            $centers = ChildDevelopmentCenter::whereIn('id', function ($query) {
+            $centers = ChildDevelopmentCenter::whereIn('id', function ($query) use ($userID) {
                 $query->select('child_development_center_id')
                     ->from('user_centers')
-                    ->where('user_id', auth()->id());
+                    ->where('user_id', $userID);
             })->with('users.roles')->get();
             $centerIDs = $centers->pluck('id');
 
@@ -887,6 +917,10 @@ class ReportsController extends Controller
 
             $city = Psgc::whereIn('psgc_id', $getPsgc)
                 ->pluck('city_name')
+                ->unique();
+
+            $adminDistrict = Psgc::whereIn('psgc_id', $getPsgc)
+                ->pluck('subdistrict')
                 ->unique();
         }
 
@@ -937,20 +971,6 @@ class ReportsController extends Controller
             'total_female' => 0,
         ];
 
-        $maleAgeTotals = [
-            2 => 0,
-            3 => 0,
-            4 => 0,
-            5 => 0,
-        ];
-
-        $femaleAgeTotals = [
-            2 => 0,
-            3 => 0,
-            4 => 0,
-            5 => 0,
-        ];
-
         foreach ($results as $row) {
             $centerId = $row->center_id;
             $centerName = $row->center_name;
@@ -973,12 +993,12 @@ class ReportsController extends Controller
                 }
             }
 
-            $category = $row->weight_for_height;
+            $cat = $row->weight_for_height;
             $sex = $sexMap[$row->sex_id] ?? null;
             $age = $row->age_in_years;
 
-            if (isset($wfhCounts[$centerId]['data'][$category][$sex][$age])) {
-                $wfhCounts[$centerId]['data'][$category][$sex][$age] += $row->total;
+            if (isset($wfhCounts[$centerId]['data'][$cat][$sex][$age])) {
+                $wfhCounts[$centerId]['data'][$cat][$sex][$age] += $row->total;
             }
 
             $wfhCounts[$centerId]['total_children'] += $row->total;
@@ -998,46 +1018,76 @@ class ReportsController extends Controller
                 $femaleAgeTotals[$age] += $row->total;
             }
 
-        }
-
-        $agetotals = [];
-        foreach ($categories as $category) {
-            foreach ($sexLabels as $sex) {
-                foreach ($ages as $age) {
-                    $agetotals[$category][$sex][$age] = 0;
-                }
-            }
-        }
-
-        foreach ($wfhCounts as $center) {
+            $agetotals = [];
             foreach ($categories as $category) {
                 foreach ($sexLabels as $sex) {
                     foreach ($ages as $age) {
-                        $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                        $agetotals[$category][$sex][$age] = 0;
                     }
                 }
             }
-        }
 
-        $ageTotalsPerCategory = [];
-        foreach ($categories as $category) {
-            foreach ($sexLabels as $sex) {
-                $ageTotalsPerCategory[$category][$sex] = 0;
-                foreach ($ages as $age) {
-                    $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
+            foreach ($wfhCounts as $centerId => $center) {
+                if (
+                    auth()->user()->hasRole('admin') ||
+                    (isset($centerIDs) && $centerIDs->contains($centerId))
+                ) {
+                    foreach ($categories as $category) {
+                        foreach ($sexLabels as $sex) {
+                            foreach ($ages as $age) {
+                                $agetotals[$category][$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                            }
+                        }
+                    }
                 }
             }
-        }
 
-        $totalsPerCategory = [];
-        foreach ($categories as $category) {
-            $totalsPerCategory[$category] = 0;
-            foreach ($sexLabels as $sex) {
-                $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
+            $sexAgeTotals = [
+                'M' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
+                'F' => [2 => 0, 3 => 0, 4 => 0, 5 => 0],
+            ];
+
+            foreach ($wfhCounts as $centerId => $center) {
+                if (
+                    auth()->user()->hasRole('admin') ||
+                    (isset($centerIDs) && $centerIDs->contains($centerId))
+                ) {
+                    foreach ($sexLabels as $sex) {
+                        foreach ($ages as $age) {
+                            foreach ($categories as $category) {
+                                $sexAgeTotals[$sex][$age] += $center['data'][$category][$sex][$age] ?? 0;
+                            }
+                        }
+                    }
+                }
             }
+
+            $totalPerSex = [
+                'M' => array_sum($sexAgeTotals['M']),
+                'F' => array_sum($sexAgeTotals['F']),
+            ];
+
+            $ageTotalsPerCategory = [];
+            foreach ($categories as $category) {
+                foreach ($sexLabels as $sex) {
+                    $ageTotalsPerCategory[$category][$sex] = 0;
+                    foreach ($ages as $age) {
+                        $ageTotalsPerCategory[$category][$sex] += $agetotals[$category][$sex][$age] ?? 0;
+                    }
+                }
+            }
+
+            $totalsPerCategory = [];
+            foreach ($categories as $category) {
+                $totalsPerCategory[$category] = 0;
+                foreach ($sexLabels as $sex) {
+                    $totalsPerCategory[$category] += $ageTotalsPerCategory[$category][$sex] ?? 0;
+                }
+            }
+
         }
 
-        $pdf = PDF::loadView('reports.print.weight-for-height-upon-entry', compact('cycle', 'province', 'city', 'results', 'centers', 'wfhCounts', 'ages', 'sexLabels', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'maleAgeTotals', 'femaleAgeTotals'))
+        $pdf = PDF::loadView('reports.print.weight-for-height-upon-entry', compact('cycle', 'province', 'city', 'adminDistrict', 'results', 'centers', 'wfhCounts', 'ages', 'sexLabels', 'cat', 'categories', 'agetotals', 'ageTotalsPerCategory', 'totalsPerCategory', 'overallTotals', 'sexAgeTotals', 'totalPerSex'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,
