@@ -264,7 +264,7 @@
                 @endcan
             </div>
 
-            <div class="@if (auth()->user()->hasRole('admin'))
+            <div class="@if (auth()->user()->hasAnyRole(['admin', 'sfp coordinator', 'lgu focal']))
                     col-lg-12
                 @elseif ( $today === $minDateExit || !$hasUponEntryData)
                     col-lg-9

@@ -127,7 +127,7 @@
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="date_of_birth">Date of Birth<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300 date-field" id="date_of_birth"
-                                            name='date_of_birth' value="{{ old('date_of_birth', \Carbon\Carbon::parse($child->date_of_birth))->format('m-d-Y') }}" min="{{ $minDate }}" max="{{ $maxDate }}">
+                                            name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth)->format('m-d-Y') }}" min="{{ $minDate }}" max="{{ $maxDate }}">
                                         @error('date_of_birth')
                                             <span class="text-xs text-red-600">{{ $errors->first('date_of_birth') }}</span>
                                         @enderror
