@@ -365,7 +365,7 @@ class ChildController extends Controller
             'middlename' => $validatedData['middlename'] ?? null,
             'lastname' => $validatedData['lastname'],
             'extension_name' => $validatedData['extension_name'] ?? null,
-            'date_of_birth' => $validatedData['date_of_birth'],
+            'date_of_birth' => Carbon::createFromFormat('m-d-Y', $validatedData['date_of_birth'])->format('Y-m-d'),
             'sex_id' => $validatedData['sex_id'],
             'address' => $validatedData['address'],
             'psgc_id' => $psgc_id,
@@ -821,9 +821,9 @@ class ChildController extends Controller
 
             ChildCenter::create([
                 'child_id' => $child->id,
-                'child_development_center_id' => $request->child_development_center_id,
-                'implementation_id' => $request->implementation_id,
-                'milk_feeding_id' => $request->implementation_id,
+                'child_development_center_id' => $currentChildCenter->child_development_center_id,
+                'implementation_id' => $currentChildCenter->implementation_id,
+                'milk_feeding_id' => null,
                 'status' => 'active',
                 'funded' => $request->is_funded,
             ]);
