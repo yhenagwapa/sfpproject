@@ -284,8 +284,8 @@ class ChildController extends Controller
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
         }
 
-        $minDate = Carbon::now()->subYears(6)->addDay()->format('Y-m-d');
-        $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('Y-m-d');
+        $minDate = Carbon::now()->subYears(6)->addDay()->format('m-d-Y');
+        $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('m-d-Y');
 
         $sexOptions = Sex::all();
 
@@ -329,13 +329,13 @@ class ChildController extends Controller
 
         $validatedData = $request->validated();
 
-        //        dd($validatedData);
+        $validatedDate = Carbon::createFromFormat('m-d-Y', $validatedData['date_of_birth'])->format('Y-m-d');
 
         $child = Child::where([
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
-            'date_of_birth' => $request->date_of_birth
+            'date_of_birth' => $validatedDate
         ]);
 
         if (isset($validatedData['extension_name'])) {
@@ -365,7 +365,7 @@ class ChildController extends Controller
             'middlename' => $validatedData['middlename'] ?? null,
             'lastname' => $validatedData['lastname'],
             'extension_name' => $validatedData['extension_name'] ?? null,
-            'date_of_birth' => $validatedData['date_of_birth'],
+            'date_of_birth' => Carbon::createFromFormat('m-d-Y', $validatedData['date_of_birth'])->format('Y-m-d'),
             'sex_id' => $validatedData['sex_id'],
             'address' => $validatedData['address'],
             'psgc_id' => $psgc_id,
@@ -457,8 +457,8 @@ class ChildController extends Controller
 
         $child = Child::findOrFail($childID);
 
-        $minDate = Carbon::now()->subYears(5)->startOfYear()->format('Y-m-d');
-        $maxDate = Carbon::now()->subYears(2)->endOfYear()->format('Y-m-d');
+        $minDate = Carbon::now()->subYears(5)->startOfYear()->format('m-d-Y');
+        $maxDate = Carbon::now()->subYears(2)->endOfYear()->format('m-d-Y');
 
         // $centers = ChildDevelopmentCenter::all();
 
@@ -583,13 +583,14 @@ class ChildController extends Controller
 
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
+        if(!auth()->user()->hasAnyRole(['lgu focal', 'sfp coordinator'])){
 
+            $validatedDate = Carbon::createFromFormat('m-d-Y', $validatedData['date_of_birth'])->format('Y-m-d');
 
-        if(!auth()->user()->hasRole('lgu focal')){
             $query = Child::where('firstname', $validatedData['firstname'])
                 ->where('middlename', $validatedData['middlename'])
                 ->where('lastname', $validatedData['lastname'])
-                ->where('date_of_birth', $validatedData['date_of_birth'])
+                ->where('date_of_birth', $validatedDate)
                 ->where('id', '!=', $child->id);
 
             if (isset($validatedData['extension_name'])) {
@@ -624,7 +625,7 @@ class ChildController extends Controller
                 'middlename' => $request->middlename,
                 'lastname' => $request->lastname,
                 'extension_name' => $request->extension_name,
-                'date_of_birth' => $request->date_of_birth,
+                'date_of_birth' => $validatedDate,
                 'sex_id' => $request->sex_id,
                 'address' => $request->address,
                 'psgc_id' => $psgc->psgc_id,
@@ -736,8 +737,8 @@ class ChildController extends Controller
 
                     //weight for height
                     if ($childSex == '1') {
-                        $getHeight = cgs_wfh_boys::where('length_from', '<=', $request->height)
-                                        ->where('length_to', '>=', $request->height)
+                        $getHeight = cgs_wfh_boys::where('length_from', '<=', $height)
+                                        ->where('length_to', '>=', $height)
                                         ->first();
 
                         if (!$getHeight) {
@@ -759,8 +760,8 @@ class ChildController extends Controller
                         }
 
                     } else {
-                        $getHeight = cgs_wfh_girls::where('length_from', '<=', $request->height)
-                                        ->where('length_to', '>=', $request->height)
+                        $getHeight = cgs_wfh_girls::where('length_from', '<=', $height)
+                                        ->where('length_to', '>=', $height)
                                         ->first();
 
                         if (!$getHeight) {
@@ -812,27 +813,24 @@ class ChildController extends Controller
             }
         }
 
-        if(auth()->user()->hasRole('admin ')|| auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')){
-
-            $currentChildCenter = ChildCenter::where('child_id', $child->id)
+        $currentChildCenter = ChildCenter::where('child_id', $child->id)
                 ->where('status', 'active')->first();
 
-            if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
-                ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
+        if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
+            ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
 
-                ChildCenter::create([
-                    'child_id' => $child->id,
-                    'child_development_center_id' => $request->child_development_center_id,
-                    'implementation_id' => $request->implementation_id,
-                    'milk_feeding_id' => $request->implementation_id,
-                    'status' => 'active',
-                    'funded' => $request->is_funded,
-                ]);
-            }
+            ChildCenter::create([
+                'child_id' => $child->id,
+                'child_development_center_id' => $currentChildCenter->child_development_center_id,
+                'implementation_id' => $currentChildCenter->implementation_id,
+                'milk_feeding_id' => null,
+                'status' => 'active',
+                'funded' => $request->is_funded,
+            ]);
+        }
 
-            if($request->is_funded != $currentChildCenter->funded){
-                ChildCenter::where('child_id', $child->id)->update(['funded' => $request->is_funded]);
-            }
+        if($request->is_funded != $currentChildCenter->funded){
+            ChildCenter::where('child_id', $child->id)->update(['funded' => $request->is_funded]);
         }
 
         return redirect()->route('child.index')->with('success', 'Child record updated successfully.');

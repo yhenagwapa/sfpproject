@@ -67,6 +67,13 @@
             width: 5%;
         }
 
+        @page {
+            margin-top: 20px;
+            margin-bottom: 50px;
+            margin-right: 30px;
+            margin-left: 30px;
+        }
+
         .footer-table {
             width: 100%;
             font-family: 'Arial', sans-serif;
@@ -140,7 +147,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $unfundedChild->full_name }}</td>
                     <td>{{ $unfundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td>{{ $unfundedChild->date_of_birth->format('Y-m-d') }}</td>
+                    <td>{{ $unfundedChild->date_of_birth->format('m-d-Y') }}</td>
                     <td>{{ $unfundedChild->psgc->brgy_name }} {{ $unfundedChild->psgc->city_name }} {{ $unfundedChild->psgc->province_name }}</td>
                     <td>{{ $unfundedChild->pantawid_details ? $unfundedChild->pantawid_details : 'No' }}</td>
                     <td>{{ $unfundedChild->is_indigenous_people ? 'Yes' : 'No' }}</td>

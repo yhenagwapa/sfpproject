@@ -31,7 +31,7 @@ class PDFController extends Controller
     {
 
         $cycleID = session('report_cycle_id');
-        $cycle = Implementation::where('id', $cycleID)->first();
+        $cycle = Implementation::find($cycleID);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
@@ -40,7 +40,9 @@ class PDFController extends Controller
         $cdcId = session('center_name');
         $selectedCenter = null;
 
-        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
+        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex')
+            ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
+            ->orderByRaw("LOWER(lastname) ASC");
 
         if (auth()->user()->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
@@ -114,18 +116,18 @@ class PDFController extends Controller
 
         }
 
-         // sort by gender
-        $isFunded = $isFunded->sort(function($a, $b) {
-            // 1) gender priority
-            if ($a->sex->name === 'Male' && $b->sex->name !== 'Male') {
-                return -1;
-            }
-            if ($b->sex->name === 'Male' && $a->sex->name !== 'Male') {
-                return 1;
-            }
-            // 2) same gender, compare full_name
-            return strcmp($a->full_name, $b->full_name);
-        });
+        //  // sort by gender
+        // $isFunded = $isFunded->sort(function($a, $b) {
+        //     // 1) gender priority
+        //     if ($a->sex->name === 'Male' && $b->sex->name !== 'Male') {
+        //         return -1;
+        //     }
+        //     if ($b->sex->name === 'Male' && $a->sex->name !== 'Male') {
+        //         return 1;
+        //     }
+        //     // 2) same gender, compare full_name
+        //     return strcmp($a->full_name, $b->full_name);
+        // });
 
         $pdf = Pdf::loadView('reports.print.masterlist', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames'))
             ->setPaper('folio', 'landscape')
@@ -180,21 +182,6 @@ class PDFController extends Controller
                     })
                     ->get();
 
-                $allCountsPerNutritionalStatus = Child::with([
-                    'nutritionalStatus' => function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    }
-                ])
-                    ->whereHas('records', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id)
-                            ->where('funded', 1)
-                            ->where('status', 'active');
-                    })
-                    ->get()
-                    ->filter(function ($child) {
-                        return $child->nutritionalStatus->isNotEmpty();
-                    });
-
             } else {
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
 
@@ -209,22 +196,6 @@ class PDFController extends Controller
                             ->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
                     ->get();
-
-                $allCountsPerNutritionalStatus = Child::with([
-                    'nutritionalStatus' => function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    }
-                ])
-                    ->whereHas('records', function ($query) use ($cycle, $cdcId) {
-                        $query->where('implementation_id', $cycle->id)
-                            ->where('child_development_center_id', $cdcId)
-                            ->where('funded', 1)
-                            ->where('status', 'active');
-                    })
-                    ->get()
-                    ->filter(function ($child) {
-                        return $child->nutritionalStatus->isNotEmpty();
-                    });
             }
 
         } else {
@@ -247,20 +218,7 @@ class PDFController extends Controller
                     })
                     ->get();
 
-                $allCountsPerNutritionalStatus = Child::with([
-                    'nutritionalStatus' => function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    }
-                ])
-                    ->whereHas('records', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id)
-                            ->where('funded', 1)
-                            ->where('status', 'active');
-                    })
-                    ->get()
-                    ->filter(function ($child) {
-                        return $child->nutritionalStatus->isNotEmpty();
-                    });
+
 
             } else {
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
@@ -277,23 +235,13 @@ class PDFController extends Controller
                     })
                     ->get();
 
-                $allCountsPerNutritionalStatus = Child::with([
-                    'nutritionalStatus' => function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    }
-                ])
-                    ->whereHas('records', function ($query) use ($cycle, $cdcId) {
-                        $query->where('implementation_id', $cycle->id)
-                            ->where('child_development_center_id', $cdcId)
-                            ->where('funded', 1)
-                            ->where('status', 'active');
-                    })
-                    ->get()
-                    ->filter(function ($child) {
-                        return $child->nutritionalStatus->isNotEmpty();
-                    });
+
             }
         }
+
+        $allCountsPerNutritionalStatus = $isFunded->filter(function ($child) {
+            return $child->nutritionalStatus->isNotEmpty();
+        });
 
         $countsPerNutritionalStatus = $allCountsPerNutritionalStatus->groupBy(function ($child) {
             $oldestStatus = $child->nutritionalStatus()->oldest()->first();
@@ -529,21 +477,6 @@ class PDFController extends Controller
                             ->whereIn('age_in_years', [2, 3, 4, 5]);
                     })
                     ->get();
-
-                $allCountsPerNutritionalStatus = Child::with([
-                    'nutritionalStatus' => function ($query) {
-                        $query->whereIn('age_in_years', [2, 3, 4, 5]);
-                    }
-                ])
-                    ->whereHas('records', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id)
-                            ->where('funded', 1)
-                            ->where('status', 'active');
-                    })
-                    ->get()
-                    ->filter(function ($child) {
-                        return $child->nutritionalStatus->isNotEmpty();
-                    });
 
             } else {
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
@@ -909,6 +842,8 @@ class PDFController extends Controller
                             ->where('status', 'active');
                     })
                     ->whereHas('nutritionalStatus')
+                    ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
+                    ->orderByRaw("LOWER(lastname) ASC")
                     ->get();
 
             } else {
@@ -920,6 +855,8 @@ class PDFController extends Controller
                             ->where('status', 'active');
                     })
                     ->whereHas('nutritionalStatus')
+                    ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
+                    ->orderByRaw("LOWER(lastname) ASC")
                     ->get();
 
                 $selectedCenter = ChildDevelopmentCenter::with('psgc')->find($cdcId);
@@ -942,6 +879,8 @@ class PDFController extends Controller
                             ->where('status', 'active');
                     })
                     ->whereHas('nutritionalStatus')
+                    ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
+                    ->orderByRaw("LOWER(lastname) ASC")
                     ->get();
 
             } else {
@@ -953,6 +892,8 @@ class PDFController extends Controller
                             ->where('status', 'active');
                     })
                     ->whereHas('nutritionalStatus')
+                    ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
+                    ->orderByRaw("LOWER(lastname) ASC")
                     ->get();
 
                 $selectedCenter = ChildDevelopmentCenter::find($cdcId);
@@ -960,17 +901,17 @@ class PDFController extends Controller
         }
 
         // sort by gender
-        $isFunded = $isFunded->sort(function($a, $b) {
-            // 1) gender priority
-            if ($a->sex->name === 'Male' && $b->sex->name !== 'Male') {
-                return -1;
-            }
-            if ($b->sex->name === 'Male' && $a->sex->name !== 'Male') {
-                return 1;
-            }
-            // 2) same gender, compare full_name
-            return strcmp($a->full_name, $b->full_name);
-        });
+        // $isFunded = $isFunded->sort(function($a, $b) {
+        //     // 1) gender priority
+        //     if ($a->sex->name === 'Male' && $b->sex->name !== 'Male') {
+        //         return -1;
+        //     }
+        //     if ($b->sex->name === 'Male' && $a->sex->name !== 'Male') {
+        //         return 1;
+        //     }
+        //     // 2) same gender, compare full_name
+        //     return strcmp($a->full_name, $b->full_name);
+        // });
 
         $pdf = Pdf::loadView('reports.print.monitoring', compact('cycle', 'isFunded', 'centers', 'cdcId', 'selectedCenter'))
             ->setPaper('folio', 'landscape')
@@ -997,7 +938,7 @@ class PDFController extends Controller
     public function printUnfunded(Request $request)
     {
         $cycleID = session('report_cycle_id');
-        $cycle = Implementation::where('id', $cycleID)->first();
+        $cycle = Implementation::find($cycleID);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');

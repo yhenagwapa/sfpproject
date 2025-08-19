@@ -87,7 +87,7 @@
 
         @page {
             margin-top: 20px;
-            margin-bottom: 0;
+            margin-bottom: 50px;
             margin-right: 30px;
             margin-left: 30px;
         }
@@ -177,10 +177,10 @@
                     <td>{{ $loop->iteration }}</td>
                     <td class="no-wrap">{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
+                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('m-d-Y') }}</td>
 
 
-                    <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date : '-' }}
+                    <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date->format('m-d-Y') : '-' }}
                     </td>
                     <td>{{ $fundedChild->nutritionalStatus->first() ? number_format($fundedChild->nutritionalStatus->first()->weight, 1) : '-' }}
                     </td>

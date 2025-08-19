@@ -66,6 +66,7 @@
 
         .footer-table p{
             margin: 0;
+            text-transform: uppercase;
         }
 
         .footer-table td {
@@ -79,7 +80,7 @@
 
         @page {
             margin-top: 20px;
-            margin-bottom: 0;
+            margin-bottom: 50px;
             margin-right: 30px;
             margin-left: 30px;
         }
@@ -137,7 +138,7 @@
                         {{ optional($childrenWithDisability->records->first()->center)->center_name ?? 'N/A' }}
                     </td>
                     <td>{{ $childrenWithDisability->sex->name }}</td>
-                    <td>{{ $childrenWithDisability->date_of_birth->format('Y-m-d') }}</td>
+                    <td>{{ $childrenWithDisability->date_of_birth->format('m-d-Y') }}</td>
                     <td>{{ $childrenWithDisability->person_with_disability_details }}</td>
                 </tr>
 

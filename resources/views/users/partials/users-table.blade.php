@@ -130,7 +130,7 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                Are you sure you want to change <b class="text-red-600">{{ $user->full_name }}</b>'s
+                                Are you sure you want to change <b class="text-red-600 uppercase">{{ $user->full_name }}</b>'s
                                 status?
                             </div>
                             <div class="modal-footer">
@@ -195,7 +195,7 @@
                                                 aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        Are you sure you want to reset <b class="text-red-600">{{ $user->full_name }}</b>'s
+                                        Are you sure you want to reset <b class="text-red-600 uppercase">{{ $user->full_name }}</b>'s
                                         password?
                                     </div>
                                     <div class="modal-footer">

@@ -9,36 +9,16 @@
 
     <title>SFP IS</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
     <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-
-    {{-- * Template Name: NiceAdmin
-        * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-        * Updated: Apr 20 2024 with Bootstrap v5.3.3
-        * Author: BootstrapMade.com
-        * License: https://bootstrapmade.com/license/ --}}
 
 </head>
 
@@ -555,18 +535,8 @@
 
             <footer id="register-footer" class="register-footer">
                 <div class="footer-dswd">
-                    &copy; {{ now()->year }} Department of Social Welfare and Development.
+                    &copy; 2025 Department of Social Welfare and Development.
                 </div>
-                {{-- <div class="copyright">
-                    &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-                </div>
-                <div class="credits">
-                    <!-- All the links in the footer should remain intact. -->
-                    <!-- You can delete the links only if you purchased the pro version. -->
-                    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                </div> --}}
             </footer><!-- End Footer -->
         </div>
     </div>

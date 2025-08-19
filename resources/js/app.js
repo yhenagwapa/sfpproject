@@ -13,7 +13,24 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
+
 window.Alpine = Alpine;
 Alpine.start();
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".date-field").forEach(input => {
+        flatpickr(input, {
+            dateFormat: "m-d-Y",
+            minDate: input.getAttribute("min"),
+            maxDate: input.getAttribute("max"),
+            allowInput: false
+        });
+    });
+});
 
 import './main';

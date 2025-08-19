@@ -9,37 +9,14 @@
 
     <title>SFP IS</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
     <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Nunito:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap CSS and Icons -->
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"> --}}
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"> --}}
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.tailwindcss.min.css"> --}}
-    {{-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script> --}}
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> --}}
-
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
     <!-- Vite -->
-    @vite(['resources/css/app.css'])
-
-     {{-- * Template Name: NiceAdmin
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Updated: Apr 20 2024 with Bootstrap v5.3.3
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/ --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-sans antialiased">
@@ -65,21 +42,20 @@
 
             <!-- End Logo -->
 
-            <nav class="header-nav ml-auto align-items-center justify-end">
-
+            {{-- <nav class="header-nav ml-auto align-items-center justify-end">
                 <ul class="d-flex list-unstyled mt-2">
                     <li class="nav-item dropdown pe-3">
-                        <button type="button" class="nav-link nav-profile d-flex align-items-center pe-0 uppercase" href="#"
+                        <a href="#" role="button" class="nav-link nav-profile d-flex align-items-center pe-0 dropdown-toggle uppercase"
                             data-bs-toggle="dropdown">
                             @auth
                                 @php
                                     $user = Auth::user();
                                     $fullName = trim("{$user->firstname} {$user->middlename} {$user->lastname}");
                                 @endphp
-                                <span class="d-none d-md-block dropdown-toggle ps-2">{{ $fullName }}</span>
+                                <span class="d-none d-md-block ps-2">{{ $fullName }}</span>
                             @endauth
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        </a>
+                        <ul class="dropdown-menu profile">
                             <li>
                                 <form action="{{ route('users.show') }}" method="POST">
                                     @csrf
@@ -118,7 +94,69 @@
                         </ul>
                     </li>
                 </ul>
-            </nav><!-- End Icons Navigation -->
+            </nav><!-- End Icons Navigation --> --}}
+            <nav class="header-nav ml-auto flex items-center">
+                <ul class="flex list-none mt-2">
+                    <li class="nav-item relative" x-data="{ open: false }">
+                        <button
+                            @click="open = !open"
+                            @click.away="open = false"
+                            class="d-flex nav-link nav-profile items-center uppercase focus:outline-none"
+                        >
+                            @auth
+                                @php
+                                    $user = Auth::user();
+                                    $fullName = trim("{$user->firstname} {$user->middlename} {$user->lastname}");
+                                @endphp
+                                <span class="d-none d-md-block ps-2">{{ $fullName }}</span>
+                            @endauth
+                            <svg class="ml-2 mr-10 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <ul
+                            x-show="open"
+                            x-transition
+                            class="absolute left-0 mt-2 px-2 w-60 bg-white rounded-md shadow-lg z-50 profile"
+                            @click.away="open = false"
+                        >
+                            <li>
+                                <form action="{{ route('users.show') }}" method="POST" class="block w-full">
+                                    @csrf
+                                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                                    <button class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="mr-2 w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                        </svg>
+                                        Profile
+                                    </button>
+                                </form>
+                            </li>
+                            <li><hr class="border-t my-1"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" class="block w-full">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mb-1 items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="mr-2 w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                                        </svg>
+                                        Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
         </header>
 
         <aside id="sidebar" class="sidebar">
@@ -202,26 +240,6 @@
                         </a>
                     </li><!-- End Audit Logs Page Nav -->
                 @endif
-
-                {{--@if (auth()->user()->hasRole('admin'))
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="{{ route('activitylogs.index')}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                            </svg>
-                            <span class="text-sm">Data Import</span>
-                        </a>
-                    </li><!-- End Audit Logs Page Nav -->
-                @elseif (auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('lgu focal'))
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="{{ route('activitylogs.index')}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#899bbd" class="mr-2 size-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                            </svg>
-                            <span class="text-sm">Data Export</span>
-                        </a>
-                    </li><!-- End Audit Logs Page Nav -->
-                @endif--}}
             </ul>
 
 
@@ -234,42 +252,13 @@
 
             <footer id="footer" class="footer">
                 <div class="footer-dswd">
-                    &copy; {{ now()->year }} Department of Social Welfare and Development.
-                </div>
-                <div class="credits mt-2 mb-0">
-                    &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-
-                    <!-- All the links in the footer should remain intact. -->
-                    <!-- You can delete the links only if you purchased the pro version. -->
-                    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    &copy; 2025 Department of Social Welfare and Development.
                 </div>
             </footer><!-- End Footer -->
         </div>
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
-{{--
-        <!-- DataTables JS -->
-        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-        <!-- Bootstrap Bundle (includes Popper.js) -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-        <!-- Chart.js -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
-
-        @vite(['resources/js/app.js'])
-
-        {{-- <form id="clear-session-form" action="{{ route('clear.child.session') }}" method="POST">
-            @csrf
-            <input type="hidden" name="redirect_url" id="redirect_url">
-        </form> --}}
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -284,6 +273,8 @@
                 };
             });
         </script>
+
+        {{-- @vite(['resources/js/app.js']) --}}
 </body>
 
 </html>

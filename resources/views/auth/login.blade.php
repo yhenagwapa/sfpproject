@@ -13,14 +13,6 @@
     <!-- Favicons -->
     <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -115,12 +107,7 @@
                         </div>
 
                         <div class="credits mt-5 text-xs text-center">
-                            <!-- All the links in the footer should remain intact. -->
-                            <!-- You can delete the links only if you purchased the pro version. -->
-                            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                            &copy; {{ now()->year }} Department of Social Welfare and Development. <br />
-                            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                            &copy; 2025 Department of Social Welfare and Development. <br />
                         </div>
 
                     </div>
@@ -154,9 +141,7 @@
             }
         </script>
     </main><!-- End #main -->
-
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> --}}
-
+    @vite(['resources/js/app.js'])
 </body>
 
 </html>

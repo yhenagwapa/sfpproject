@@ -56,9 +56,7 @@
                             <b>{{ $childCount }}</b></b>
                         </h5>
                         <div id="report-content">
-                            @if (auth()->user()->hasRole('admin') ||
-                                    auth()->user()->hasRole('lgu focal') ||
-                                    auth()->user()->hasRole('child development worker'))
+                            @if (!auth()->user()->hasRole('encoder'))
                                 <div id="funded-content">
                                     <div class="row">
                                         <div class="col-md-6 mt-3 text-sm">
@@ -85,24 +83,26 @@
                                         <div class="col-md-6 row">
                                         </div>
                                         <div class="col-md-6 text-base inline">
-                                            <nav class="d-flex header-nav mt-4 mb-5">
-                                                {{-- worker report button --}}
-                                                @if (auth()->user()->hasRole('admin') ||
-                                                        auth()->user()->hasRole('lgu focal') ||
-                                                        auth()->user()->hasRole('child development worker'))
-                                                    <ul class="d-flex list-unstyled">
-                                                        <li class="nav-item dropdown pe-3" x-data="{ open: false }">
-                                                            <a class="nav-link nav-profile align-items-center pe-0 inline"
-                                                                @click.prevent="open = !open; $event.stopPropagation()"
-                                                                data-bs-toggle="dropdown">
-                                                                <button type="button"
-                                                                    class="bg-blue-600 text-white rounded px-3 min-h-9">
-                                                                    <span class="dropdown-toggle text-white">Worker
-                                                                        Reports</span>
-                                                                </button>
-                                                            </a>
-                                                            <ul id="dropdown-worker"
-                                                                class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                                            <nav class="header-nav ml-auto flex gap-3 mt-2 items-center">
+                                                @if (!auth()->user()->hasRole('encoder'))
+                                                    <ul class="flex list-none">
+                                                        <li class="nav-item relative" x-data="{ open: false }">
+                                                            <button @click="open = !open" @click.away="open = false"
+                                                                class="d-flex items-center focus:outline-none bg-blue-600 text-white rounded px-3 min-h-9">
+                                                                <b>Worker Reports</b>
+                                                                <span>
+                                                                    <svg class="ml-2 w-4 h-4" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                                            d="M19 9l-7 7-7-7" />
+                                                                    </svg>
+                                                                </span>
+                                                            </button>
+
+                                                            <ul id="dropdown-worker" x-show="open" x-transition
+                                                                class="absolute left-0 mt-2 px-2 w-max bg-white rounded-md shadow-lg z-50 profile"
+                                                                @click.away="open = false">
                                                                 <form id="printCDWForm" action="" method="POST"
                                                                     target="_blank">
                                                                     @csrf
@@ -112,7 +112,7 @@
                                                                         value="">
                                                                     <li>
                                                                         <button
-                                                                            class="dropdown-item d-flex align-items-center"
+                                                                            class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
                                                                             onclick="workerReport('masterlist'); return false;">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
@@ -126,15 +126,15 @@
                                                                         </button>
                                                                     </li>
                                                                     <li>
-                                                                        <hr class="dropdown-divider">
+                                                                        <hr class="border-t my-1">
                                                                     </li>
 
-                                                                    <li class="nav-heading d-flex align-items-center">
+                                                                    <li class="nav-heading">
                                                                         Age Bracket
                                                                     </li>
                                                                     <li>
                                                                         <button
-                                                                            class="dropdown-item d-flex align-items-center"
+                                                                            class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
                                                                             onclick="workerReport('age-bracket-upon-entry'); return false;">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
@@ -149,7 +149,7 @@
                                                                     </li>
                                                                     <li>
                                                                         <button
-                                                                            class="dropdown-item d-flex align-items-center"
+                                                                            class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
                                                                             onclick="workerReport('age-bracket-after-120'); return false;">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
@@ -163,11 +163,11 @@
                                                                         </button>
                                                                     </li>
                                                                     <li>
-                                                                        <hr class="dropdown-divider">
+                                                                        <hr class="border-t my-1">
                                                                     </li>
                                                                     <li>
                                                                         <button
-                                                                            class="dropdown-item d-flex align-items-center"
+                                                                            class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
                                                                             onclick="workerReport('monitoring'); return false;">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
@@ -181,11 +181,11 @@
                                                                         </button>
                                                                     </li>
                                                                     <li>
-                                                                        <hr class="dropdown-divider">
+                                                                        <hr class="border-t my-1">
                                                                     </li>
                                                                     <li>
                                                                         <button
-                                                                            class="dropdown-item d-flex align-items-center"
+                                                                            class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mb-1 items-center"
                                                                             onclick="workerReport('unfunded'); return false;">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 fill="none" viewBox="0 0 24 24"
@@ -204,33 +204,35 @@
 
                                                     </ul>
                                                 @endif
-                                                {{-- focal report button --}}
-                                                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-                                                    <div id="focal-dropdown">
-                                                        <ul class="d-flex list-unstyled">
-                                                            <li class="nav-item dropdown pe-3" x-data="{ open: false }">
-                                                                <a class="nav-link nav-profile align-items-center pe-0"
-                                                                    @click.prevent="open = !open; $event.stopPropagation()"
-                                                                    data-bs-toggle="dropdown">
-                                                                    <button type="button"
-                                                                        class="bg-blue-600 text-white rounded px-3 min-h-9">
-                                                                        <span class="dropdown-toggle text-white">Focal
-                                                                            Reports</span>
-                                                                    </button>
-                                                                </a>
-                                                                <ul id="dropdown-focal"
-                                                                    class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                                                                    <form id="printFocalForm" action=""
-                                                                        method="POST" target="_blank">
-                                                                        @csrf
-                                                                        <input type="hidden" name="cycle_id2"
-                                                                            id="cycle_id2" value="{{ $cycle->id }}">
-                                                                        <input type="hidden" name="center_name2"
-                                                                            id="center_id2" value="">
-
+                                                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator'))
+                                                    <ul class="flex list-none">
+                                                        <li class="nav-item relative" x-data="{ open: false }">
+                                                            <button @click="open = !open" @click.away="open = false"
+                                                                class="d-flex items-center focus:outline-none bg-blue-600 text-white rounded px-3 min-h-9">
+                                                                <b>Focal Reports</b>
+                                                                <span>
+                                                                    <svg class="ml-2 w-4 h-4" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                                                    </svg>
+                                                                </span>
+                                                            </button>
+                                                            <ul id="dropdown-focal" x-show="open" x-transition
+                                                                class="absolute left-0 mt-2 px-2 w-60 bg-white rounded-md shadow-lg z-50 profile"
+                                                                @click.away="open = false">
+                                                                <form id="printFocalForm" action="" method="POST"
+                                                                    target="_blank">
+                                                                    @csrf
+                                                                    <input type="hidden" name="cycle_id2" id="cycle_id2"
+                                                                        value="{{ $cycle->id }}">
+                                                                    <input type="hidden" name="center_name2"
+                                                                        id="center_id2" value="">
+                                                                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                                                         <li>
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
                                                                                 onclick="focalReport('malnourished'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
@@ -244,11 +246,11 @@
                                                                             </button>
                                                                         </li>
                                                                         <li>
-                                                                            <hr class="dropdown-divider">
+                                                                            <hr class="border-t my-1">
                                                                         </li>
                                                                         <li>
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
                                                                                 onclick="focalReport('disabilities'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
@@ -263,14 +265,14 @@
                                                                             </button>
                                                                         </li>
                                                                         <li>
-                                                                            <hr class="dropdown-divider">
+                                                                            <hr class="border-t my-1">
                                                                         </li>
                                                                         <li class="nav-heading d-flex align-items-center">
                                                                             Undernourish
                                                                         </li>
                                                                         <li>
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
                                                                                 onclick="focalReport('undernourished-upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
@@ -283,9 +285,9 @@
                                                                                 <span>Upon Entry</span>
                                                                             </button>
                                                                         </li>
-                                                                        <li>
+                                                                        <li class="hidden">
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
                                                                                 onclick="focalReport('undernourished-after-120'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
@@ -299,45 +301,14 @@
                                                                             </button>
                                                                         </li>
                                                                         <li>
-                                                                            <hr class="dropdown-divider">
+                                                                            <hr class="border-t my-1">
                                                                         </li>
-                                                                    </form>
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    {{-- ns report button --}}
-                                                    <div id="ns-dropdown">
-                                                        <ul class="d-flex list-unstyled">
-                                                            <li class="nav-item dropdown pe-3" x-data="{ open: false }">
-                                                                <a class="nav-link nav-profile align-items-center pe-0"
-                                                                    @click.prevent="open = !open; $event.stopPropagation()"
-                                                                    data-bs-toggle="dropdown">
-                                                                    <button type="button"
-                                                                        class="bg-blue-600 text-white rounded px-3 min-h-9">
-                                                                        <span class="dropdown-toggle text-white">NS
-                                                                            Reports</span>
-                                                                    </button>
-                                                                </a>
-                                                                <ul id="dropdown-ns"
-                                                                    class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                                                                    <form id="printNSForm" action="" method="POST"
-                                                                        target="_blank">
-                                                                        @csrf
-                                                                        <input type="hidden" name="ns_cycle_id"
-                                                                            id="ns_cycle_id" value="{{ $cycle->id }}">
-                                                                        <input type="hidden" name="ns_center_name"
-                                                                            id="ns_center_id" value="">
-                                                                        <input type="hidden" name="ns_type"
-                                                                            id="ns_type">
-                                                                        <input type="hidden" name="report_type"
-                                                                            id="report_type">
                                                                         <li class="nav-heading d-flex align-items-center">
                                                                             Nutritional Status Upon Entry
                                                                         <li>
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('weight-for-age', 'upon-entry'); return false;">
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
+                                                                                onclick="focalReport('weight-for-age-upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -351,8 +322,8 @@
                                                                         </li>
                                                                         <li>
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('height-for-age', 'upon-entry'); return false;">
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
+                                                                                onclick="focalReport('height-for-age-upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -366,8 +337,8 @@
                                                                         </li>
                                                                         <li>
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('weight-for-height', 'upon-entry'); return false;">
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
+                                                                                onclick="focalReport('weight-for-height-upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -379,16 +350,16 @@
                                                                                 <span>Weight for Height</span>
                                                                             </button>
                                                                         </li>
-                                                                        <li>
-                                                                            <hr class="dropdown-divider">
+                                                                        <li class="hidden">
+                                                                            <hr class="border-t my-1">
                                                                         </li>
-                                                                        <li class="nav-heading d-flex align-items-center">
+                                                                        <li class="hidden">
                                                                             NS After 120 Feedings
                                                                         </li>
-                                                                        <li>
+                                                                        <li class="hidden">
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('weight-for-age', 'after-120'); return false;">
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
+                                                                                onclick="focalReport('weight-for-age-after-120'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -400,10 +371,10 @@
                                                                                 <span>Weight for Age</span>
                                                                             </button>
                                                                         </li>
-                                                                        <li>
+                                                                        <li class="hidden">
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('height-for-age', 'after-120'); return false;">
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
+                                                                                onclick="focalReport('height-for-age-after-120'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -415,10 +386,10 @@
                                                                                 <span>Height for Age</span>
                                                                             </button>
                                                                         </li>
-                                                                        <li>
+                                                                        <li class="hidden">
                                                                             <button
-                                                                                class="dropdown-item d-flex align-items-center"
-                                                                                onclick="nsReport('weight-for-height', 'after-120'); return false;">
+                                                                                class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
+                                                                                onclick="focalReport('weight-for-height-after-120'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -430,13 +401,13 @@
                                                                                 <span>Weight for Height</span>
                                                                             </button>
                                                                         </li>
-                                                                    </form>
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                                                    @endif
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+
+                                                    </form>
                                                 @endif
-                                                {{-- export report for CO --}}
                                                 <form action="{{ route('export-report') }}" method="POST"
                                                     target="_blank">
                                                     @csrf
@@ -445,13 +416,15 @@
 
                                                     <button type="submit"
                                                         class="bg-blue-600 text-white flex align-items-center rounded px-3 min-h-9">
-                                                        <span>Export Report</span>
+                                                        <b><span>Export Report</span></b>
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="white"
                                                             class="size-5">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                                                         </svg>
+
+
                                                     </button>
                                                 </form>
                                             </nav>
@@ -519,57 +492,34 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
-
     </section>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- @vite(['resources/js/app.js']) --}}
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dropdownToggles = document.querySelectorAll('[data-bs-toggle="dropdown"]');
-
-            dropdownToggles.forEach(toggle => {
-                toggle.addEventListener('click', function() {
-                    // Close all open dropdowns first
-                    document.querySelectorAll('.dropdown-menu.show').forEach(openMenu => {
-                        if (!toggle.nextElementSibling.contains(openMenu)) {
-                            const dropdown = bootstrap.Dropdown.getInstance(openMenu
-                                .previousElementSibling);
-                            if (dropdown) dropdown.hide();
+        window.addEventListener('load', function () {
+            $(document).ready(function() {
+                $("#funded-table").DataTable({
+                    paging: true, // Enable paging
+                    pageLength: 15, // Show 10 entries per page
+                    lengthChange: false, // Hide the dropdown to change entry count
+                    searching: true,
+                    order: [
+                        [0, 'asc']
+                    ],
+                    columnDefs: [{
+                        orderable: false,
+                        targets: 'no-sort'
+                    }],
+                    info: false,
+                    rowCallback: function(row, data, index) {
+                        var table = $('#funded-table').DataTable();
+                        if (data && Object.keys(data).length !== 0) {
+                            $('td:eq(0)', row).html(table.page.info().start + index + 1);
+                        } else {
+                            $('td:eq(0)', row).html('');
                         }
-                    });
-                });
-            });
-        });
-    </script>
-
-    <script>
-        jQuery(document).ready(function() {
-            jQuery("#funded-table").DataTable({
-                paging: true, // Enable paging
-                pageLength: 20, // Show 10 entries per page
-                lengthChange: false, // Hide the dropdown to change entry count
-                searching: true,
-                order: [
-                    [0, 'asc']
-                ],
-                columnDefs: [{
-                    orderable: false,
-                    targets: 'no-sort'
-                }],
-                info: false,
-                rowCallback: function(row, data, index) {
-                    var table = $('#funded-table').DataTable();
-                    if (data && Object.keys(data).length !== 0) {
-                        $('td:eq(0)', row).html(table.page.info().start + index + 1);
-                    } else {
-                        $('td:eq(0)', row).html('');
                     }
-                }
+                });
             });
         });
     </script>

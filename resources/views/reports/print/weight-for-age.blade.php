@@ -42,7 +42,15 @@
             <tr>
                 <td>
                     <p>Province: <u>{{ $province ? $province->implode(', ') : 'All Provinces' }}</u></p>
-                    <p>City / Municipality: <u>{{ $city ? $city->implode(', ') : 'All Cities' }}</u></p>
+                    <p>
+                        City / Municipality:
+                        <u>
+                            @if(auth()->user()->hasRole('sfp coordinator'))
+                                {{ $adminDistrict ? $adminDistrict->implode(', ') : null }}
+                            @endif
+                            {{ $city ? $city->implode(', ') : 'All Cities' }}
+                        </u>
+                    </p>
                 </td>
             </tr>
         </table>
@@ -102,6 +110,12 @@
                     $maleAges = 0;
                     $femaleAges = 0;
                     $allAges = 0;
+                    $overAll = 0;
+                    $overAllM = 0;
+                    $overAllF = 0;
+                    $perAgeTotal = 0;
+                    $perSexTotal = 0;
+                    $perCategory = 0;
                 @endphp
 
                 @foreach ($centers as $center)
@@ -137,9 +151,24 @@
                             $totalFemale = $nsCounts[$center->id]['total_female'] ?? 0;
                         @endphp
 
-                        <td>{{ $overallTotal }}</td>
-                        <td>{{ $totalMale }}</td>
-                        <td>{{ $totalFemale }}</td>
+                        <td>
+                            {{ $overallTotal }}
+                            @php
+                                $overAll += $overallTotal;
+                            @endphp
+                        </td>
+                        <td>
+                            {{ $totalMale }}
+                            @php
+                                $overAllM += $totalMale;
+                            @endphp
+                        </td>
+                        <td>
+                            {{ $totalFemale }}
+                            @php
+                                $overAllF += $totalFemale;
+                            @endphp
+                        </td>
 
                         @foreach ($categories as $category)
                             @foreach ($sexLabels as $sex)
@@ -162,35 +191,27 @@
                 @endforeach
                 <tr>
                     <td colspan="3">TOTAL PER AGE BRACKET ></td>
-                    <td class="centered" rowspan="3">{{ $overallTotals['total_children'] }}</td>
-                    <td class="centered">{{ $overallTotals['total_male'] }}</td>
-                    <td class="centered">{{ $overallTotals['total_female'] }}</td>
+                    <td class="centered" rowspan="3">{{ $overAll }}</td>
+                    <td class="centered">{{ $overAllM }}</td>
+                    <td>{{ $overAllF }}</td>
+
                     @foreach ($categories as $category)
                         @foreach ($sexLabels as $sex)
                             @foreach ($ages as $age)
-                                <td class="centered">{{ $agetotals[$category][$sex][$age] ?? 0 }}</td>
+                                <td>{{ $agetotals[$category][$sex][$age] }}</td>
                             @endforeach
                         @endforeach
                     @endforeach
+
                     @foreach ($sexLabels as $sex)
                         @foreach ($ages as $age)
-                            @if ($sex == 'M')
-                                <td class="centered">{{ $maleAgeTotals[$age] }}</td>
-                                @php
-                                    $maleAges += $maleAgeTotals[$age];
-                                @endphp
-                            @else
-                                <td class="centered">{{ $femaleAgeTotals[$age] }}</td>
-                                @php
-                                    $femaleAges += $femaleAgeTotals[$age];
-                                @endphp
-                            @endif
+                            <td>{{ $sexAgeTotals[$sex][$age] }}</td>
                         @endforeach
                     @endforeach
                 </tr>
                 <tr>
                     @php
-                        $totalAllGender = $overallTotals['total_male'] + $overallTotals['total_female'];
+                        $totalAllGender = $overAllM + $overAllF;
                     @endphp
 
                     <td colspan="3">TOTAL MALE/FEMALE ></td>
@@ -205,18 +226,13 @@
                     @endforeach
 
                     @foreach ($sexLabels as $sex)
-                        @if ($sex == 'M')
-                            <td class="centered" colspan="{{ count($ages) }}">{{ $maleAges }}</td>
-                        @else
-                            <td class="centered" colspan="{{ count($ages) }}">{{ $femaleAges }}</td>
-                        @endif
+                        <td colspan="{{ count($ages) }}">{{ $totalPerSex[$sex] }}</td>
                     @endforeach
                 </tr>
                 <tr>
                     <td class="centered" colspan="3">TOTAL CHILD BENEFICIARIES > </td>
                     @php
                         $colspan = count($ages) * count($sexLabels);
-                        $overallTotal = $maleAges + $femaleAges;
                     @endphp
 
                     @foreach ($categories as $category)
@@ -225,9 +241,8 @@
                         </td>
                     @endforeach
 
-
                     <td class="centered" colspan="{{ $colspan }}">
-                        {{ $overallTotal }}
+                        {{ $overAll }}
                     </td>
                 </tr>
 

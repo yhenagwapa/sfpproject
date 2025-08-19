@@ -27,24 +27,24 @@ class StoreNutritionalStatusRequest extends FormRequest
         $implementationID = $this->input('implementation_id');
         $implementationYear = Implementation::findOrFail($implementationID);
 
-        $yearFrom = $implementationYear->school_year_from;
-        $yearTo = $implementationYear->school_year_to;
+        $year = $implementationYear->school_year_from;
 
-        $minWeighingDate = $yearFrom ? $yearFrom . '-01-01' : null;
-        $maxDate = $yearTo ? $yearTo . '-12-31' : null;
+        $minWeighingDate = $year ? Carbon::parse($year . '-01-01')->format('m-d-Y') : null;
+        $maxDate = $year ? Carbon::parse($year . '-12-31')->format('m-d-Y') : null;
+
 
         if ($this->input('form_type') === 'entry') {
             $childID = $this->input('child_id');
             $child = Child::findOrFail($childID);
 
-            $childDOB = $child->date_of_birth;
+            $childDOB = $child->date_of_birth->format('m-d-Y');
             return [
                 'child_id' => ['required', 'exists:children,id'],
                 'weight' => ['required', 'numeric'],
                 'height' => ['required', 'numeric'],
-                'actual_weighing_date' => ['required', 'date', 'after_or_equal:'. $minWeighingDate, 'before_or_equal:'. $maxDate],
-                'deworming_date' => ['required', 'date', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
-                'vitamin_a_date' => ['required', 'date', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
+                'actual_weighing_date' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:'. $minWeighingDate, 'before_or_equal:'. $maxDate],
+                'deworming_date' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
+                'vitamin_a_date' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
             ];
 
         } elseif($this->input('form_type') === 'exit') {
@@ -52,14 +52,14 @@ class StoreNutritionalStatusRequest extends FormRequest
             $childID = $this->input('exitchild_id');
             $child = Child::findOrFail($childID);
 
-            $childDOB = $child->date_of_birth;
-            $minDateForExit = Carbon::parse($this->input('entryWeighing'))->addDay()->format('Y-m-d');
+            $childDOB = $child->date_of_birth->format('m-d-Y');
+            $minDateForExit = Carbon::parse($this->input('entryWeighing'))->addDay()->format('m-d-Y');
 
             return [
                 'exitchild_id' => ['required', 'exists:children,id'],
                 'exitweight' => ['required', 'numeric'],
                 'exitheight' => ['required', 'numeric'],
-                'exitweighing_date' => ['required', 'date', 'after_or_equal:'. $minDateForExit, 'before_or_equal:'. $maxDate],
+                'exitweighing_date' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:'. $minDateForExit, 'before_or_equal:'. $maxDate],
             ];
         }
 
@@ -70,24 +70,23 @@ class StoreNutritionalStatusRequest extends FormRequest
         $implementationID = $this->input('implementation_id');
         $implementationYear = Implementation::findOrFail($implementationID);
 
-        $yearFrom = $implementationYear->school_year_from;
-        $yearTo = $implementationYear->school_year_to;
+        $year = $implementationYear->school_year_from;
 
-        $maxDate = $yearTo ? $yearTo . '-12-31' : null;
+        $maxDate = $year ? Carbon::parse($year . '-12-31')->format('m-d-Y') : null;
 
         if ($this->input('form_type') === 'entry') {
             $childID = $this->input('child_id');
             $child = Child::findOrFail($childID);
 
-            $childDOB = $child->date_of_birth->format('Y-m-d');
+            $childDOB = $child->date_of_birth->format('m-d-Y');
             return [
                 'weight.required' => 'Please fill in weight.',
                 'weight.numeric' => 'Invalid entry.',
                 'height.required' => 'Please fill in weight.',
                 'height.numeric' => 'Invalid entry.',
                 'actual_weighing_date.required' => 'Please fill in actual date of weighing.',
-                'actual_weighing_date.after_or_equal' => 'Minimum date allowed is ' . $yearFrom . '.',
-                'actual_weighing_date.before_or_equal' => 'Maximum date allowed is ' . $yearTo . '.',
+                'actual_weighing_date.after_or_equal' => 'Minimum date allowed is ' . $year . '.',
+                'actual_weighing_date.before_or_equal' => 'Maximum date allowed is ' . $year . '.',
                 'deworming_date.required' => 'Please fill in deworming date.',
                 'deworming_date.after_or_equal' => 'Deworming should be from ' . $childDOB . '.',
                 'deworming_date.before_or_equal' => 'Deworming should be from ' . $childDOB . ' to ' . $maxDate . '.',
@@ -99,8 +98,8 @@ class StoreNutritionalStatusRequest extends FormRequest
             $childID = $this->input('exitchild_id');
             $child = Child::findOrFail($childID);
 
-            $childDOB = $child->date_of_birth->format('Y-m-d');
-            $minDateForExit = Carbon::parse($this->input('entryWeighing'))->addDay()->format('Y-m-d');
+            $childDOB = $child->date_of_birth->format('m-d-Y');
+            $minDateForExit = Carbon::parse($this->input('entryWeighing'))->addDay()->format('m-d-Y');
 
             return [
                 'exitweight.required' => 'Please fill in weight.',

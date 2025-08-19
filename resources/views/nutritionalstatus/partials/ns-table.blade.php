@@ -26,9 +26,21 @@
                 </tr>
             @else
                 <tr>
-                    <td>{{ $entryDetails->actual_weighing_date }}</td>
-                    <td>{{ $entryDetails->weight }}</td>
-                    <td>{{ $entryDetails->height }}</td>
+                    <td>{{ $entryDetails->actual_weighing_date->format('m-d-Y') }}</td>
+                    <td>
+                        @if (fmod($entryDetails->weight * 10, 1) == 0)
+                            {{ number_format($entryDetails->weight, 1) }}
+                        @else
+                            {{ number_format($entryDetails->weight, 2) }}
+                        @endif
+                    </td>
+                    <td>
+                         @if (fmod($entryDetails->height * 10, 1) == 0)
+                            {{ number_format($entryDetails->height, 1) }}
+                        @else
+                            {{ number_format($entryDetails->height, 2) }}
+                        @endif
+                    </td>
                     <td>{{ $entryDetails->age_in_months }}</td>
                     <td>{{ $entryDetails->age_in_years }}</td>
                     <td class="{{ $entryDetails->weight_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $entryDetails->weight_for_age }}</td>
@@ -105,9 +117,21 @@
                     </td>
                 </tr>
             @else
-                <td>{{ $exitDetails->actual_weighing_date }}</td>
-                <td>{{ $exitDetails->weight }}</td>
-                <td>{{ $exitDetails->height }}</td>
+                <td>{{ $exitDetails->actual_weighing_date->format('m-d-Y') }}</td>
+                <td>
+                    @if (fmod($exitDetails->weight * 10, 1) == 0)
+                        {{ number_format($exitDetails->weight, 1) }}
+                    @else
+                        {{ number_format($exitDetails->weight, 2) }}
+                    @endif
+                </td>
+                <td>
+                    @if (fmod($exitDetails->height * 10, 1) == 0)
+                        {{ number_format($exitDetails->height, 1) }}
+                    @else
+                        {{ number_format($exitDetails->height, 2) }}
+                    @endif
+                </td>
                 <td>{{ $exitDetails->age_in_months }}</td>
                 <td>{{ $exitDetails->age_in_years }}</td>
                 <td class="{{ $exitDetails->weight_for_age !== 'Normal' ? 'text-red-500' : '' }}">{{ $exitDetails->weight_for_age }}</td>
