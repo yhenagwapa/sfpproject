@@ -1,5 +1,5 @@
-<table id='children-table' class="table datatable mt-3 text-sm">
-    <thead class="text-sm">
+<table id='children-table' class="table datatable mt-3">
+    <thead class="text-base">
         <tr>
             <th>No.</th>
             <th>Child Name</th>
@@ -11,7 +11,7 @@
             <th>Action</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="text-sm">
         @if ($children)
             @foreach ($children as $child)
                 <tr>
@@ -25,23 +25,46 @@
                     <td>
                         {{ $child->records->first()?->funded ? 'Yes' : 'No' }}
                     </td>
+
                     <td>
-                        <select id="statusSelect-{{ $child->id }}" name="status" class="form-control uppercase w-full border-none"
-                            @if ($child->records->first()?->status == 'dropped') disabled @endif onchange="handleSelectChange(this, {{ $sample->id }})">
-                            <option value="" disabled>Select status</option>
-                            <option value="active"
-                                {{ $child->records->first()?->status === 'active' ? 'selected' : '' }}>
-                                Active
-                            </option>
-                            @if (!auth()->user()->hasRole(['child development worker', 'encoder']))
-                                <option value="transferred" {{ $child->records->first()?->status === 'transferred' ? 'selected' : '' }}>
-                                    Transferred
+                        <select id="statusSelect-{{ $child->id }}" name="status"
+                            class="@if ($child->records->first()?->status === 'dropped') rounded border-gray-300 bg-gray-500 text-white uppercase w-full
+                                @else
+                                    rounded border-gray-300 uppercase w-full @endif">
+
+                            <option value="" selected disabled>{{ $child->records->first()?->status }}</option>
+
+                            @if ($child->records->first()?->status == 'transferred')
+                                <option value="active" hidden>
+                                    Active
+                                </option>
+                            @else
+                                <option value="active">
+                                    Active
                                 </option>
                             @endif
-                            <option value="dropped"
-                                {{ $child->records->first()?->status === 'dropped' ? 'selected' : '' }}>
-                                Dropped
-                            </option>
+
+                            @if (!auth()->user()->hasAnyRole(['child development worker', 'encoder']))
+                                <option value="transferred">
+                                    Transferred
+                                </option>
+                            {{-- @elseif ($child->records->first()?->status === 'transferred')
+                                <option value="transferred" disabled>
+                                    Transferred
+                                </option> --}}
+                            @endif
+
+                            @if ($child->records->first()?->status === 'dropped')
+                                <option value="dropped" disabled>
+                                    Dropped
+                                </option>
+                            @else
+                                @if (!auth()->user()->hasAnyRole(['lgu focal', 'sfp coordinator', 'admin']))
+                                    <option value="dropped">
+                                        Dropped
+                                    </option>
+                                @endif
+                            @endif
                         </select>
                     </td>
 
@@ -51,17 +74,18 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title text-red-600">Confirmation</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    <button id="cancelDropClose-{{ $child->id }}" type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to change <b class="text-red-600 uppercase">{{ $child->full_name }}</b>'s
+                                    Are you sure you want to change <b
+                                        class="text-red-600 uppercase">{{ $child->full_name }}</b>'s
                                     status?
                                 </div>
                                 <div class="modal-footer">
-                                    <button id="confirmStatusChange-{{ $child->id }}" type="button"
+                                    <button id="confirmDrop-{{ $child->id }}" type="button"
                                         class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                    <button id="cancelStatusChange-{{ $child->id }}" type="button"
+                                    <button id="cancelDropBtn-{{ $child->id }}" type="button"
                                         class="text-white bg-gray-600 rounded px-3 min-h-9"
                                         data-bs-dismiss="modal">Cancel</button>
                                 </div>
@@ -75,14 +99,14 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title text-red-600">Confirmation</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    <button id="cancelTransferClose-{{ $child->id }}" type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <label for="child_development_center_id">CDC or SNP <span
-                                        class="text-red-600">*</span></label>
-                                    <select class="form-control rounded border-gray-300 uppercase" id="child_development_center_id"
-                                        name='child_development_center_id' required>
+                                            class="text-red-600">*</span></label>
+                                    <select class="form-control rounded border-gray-300 uppercase"
+                                        id="child_development_center_id" name='child_development_center_id' required>
                                         <option value="" selected>Select CDC or SNP</option>
                                         @foreach ($centerNames as $center)
                                             <option value="{{ $center->id }}"
@@ -97,9 +121,9 @@
                                     @endif
                                 </div>
                                 <div class="modal-footer">
-                                    <button id="confirmStatusChange-{{ $child->id }}" type="button"
+                                    <button id="confirmTransfer-{{ $child->id }}" type="button"
                                         class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                    <button id="cancelStatusChange-{{ $child->id }}" type="button"
+                                    <button id="cancelTransferBtn-{{ $child->id }}" type="button"
                                         class="text-white bg-gray-600 rounded px-3 min-h-9"
                                         data-bs-dismiss="modal">Cancel</button>
                                 </div>
@@ -113,28 +137,55 @@
 
                         <input type="hidden" name="_method" value="PUT">
                         <input type="hidden" id="statusValue-{{ $child->id }}" name="status" value="">
-                        <input type="hidden" id="statusValue-{{ $child->id }}" name="child_id" value="{{ $child->id }}">
+                        <input type="hidden" id="statusValue-{{ $child->id }}" name="child_id"
+                            value="{{ $child->id }}">
                     </form>
 
+                    {{-- script for showing transfer/drop modal --}}
                     <script>
                         let selectedStatus{{ $child->id }} = '';
-                        let originalStatus{{ $child->id }} = document.getElementById('statusSelect-{{ $child->id }}').value;
+                        let originalStatus{{ $child->id }} = "{{ $child->records->first()?->status }}";
+
 
                         document.getElementById('statusSelect-{{ $child->id }}').addEventListener('change', function() {
                             selectedStatus{{ $child->id }} = this.value;
-                            let modal = new bootstrap.Modal(document.getElementById(
-                                'dropStudentModal-{{ $child->id }}'));
-                            modal.show();
+
+                            if (selectedStatus{{ $child->id }} === 'dropped') {
+                                let modal = new bootstrap.Modal(document.getElementById('dropStudentModal-{{ $child->id }}'));
+                                modal.show();
+                            } else if (selectedStatus{{ $child->id }} === 'transferred') {
+                                let modal = new bootstrap.Modal(document.getElementById(
+                                    'transferStudentModal-{{ $child->id }}'));
+                                modal.show();
+                            }
                         });
 
-                        document.getElementById('confirmStatusChange-{{ $child->id }}').addEventListener('click', function() {
-                            document.getElementById('statusValue-{{ $child->id }}').value = selectedStatus{{ $child->id }};
+                        document.getElementById('confirmDrop-{{ $child->id }}').addEventListener('click', function() {
+                            document.getElementById('statusValue-{{ $child->id }}').value = 'dropped';
                             document.getElementById('statusForm-{{ $child->id }}').submit();
                         });
 
-                        document.getElementById('cancelStatusChange-{{ $child->id }}').addEventListener('click', function() {
+                        document.getElementById('confirmTransfer-{{ $child->id }}').addEventListener('click', function() {
+                            document.getElementById('statusValue-{{ $child->id }}').value = 'transferred';
+                            document.getElementById('statusForm-{{ $child->id }}').submit();
+                        });
+
+                        document.getElementById('cancelDropClose-{{ $child->id }}').addEventListener('click', function() {
                             document.getElementById('statusSelect-{{ $child->id }}').value = originalStatus{{ $child->id }};
                         });
+
+                        document.getElementById('cancelDropBtn-{{ $child->id }}').addEventListener('click', function() {
+                            document.getElementById('statusSelect-{{ $child->id }}').value = "";
+                        });
+
+                        document.getElementById('cancelTransferClose-{{ $child->id }}').addEventListener('click', function() {
+                            document.getElementById('statusSelect-{{ $child->id }}').value = originalStatus{{ $child->id }};
+                        });
+
+                        document.getElementById('cancelTransferBtn-{{ $child->id }}').addEventListener('click', function() {
+                            document.getElementById('statusSelect-{{ $child->id }}').value = originalStatus{{ $child->id }};
+                        });
+
                     </script>
 
                     {{-- actions column --}}
@@ -160,7 +211,7 @@
                             </form>
 
                             @if (session('temp_can_edit') || auth()->user()?->can('edit-child'))
-                                @if ($child->records->first()?->status != 'dropped')
+                                @if ($child->records->first()?->status != 'dropped' || auth()->user()->hasRole('admin'))
                                     @if (auth()->user()->hasRole('admin') || $child->edit_counter != 2)
                                         <form id="editChild-{{ $child->id }}" action="{{ route('child.show') }}"
                                             method="POST" class="inline">
@@ -181,8 +232,9 @@
                                         </form>
                                     @else
                                         <button class="flex relative group" disabled>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="2" stroke="#D1D5DB80" class="w-5 h-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="2" stroke="#D1D5DB80"
+                                                class="w-5 h-5">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                             </svg>
@@ -219,6 +271,7 @@
                                     </div>
                                 </button>
                             </form>
+
                         </div>
                     </td>
                 </tr>
@@ -226,17 +279,3 @@
         @endif
     </tbody>
 </table>
-
-<script>
-    function handleTypeChange(select, childId) {
-        const value = select.value;
-
-        if (value === 'dropped') {
-            const modal = new bootstrap.Modal(document.getElementById(`dropStudentModal-${childId}`));
-            modal.show();
-        } else if (value === 'transferred') {
-            const modal = new bootstrap.Modal(document.getElementById(`transferStudentModal-${childId}`));
-            modal.show();
-        }
-    }
-</script>

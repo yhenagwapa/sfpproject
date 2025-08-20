@@ -60,7 +60,7 @@ Route::middleware(['auth','verified'])->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware(['auth','verified'])->group(function () {
+Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
 
     Route::get('/child', [ChildController::class, 'index'])->name('child.index');
     Route::get('/child/create', [ChildController::class, 'create'])->name('child.create');
