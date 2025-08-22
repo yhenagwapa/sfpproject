@@ -105,20 +105,21 @@
                                 <div class="modal-body">
                                     <label for="child_development_center_id">CDC or SNP <span
                                             class="text-red-600">*</span></label>
-                                    <select class="form-control rounded border-gray-300 uppercase"
-                                        id="child_development_center_id" name='child_development_center_id' required>
+                                    <select id="selectedCenter{{ $child->id }}" class="form-control rounded border-gray-300 uppercase"
+                                            name='newCenter' required>
                                         <option value="" selected>Select CDC or SNP</option>
                                         @foreach ($centerNames as $center)
-                                            <option value="{{ $center->id }}"
-                                                {{ $center->id == old('child_development_center_id') ? 'selected' : '' }}>
-                                                {{ $center->center_name }}
-                                            </option>
+                                            @if ($center->id != $child->records->first()?->center->id)
+                                                <option value="{{ $center->id }}"
+                                                    {{ $center->id == old('child_development_center_id') ? 'selected' : '' }}>
+                                                    {{ $center->center_name }}
+                                                </option>
+                                            @endif
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('child_development_center_id'))
-                                        <span
-                                            class="text-xs text-red-600">{{ $errors->first('child_development_center_id') }}</span>
-                                    @endif
+                                    @error('newCenter')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="modal-footer">
                                     <button id="confirmTransfer-{{ $child->id }}" type="button"
@@ -131,21 +132,31 @@
                         </div>
                     </div>
 
-                    <form id="statusForm-{{ $child->id }}" method="POST"
-                        action="{{ route('child.update-status') }}">
+                    @if ($errors->has('newCenter'))
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                let modal = new bootstrap.Modal(document.getElementById(
+                                    'transferStudentModal-{{ $child->id }}'));
+                                modal.show();
+                            });
+                        </script>
+                    @endif
+
+                    <form id="statusForm-{{ $child->id }}" method="POST" action="{{ route('child.update-status') }}">
                         @csrf
 
                         <input type="hidden" name="_method" value="PUT">
-                        <input type="hidden" id="statusValue-{{ $child->id }}" name="status" value="">
-                        <input type="hidden" id="statusValue-{{ $child->id }}" name="child_id"
-                            value="{{ $child->id }}">
+
+                        <input type="hidden" name="child_id" value="{{ $child->id }}">
+                        <input type="hidden" name="status" id="statusValue-{{ $child->id }}" value="">
+                        <input type="hidden" name="oldCenter" value="{{ $child->records->first()?->center->id }}">
+                        <input type="hidden" name="newCenter" id="newCenter-{{ $child->id }}" value="">
                     </form>
 
                     {{-- script for showing transfer/drop modal --}}
                     <script>
                         let selectedStatus{{ $child->id }} = '';
                         let originalStatus{{ $child->id }} = "{{ $child->records->first()?->status }}";
-
 
                         document.getElementById('statusSelect-{{ $child->id }}').addEventListener('change', function() {
                             selectedStatus{{ $child->id }} = this.value;
@@ -166,7 +177,12 @@
                         });
 
                         document.getElementById('confirmTransfer-{{ $child->id }}').addEventListener('click', function() {
+
+                            let selectedCenter = document.getElementById('selectedCenter{{ $child->id }}').value;
+
                             document.getElementById('statusValue-{{ $child->id }}').value = 'transferred';
+                            document.getElementById('newCenter-{{ $child->id }}').value = selectedCenter;
+
                             document.getElementById('statusForm-{{ $child->id }}').submit();
                         });
 

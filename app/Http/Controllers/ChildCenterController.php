@@ -14,18 +14,24 @@ class ChildCenterController extends Controller
     public function updateStatus(Request $request)
     {
         $childID = $request->input('child_id');
+        $status = $request->input('status');
+        $oldCenter = $request->input('oldCenter');
+        $newCenter = $request->input('newCenter');
+
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->value('id');
 
         $request->validate([
-            'status' => 'required|string|in:active,transferred,dropped',
-        ]);
+            'newCenter' => 'required',
+            ], [
+                'newCenter.required' => 'Please select a center before confirming transfer.',
+            ]);
 
         $childStatus = ChildCenter::where('child_id' , $childID)
             ->where('implementation_id', $cycle)
             ->first();
 
         $childStatus->update([
-            'status' => $request->input('status')
+            'status' => $request->input('newCenter')
         ]);
 
         return redirect()->back()

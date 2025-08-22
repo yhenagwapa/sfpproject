@@ -7,6 +7,7 @@ use App\Models\Child;
 use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
 use App\Models\ChildDevelopmentCenter;
+use App\Models\ChildHistory;
 use App\Models\NutritionalStatus;
 use App\Models\cgs_wfa_girls;
 use App\Models\cgs_wfa_boys;
@@ -383,6 +384,15 @@ class ChildController extends Controller
             'implementation_id' => $validatedData['implementation_id'],
             'status' => 'active',
             'funded' => $validatedData['is_funded'],
+        ]);
+
+        $newChildHistory = ChildHistory::create([
+            'child_id' => $newChild->id,
+            'implementation_id' => $validatedData['implementation_id'],
+            'action_type' => 'active',
+            'action_date' => now(),
+            'center_from' => $validatedData['child_development_center_id'],
+            'created_by_user_id' => auth()->id(),
         ]);
 
         return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
