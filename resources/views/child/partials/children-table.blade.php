@@ -20,7 +20,12 @@
                     <td>{{ $child->sex->name }}</td>
                     <td>{{ \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') }}</td>
                     <td>
-                        {{ $child->records->first()?->center->center_name }}
+                        @if ($child->records->first()?->status === 'transferred')
+                            {{ $child->records->get(1)?->center->center_name }}
+                        @else
+                            {{ $child->records->first()?->center->center_name }}
+                        @endif
+                        
                     </td>
                     <td>
                         {{ $child->records->first()?->funded ? 'Yes' : 'No' }}
@@ -34,7 +39,7 @@
 
                             <option value="" selected disabled>{{ $child->records->first()?->status }}</option>
 
-                            @if ($child->records->first()?->status == 'transferred')
+                            @if ($child->records->first()?->status == 'transferred' || $child->records->first()?->status == 'active')
                                 <option value="active" hidden>
                                     Active
                                 </option>
@@ -78,9 +83,8 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to change <b
-                                        class="text-red-600 uppercase">{{ $child->full_name }}</b>'s
-                                    status?
+                                    Are you sure you want to drop <b
+                                        class="text-red-600 uppercase">{{ $child->full_name }}</b>?
                                 </div>
                                 <div class="modal-footer">
                                     <button id="confirmDrop-{{ $child->id }}" type="button"
@@ -123,7 +127,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button id="confirmTransfer-{{ $child->id }}" type="button"
-                                        class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                        class="text-white bg-blue-600 rounded px-3 min-h-9" disabled>Confirm</button>
                                     <button id="cancelTransferBtn-{{ $child->id }}" type="button"
                                         class="text-white bg-gray-600 rounded px-3 min-h-9"
                                         data-bs-dismiss="modal">Cancel</button>
@@ -169,6 +173,31 @@
                                     'transferStudentModal-{{ $child->id }}'));
                                 modal.show();
                             }
+                        });
+
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let dropdown = document.getElementById("selectedCenter{{ $child->id }}");
+                            let confirmBtn = document.getElementById("confirmTransfer-{{ $child->id }}");
+
+                            // save initial value outside the event listener
+                            let initialValue = dropdown.value;
+
+                            // start disabled & gray
+                            confirmBtn.disabled = true;
+                            confirmBtn.classList.remove("bg-blue-600");
+                            confirmBtn.classList.add("bg-gray-500");
+
+                            dropdown.addEventListener("change", function () {
+                                if (dropdown.value !== "" && dropdown.value !== initialValue) {
+                                    confirmBtn.disabled = false;
+                                    confirmBtn.classList.remove("bg-gray-500");
+                                    confirmBtn.classList.add("bg-blue-600");
+                                } else {
+                                    confirmBtn.disabled = true;
+                                    confirmBtn.classList.remove("bg-blue-600");
+                                    confirmBtn.classList.add("bg-gray-500");
+                                }
+                            });
                         });
 
                         document.getElementById('confirmDrop-{{ $child->id }}').addEventListener('click', function() {

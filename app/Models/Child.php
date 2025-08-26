@@ -88,8 +88,6 @@ class Child extends Model
     {
         return $this->belongsTo(Psgc::class, 'psgc_id', 'psgc_id');
     }
-
-
     /**
      * All center‐records for this child.
      */
@@ -97,6 +95,20 @@ class Child extends Model
     {
         return $this->hasMany(ChildCenter::class, 'child_id', 'id');
     }
+    /**
+     * All history for this child.
+     */
+    public function histories()
+    {
+        return $this->hasMany(ChildHistory::class);
+    }
+    // /**
+    //  * latest child history
+    //  */
+    // public function latestHistory()
+    // {
+    //     return $this->hasOne(ChildHistory::class)->latestOfMany();
+    // }
 
     /**
      * Quick “funded” lookup as “Yes” or “No”.

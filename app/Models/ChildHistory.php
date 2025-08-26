@@ -16,7 +16,7 @@ class ChildHistory extends Model
         'implementation_id',
         'action_type',
         'action_date',
-        'center-from',
+        'center_from',
         'center_to',
         'created_by_user_id',
         'updated_by_user_id',
