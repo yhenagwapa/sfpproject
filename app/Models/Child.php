@@ -68,7 +68,7 @@ class Child extends Model
     }
     public function records()
     {
-        return $this->hasMany(ChildCenter::class);
+        return $this->hasMany(ChildRecord::class);
     }
 
     public function sex()
@@ -89,34 +89,12 @@ class Child extends Model
         return $this->belongsTo(Psgc::class, 'psgc_id', 'psgc_id');
     }
     /**
-     * All center‐records for this child.
-     */
-    public function childCenters()
-    {
-        return $this->hasMany(ChildCenter::class, 'child_id', 'id');
-    }
-    /**
-     * All history for this child.
-     */
-    public function histories()
-    {
-        return $this->hasMany(ChildHistory::class);
-    }
-    // /**
-    //  * latest child history
-    //  */
-    // public function latestHistory()
-    // {
-    //     return $this->hasOne(ChildHistory::class)->latestOfMany();
-    // }
-
-    /**
      * Quick “funded” lookup as “Yes” or “No”.
      */
     public function getFundedAttribute(): string
     {
         // if any related record has funded = true
-        $isFunded = $this->childCenters()
+        $isFunded = $this->records()
             ->where('funded', true)
             ->exists();
 

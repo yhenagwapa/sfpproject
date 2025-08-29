@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
-use App\Http\Controllers\ChildCenterController;
+use App\Http\Controllers\ChildRecordController;
 use App\Http\Controllers\NutritionalStatusController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReportsController;
@@ -70,7 +70,7 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::get('/child/edit', [ChildController::class, 'edit'])->name('child.edit');
     Route::patch('/child/update', [ChildController::class, 'update'])->name('child.update');
 
-    Route::put('/child/update-status', [ChildCenterController::class, 'updateStatus'])->name('child.update-status');
+    Route::put('/child/update-status', [ChildRecordController::class, 'updateStatus'])->name('child.update-status');
 
     Route::resources([
         'roles' => RoleController::class

@@ -7,7 +7,6 @@ use App\Models\Child;
 use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
 use App\Models\ChildDevelopmentCenter;
-use App\Models\ChildHistory;
 use App\Models\NutritionalStatus;
 use App\Models\cgs_wfa_girls;
 use App\Models\cgs_wfa_boys;
@@ -24,7 +23,7 @@ use App\Models\Psgc;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use App\Models\Implementation;
-use App\Models\ChildCenter;
+use App\Models\ChildRecord;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
@@ -41,7 +40,7 @@ class ChildController extends Controller
         $this->middleware('permission:edit-child', ['only' => ['edit', 'update']]);
         $this->middleware('permission:view-child', ['only' => ['index']]);
     }
-    
+
     public function index(Request $request)
     {
         $cdcId = $request->input('center_name', 'all_center');
@@ -50,8 +49,8 @@ class ChildController extends Controller
 
         $fundedChildren = Child::with(['records' => function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id)
-                    ->whereIn('status', ['active', 'transferred', 'dropped']);
-            }, 'sex', 'records.center'])
+                    ->whereIn('action_type', ['active', 'transferred', 'dropped']);
+            }, 'sex', 'records.centerFrom', 'records.centerTo'])
             ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END");
 
         $userID = auth()->id();
@@ -66,7 +65,8 @@ class ChildController extends Controller
 
             if (!$cycle) {
                 $children = null;
-                return view('child.index', compact('children', 'centerNames', 'cdcId'))->with('error', 'No active implementation.');
+                return view('child.index', compact('children', 'centerNames', 'cdcId'))
+                    ->with('error', 'No active implementation.');
             }
 
             if ($cdcId === 'all_center') {
@@ -103,8 +103,9 @@ class ChildController extends Controller
 
             if ($cdcId === 'all_center') {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
-                    $query->whereIn('child_development_center_id', $centerIDs)
-                        ->where('implementation_id', $cycle->id);
+                    $query->where('implementation_id', $cycle->id)
+                        ->whereIn('center_from', $centerIDs)
+                        ->orWhereIn('center_to', $centerIDs);
                     })
                     ->with('records')
                     ->orderBy('lastname', 'asc')
@@ -114,8 +115,9 @@ class ChildController extends Controller
 
             } else {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
-                    $query->where('child_development_center_id', $cdcId)
-                        ->where('implementation_id', $cycle->id);
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('center_from', $cdcId)
+                        ->orWhere('center_to', $cdcId);
                     })
                     ->with('records')
                     ->orderBy('lastname', 'asc')
@@ -250,21 +252,13 @@ class ChildController extends Controller
             'created_by_user_id' => auth()->id(),
         ]);
 
-        $newChildRecord = ChildCenter::create([
+        $newChildRecord = ChildRecord::create([
             'child_id' => $newChild->id,
             'child_development_center_id' => $validatedData['child_development_center_id'],
             'implementation_id' => $validatedData['implementation_id'],
-            'status' => 'active',
-            'funded' => $validatedData['is_funded'],
-        ]);
-
-        $newChildHistory = ChildHistory::create([
-            'child_id' => $newChild->id,
-            'implementation_id' => $validatedData['implementation_id'],
             'action_type' => 'active',
             'action_date' => now(),
-            'center_from' => $validatedData['child_development_center_id'],
-            'created_by_user_id' => auth()->id(),
+            'funded' => $validatedData['is_funded'],
         ]);
 
         return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
@@ -277,6 +271,7 @@ class ChildController extends Controller
     public function show(Request $request)
     {
         session(['editing_child_id' => $request->input('child_id')]);
+        session(['child_status' => $request->input('child_status')]);
 
         return redirect()->route('child.edit');
     }
@@ -300,17 +295,28 @@ class ChildController extends Controller
 
         $psgcRecord = Psgc::where('psgc_id', $child->psgc_id)->first();
 
-        $childRecord = ChildCenter::where('child_id', $child->id)
+        $childRecord = ChildRecord::where('child_id', $child->id)
             ->where('implementation_id', $cycle->id)
-            ->first();
+            ->get();
 
-        $centerName = ChildDevelopmentCenter::where('id', $childRecord->child_development_center_id)->get();
-        $cycleName = Implementation::where('id', $childRecord->implementation_id)->get();
-        $childNS = NutritionalStatus::where('child_id', $child->id)->where('implementation_id', $childRecord->implementation_id)->get();
+        //     dd($childRecord);
 
-        $childCenter = $centerName->pluck('center_name')->first();
-        $childCycle = $cycleName->pluck('name')->first();
-        $childIsFunded = $childRecord->funded;
+        // $childCurrentCenter = $childRecord->centerTo ?? $childRecord->centerFrom;
+
+        // if($childRecord->action_type == 'transferred'){
+        //     $note = 'Child is a transferee from ' . $childRecord->centerFrom->center_name . '.'; // not working here last move
+        // } elseif ($childRecord->action_type == 'dropped'){
+        //     $note = 'Child was dropped last ' . $childRecord->action_date . '.';
+        // } else{
+        //     $note = null;
+        // }
+
+
+        // $childCenter = $childCurrentCenter?->center_name;
+        // $cycleName = Implementation::where('id', $childRecord->implementation_id)->get();
+        // $childNS = NutritionalStatus::where('child_id', $child->id)->where('implementation_id', $childRecord->implementation_id)->get();
+
+        // $childCycle = $cycleName->pluck('name')->first();
 
         return view(
             'child.view',
@@ -319,11 +325,7 @@ class ChildController extends Controller
                 'childSex',
                 'cycle',
                 'psgcRecord',
-                'childCenter',
-                'centerName',
-                'childCycle',
-                'childIsFunded',
-                'childNS'
+                'childRecord',
             ])
         );
     }
@@ -333,6 +335,7 @@ class ChildController extends Controller
         $this->authorize('edit-child');
 
         $childID = session('editing_child_id');
+        $childStatus = session('child_status');
 
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
         $milkFeeding = Implementation::where('status', 'active')->where('type', 'milk')->first();
@@ -412,13 +415,17 @@ class ChildController extends Controller
             $isChildPWD = false;
         }
 
-        $childCenterId = ChildCenter::where('child_id', $child->id)
-            ->where('status', 'active')
+        $childRecord = ChildRecord::where('child_id', $childID)
+            ->where('action_type', $childStatus)
             ->first();
 
-        $centerName = ChildDevelopmentCenter::where('id', $childCenterId);
-        $childCycle = $childCenterId->implementation_id;
-        $childMilkFeeding = $childCenterId->milk_feeding_id;
+        $childCurrentCenter = $childRecord->centerTo ?? $childRecord->centerFrom;
+
+        $childCenter = $childCurrentCenter?->center_name;
+        $cycleName = Implementation::where('id', $childRecord->implementation_id)->get();
+
+        $centerName = ChildDevelopmentCenter::find($childRecord->id);
+        $childCycle = $childRecord->implementation_id;
 
         $disabilities = Child::disabilityOptions();
 
@@ -429,7 +436,6 @@ class ChildController extends Controller
                 'minDate',
                 'maxDate',
                 'cycle',
-                'milkFeeding',
                 'centers',
                 'sexOptions',
                 'extNameOptions',
@@ -440,7 +446,10 @@ class ChildController extends Controller
                 'barangays',
                 'isChildPantawid',
                 'isChildPWD',
-                'childCenterId',
+                'childRecord',
+                'childCurrentCenter',
+                'childCycle',
+                'childStatus',
                 'centerName',
                 'centerNames',
                 'disabilities',
@@ -462,6 +471,7 @@ class ChildController extends Controller
         $child = Child::findOrFail($childID);
         $oldDOB = $child->date_of_birth;
         $childSex = $child->sex_id;
+        $childStatus = $request->child_status;
 
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
@@ -695,24 +705,11 @@ class ChildController extends Controller
             }
         }
 
-        $currentChildCenter = ChildCenter::where('child_id', $child->id)
-                ->where('status', 'active')->first();
+        $currentChildRecord = ChildRecord::where('child_id', $child->id)
+                ->where('action_type', $childStatus)->first();
 
-        if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
-            ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
-
-            ChildCenter::create([
-                'child_id' => $child->id,
-                'child_development_center_id' => $currentChildCenter->child_development_center_id,
-                'implementation_id' => $currentChildCenter->implementation_id,
-                'milk_feeding_id' => null,
-                'status' => 'active',
-                'funded' => $request->is_funded,
-            ]);
-        }
-
-        if($request->is_funded != $currentChildCenter->funded){
-            ChildCenter::where('child_id', $child->id)->update(['funded' => $request->is_funded]);
+        if($request->is_funded != $currentChildRecord->funded){
+            ChildRecord::where('child_id', $child->id)->update(['funded' => $request->is_funded]);
         }
 
         return redirect()->route('child.index')->with('success', 'Child record updated successfully.');

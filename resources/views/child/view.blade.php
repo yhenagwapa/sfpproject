@@ -28,6 +28,8 @@
 
                         <h5 class='card-title uppercase'>{{ $child->full_name }}</h5>
                         <div class="row">
+
+                            {{-- child personal information --}}
                             <div class='col-md-2 mt-2 text-gray-400 text-xs'>Personal Information</div>
                             <div class='col-md-10 text-gray-400'>
                                 <hr>
@@ -103,6 +105,7 @@
                             </div>
                             <div class="col-md-6 mt-1 text-sm"></div>
 
+                            {{-- child address information --}}
                             <div class='col-md-1 mt-4 flex text-gray-400 text-sm'>Address</div>
                             <div class='col-md-11 mt-3 text-gray-400'>
                                 <hr>
@@ -138,12 +141,13 @@
                                     value="{{ $child->address }}" readonly>
                             </div>
 
-                            <div class='col-md-3 mt-4 text-gray-400 text-sm'>CDC/SNP and Implementation</div>
+                            {{-- child center records --}}
+                            <div class='col-md-3 mt-4 text-gray-400 text-sm'>Child Center Record/s</div>
                             <div class='col-md-9 mt-3 text-gray-400'>
                                 <hr>
                             </div>
 
-                            <div class="col-md-6 mt-1 text-sm">
+                            {{-- <div class="col-md-6 mt-1 text-sm">
                                 <label for="child_development_center_id">CDC/SNP:</label>
                                 <input type="text" class="form-control rounded border-gray-300"
                                     name='child_development_center_id' value="{{ $childCenter }}" readonly>
@@ -158,51 +162,41 @@
                             <div class="col-md-6 mt-1 text-sm">
                                 <label for="is_funded">Is child funded?</label>
                                 <input type="text" class="form-control rounded border-gray-300" name='is_funded'
-                                    value="{{ $childIsFunded ? 'Yes' : 'No' }}" readonly>
+                                    value="{{ $childRecord->funded }}" readonly>
                             </div>
-                            <div class="col-md-6 mt-1 text-sm"></div>
+                            <div class="col-md-6 mt-1 text-sm"></div> --}}
 
-                            {{-- <div class='col-md-3 mt-4 text-gray-400 text-sm'>Nutritional Status Upon Entry</div>
-                            <div class='col-md-9 mt-3 text-gray-400'>
-                                <hr>
-                            </div>
+                            {{-- added a note for child transferree --}}
+                            <div class="col-md-12 mt-1 text-sm">
+                                {{-- <label for="note">Note/s:</label>
+                                <input type="text" class="form-control rounded border-gray-300"
+                                    name='note' value="{{ $note ? 'Child is transferree from ' . $childRecord->centerFrom->center_name . '.' : 'N/A'}}" readonly> --}}
 
-                            <div class="col-md-4 mt-1 text-sm">
-                                <label for="wfa">Weight for Age:</label>
-                                <input type="text" class="form-control rounded border-gray-300" name='wfa'
-                                    value="{{ $childNS->first()?->weight_for_age }}" readonly>
+                                <table class="table mt-3 text-sm text-center w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>Implementation</th>
+                                            <th>Status</th>
+                                            <th>From CDC</th>
+                                            <th>To CDC</th>
+                                            <th>Funded</th>
+                                            <th>Date of Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-base">
+                                        @foreach ($childRecord as $record)
+                                            <tr>
+                                                <td>{{ $record->implementation->name }}</td>
+                                                <td>{{ $record->action_type }}</td>
+                                                <td>{{ $record->centerFrom?->center_name }}</td>
+                                                <td>{{ $record->centerTo->center_name ?? 'N/A'  }}</td>
+                                                <td>{{ $record->funded ? 'Yes' : 'No' }}</td>
+                                                <td>{{ $record->updated_at->format('m-d-Y') }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-4 mt-1 text-sm">
-                                <label for="hfa">Height for Age:</label>
-                                <input type="text" class="form-control rounded border-gray-300" name='hfa'
-                                    value="{{ $childNS->first()?->height_for_age }}" readonly>
-                            </div>
-                            <div class="col-md-4 mt-1 text-sm">
-                                <label for="wfh">Weight for Age:</label>
-                                <input type="text" class="form-control rounded border-gray-300" name='wfh'
-                                    value="{{ $childNS->first()?->weight_for_height }}" readonly>
-                            </div>
-
-                            <div class='col-md-3 mt-4 text-gray-400 text-sm'>Nutritional Status After 120 Feedings</div>
-                            <div class='col-md-9 mt-3 text-gray-400'>
-                                <hr>
-                            </div>
-
-                            <div class="col-md-4 mt-1 text-sm">
-                                <label for="wfa">Weight for Age:</label>
-                                <input type="text" class="form-control rounded border-gray-300" name='wfa'
-                                    value="{{ $childNS->get(1)?->weight_for_age }}" readonly>
-                            </div>
-                            <div class="col-md-4 mt-1 text-sm">
-                                <label for="hfa">Height for Age:</label>
-                                <input type="text" class="form-control rounded border-gray-300" name='hfa'
-                                    value="{{ $childNS->get(1)?->height_for_age }}" readonly>
-                            </div>
-                            <div class="col-md-4 mt-1 text-sm">
-                                <label for="wfh">Weight for Age:</label>
-                                <input type="text" class="form-control rounded border-gray-300" name='wfh'
-                                    value="{{ $childNS->get(1)?->weight_for_height }}" readonly>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
