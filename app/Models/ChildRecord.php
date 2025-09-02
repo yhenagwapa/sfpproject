@@ -34,17 +34,10 @@ class ChildRecord extends Model
     {
         return $this->belongsTo(Child::class, 'child_id', 'id');
     }
-
-    public function centerFrom()
+    public function center()
     {
-        return $this->belongsTo(ChildDevelopmentCenter::class, 'center_from', 'id');
+        return $this->belongsTo(ChildDevelopmentCenter::class, 'child_development_center_id', 'id');
     }
-
-    public function centerTo()
-    {
-        return $this->belongsTo(ChildDevelopmentCenter::class, 'center_to', 'id');
-    }
-
     public function implementation()
     {
         return $this->belongsTo(Implementation::class, 'implementation_id', 'id');

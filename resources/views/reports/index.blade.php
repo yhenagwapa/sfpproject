@@ -308,7 +308,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
-                                                                                onclick="focalReport('weight-for-age-upon-entry'); return false;">
+                                                                                onclick="nsReport('weight-for-age', 'upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -323,7 +323,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
-                                                                                onclick="focalReport('height-for-age-upon-entry'); return false;">
+                                                                                onclick="nsReport('height-for-age', 'upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -338,7 +338,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
-                                                                                onclick="focalReport('weight-for-height-upon-entry'); return false;">
+                                                                                onclick="nsReport('weight-for-height', 'upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -481,7 +481,7 @@
                                             ns_type.value = nsType;
                                             report_type.value = reportType;
 
-                                            printNSForm.action = `{{ url('') }}/reports/show-${reportType}/${nsType}`;
+                                            printNSForm.action = `{{ url('') }}/reports/show/${reportType}/${nsType}`;
                                             printNSForm.method = "POST";
                                             printNSForm.target = "_blank";
                                             printNSForm.submit();

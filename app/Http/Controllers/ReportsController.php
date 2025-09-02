@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChildDevelopmentCenter;
+use App\Models\ChildRecord;
 use App\Models\Psgc;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,27 +27,22 @@ class ReportsController extends Controller
         $this->middleware('permission:create-cycle-implementation', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit-cycle-implementation', ['only' => ['edit', 'update']]);
     }
-        public function index(Request $request)
+    public function index(Request $request)
     {
         $cycleID = session('report_cycle_id');
+        $cdcId = session('center_name');
+
         $cycle = Implementation::find($cycleID);
         $cycleStatus = $cycle->status;
         $childStatus = [];
 
-        if($cycleStatus == 'active'){
-            $childStatus = ['active', 'transferred', 'dropped'];
-        } else{
-            $childStatus = ['inactive'];
-        }
-
         // add filter to session
-        session(['filter_cdc_id' => $request->input('center_name')]);
+        // session(['filter_cdc_id' => $request->input('center_name')]);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = session('center_name');
         $selectedCenter = null;
         $childCount = null;
 
@@ -60,9 +56,9 @@ class ReportsController extends Controller
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $childStatus) {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id)
-                        ->whereIn('status', $childStatus)
+                        ->where('action_type', 'active')
                         ->where('funded', 1);
                     })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -74,11 +70,11 @@ class ReportsController extends Controller
                 $childCount = $isFunded->count();
 
             } else {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($request, $cycle, $childStatus) {
-                    $query->where('child_development_center_id', $request->center_name)
-                        ->where('implementation_id', $cycle->id)
-                        ->whereIn('status', $childStatus)
-                        ->where('funded', 1);
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('action_type', 'active')
+                        ->where('funded', 1)
+                        ->where('child_development_center_id', $cdcId);
                     })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id);
@@ -100,11 +96,11 @@ class ReportsController extends Controller
             // dd($cdcId);
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle, $childStatus) {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
                     if ($cycle) {
                         $query->whereIn('child_development_center_id', $centerIDs)
                             ->where('implementation_id', $cycle->id)
-                            ->whereIn('status', $childStatus)
+                            ->where('action_type', 'active')
                             ->where('funded', 1);
                     }
                     })
@@ -117,10 +113,10 @@ class ReportsController extends Controller
                 $childCount = $isFunded->count();
             } else {
 
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle, $childStatus) {
+                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                     $query->where('child_development_center_id', $cdcId)
                         ->where('implementation_id', $cycle->id)
-                        ->whereIn('status', $childStatus)
+                        ->where('action_type', 'active')
                         ->where('funded', 1);
                     })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -497,13 +493,13 @@ class ReportsController extends Controller
                 $join->on('nutritional_statuses.id', '=', 'nutritionalstatus.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
-            ->join('child_centers', function ($join) use ($cycle, $status) {
-                $join->on('children.id', '=', 'child_centers.child_id')
-                    ->where('child_centers.implementation_id', '=', $cycle->id)
-                    ->where('child_centers.status', '=', $status)
-                    ->where('child_centers.funded', '=', 1);
+            ->join('child_records', function ($join) use ($cycle, $status) {
+                $join->on('children.id', '=', 'child_records.child_id')
+                    ->where('child_records.implementation_id', '=', $cycle->id)
+                    ->where('child_records.action_type', '=', $status)
+                    ->where('child_records.funded', '=', 1);
             })
-            ->join('child_development_centers', 'child_development_centers.id', '=', 'child_centers.child_development_center_id')
+            ->join('child_development_centers', 'child_development_centers.id', '=', 'child_records.child_development_center_id')
             ->select([
                 'child_development_centers.id as center_id',
                 'child_development_centers.center_name as center_name',
@@ -724,13 +720,13 @@ class ReportsController extends Controller
                 $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
-            ->join('child_centers', function ($join) use ($cycle, $status) {
-                $join->on('children.id', '=', 'child_centers.child_id')
-                    ->where('child_centers.implementation_id', '=', $cycle->id)
-                    ->where('child_centers.status', '=', $status)
-                    ->where('child_centers.funded', '=', 1);
+            ->join('child_records', function ($join) use ($cycle, $status) {
+                $join->on('children.id', '=', 'child_records.child_id')
+                    ->where('child_records.implementation_id', '=', $cycle->id)
+                    ->where('child_records.action_type', '=', $status)
+                    ->where('child_records.funded', '=', 1);
             })
-            ->join('child_development_centers', 'child_development_centers.id', '=', 'child_centers.child_development_center_id')
+            ->join('child_development_centers', 'child_development_centers.id', '=', 'child_records.child_development_center_id')
             ->select([
                 'child_development_centers.id as center_id',
                 'child_development_centers.center_name as center_name',
@@ -961,13 +957,13 @@ class ReportsController extends Controller
                 $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
-            ->join('child_centers', function ($join) use ($cycle, $status) {
-                $join->on('children.id', '=', 'child_centers.child_id')
-                    ->where('child_centers.implementation_id', '=', $cycle->id)
-                    ->where('child_centers.status', '=', $status)
-                    ->where('child_centers.funded', '=', 1);
+            ->join('child_records', function ($join) use ($cycle, $status) {
+                $join->on('children.id', '=', 'child_records.child_id')
+                    ->where('child_records.implementation_id', '=', $cycle->id)
+                    ->where('child_records.action_type', '=', $status)
+                    ->where('child_records.funded', '=', 1);
             })
-            ->join('child_development_centers', 'child_development_centers.id', '=', 'child_centers.child_development_center_id')
+            ->join('child_development_centers', 'child_development_centers.id', '=', 'child_records.child_development_center_id')
             ->select([
                 'child_development_centers.id as center_id',
                 'child_development_centers.center_name as center_name',

@@ -31,13 +31,7 @@
                         <td>{{ $child->full_name }}</td>
                         <td>{{ $child->sex->name }}</td>
                         <td>{{ \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') }}</td>
-                        <td>
-                            @if (!$records->first()?->centerTo)
-                                {{ $records->first()?->centerFrom?->center_name }}
-                            @else
-                                {{ $records->first()?->centerTo?->center_name }}
-                            @endif
-                        </td>
+                        <td>{{ $records->first()?->center?->center_name }}</td>
                         <td>
                             {{ $records->first()?->funded ? 'Yes' : 'No' }}
                         </td>

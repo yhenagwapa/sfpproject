@@ -39,11 +39,10 @@ class ChildRecordController extends Controller
 
             ChildRecord::create([
                 'child_id' => $childID,
+                'child_development_center_id' => $newCenter,
                 'implementation_id' => $cycle,
                 'action_type' => 'active',
                 'action_date' => now(),
-                'center_from' => $oldCenter,
-                'center_to' => $newCenter,
                 'funded' => '1',
             ]);
         }

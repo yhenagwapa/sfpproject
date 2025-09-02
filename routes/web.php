@@ -151,7 +151,7 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::get('/reports/print/undernourished-after-120', [PDFController::class, 'printUndernourishedAfter120'])->name('reports.print.undernourished-after-120');
 
     //focal ns reports
-    Route::post('/reports/show-{reportType}/{nsType}', [ReportsController::class, 'showNutritionalStatus'])->name('reports.show-nutritional-status');
+    Route::post('/reports/show/{reportType}/{nsType}', [ReportsController::class, 'showNutritionalStatus'])->name('reports.show-nutritional-status');
     Route::get('/reports/print/{reportType}/{nsType}', [ReportsController::class, 'nutritionalStatus'])->name('reports.print');
 
     Route::post('/export-report', [ReportsController::class, 'exportReport'])->name('export-report');

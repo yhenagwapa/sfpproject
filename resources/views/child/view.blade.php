@@ -177,8 +177,7 @@
                                         <tr>
                                             <th>Implementation</th>
                                             <th>Status</th>
-                                            <th>From CDC</th>
-                                            <th>To CDC</th>
+                                            <th>CDC/SNP</th>
                                             <th>Funded</th>
                                             <th>Date of Action</th>
                                         </tr>
@@ -188,8 +187,7 @@
                                             <tr>
                                                 <td>{{ $record->implementation->name }}</td>
                                                 <td>{{ $record->action_type }}</td>
-                                                <td>{{ $record->centerFrom?->center_name }}</td>
-                                                <td>{{ $record->centerTo->center_name ?? 'N/A'  }}</td>
+                                                <td>{{ $record->center?->center_name }}</td>
                                                 <td>{{ $record->funded ? 'Yes' : 'No' }}</td>
                                                 <td>{{ $record->updated_at->format('m-d-Y') }}</td>
                                             </tr>

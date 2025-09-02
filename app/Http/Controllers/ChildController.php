@@ -49,12 +49,11 @@ class ChildController extends Controller
 
         $fundedChildren = Child::with(['records' => function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id)
-                    ->whereIn('action_type', ['active', 'transferred', 'dropped']);
-            }, 'sex', 'records.centerFrom', 'records.centerTo'])
+                    ->where('action_type', 'active');
+            }, 'sex', 'records.center'])
             ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END");
 
         $userID = auth()->id();
-
         $center_name = null;
         $childCount = null;
 
@@ -71,7 +70,8 @@ class ChildController extends Controller
 
             if ($cdcId === 'all_center') {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id);
+                        $query->where('implementation_id', $cycle->id)
+                            ->where('action_type', 'active');
                     })
                     ->with('records')
                     ->orderBy('lastname', 'asc')
@@ -81,8 +81,9 @@ class ChildController extends Controller
 
             } else {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
-                    $query->where('child_development_center_id', $cdcId)
-                        ->where('implementation_id', $cycle->id);
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('action_type', 'active')
+                        ->where('child_development_center_id', $cdcId);
                     })
                     ->with('records')
                     ->orderBy('lastname', 'asc')
@@ -104,8 +105,8 @@ class ChildController extends Controller
             if ($cdcId === 'all_center') {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
                     $query->where('implementation_id', $cycle->id)
-                        ->whereIn('center_from', $centerIDs)
-                        ->orWhereIn('center_to', $centerIDs);
+                        ->where('action_type', 'active')
+                        ->whereIn('child_development_center_id', $centerIDs);
                     })
                     ->with('records')
                     ->orderBy('lastname', 'asc')
@@ -116,8 +117,8 @@ class ChildController extends Controller
             } else {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                     $query->where('implementation_id', $cycle->id)
-                        ->where('center_from', $cdcId)
-                        ->orWhere('center_to', $cdcId);
+                        ->where('action_type', 'active')
+                        ->where('child_development_center_id', $cdcId);
                     })
                     ->with('records')
                     ->orderBy('lastname', 'asc')

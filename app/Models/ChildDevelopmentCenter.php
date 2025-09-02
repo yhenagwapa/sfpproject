@@ -40,7 +40,7 @@ class ChildDevelopmentCenter extends Model
     }
     public function records()
     {
-        return $this->hasMany(ChildCenter::class);
+        return $this->hasMany(ChildRecord::class);
     }
 
 

@@ -83,6 +83,8 @@
                             </div>
                                 <div class="col-md-12 mt-4">
                                     <form class="row" id="search-form" action="{{ route('child.index') }}" method="GET">
+                                        @csrf
+
                                         <div class="col-md-6 text-sm flex">
                                             <label for="center_name" class="text-base mt-2 mr-2">CDC/SNP:</label>
                                             <select class="form-control uppercase" name="center_name" id="center_name" onchange="this.form.submit()">
