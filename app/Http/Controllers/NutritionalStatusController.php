@@ -46,10 +46,9 @@ class NutritionalStatusController extends Controller
             ->get();
 
         $startDate = $implementation->school_year_from;
-        $endDate = $implementation->school_year_to;
 
-        $minDate = Carbon::create($startDate, 6, 1)->format('Y-m-d');
-        $maxDate = Carbon::create($endDate, 6, 1)->format('Y-m-d');
+        $minDate = Carbon::create($startDate, 6, 1)->format('m-d-Y');
+        $maxDate = Carbon::create($startDate, 12, 31)->format('m-d-Y');
 
         $minDateExit = null;
         $today = null;
@@ -73,9 +72,11 @@ class NutritionalStatusController extends Controller
             $entryDetails = $entryData[0];
             $entryWeighingDate = $entryData[0]->actual_weighing_date;
             $exitDetails = $entryData[1];
-            $minDateExit = Carbon::create($entryWeighingDate)->addDays(60)->format('Y-m-d');
-            $today = Carbon::today()->format('Y-m-d');
+            $minDateExit = Carbon::create($entryWeighingDate)->addDays(60)->format('m-d-Y');
+            $today = Carbon::today()->format('m-d-Y');
         }
+
+        // dd($entryDetails);
 
 
         return view('nutritionalstatus.index', compact('child', 'implementation', 'minDate', 'maxDate', 'minDateExit', 'today', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData'));
@@ -122,9 +123,12 @@ class NutritionalStatusController extends Controller
         $childMilkFeeding = $child->milk_feeding_id ? $child->milk_feeding_id : null;
         $childBirthDate = Carbon::parse($child->date_of_birth);
 
-        $entryWeighingDate = Carbon::parse($request->actual_weighing_date);
+        $entryWeighingDate = Carbon::createFromFormat('m-d-Y',$validatedData['actual_weighing_date']);
         $entryAgeInMonths = $childBirthDate->diffInMonths($entryWeighingDate);
         $entryAgeInYears = floor($entryAgeInMonths / 12);
+
+        $deworming = Carbon::createFromFormat('m-d-Y',$validatedData['deworming_date']);
+        $vitamin_a = Carbon::createFromFormat('m-d-Y',$validatedData['vitamin_a_date']);
 
         //weight for age
         if ($childSex == '1') {
@@ -269,7 +273,7 @@ class NutritionalStatusController extends Controller
             'child_id' => $request->child_id,
             'weight' => $request->weight,
             'height' => $request->height,
-            'actual_weighing_date' => $request->actual_weighing_date,
+            'actual_weighing_date' => $entryWeighingDate,
             'age_in_months' => $entryAgeInMonths,
             'age_in_years' => $entryAgeInYears,
             'weight_for_age' => $entryWeightForAge,
@@ -277,8 +281,8 @@ class NutritionalStatusController extends Controller
             'weight_for_height' => $entryWeightForHeight,
             'is_malnourish' => $entryIsMalnourished,
             'is_undernourish' => $entryIsUndernourished,
-            'deworming_date' => $request->deworming_date,
-            'vitamin_a_date' => $request->vitamin_a_date,
+            'deworming_date' => $deworming,
+            'vitamin_a_date' => $vitamin_a,
             'created_by_user_id' => auth()->id(),
             'updated_by_user_id' => auth()->id(),
         ]);
@@ -318,7 +322,7 @@ class NutritionalStatusController extends Controller
             // $childMilkFeeding = $child->milk_feeding_id;
             $childBirthDate = Carbon::parse($child->date_of_birth);
 
-            $exitWeighingDate = Carbon::parse($request->exitweighing_date);
+            $exitWeighingDate = Carbon::createFromFormat('m-d-Y',$request->exitweighing_date);
             $exitAgeInMonths = $childBirthDate->diffInMonths($exitWeighingDate);
             $exitAgeInYears = floor($exitAgeInMonths / 12);
 
@@ -514,6 +518,11 @@ class NutritionalStatusController extends Controller
         $hasUponExitData = false;
         $exitDetails = null;
 
+        $startDate = $implementation->school_year_from;
+
+        $minDate = Carbon::create($startDate, 6, 1)->format('m-d-Y');
+        $maxDate = Carbon::create($startDate, 12, 31)->format('m-d-Y');
+
         $count = $entryData->count();
 
         if ($count === 1) {
@@ -530,7 +539,7 @@ class NutritionalStatusController extends Controller
             $exitDetails = $entryData[1];
         }
 
-        return view('nutritionalstatus.edit', compact('implementation', 'child', 'entryDetails', 'hasUponEntryData', 'exitDetails', 'hasUponExitData'));
+        return view('nutritionalstatus.edit', compact('implementation', 'child', 'entryDetails', 'hasUponEntryData', 'exitDetails', 'hasUponExitData', 'minDate', 'maxDate'));
     }
 
     /**
@@ -568,7 +577,7 @@ class NutritionalStatusController extends Controller
 
         $childBirthDate = Carbon::parse($childInfo->date_of_birth);
 
-        $entryWeighingDate = Carbon::parse($request->actual_weighing_date);
+        $entryWeighingDate = Carbon::createFromFormat('m-d-Y',$request->actual_weighing_date);
         $entryAgeInMonths = $childBirthDate->diffInMonths($entryWeighingDate);
         $entryAgeInYears = floor($entryAgeInMonths / 12);
 
@@ -782,7 +791,7 @@ class NutritionalStatusController extends Controller
 
             $childBirthDate = Carbon::parse($childInfo->date_of_birth);
 
-            $exitWeighingDate = Carbon::parse($request->exitweighing_date);
+            $exitWeighingDate = Carbon::createFromFormat('m-d-Y',$request->exitweighing_date);
 
             $exitAgeInMonths = $childBirthDate->diffInMonths($exitWeighingDate);
             $exitAgeInYears = floor($exitAgeInMonths / 12);

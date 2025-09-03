@@ -21,7 +21,9 @@ export default defineConfig({
     ],
     build: {
         rollupOptions: {
-            external: ['datatables.net-dt']
+            external: [
+                'datatables.net-dt',
+            ]
         }
     }
 });

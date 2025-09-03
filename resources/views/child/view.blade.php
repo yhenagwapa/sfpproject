@@ -59,8 +59,8 @@
 
                             <div class="col-md-6 mt-1 text-sm">
                                 <label for="date_of_birth">Date of birth:</label>
-                                <input type="text" class="form-control rounded border-gray-300" name='date_of_birth'
-                                    value="{{ $child->date_of_birth->format('Y-m-d') }}" readonly>
+                                <input type="text" class="form-control rounded border-gray-300 date-field" name='date_of_birth'
+                                    value="{{ $child->date_of_birth->format('m-d-Y') }}" readonly>
                             </div>
                             <div class="col-md-6 mt-1 text-sm">
                                 <label for="sex">Sex:</label>

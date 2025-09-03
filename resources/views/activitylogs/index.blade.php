@@ -57,23 +57,25 @@
             </div>
         </section>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @vite(['resources/js/app.js'])
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    {{-- @vite(['resources/js/app.js']) --}}
 
     <script>
-        jQuery(document).ready(function () {
-            jQuery("#activitylogs-table").DataTable({
-                paging: true,             // Enable paging
-                pageLength: 10,           // Show 10 entries per page
-                lengthChange: false,      // Hide the dropdown to change entry count
-                searching: true,
-                order: [[0, 'asc']],
-                columnDefs: [
-                    {
-                        orderSequence: ["desc", "asc"]
-                    },
-                ],
-                info: false
+        window.addEventListener('load', function () {
+            $(document).ready(function () {
+                $("#activitylogs-table").DataTable({
+                    paging: true,             // Enable paging
+                    pageLength: 10,           // Show 10 entries per page
+                    lengthChange: false,      // Hide the dropdown to change entry count
+                    searching: true,
+                    order: [[0, 'asc']],
+                    columnDefs: [
+                        {
+                            orderSequence: ["desc", "asc"]
+                        },
+                    ],
+                    info: false
+                });
             });
         });
     </script>

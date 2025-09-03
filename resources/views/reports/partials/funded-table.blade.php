@@ -1,3 +1,6 @@
+@php
+    $no = 0;
+@endphp
 <table id='funded-table' class="table datatable text-sm">
     <thead class="border-bottom-2 text-sm">
         <tr>
@@ -20,8 +23,11 @@
     </thead>
     <tbody>
         @foreach ($isFunded as $fundedChild)
+            @php
+                $no += 1;
+            @endphp
             <tr class="text-left">
-                <td class="text-center"></td>
+                <td class="text-center">{{ $no }}</td>
                 <td><strong>{{ $fundedChild->full_name }}</strong></td>
                 <td>{{ $fundedChild->sex->name }}</td>
                 <td>{{ \Carbon\Carbon::parse($fundedChild->date_of_birth)->format('m-d-Y') }}</td>

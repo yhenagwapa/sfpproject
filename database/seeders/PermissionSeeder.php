@@ -21,6 +21,7 @@ class PermissionSeeder extends Seeder
             'add-attendance',
             'create-nutritional-status',
             'edit-nutritional-status',
+            'view-nutritional-status',
             'view-report',
             'print-report',
             'create-child-development-center',
@@ -63,6 +64,7 @@ class PermissionSeeder extends Seeder
             'edit-child',
             'view-child',
             'edit-nutritional-status',
+            'view-nutritional-status',
             'view-report',
             'print-report',
             'edit-child-development-center',
@@ -73,7 +75,7 @@ class PermissionSeeder extends Seeder
             'view-audit-logs',
             'add-cycle-implementation',
             'edit-cycle-implementation',
-            'view-cycle-implementation'
+            'view-cycle-implementation',
         ]);
 
         $cdw->givePermissionTo([
@@ -82,6 +84,7 @@ class PermissionSeeder extends Seeder
             'add-attendance',
             'create-nutritional-status',
             'edit-nutritional-status',
+            'view-nutritional-status',
             'view-report',
             'print-report',
             'register',
@@ -96,6 +99,7 @@ class PermissionSeeder extends Seeder
             'print-report',
             'register',
             'edit-user-profile',
+            'view-nutritional-status',
             'view-cycle-implementation',
             'create-child-development-center',
             'edit-child-development-center',
@@ -104,12 +108,16 @@ class PermissionSeeder extends Seeder
         $encoder->givePermissionTo([
             'create-child',
             'view-child',
+            'edit-user-profile',
+            'view-nutritional-status',
             'create-nutritional-status',
             'edit-nutritional-status',
         ]);
 
         $pdo->givePermissionTo([
             'view-child',
+            'edit-user-profile',
+            'view-nutritional-status',
         ]);
 
         $sfpcoordinator->givePermissionTo([
@@ -119,6 +127,7 @@ class PermissionSeeder extends Seeder
             'print-report',
             'register',
             'edit-user-profile',
+            'view-nutritional-status',
             'view-cycle-implementation',
             'create-child-development-center',
             'edit-child-development-center',

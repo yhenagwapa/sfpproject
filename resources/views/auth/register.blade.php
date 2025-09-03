@@ -9,41 +9,16 @@
 
     <title>SFP IS</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
     <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
-
-    <!-- Fonts and Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-
-    {{-- * Template Name: NiceAdmin
-        * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-        * Updated: Apr 20 2024 with Bootstrap v5.3.3
-        * Author: BootstrapMade.com
-        * License: https://bootstrapmade.com/license/ --}}
 
 </head>
 
@@ -58,6 +33,16 @@
                         </ol>
                     </nav>
                 </div>
+
+                {{-- @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif --}}
 
 
                 <section class="section">
@@ -318,7 +303,7 @@
 
                                         <div class="flex flex-wrap">
                                             <div class="w-full md:w-1/2 px-3 mt-3 text-sm">
-                                                <input type="checkbox" name="privacy_notice" id="privacy_notice" value="1" {{ old('privamcy_notice') ? 'checked' : '' }}>
+                                                <input type="checkbox" name="privacy_notice" id="privacy_notice" value="1" {{ old('privacy_notice') ? 'checked' : '' }}>
                                                 <label for="privacy_notice">Agree to <a class="hand-pointer" data-bs-toggle="modal" data-bs-target="#privacyNoticeModal"><u>Privacy Notice</u></a><b class="text-red-600">*</b></label>
 
                                                 @error('privacy_notice')
@@ -340,13 +325,13 @@
                                             </div>
                                         </div>
 
-                                    <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                                    {{-- <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
 
                                     @if ($errors->has('g-recaptcha-response'))
                                         <span class="text-red-500 text-sm">
                                             {{ $errors->first('g-recaptcha-response') }}
                                         </span>
-                                    @endif
+                                    @endif --}}
 
                                         <div class="flex flex-wrap justify-end w-full md:w-full">
                                             <div class="mt-4">
@@ -550,24 +535,12 @@
 
             <footer id="register-footer" class="register-footer">
                 <div class="footer-dswd">
-                    &copy; {{ now()->year }} Department of Social Welfare and Development.
+                    &copy; 2025 Department of Social Welfare and Development.
                 </div>
-                {{-- <div class="copyright">
-                    &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-                </div>
-                <div class="credits">
-                    <!-- All the links in the footer should remain intact. -->
-                    <!-- You can delete the links only if you purchased the pro version. -->
-                    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                </div> --}}
             </footer><!-- End Footer -->
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     @vite(['resources/js/app.js'])
 
 </body>

@@ -78,7 +78,7 @@
 
         @page {
             margin-top: 20px;
-            margin-bottom: 0;
+            margin-bottom: 50px;
             margin-right: 30px;
             margin-left: 30px;
         }
@@ -164,8 +164,8 @@
                     <td style="width: 10px;">{{ $loop->iteration }}</td>
                     <td class="no-wrap">{{ $fundedChild->full_name }}</td>
                     <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('Y-m-d') }}</td>
-                    <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first()?->actual_weighing_date }}</td>
+                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('m-d-Y') }}</td>
+                    <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first()?->actual_weighing_date->format('m-d-Y') }}</td>
                     <td>{{ number_format($fundedChild->nutritionalStatus->first()?->weight, 1) }}</td>
                     <td>{{ number_format($fundedChild->nutritionalStatus->first()?->height, 1) }}</td>
                     <td>{{ $fundedChild->nutritionalStatus->first()?->age_in_months }}</td>
@@ -180,8 +180,8 @@
                             0
                         @endif
                     </td>
-                    <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->deworming_date }}</td>
-                    <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->vitamin_a_date }}</td>
+                    <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->deworming_date->format('m-d-Y') }}</td>
+                    <td style="white-space: nowrap;">{{ $fundedChild->nutritionalStatus->first()->vitamin_a_date->format('m-d-Y') }}</td>
                     <td>{{ $fundedChild->pantawid_details ?  $fundedChild->pantawid_details : 'NO'}}</td>
                     <td>{{ $fundedChild->is_indigenous_people ? 'YES' : 'NO' }}</td>
                     <td>{{ $fundedChild->person_with_disability_details ? $fundedChild->person_with_disability_details : 'NO'}}</td>
