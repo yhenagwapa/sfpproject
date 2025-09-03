@@ -77,10 +77,7 @@ class NutritionalStatusController extends Controller
         }
 
         $childStatus = ChildCenter::where('child_id', $child->id)
-            ->value('status');
-
-
-
+            ->value('action_type');
 
         return view('nutritionalstatus.index', compact('child', 'implementation', 'minDate', 'maxDate', 'minDateExit', 'today', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData', 'childStatus'));
     }
@@ -546,7 +543,10 @@ class NutritionalStatusController extends Controller
             $exitDetails = $entryData[1];
         }
 
-        return view('nutritionalstatus.edit', compact('implementation', 'child', 'entryDetails', 'hasUponEntryData', 'exitDetails', 'hasUponExitData', 'minDate', 'maxDate'));
+        $childStatus = ChildCenter::where('child_id', $child->id)
+            ->value('action_type');
+
+        return view('nutritionalstatus.edit', compact('implementation', 'child', 'entryDetails', 'hasUponEntryData', 'exitDetails', 'hasUponExitData', 'minDate', 'maxDate', 'childStatus'));
     }
 
     /**

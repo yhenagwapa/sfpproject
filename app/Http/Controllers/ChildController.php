@@ -66,7 +66,7 @@ class ChildController extends Controller
                 if ($search) {
                     $children = $childrenQuery->whereHas('records', function ($query) use ($centerIds) {
                         $query->whereIn('child_development_center_id', $centerIds)
-                            ->where('status', 'active')
+                            ->where('action_type', 'active')
                             ->groupBy('child_id');
                     })
                         ->whereHas('sex')
@@ -80,7 +80,7 @@ class ChildController extends Controller
 
                 $children = $childrenQuery->whereHas('records', function ($query) use ($centerIds) {
                     $query->whereIn('child_development_center_id', $centerIds)
-                        ->where('status', 'active')
+                        ->where('action_type', 'active')
                         ->groupBy('child_id');
                 })
                     ->whereHas('sex')
@@ -91,7 +91,7 @@ class ChildController extends Controller
                 if ($search) {
                     $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
                         $query->where('child_development_center_id', $cdcId)
-                            ->where('status', 'active')
+                            ->where('action_type', 'active')
                             ->groupBy('child_id');
                     })
                         ->whereHas('sex')
@@ -104,7 +104,7 @@ class ChildController extends Controller
 
                 $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
-                        ->where('status', 'active')
+                        ->where('action_type', 'active')
                         ->groupBy('child_id');
                 })
                     ->whereHas('sex')
@@ -121,7 +121,7 @@ class ChildController extends Controller
                 if ($search) {
                     $children = $childrenQuery->whereHas('records', function ($query) use ($centerIDs) {
                         $query->whereIn('child_development_center_id', $centerIDs)
-                            ->where('status', 'active')
+                            ->where('action_type', 'active')
                             ->groupBy('child_id');
                     })
                         ->whereHas('sex')
@@ -134,7 +134,7 @@ class ChildController extends Controller
 
                 $children = $childrenQuery->whereHas('records', function ($query) use ($centerIDs) {
                     $query->whereIn('child_development_center_id', $centerIDs)
-                        ->where('status', 'active')
+                        ->where('action_type', 'active')
                         ->groupBy('child_id');
                 })
                     ->whereHas('sex')
@@ -146,7 +146,7 @@ class ChildController extends Controller
                 if ($search) {
                     $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
                         $query->where('child_development_center_id', $cdcId)
-                            ->where('status', 'active')
+                            ->where('action_type', 'active')
                             ->groupBy('child_id');
                     })
                         ->whereHas('sex')
@@ -158,7 +158,7 @@ class ChildController extends Controller
                 }
                 $children = $childrenQuery->whereHas('records', function ($query) use ($cdcId) {
                     $query->where('child_development_center_id', $cdcId)
-                        ->where('status', 'active')
+                        ->where('action_type', 'active')
                         ->groupBy('child_id');
                 })
                     ->whereHas('sex')
@@ -178,7 +178,7 @@ class ChildController extends Controller
 
         $fundedChildren = Child::with(['records' => function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id)
-                    ->where('status', 'active');
+                    ->where('action_type', 'active');
             }, 'sex', 'records.center'])
             ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END");
 
@@ -382,7 +382,7 @@ class ChildController extends Controller
             'child_id' => $newChild->id,
             'child_development_center_id' => $validatedData['child_development_center_id'],
             'implementation_id' => $validatedData['implementation_id'],
-            'status' => 'active',
+            'action_type' => 'active',
             'funded' => $validatedData['is_funded'],
         ]);
 
@@ -541,7 +541,7 @@ class ChildController extends Controller
         }
 
         $childCenterId = ChildCenter::where('child_id', $child->id)
-            ->where('status', 'active')
+            ->where('action_type', 'active')
             ->first();
 
         $centerName = ChildDevelopmentCenter::where('id', $childCenterId);
@@ -824,17 +824,17 @@ class ChildController extends Controller
         }
 
         $currentChildCenter = ChildCenter::where('child_id', $child->id)
-                ->where('status', 'active')->first();
+                ->where('action_type', 'active')->first();
 
         if ($request->child_development_center_id != $currentChildCenter->child_development_center_id) {
-            ChildCenter::where('child_id', $child->id)->update(['status' => 'inactive']);
+            ChildCenter::where('child_id', $child->id)->update(['action_type' => 'inactive']);
 
             ChildCenter::create([
                 'child_id' => $child->id,
                 'child_development_center_id' => $currentChildCenter->child_development_center_id,
                 'implementation_id' => $currentChildCenter->implementation_id,
                 'milk_feeding_id' => null,
-                'status' => 'active',
+                'action_type' => 'active',
                 'funded' => $request->is_funded,
             ]);
         }

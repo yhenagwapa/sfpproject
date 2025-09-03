@@ -9,11 +9,14 @@ class ChildCenter extends Model
 {
     use HasFactory;
 
+    protected $table = 'child_records';
+
     protected $fillable = [
         'child_id',
         'child_development_center_id',
         'implementation_id',
-        'status',
+        'action_type',
+        'action_date',
         'funded',
         'created_by_user_id',
         'updated_by_user_id'
