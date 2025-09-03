@@ -7,6 +7,7 @@ use App\Models\Child;
 use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
 use App\Models\ChildDevelopmentCenter;
+use App\Models\ChildHistory;
 use App\Models\NutritionalStatus;
 use App\Models\cgs_wfa_girls;
 use App\Models\cgs_wfa_boys;
@@ -198,9 +199,9 @@ class ChildController extends Controller
 
             if ($cdcId === 'all_center') {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id)
-                            ->where('status', 'active');
+                        $query->where('implementation_id', $cycle->id);
                     })
+                    ->with('records')
                     ->orderBy('lastname', 'asc')
                     ->get();
 
@@ -209,14 +210,14 @@ class ChildController extends Controller
             } else {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                     $query->where('child_development_center_id', $cdcId)
-                        ->where('implementation_id', $cycle->id)
-                        ->where('status', 'active');
+                        ->where('implementation_id', $cycle->id);
                     })
+                    ->with('records')
                     ->orderBy('lastname', 'asc')
-                            ->get();
-                    }
+                    ->get();
+            }
 
-                $center_name = ChildDevelopmentCenter::where('id', $cdcId)->first();
+            $center_name = ChildDevelopmentCenter::where('id', $cdcId)->first();
 
         } else {
             $centers = UserCenter::where('user_id', $userID)->get();
@@ -231,9 +232,9 @@ class ChildController extends Controller
             if ($cdcId === 'all_center') {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
                     $query->whereIn('child_development_center_id', $centerIDs)
-                        ->where('implementation_id', $cycle->id)
-                        ->where('status', 'active');
+                        ->where('implementation_id', $cycle->id);
                     })
+                    ->with('records')
                     ->orderBy('lastname', 'asc')
                     ->get();
 
@@ -242,9 +243,9 @@ class ChildController extends Controller
             } else {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                     $query->where('child_development_center_id', $cdcId)
-                        ->where('implementation_id', $cycle->id)
-                        ->where('status', 'active');
+                        ->where('implementation_id', $cycle->id);
                     })
+                    ->with('records')
                     ->orderBy('lastname', 'asc')
                     ->get();
 
@@ -385,6 +386,15 @@ class ChildController extends Controller
             'funded' => $validatedData['is_funded'],
         ]);
 
+        $newChildHistory = ChildHistory::create([
+            'child_id' => $newChild->id,
+            'implementation_id' => $validatedData['implementation_id'],
+            'action_type' => 'active',
+            'action_date' => now(),
+            'center_from' => $validatedData['child_development_center_id'],
+            'created_by_user_id' => auth()->id(),
+        ]);
+
         return redirect()->route('child.index')->with('success', 'Child details saved successfully.');
     }
 
@@ -419,7 +429,7 @@ class ChildController extends Controller
         $psgcRecord = Psgc::where('psgc_id', $child->psgc_id)->first();
 
         $childRecord = ChildCenter::where('child_id', $child->id)
-            ->where('status', 'active')
+            ->where('implementation_id', $cycle->id)
             ->first();
 
         $centerName = ChildDevelopmentCenter::where('id', $childRecord->child_development_center_id)->get();

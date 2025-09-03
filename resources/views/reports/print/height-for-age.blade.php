@@ -28,7 +28,11 @@
             Supplementary Feeding Program<br>
             {{ $cycle->name }} ( CY {{ $cycle->school_year_from }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS REPORT</b><br>
-            <i>(Height-for-Age)<br>Upon Entry</i>asdasdasd
+            @if($nsType == 'upon-entry')
+                <i>(Height-for-Age)<br>Upon Entry</i>
+            @else
+                <i>(Height-for-Age)<br>After 120 Feedings</i>
+            @endif
         </p>
         <br>
     </div>

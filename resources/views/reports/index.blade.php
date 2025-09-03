@@ -60,7 +60,7 @@
                                 <div id="funded-content">
                                     <div class="row">
                                         <div class="col-md-6 mt-3 text-sm">
-                                            <form action="{{ route('reports.index') }}" method="post">
+                                            <form action="{{ route('reports.show') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="cycle_id" value="{{ $cycle->id }}">
 
@@ -147,7 +147,7 @@
                                                                             <span>Upon Entry</span>
                                                                         </button>
                                                                     </li>
-                                                                    <li class="hidden">
+                                                                    <li>
                                                                         <button
                                                                             class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
                                                                             onclick="workerReport('age-bracket-after-120'); return false;">
@@ -430,16 +430,6 @@
                                             </nav>
                                         </div>
 
-                                        {{-- <form action="{{ route('reports.hfa') }}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="cycle_id" value="{{ $cycle->id }}">
-                                            <button
-                                                class="bg-blue-600 text-white rounded px-3 min-h-9">
-                                                <span
-                                                    class="dropdown-toggle text-white">hfa</span>
-                                        </button>
-                                        </form> --}}
-
                                     </div>
 
 
@@ -460,12 +450,12 @@
 
                                             centerHiddenInput.value = center_name;
 
-                                            printCDWForm.action = `{{ url('') }}/reports/print/${reportType}`;
+                                            printCDWForm.action = `{{ url('') }}/reports/show-${reportType}`;
                                             printCDWForm.target = "_blank";
                                             printCDWForm.submit();
                                         }
 
-                                        function focalReport(reportType, cycleId) {
+                                        function focalReport(reportType) {
                                             let printFocalForm = document.getElementById('printFocalForm');
                                             let centerInput = document.getElementById('center_name');
                                             let centerHiddenInput = document.getElementById('center_id');
@@ -473,34 +463,29 @@
 
                                             let center_name = centerInput.value;
 
-                                            printFocalForm.action = `{{ url('') }}/reports/print/${reportType}`;
+                                            printFocalForm.action = `{{ url('') }}/reports/show-${reportType}`;
                                             printFocalForm.target = "_blank";
                                             printFocalForm.submit();
                                         }
 
-                                        // function adminReport(reportType, cycleId) {
-                                        //     let printAdminForm = document.getElementById('printAdminForm');
-                                        //     let centerInput = document.getElementById('center_name');
-                                        //     let centerHiddenInput = document.getElementById('center_id');
-                                        //     let cycleHiddenInput = document.getElementById('cycle_id');
-                                        // function adminReport(reportType, cycleId) {
-                                        //     let printAdminForm = document.getElementById('printAdminForm');
-                                        //     let centerInput = document.getElementById('center_name');
-                                        //     let centerHiddenInput = document.getElementById('center_id');
-                                        //     let cycleHiddenInput = document.getElementById('cycle_id');
+                                        function nsReport(reportType, nsType) {
+                                            let printNSForm = document.getElementById('printNSForm');
+                                            let centerInput = document.getElementById('center_name');
+                                            let centerHiddenInput = document.getElementById('ns_center_id');
+                                            let cycle_id = document.getElementById('ns_cycle_id');
+                                            let ns_type = document.getElementById('ns_type');
+                                            let report_type = document.getElementById('report_type');
 
-                                        //     centerHiddenInput.value = centerInput.value;
-                                        //     centerHiddenInput.value = centerInput.value;
+                                            let center_name = centerInput.value;
 
-                                        //     printAdminForm.action = `/reports/${cycleId}/print/${reportType}`;
-                                        //     printAdminForm.action = `/reports/${cycleId}/print/${reportType}`;
+                                            ns_type.value = nsType;
+                                            report_type.value = reportType;
 
-                                        //     // printAdminForm.target = "_blank";
-                                        //     printAdminForm.submit();
-                                        // }
-                                        //     // printAdminForm.target = "_blank";
-                                        //     printAdminForm.submit();
-                                        // }
+                                            printNSForm.action = `{{ url('') }}/reports/show-${reportType}/${nsType}`;
+                                            printNSForm.method = "POST";
+                                            printNSForm.target = "_blank";
+                                            printNSForm.submit();
+                                        }
                                     </script>
                                 </div>
                             @endif

@@ -20,6 +20,13 @@ class PDFController extends Controller
 {
     use WorkerReports, NutritionalStatusReport, FocalReports;
 
+    public function showMasterlist(Request $request)
+    {
+        session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
+
+        return redirect()->route('reports.print.masterlist');
+    }
     public function printMasterlist(Request $request)
     {
 
@@ -30,7 +37,7 @@ class PDFController extends Controller
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex')
@@ -137,652 +144,23 @@ class PDFController extends Controller
         return $pdf->stream($cycle->name . ' Masterlist.pdf');
     }
 
-    public function printMalnourish(Request $request)
+    public function showAgeBracketUponEntry(Request $request)
     {
+        session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
 
-        $cycleID = session('report_cycle_id');
-        $cycle = Implementation::find($cycleID);
-
-        if (!$cycle) {
-            return back()->with('error', 'No active regular cycle found.');
-        }
-
-        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex')
-            ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
-            ->orderByRaw("LOWER(lastname) ASC");
-
-        $childrenWithNutritionalStatus = [];
-        $province = null;
-        $city = null;
-
-        foreach ($fundedChildren as $child) {
-            $nutritionalStatuses = $child->nutritionalStatus;
-
-            if ($nutritionalStatuses && $nutritionalStatuses->count() > 0) {
-                $entry = $nutritionalStatuses->first();
-                $exit = $nutritionalStatuses->count() > 1 ? $nutritionalStatuses[1] : null;
-
-            } else {
-                $entry = null;
-                $exit = null;
-            }
-
-            $childrenWithNutritionalStatus[] = [
-                'child' => $child,
-                'entry' => $entry,
-                'exit' => $exit,
-            ];
-        }
-
-        if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::all()->keyBy('id');
-
-            $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                $query->where('implementation_id', $cycle->id)
-                    ->where('funded', 1)
-                    ->where('status', 'active')
-                    ->orderBy('child_development_center_id');
-            })
-                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                    $query->where('implementation_id', $cycle->id)
-                        ->where('is_malnourish', 1);
-                })
-                ->get();
-
-        } elseif (auth()->user()->hasRole('lgu focal')) {
-            $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $focalCenters = ChildDevelopmentCenter::whereIn('id', $centerIDs);
-
-            $getPsgc = $focalCenters->pluck('psgc_id');
-
-            $province = Psgc::whereIn('psgc_id', $getPsgc)
-                ->pluck('province_name')
-                ->unique();
-
-            $city = Psgc::whereIn('psgc_id', $getPsgc)
-                ->pluck('city_name')
-                ->unique();
-
-            $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $centerIDs) {
-                $query->where('implementation_id', $cycle->id)
-                    ->where('funded', 1)
-                    ->where('status', 'active')
-                    ->whereIn('child_development_center_id', $centerIDs)
-                    ->orderBy('child_development_center_id');
-            })
-                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                    $query->where('implementation_id', $cycle->id)
-                        ->where('is_malnourish', 1);
-                })
-                ->get();
-        }
-
-        $pdf = Pdf::loadView('reports.print.malnourished', compact('cycle', 'isFunded', 'centers', 'province', 'city'))
-            ->setPaper('folio', 'landscape')
-            ->setOptions([
-                'margin-top' => 0.5,
-                'margin-right' => 1,
-                'margin-bottom' => 50,
-                'margin-left' => 1,
-                'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true,
-                'isPhpEnabled' => true
-            ]);
-
-        return $pdf->stream($cycle->cycle_name . ' Malnourished.pdf');
-    }
-    public function printDisabilities(Request $request)
-    {
-
-        $cycle = Implementation::where('id', $request->cycle_id2)->first();
-
-        if (!$cycle) {
-            return back()->with('error', 'No active regular cycle found.');
-        }
-
-        $childrenWithDisabilities = Child::with('records', 'nutritionalStatus', 'sex')
-            ->where('person_with_disability_details', '!=', null)
-            ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
-            ->orderByRaw("LOWER(lastname) ASC");;
-
-        $province = null;
-        $city = null;
-
-        if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::all()->keyBy('id');
-
-            $isPwdChildren = $childrenWithDisabilities->whereHas('records', function ($query) use ($cycle) {
-                $query->where('implementation_id', $cycle->id)
-                    ->where('funded', 1)
-                    ->where('status', 'active')
-                    ->orderBy('child_development_center_id');
-            })
-                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                    $query->where('implementation_id', $cycle->id);
-                    ;
-                })
-                ->get();
-
-        } elseif (auth()->user()->hasRole('lgu focal')) {
-            $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $focalCenters = ChildDevelopmentCenter::whereIn('id', $centerIDs);
-
-            $isPwdChildren = $childrenWithDisabilities->whereHas('records', function ($query) use ($cycle, $centerIDs) {
-                $query->where('implementation_id', $cycle->id)
-                    ->where('funded', 1)
-                    ->where('status', 'active')
-                    ->whereIn('child_development_center_id', $centerIDs)
-                    ->orderBy('child_development_center_id');
-            })
-                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                    $query->where('implementation_id', $cycle->id);
-                    ;
-                })
-                ->get();
-        }
-
-        $pdf = Pdf::loadView('reports.print.disabilities', compact('cycle', 'isPwdChildren', 'centers', 'province', 'city'))
-            ->setPaper('folio')
-            ->setOptions([
-                'margin-top' => 0.5,
-                'margin-right' => 1,
-                'margin-bottom' => 50,
-                'margin-left' => 1,
-                'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true,
-                'isPhpEnabled' => true
-            ]);
-
-        return $pdf->stream($cycle->name . ' Persons with Disability.pdf');
-    }
-    public function printUndernourishedUponEntry(Request $request)
-    {
-        ini_set('memory_limit', '512M');
-
-        $cycle = Implementation::where('id', $request->cycle_id2)->first();
-
-        if (!$cycle) {
-            return back()->with('error', 'No active regular cycle found.');
-        }
-
-        $cdcId = $request->input('center_name', 'all_center');
-        $selectedCenter = null;
-
-        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
-
-        $province = null;
-        $city = null;
-
-        if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::with([
-                'users' => function ($query) {
-                    $query->whereHas('roles', function ($query) {
-                        $query->where('name', 'child development worker');
-                    });
-                }
-            ])->get()->keyBy('id');
-
-            $centerIDs = $centers->pluck('id');
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)
-                    ->orderByRaw("LOWER(center_name) ASC")
-                    ->get();
-
-            $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
-                $query->where('implementation_id', $cycle->id)
-                    ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1);
-                })
-                ->whereHas('nutritionalStatus', function ($query) {
-                    $query->whereIn('age_in_years', [2, 3, 4, 5])
-                        ->where('is_undernourish', true);
-                })
-                ->with('records')
-                ->get();
-
-            $centers = ChildDevelopmentCenter::paginate(15);
-            $centers->getCollection()->keyBy('id');
-
-        } else if (auth()->user()->hasRole('lgu focal')) {
-            $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
-
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)
-                    ->orderByRaw("LOWER(center_name) ASC")
-                    ->get();
-
-            $getPsgc = $centers->pluck('psgc_id');
-
-            $province = Psgc::whereIn('psgc_id', $getPsgc)
-                ->pluck('province_name')
-                ->unique();
-
-            $city = Psgc::whereIn('psgc_id', $getPsgc)
-                ->pluck('city_name')
-                ->unique();
-
-            $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
-                $query->where('implementation_id', $cycle->id)
-                    ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1);
-            })
-                ->whereHas('nutritionalStatus', function ($query) {
-                    $query->whereIn('age_in_years', [2, 3, 4, 5])
-                        ->where('is_undernourish', true);
-                })
-                ->with([
-                    'records' => function ($query) {
-                        $query->select('child_id', 'child_development_center_id', 'status');
-                    }
-                ])
-                ->get();
-        }
-
-        $nutritionalStatusOccurrences = $fundedChildren->map(callback: function (Child $child): array {
-            if ($child->nutritionalStatus->isEmpty()) {
-                return [
-                    'child_id' => $child->id,
-                    'entry' => null,
-                ];
-            }
-            $statuses = $child->nutritionalStatus->whereIn('age_in_years', [2, 3, 4, 5])
-                ->where('is_undernourish', true);
-
-            $entry = $statuses->first();
-
-            return [
-                'child_id' => $child->id,
-                'entry' => $entry,
-            ];
-        });
-
-        $ageGroupsPerCenter = $fundedChildren->filter(function ($child) {
-            return $child->records->firstWhere('status', 'active') !== null;
-        })->groupBy(function ($child) {
-            $activeRecord = $child->records->firstWhere('status', 'active');
-            return $activeRecord->child_development_center_id;
-        })->mapWithKeys(function ($childrenByCenter, $centerID) use ($nutritionalStatusOccurrences) {
-            return [
-                $centerID => [
-                    '2_years_old' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->age_in_years == 2 && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->age_in_years == 2 && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    '3_years_old' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->age_in_years == 3 && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->age_in_years == 3 && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    '4_years_old' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->age_in_years == 4 && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->age_in_years == 4 && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    '5_years_old' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->age_in_years == 5 && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->age_in_years == 5 && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'indigenous_people' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->is_indigenous_people == true && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->is_indigenous_people == true && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'pantawid' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->pantawid_details != null && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->pantawid_details != null && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'pwd' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->person_with_disability_details != null && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->person_with_disability_details != null && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'lactose_intolerant' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->is_lactose_intolerant == true && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->is_lactose_intolerant == true && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'child_of_solo_parent' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $child->is_child_of_soloparent == true && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $child->is_child_of_soloparent == true && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'dewormed' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->deworming_date != null && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->deworming_date != null && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'vitamin_a' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->vitamin_a_date != null && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
-                            return $firstStatus && $firstStatus->vitamin_a_date != null && $child->sex_id == 2;
-                        })->count(),
-                    ],
-
-                ]
-            ];
-        });
-
-        $pdf = PDF::loadView('reports.print.undernourished-upon-entry', compact('cycle', 'centerNames', 'ageGroupsPerCenter', 'province', 'city'))
-            ->setPaper('folio', 'landscape')
-            ->setOptions([
-                'margin-top' => 0.5,
-                'margin-right' => 1,
-                'margin-bottom' => 50,
-                'margin-left' => 1,
-                'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true,
-                'isPhpEnabled' => true
-            ]);
-
-        return $pdf->stream($cycle->name . ' Undernourished Upon Entry.pdf');
-    }
-    public function printUndernourishedAfter120(Request $request)
-    {
-        $cycle = Implementation::where('id', $request->cycle_id2)->first();
-
-        if (!$cycle) {
-            return back()->with('error', 'No active regular cycle found.');
-        }
-
-        $cdcId = $request->input('center_name', 'all_center');
-        $selectedCenter = null;
-
-        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
-
-        $province = null;
-        $city = null;
-
-        if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::with([
-                'users' => function ($query) {
-                    $query->whereHas('roles', function ($query) {
-                        $query->where('name', 'child development worker');
-                    });
-                }
-            ])->get()->keyBy('id');
-
-            $centerIDs = $centers->pluck('id');
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
-
-            $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
-                $query->where('implementation_id', $cycle->id)
-                    ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1)
-                    ->where('status', 'active');
-            })
-                ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5]);
-                })
-                ->with('records')
-                ->get();
-
-            $centers = ChildDevelopmentCenter::paginate(15);
-            $centers->getCollection()->keyBy('id');
-
-        } elseif (auth()->user()->hasRole('lgu focal')) {
-
-            $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
-
-            $getPsgc = $centers->pluck('psgc_id');
-
-            $province = Psgc::whereIn('psgc_id', $getPsgc)
-                ->pluck('province_name')
-                ->unique();
-
-            $city = Psgc::whereIn('psgc_id', $getPsgc)
-                ->pluck('city_name')
-                ->unique();
-
-            $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
-                $query->where('implementation_id', $cycle->id)
-                    ->whereIn('child_development_center_id', $centerIDs)
-                    ->where('funded', 1)
-                    ->where('status', 'active');
-            })
-                ->whereHas('nutritionalStatus', function ($query) {
-                    $query->where('is_undernourish', true)
-                        ->whereIn('age_in_years', [2, 3, 4, 5]);
-                })
-                ->with([
-                    'records' => function ($query) {
-                        $query->select('child_id', 'child_development_center_id', 'status');
-                    }
-                ])
-                ->get();
-        }
-
-        $nutritionalStatusOccurrences = $fundedChildren->map(function ($child) {
-            if ($child->nutritionalStatus->isEmpty()) {
-                return [
-                    'child_id' => $child->id,
-                    'exit' => null,
-                ];
-            }
-            $statuses = $child->nutritionalStatus->where('is_undernourish', true)
-                ->whereIn('age_in_years', [2, 3, 4, 5]);
-            $exit = $statuses->skip(1)->first();
-
-            return [
-                'child_id' => $child->id,
-                'exit' => $exit,
-            ];
-        });
-
-        $exitAgeGroupsPerCenter = $fundedChildren->filter(function ($child) {
-            return $child->records->firstWhere('status', 'active') !== null;
-        })->groupBy(function ($child) {
-            $activeRecord = $child->records->firstWhere('status', 'active');
-            return $activeRecord->child_development_center_id;
-        })->mapWithKeys(function ($childrenByCenter, $centerID) use ($nutritionalStatusOccurrences) {
-            return [
-                $centerID => [
-                    '2_years_old' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $exitStatus->age_in_years == 2 && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $exitStatus->age_in_years == 2 && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    '3_years_old' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $exitStatus->age_in_years == 3 && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $exitStatus->age_in_years == 3 && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    '4_years_old' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $exitStatus->age_in_years == 4 && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $exitStatus->age_in_years == 4 && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    '5_years_old' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $exitStatus->age_in_years == 5 && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $exitStatus && $exitStatus->age_in_years == 5 && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'indigenous_people' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->is_indegenous_people == true && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->is_indegenous_people == true && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'pantawid' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->pantawid_details != null && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->pantawid_details != null && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'pwd' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->person_with_disability_details != null && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->person_with_disability_details != null && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'lactose_intolerant' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->is_lactose_intolerant == true && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->is_lactose_intolerant == true && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'child_of_solo_parent' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->is_child_of_soloparent == true && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $child->is_child_of_soloparent == true && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'dewormed' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->deworming_date != null && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->deworming_date != null && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                    'vitamin_a' => [
-                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->vitamin_a_date != null && $child->sex_id == 1;
-                        })->count(),
-                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
-                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
-                            return $firstStatus && $child->vitamin_a_date != null && $child->sex_id == 2;
-                        })->count(),
-                    ],
-                ]
-            ];
-        });
-
-        $pdf = PDF::loadView('reports.print.undernourished-after-120', compact('cycle', 'centers', 'exitAgeGroupsPerCenter', 'province', 'city'))
-            ->setPaper('folio', 'landscape')
-            ->setOptions([
-                'margin-top' => 0.5,
-                'margin-right' => 1,
-                'margin-bottom' => 0.5,
-                'margin-left' => 1
-            ]);
-
-        return $pdf->stream($cycle->name . ' Undernourished After 120 Feedings.pdf');
+        return redirect()->route('reports.print.age-bracket-upon-entry');
     }
     public function printAgeBracketUponEntry(Request $request)
     {
-        ini_set('memory_limit', '512M');
-
-        $cycle = Implementation::where('id', $request->cycle_id)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
@@ -1062,15 +440,23 @@ class PDFController extends Controller
         return $pdf->stream($cycle->name . ' Age Bracket Upon Entry.pdf');
     }
 
+    public function showAgeBracketAfter120(Request $request)
+    {
+        session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
+
+        return redirect()->route('reports.print.age-bracket-after-120');
+    }
     public function printAgeBracketAfter120(Request $request)
     {
-        $cycle = Implementation::where('id', $request->cycle_id)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
@@ -1367,18 +753,18 @@ class PDFController extends Controller
                     ],
                     'dewormed' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child->child->sex_id == 1 && $child->entry->deworming_date != null;
+                            return $child->child->sex_id == 1 && $child->exit->deworming_date != null;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child->child->sex_id == 2 && $child->entry->deworming_date != null;
+                            return $child->child->sex_id == 2 && $child->exit->deworming_date != null;
                         })->count(),
                     ],
                     'vitamin_a' => [
                         'male' => $childrenByAge->filter(function ($child) {
-                            return $child->child->sex_id == 1 && $child->entry->vitamin_a_date != null;
+                            return $child->child->sex_id == 1 && $child->exit->vitamin_a_date != null;
                         })->count(),
                         'female' => $childrenByAge->filter(function ($child) {
-                            return $child->child->sex_id == 2 && $child->entry->vitamin_a_date != null;
+                            return $child->child->sex_id == 2 && $child->exit->vitamin_a_date != null;
                         })->count(),
                     ],
                 ];
@@ -1396,17 +782,23 @@ class PDFController extends Controller
 
         return $pdf->stream($cycle->name . ' Age Bracket After 120 Feeding Days.pdf');
     }
+    public function showMonitoring(Request $request)
+    {
+        session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
 
+        return redirect()->route('reports.print.monitoring');
+    }
     public function printMonitoring(Request $request)
     {
-
-        $cycle = Implementation::where('id', $request->cycle_id)->first();
+        $cycleID = session('report_cycle_id');
+        $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex')
@@ -1536,9 +928,15 @@ class PDFController extends Controller
         return $pdf->stream($cycle->name . ' Weight and Height Monitoring.pdf');
 
     }
+    public function showUnfunded(Request $request)
+    {
+        session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input(key: 'center_name')]);
+
+        return redirect()->route('reports.print.unfunded');
+    }
     public function printUnfunded(Request $request)
     {
-
         $cycleID = session('report_cycle_id');
         $cycle = Implementation::find($cycleID);
 
@@ -1546,7 +944,7 @@ class PDFController extends Controller
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $unfundedChildren = Child::with('records', 'sex', 'nutritionalStatus')
@@ -1608,6 +1006,658 @@ class PDFController extends Controller
         return $pdf->stream($cycle->name . ' Unfunded Children.pdf');
 
     }
+    public function showMalnourished(Request $request)
+    {
+        session(['report_cycle_id2' => $request->input(key: 'cycle_id2')]);
+
+        return redirect()->route('reports.print.malnourished');
+    }
+    public function printMalnourish(Request $request)
+    {
+        $cycleID = session('report_cycle_id2');
+        $cycle = Implementation::where('id', $cycleID)->first();
+
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
+        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
+
+        $childrenWithNutritionalStatus = [];
+        $province = null;
+        $city = null;
+
+        foreach ($fundedChildren as $child) {
+            $nutritionalStatuses = $child->nutritionalStatus;
+
+            if ($nutritionalStatuses && $nutritionalStatuses->count() > 0) {
+                $entry = $nutritionalStatuses->first();
+                $exit = $nutritionalStatuses->count() > 1 ? $nutritionalStatuses[1] : null;
+
+            } else {
+                $entry = null;
+                $exit = null;
+            }
+
+            $childrenWithNutritionalStatus[] = [
+                'child' => $child,
+                'entry' => $entry,
+                'exit' => $exit,
+            ];
+        }
+
+        if (auth()->user()->hasRole('admin')) {
+            $centers = ChildDevelopmentCenter::all()->keyBy('id');
+
+            $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
+                $query->where('implementation_id', $cycle->id)
+                    ->where('funded', 1)
+                    ->where('status', 'active')
+                    ->orderBy('child_development_center_id');
+            })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('is_malnourish', 1);
+                })
+                ->get();
+
+        } elseif (auth()->user()->hasRole('lgu focal')) {
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
+
+            $focalCenters = ChildDevelopmentCenter::whereIn('id', $centerIDs);
+
+            $getPsgc = $focalCenters->pluck('psgc_id');
+
+            $province = Psgc::whereIn('psgc_id', $getPsgc)
+                ->pluck('province_name')
+                ->unique();
+
+            $city = Psgc::whereIn('psgc_id', $getPsgc)
+                ->pluck('city_name')
+                ->unique();
+
+            $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                $query->where('implementation_id', $cycle->id)
+                    ->where('funded', 1)
+                    ->where('status', 'active')
+                    ->whereIn('child_development_center_id', $centerIDs)
+                    ->orderBy('child_development_center_id');
+            })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('is_malnourish', 1);
+                })
+                ->get();
+        }
+
+        $pdf = Pdf::loadView('reports.print.malnourished', compact('cycle', 'isFunded', 'centers', 'province', 'city'))
+            ->setPaper('folio', 'landscape')
+            ->setOptions([
+                'margin-top' => 0.5,
+                'margin-right' => 1,
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
+            ]);
+
+        return $pdf->stream($cycle->cycle_name . ' Malnourished.pdf');
+    }
+    public function showDisabilities(Request $request)
+    {
+        session(['report_cycle_id2' => $request->input(key: 'cycle_id2')]);
+        session(['center_name2' => $request->input(key: 'center_name2')]);
+
+        return redirect()->route('reports.print.disabilities');
+    }
+    public function printDisabilities(Request $request)
+    {
+        $cycleID = session('report_cycle_id2');
+        $cycle = Implementation::where('id', $cycleID)->first();
+
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
+        $childrenWithDisabilities = Child::with('records', 'nutritionalStatus', 'sex')
+            ->where('person_with_disability_details', '!=', null);
+
+        $province = null;
+        $city = null;
+
+        if (auth()->user()->hasRole('admin')) {
+            $centers = ChildDevelopmentCenter::all()->keyBy('id');
+
+            $isPwdChildren = $childrenWithDisabilities->whereHas('records', function ($query) use ($cycle) {
+                $query->where('implementation_id', $cycle->id)
+                    ->where('funded', 1)
+                    ->where('status', 'active')
+                    ->orderBy('child_development_center_id');
+            })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id);
+                    ;
+                })
+                ->get();
+
+        } elseif (auth()->user()->hasRole('lgu focal')) {
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
+
+            $focalCenters = ChildDevelopmentCenter::whereIn('id', $centerIDs);
+
+            $isPwdChildren = $childrenWithDisabilities->whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                $query->where('implementation_id', $cycle->id)
+                    ->where('funded', 1)
+                    ->where('status', 'active')
+                    ->whereIn('child_development_center_id', $centerIDs)
+                    ->orderBy('child_development_center_id');
+            })
+                ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+                    $query->where('implementation_id', $cycle->id);
+                    ;
+                })
+                ->get();
+        }
+
+        $pdf = Pdf::loadView('reports.print.disabilities', compact('cycle', 'isPwdChildren', 'centers', 'province', 'city'))
+            ->setPaper('folio')
+            ->setOptions([
+                'margin-top' => 0.5,
+                'margin-right' => 1,
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
+            ]);
+
+        return $pdf->stream($cycle->name . ' Persons with Disability.pdf');
+    }
+    public function showUndernourishedUponEntry(Request $request)
+    {
+        session(['report_cycle_id2' => $request->input(key: 'cycle_id2')]);
+
+        return redirect()->route('reports.print.undernourished-upon-entry');
+    }
+    public function printUndernourishedUponEntry(Request $request)
+    {
+        $cycleID = session('report_cycle_id2');
+        $cycle = Implementation::where('id', $cycleID)->first();
+
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
+        $cdcId = $request->input('center_name', 'all_center');
+        $selectedCenter = null;
+
+        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
+
+        $province = null;
+        $city = null;
+
+        if (auth()->user()->hasRole('admin')) {
+            $centers = ChildDevelopmentCenter::with([
+                'users' => function ($query) {
+                    $query->whereHas('roles', function ($query) {
+                        $query->where('name', 'child development worker');
+                    });
+                }
+            ])->get()->keyBy('id');
+
+            $centerIDs = $centers->pluck('id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+
+            $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                $query->where('implementation_id', $cycle->id)
+                    ->whereIn('child_development_center_id', $centerIDs)
+                    ->where('funded', 1);
+                })
+                ->whereHas('nutritionalStatus', function ($query) {
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
+                        ->where('is_undernourish', true);
+                })
+                ->with('records')
+                ->get();
+
+            $centers = ChildDevelopmentCenter::paginate(15);
+            $centers->getCollection()->keyBy('id');
+
+        } else if (auth()->user()->hasRole('lgu focal')) {
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
+
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+
+            $getPsgc = $centers->pluck('psgc_id');
+
+            $province = Psgc::whereIn('psgc_id', $getPsgc)
+                ->pluck('province_name')
+                ->unique();
+
+            $city = Psgc::whereIn('psgc_id', $getPsgc)
+                ->pluck('city_name')
+                ->unique();
+
+            $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                $query->where('implementation_id', $cycle->id)
+                    ->whereIn('child_development_center_id', $centerIDs)
+                    ->where('funded', 1);
+            })
+                ->whereHas('nutritionalStatus', function ($query) {
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
+                        ->where('is_undernourish', true);
+                })
+                ->with([
+                    'records' => function ($query) {
+                        $query->select('child_id', 'child_development_center_id', 'status');
+                    }
+                ])
+                ->get();
+        }
+
+        $nutritionalStatusOccurrences = $fundedChildren->map(callback: function (Child $child): array {
+            if ($child->nutritionalStatus->isEmpty()) {
+                return [
+                    'child_id' => $child->id,
+                    'entry' => null,
+                ];
+            }
+            $statuses = $child->nutritionalStatus->whereIn('age_in_years', [2, 3, 4, 5])
+                ->where('is_undernourish', true);
+
+            $entry = $statuses->first();
+
+            return [
+                'child_id' => $child->id,
+                'entry' => $entry,
+            ];
+        });
+
+        $ageGroupsPerCenter = $fundedChildren->filter(function ($child) {
+            return $child->records->firstWhere('status', 'active') !== null;
+        })->groupBy(function ($child) {
+            $activeRecord = $child->records->firstWhere('status', 'active');
+            return $activeRecord->child_development_center_id;
+        })->mapWithKeys(function ($childrenByCenter, $centerID) use ($nutritionalStatusOccurrences) {
+            return [
+                $centerID => [
+                    '2_years_old' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->age_in_years == 2 && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->age_in_years == 2 && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    '3_years_old' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->age_in_years == 3 && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->age_in_years == 3 && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    '4_years_old' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->age_in_years == 4 && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->age_in_years == 4 && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    '5_years_old' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->age_in_years == 5 && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->age_in_years == 5 && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'indigenous_people' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $child->is_indigenous_people == true && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $child->is_indigenous_people == true && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'pantawid' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $child->pantawid_details != null && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $child->pantawid_details != null && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'pwd' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $child->person_with_disability_details != null && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $child->person_with_disability_details != null && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'lactose_intolerant' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $child->is_lactose_intolerant == true && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $child->is_lactose_intolerant == true && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'child_of_solo_parent' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $child->is_child_of_soloparent == true && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $child->is_child_of_soloparent == true && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'dewormed' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->deworming_date != null && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->deworming_date != null && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'vitamin_a' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->vitamin_a_date != null && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $firstStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['entry'];
+                            return $firstStatus && $firstStatus->vitamin_a_date != null && $child->sex_id == 2;
+                        })->count(),
+                    ],
+
+                ]
+            ];
+        });
+
+        $pdf = PDF::loadView('reports.print.undernourished-upon-entry', compact('cycle', 'centerNames', 'ageGroupsPerCenter', 'province', 'city'))
+            ->setPaper('folio', 'landscape')
+            ->setOptions([
+                'margin-top' => 0.5,
+                'margin-right' => 1,
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
+            ]);
+
+        return $pdf->stream($cycle->name . ' Undernourished Upon Entry.pdf');
+    }
+    public function showUndernourishedAfter120(Request $request)
+    {
+        session(['report_cycle_id2' => $request->input(key: 'cycle_id2')]);
+
+        return redirect()->route('reports.print.undernourished-after-120');
+    }
+    public function printUndernourishedAfter120(Request $request)
+    {
+        $cycleID = session('report_cycle_id2');
+        $cycle = Implementation::where('id', $cycleID)->first();
+
+        if (!$cycle) {
+            return back()->with('error', 'No active regular cycle found.');
+        }
+
+        $cdcId = $request->input('center_name', 'all_center');
+        $selectedCenter = null;
+
+        $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
+
+        $province = null;
+        $city = null;
+
+        if (auth()->user()->hasRole('admin')) {
+            $centers = ChildDevelopmentCenter::with([
+                'users' => function ($query) {
+                    $query->whereHas('roles', function ($query) {
+                        $query->where('name', 'child development worker');
+                    });
+                }
+            ])->get()->keyBy('id');
+
+            $centerIDs = $centers->pluck('id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+
+            $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                $query->where('implementation_id', $cycle->id)
+                    ->whereIn('child_development_center_id', $centerIDs)
+                    ->where('funded', 1)
+                    ->where('status', 'active');
+            })
+                ->whereHas('nutritionalStatus', function ($query) {
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
+                    ->where('is_undernourish', true);
+                })
+                ->with('records')
+                ->get();
+
+            $centers = ChildDevelopmentCenter::paginate(15);
+            $centers->getCollection()->keyBy('id');
+
+        } elseif (auth()->user()->hasRole('lgu focal')) {
+
+            $userID = auth()->id();
+            $centers = UserCenter::where('user_id', $userID)->get();
+            $centerIDs = $centers->pluck('child_development_center_id');
 
 
+
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+
+            $getPsgc = $centers->pluck('psgc_id');
+
+            $province = Psgc::whereIn('psgc_id', $getPsgc)
+                ->pluck('province_name')
+                ->unique();
+
+            $city = Psgc::whereIn('psgc_id', $getPsgc)
+                ->pluck('city_name')
+                ->unique();
+
+            $fundedChildren = Child::whereHas('records', function ($query) use ($cycle, $centerIDs) {
+                $query->where('implementation_id', $cycle->id)
+                    ->whereIn('child_development_center_id', $centerIDs)
+                    ->where('funded', 1)
+                    ->where('status', 'active');
+            })
+                ->whereHas('nutritionalStatus', function ($query) {
+                    $query->whereIn('age_in_years', [2, 3, 4, 5])
+                    ->where('is_undernourish', true);
+                })
+                ->with([
+                    'records' => function ($query) {
+                        $query->select('child_id', 'child_development_center_id', 'status');
+                    }
+                ])
+                ->get();
+        }
+
+        $nutritionalStatusOccurrences = $fundedChildren->map(function ($child) {
+            if ($child->nutritionalStatus->isEmpty()) {
+                return [
+                    'child_id' => $child->id,
+                    'exit' => null,
+                ];
+            }
+            $statuses = $child->nutritionalStatus->whereIn('age_in_years', [2, 3, 4, 5])
+                ->where('is_undernourish', true);
+
+            $exit = $statuses->skip(1)->first();
+
+            return [
+                'child_id' => $child->id,
+                'exit' => $exit,
+            ];
+        });
+
+        $exitAgeGroupsPerCenter = $fundedChildren->filter(function ($child) {
+            return $child->records->firstWhere('status', 'active') !== null;
+        })->groupBy(function ($child) {
+            $activeRecord = $child->records->firstWhere('status', 'active');
+            return $activeRecord->child_development_center_id;
+        })->mapWithKeys(function ($childrenByCenter, $centerID) use ($nutritionalStatusOccurrences) {
+            return [
+                $centerID => [
+                    '2_years_old' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->age_in_years == 2 && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->age_in_years == 2 && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    '3_years_old' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->age_in_years == 3 && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->age_in_years == 3 && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    '4_years_old' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->age_in_years == 4 && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->age_in_years == 4 && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    '5_years_old' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->age_in_years == 5 && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->age_in_years == 5 && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'indigenous_people' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->is_indigenous_people == true && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->is_indigenous_people == true && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'pantawid' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->pantawid_details != null && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->pantawid_details != null && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'pwd' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->person_with_disability_details != null && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->person_with_disability_details != null && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'lactose_intolerant' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->is_lactose_intolerant == true && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->is_lactose_intolerant == true && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'child_of_solo_parent' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->is_child_of_soloparent == true && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $child->is_child_of_soloparent == true && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'dewormed' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->deworming_date != null && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->deworming_date != null && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                    'vitamin_a' => [
+                        'male' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->vitamin_a_date != null && $child->sex_id == 1;
+                        })->count(),
+                        'female' => $childrenByCenter->filter(function ($child) use ($nutritionalStatusOccurrences) {
+                            $exitStatus = $nutritionalStatusOccurrences->firstWhere('child_id', $child->id)['exit'];
+                            return $exitStatus && $exitStatus->vitamin_a_date != null && $child->sex_id == 2;
+                        })->count(),
+                    ],
+                ]
+            ];
+        });
+
+        $pdf = PDF::loadView('reports.print.undernourished-after-120', compact('cycle', 'centerNames', 'exitAgeGroupsPerCenter', 'province', 'city'))
+            ->setPaper('folio', 'landscape')
+            ->setOptions([
+                'margin-top' => 0.5,
+                'margin-right' => 1,
+                'margin-bottom' => 50,
+                'margin-left' => 1,
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
+            ]);
+
+        return $pdf->stream($cycle->name . ' Undernourished After 120 Feedings.pdf');
+    }
 }

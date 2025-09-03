@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Clegginabox\PDFMerger\PDFMerger;
 use Illuminate\Support\Facades\DB;
 use Str;
+use Storage;
 
 class ReportsController extends Controller
 {
@@ -45,7 +46,7 @@ class ReportsController extends Controller
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = session('center_name');
         $selectedCenter = null;
         $childCount = null;
 
@@ -96,6 +97,8 @@ class ReportsController extends Controller
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
+            // dd($cdcId);
+
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle, $childStatus) {
                     if ($cycle) {
@@ -139,7 +142,8 @@ class ReportsController extends Controller
      */
     public function show(Request $request)
     {
-        session(['report_cycle_id' => $request->input('cycle_id')]);
+        session(['report_cycle_id' => $request->input(key: 'cycle_id')]);
+        session(['center_name' => $request->input('center_name')]);
 
         return redirect()->route('reports.index');
     }
@@ -419,12 +423,19 @@ class ReportsController extends Controller
 
         return response()->download($filepath)->deleteFileAfterSend(true);
     }
-
-    public function nutritionalStatusWFA(Request $request)
+    public function showNutritionalStatus(Request $request, $reportType, $nsType)
     {
-        ini_set('memory_limit', '512M');
+        session(['report_cycle_id' => $request->input(key: 'ns_cycle_id')]);
 
+        $nsType = $request->input('ns_type');
+        $reportType = $request->input('report_type');
+
+        return redirect()->route('reports.print', ['reportType' => $reportType,'nsType' => $nsType]);
+    }
+    public function nutritionalStatus($reportType, $nsType)
+    {
         $cycleID = session('report_cycle_id');
+
         $cycle = Implementation::find($cycleID);
         $cycleStatus = $cycle->status;
 
@@ -471,13 +482,19 @@ class ReportsController extends Controller
                 ->unique();
         }
 
-        $oldestNutritionalIds = DB::table('nutritional_statuses')
+        if($nsType == 'upon-entry'){
+            $nutritionalIds = DB::table('nutritional_statuses')
             ->select(DB::raw('MIN(id) as id'))
             ->groupBy('child_id');
+        } else{
+            $nutritionalIds = DB::table('nutritional_statuses')
+            ->select(DB::raw('MAX(id) as id'))
+            ->groupBy('child_id');
+        }
 
         $results = DB::table('nutritional_statuses')
-            ->joinSub($oldestNutritionalIds, 'oldest_nutritionals', function ($join) {
-                $join->on('nutritional_statuses.id', '=', 'oldest_nutritionals.id');
+            ->joinSub($nutritionalIds, 'nutritionalstatus', function ($join) {
+                $join->on('nutritional_statuses.id', '=', 'nutritionalstatus.id');
             })
             ->join('children', 'children.id', '=', 'nutritional_statuses.child_id')
             ->join('child_centers', function ($join) use ($cycle, $status) {
@@ -493,6 +510,8 @@ class ReportsController extends Controller
                 'children.sex_id',
                 'nutritional_statuses.age_in_years',
                 'nutritional_statuses.weight_for_age',
+                'nutritional_statuses.height_for_age',
+                'nutritional_statuses.weight_for_height',
                 DB::raw('COUNT(*) as total')
             ])
             ->where('nutritional_statuses.implementation_id', $cycle->id)
@@ -733,9 +752,18 @@ class ReportsController extends Controller
         $ages = [2, 3, 4, 5];
         $sexMap = [1 => 'M', 2 => 'F'];
         $sexLabels = ['M', 'F'];
-        $categories = ['Normal', 'Stunted', 'Severely Stunted', 'Tall'];
 
-        $hfaCounts = [];
+
+
+        if($reportType == 'weight-for-age'){
+            $categories = ['Normal', 'Underweight', 'Severely Underweight', 'Overweight'];
+        } elseif($reportType == 'height-for-age'){
+            $categories = ['Normal', 'Stunted', 'Severely Stunted', 'Tall'];
+        } elseif ($reportType == 'weight-for-height'){
+            $categories = ['Normal', 'Wasted', 'Severely Wasted', 'Overweight', 'Obese'];
+        }
+
+        $nsCounts = [];
 
         $overallTotals = [
             'total_children' => 0,
@@ -747,8 +775,8 @@ class ReportsController extends Controller
             $centerId = $row->center_id;
             $centerName = $row->center_name;
 
-            if (!isset($hfaCounts[$centerId])) {
-                $hfaCounts[$centerId] = [
+            if (!isset($nsCounts[$centerId])) {
+                $nsCounts[$centerId] = [
                     'center_name' => $centerName,
                     'data' => [],
                     'total_children' => 0,
@@ -759,7 +787,7 @@ class ReportsController extends Controller
                 foreach ($categories as $category) {
                     foreach ($sexLabels as $sex) {
                         foreach ($ages as $age) {
-                            $hfaCounts[$centerId]['data'][$category][$sex][$age] = 0;
+                            $nsCounts[$centerId]['data'][$category][$sex][$age] = 0;
                         }
                     }
                 }
@@ -773,14 +801,14 @@ class ReportsController extends Controller
                 $hfaCounts[$centerId]['data'][$cat][$sex][$age] += $row->total;
             }
 
-            $hfaCounts[$centerId]['total_children'] += $row->total;
+            $nsCounts[$centerId]['total_children'] += $row->total;
             $overallTotals['total_children'] += $row->total;
 
             if ($sex === 'M') {
-                $hfaCounts[$centerId]['total_male'] += $row->total;
+                $nsCounts[$centerId]['total_male'] += $row->total;
                 $overallTotals['total_male'] += $row->total;
             } elseif ($sex === 'F') {
-                $hfaCounts[$centerId]['total_female'] += $row->total;
+                $nsCounts[$centerId]['total_female'] += $row->total;
                 $overallTotals['total_female'] += $row->total;
             }
 

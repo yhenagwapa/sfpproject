@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="base-url" content="{{ url('https://172.31.176.49/sfpproject/public') }}">
 
-    <title>Weight for Height</title>
+    <title>Weight for Age</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -28,7 +28,11 @@
             Supplementary Feeding Program<br>
             {{ $cycle->name }} ( CY {{ $cycle->school_year_from }} )<br>
             <b>CONSOLIDATED NUTRITIONAL STATUS REPORT</b><br>
-            <i>(Weight-for-Height)<br>Upon Entry</i>
+            @if($nsType == 'upon-entry')
+                <i>(Weight-for-Age)<br>Upon Entry</i>
+            @else
+                <i>(Weight-for-Age)<br>After 120 Feedings</i>
+            @endif
         </p>
         <br>
     </div>
@@ -56,7 +60,7 @@
         $no = 0;
     @endphp
     <div style="margin-bottom: 50px;">
-        <table id='nutritional-status-table' class="table datatable nutritional-status-table w-full">
+        <table id='nutritional-status-table' class="table datatable nutritional-status-table table-wrapper w-full">
             <thead>
                 <tr>
                     <th class="border-bg" rowspan="3">No.</th>
@@ -134,8 +138,7 @@
 
                             @if ($users->isNotEmpty())
                                 @foreach ($users as $user)
-                                    {{ $user->firstname }} {{ $user->middlename }} {{ $user->lastname }}
-                                    {{ $user->extension_name }}
+                                    {{ $user->full_name }}
                                 @endforeach
                             @else
                                 No Worker Assigned
@@ -143,9 +146,9 @@
                         </td>
 
                         @php
-                            $overallTotal = $wfhCounts[$center->id]['total_children'] ?? 0;
-                            $totalMale = $wfhCounts[$center->id]['total_male'] ?? 0;
-                            $totalFemale = $wfhCounts[$center->id]['total_female'] ?? 0;
+                            $overallTotal = $nsCounts[$center->id]['total_children'] ?? 0;
+                            $totalMale = $nsCounts[$center->id]['total_male'] ?? 0;
+                            $totalFemale = $nsCounts[$center->id]['total_female'] ?? 0;
                         @endphp
 
                         <td>
@@ -171,7 +174,7 @@
                             @foreach ($sexLabels as $sex)
                                 @foreach ($ages as $age)
                                     @php
-                                        $count = $wfhCounts[$center->id]['data'][$category][$sex][$age] ?? 0;
+                                        $count = $nsCounts[$center->id]['data'][$category][$sex][$age] ?? 0;
                                         $totals[$sex][$age] += $count;
                                     @endphp
                                     <td>{{ $count }}</td>
@@ -227,7 +230,7 @@
                     @endforeach
                 </tr>
                 <tr>
-                    <td colspan="3">TOTAL CHILD BENEFICIARIES > </td>
+                    <td class="centered" colspan="3">TOTAL CHILD BENEFICIARIES > </td>
                     @php
                         $colspan = count($ages) * count($sexLabels);
                     @endphp
@@ -246,6 +249,8 @@
             </tbody>
         </table>
     </div>
+
+
     <div class="footer-section">
         <table class="footer-table">
             <tr></tr>

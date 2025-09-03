@@ -11,37 +11,30 @@ use App\Models\UserCenter;
 
 class ChildCenterController extends Controller
 {
-    public function additionalInfo(Request $request, Implementation $cycle, $id)
+    public function updateStatus(Request $request)
     {
-        $this->authorize('create-child');
+        $childID = $request->input('child_id');
+        $status = $request->input('status');
+        $oldCenter = $request->input('oldCenter');
+        $newCenter = $request->input('newCenter');
 
-        $cycles = Implementation::where('status', 'active')->where('type', 'regular')->get();
-        $milkFeedings = Implementation::where('status', 'active')->where('type', 'milk')->get();
+        $cycle = Implementation::where('status', 'active')->where('type', 'regular')->value('id');
 
-        $child = Child::findOrFail($id);
+        $request->validate([
+            'newCenter' => 'required',
+            ], [
+                'newCenter.required' => 'Please select a center before confirming transfer.',
+            ]);
 
-        $centers = ChildDevelopmentCenter::all();
+        $childStatus = ChildCenter::where('child_id' , $childID)
+            ->where('implementation_id', $cycle)
+            ->first();
 
-        $userID = auth()->id();
-        if (auth()->user()->hasRole('child development worker')){
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
+        $childStatus->update([
+            'status' => $request->input('newCenter')
+        ]);
 
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
-
-        } elseif(auth()->user()->hasRole('encoder')){
-            $centers = UserCenter::where('user_id', $userID)->get();
-            $centerIDs = $centers->pluck('child_development_center_id');
-
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
-        }
-
-        return view('child.additional-info',
-        compact([
-            'child',
-            'cycles',
-            'milkFeedings',
-            'centerNames'
-        ]));
+        return redirect()->back()
+                ->withSuccess('User status updated successfully.');
     }
 }

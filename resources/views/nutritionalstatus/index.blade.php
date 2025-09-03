@@ -69,7 +69,7 @@
         <div class="row">
             <div class="col-lg-3">
                 @can(['create-nutritional-status'])
-                    @if (!$hasUponEntryData)
+                    @if (!$hasUponEntryData && $childStatus != 'dropped')
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title">
@@ -178,7 +178,7 @@
                     @endphp
 
                     @if ($today === $minDateExit)
-                        @if ($hasUponEntryData && !$hasUponExitData)
+                        @if ($hasUponEntryData && !$hasUponExitData && $childStatus != 'dropped')
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-title">
@@ -192,6 +192,8 @@
                                         <input type="hidden" name="exitchild_id" value="{{ $child->id }}">
                                         <input type="hidden" name="entryWeighing" value="{{ $entryDetails->actual_weighing_date }}">
                                         <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
+                                        <input type="hidden" name="deworming_date" value="{{ $entryDetails->deworming_date }}">
+                                        <input type="hidden" name="vitamin_a_date" value="{{ $entryDetails->vitamin_a_date }}">
 
                                         <div class="col-md-12 mt-2 text-sm">
                                             <label for="exitweight">Weight (kg)<b class="text-red-600">*</b></label>
@@ -266,9 +268,9 @@
 
             <div class="@if (auth()->user()->hasAnyRole(['admin', 'sfp coordinator', 'lgu focal']))
                     col-lg-12
-                @elseif ( $today === $minDateExit || !$hasUponEntryData)
+                @elseif ( $today == $minDateExit || !$hasUponEntryData)
                     col-lg-9
-                @elseif ( $today === $minDateExit && !$hasUponExitData)
+                @elseif ($hasUponExitData)
                     col-lg-9
                 @else
                     col-lg-12
