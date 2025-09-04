@@ -29,15 +29,15 @@ class PDFController extends Controller
     }
     public function printMasterlist(Request $request)
     {
-
         $cycleID = session('report_cycle_id');
+        $cdcId = session('center_name');
+
         $cycle = Implementation::find($cycleID);
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
         }
 
-        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex')
@@ -65,10 +65,10 @@ class PDFController extends Controller
             } else {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                     if ($cycle) {
-                        $query->where('child_development_center_id', $cdcId)
-                            ->where('implementation_id', $cycle->id)
+                        $query->where('implementation_id', $cycle->id)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('action_type', 'active')
+                            ->where('child_development_center_id', $cdcId);
                     }
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -88,10 +88,10 @@ class PDFController extends Controller
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
                     if ($cycle) {
-                        $query->whereIn('child_development_center_id', $centerIDs)
-                            ->where('implementation_id', $cycle->id)
+                        $query->where('implementation_id', $cycle->id)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('action_type', 'active')
+                            ->where('child_development_center_id', $centerIDs);
                     }
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -101,10 +101,10 @@ class PDFController extends Controller
             } else {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
                     if ($cycle) {
-                        $query->where('child_development_center_id', $cdcId)
-                            ->where('implementation_id', $cycle->id)
+                        $query->where('implementation_id', $cycle->id)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('action_type', 'active')
+                            ->where('child_development_center_id', $cdcId);
                     }
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -115,19 +115,6 @@ class PDFController extends Controller
             }
 
         }
-
-        //  // sort by gender
-        // $isFunded = $isFunded->sort(function($a, $b) {
-        //     // 1) gender priority
-        //     if ($a->sex->name === 'Male' && $b->sex->name !== 'Male') {
-        //         return -1;
-        //     }
-        //     if ($b->sex->name === 'Male' && $a->sex->name !== 'Male') {
-        //         return 1;
-        //     }
-        //     // 2) same gender, compare full_name
-        //     return strcmp($a->full_name, $b->full_name);
-        // });
 
         $pdf = Pdf::loadView('reports.print.masterlist', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames'))
             ->setPaper('folio', 'landscape')
@@ -154,13 +141,13 @@ class PDFController extends Controller
     public function printAgeBracketUponEntry(Request $request)
     {
         $cycleID = session('report_cycle_id');
+        $cdcId = session('center_name');
+
         $cycle = Implementation::where('id', $cycleID)->first();
 
         if (!$cycle) {
             return back()->with('error', 'No active regular cycle found.');
         }
-
-        $cdcId = session('center_name');
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
@@ -189,7 +176,7 @@ class PDFController extends Controller
                     $query->where('implementation_id', $cycle->id)
                         ->where('child_development_center_id', $cdcId)
                         ->where('funded', 1)
-                        ->where('status', 'active');
+                        ->where('action_type', 'active');
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id)
@@ -210,7 +197,7 @@ class PDFController extends Controller
                     $query->where('implementation_id', $cycle->id)
                         ->whereIn('child_development_center_id', $centerIDs)
                         ->where('funded', 1)
-                        ->where('status', 'active');
+                        ->where('action_type', 'active');
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id)
@@ -227,7 +214,7 @@ class PDFController extends Controller
                     $query->where('implementation_id', $cycle->id)
                         ->where('child_development_center_id', $cdcId)
                         ->where('funded', 1)
-                        ->where('status', 'active');
+                        ->where('action_type', 'active');
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id)
@@ -486,7 +473,7 @@ class PDFController extends Controller
                     $query->where('implementation_id', $cycle->id)
                         ->where('child_development_center_id', $cdcId)
                         ->where('funded', 1)
-                        ->where('status', 'active');
+                        ->where('action_type', 'active');
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id)
@@ -503,7 +490,7 @@ class PDFController extends Controller
                         $query->where('implementation_id', $cycle->id)
                             ->where('child_development_center_id', $cdcId)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('action_type', 'active');
                     })
                     ->get()
                     ->filter(function ($child) {
@@ -523,7 +510,7 @@ class PDFController extends Controller
                     $query->where('implementation_id', $cycle->id)
                         ->whereIn('child_development_center_id', $centerIDs)
                         ->where('funded', 1)
-                        ->where('status', 'active');
+                        ->where('action_type', 'active');
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id)
@@ -539,7 +526,7 @@ class PDFController extends Controller
                     ->whereHas('records', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('action_type', 'active');
                     })
                     ->get()
                     ->filter(function ($child) {
@@ -553,7 +540,7 @@ class PDFController extends Controller
                     $query->where('implementation_id', $cycle->id)
                         ->where('child_development_center_id', $cdcId)
                         ->where('funded', 1)
-                        ->where('status', 'active');
+                        ->where('action_type', 'active');
                 })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
                         $query->where('implementation_id', $cycle->id)
@@ -570,7 +557,7 @@ class PDFController extends Controller
                         $query->where('implementation_id', $cycle->id)
                             ->where('child_development_center_id', $cdcId)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('action_type', 'active');
                     })
                     ->get()
                     ->filter(function ($child) {
@@ -853,7 +840,7 @@ class PDFController extends Controller
                         $query->where('implementation_id', $cycle->id)
                             ->where('child_development_center_id', $cdcId)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('action_type', 'active');
                     })
                     ->whereHas('nutritionalStatus')
                     ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
@@ -877,7 +864,7 @@ class PDFController extends Controller
                         $query->where('implementation_id', $cycle->id)
                             ->whereIn('child_development_center_id', $centerIDs)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('action_type', 'active');
                     })
                     ->whereHas('nutritionalStatus')
                     ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
@@ -890,7 +877,7 @@ class PDFController extends Controller
                         $query->where('implementation_id', $cycle->id)
                             ->where('child_development_center_id', $cdcId)
                             ->where('funded', 1)
-                            ->where('status', 'active');
+                            ->where('action_type', 'active');
                     })
                     ->whereHas('nutritionalStatus')
                     ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
@@ -1082,7 +1069,7 @@ class PDFController extends Controller
             $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $centerIDs) {
                 $query->where('implementation_id', $cycle->id)
                     ->where('funded', 1)
-                    ->where('status', 'active')
+                    ->where('action_type', 'active')
                     ->whereIn('child_development_center_id', $centerIDs)
                     ->orderBy('child_development_center_id');
             })
@@ -1154,7 +1141,7 @@ class PDFController extends Controller
             $isPwdChildren = $childrenWithDisabilities->whereHas('records', function ($query) use ($cycle, $centerIDs) {
                 $query->where('implementation_id', $cycle->id)
                     ->where('funded', 1)
-                    ->where('status', 'active')
+                    ->where('action_type', 'active')
                     ->whereIn('child_development_center_id', $centerIDs)
                     ->orderBy('child_development_center_id');
             })
@@ -1226,9 +1213,6 @@ class PDFController extends Controller
                 ->with('records')
                 ->get();
 
-            $centers = ChildDevelopmentCenter::paginate(15);
-            $centers->getCollection()->keyBy('id');
-
         } else if (auth()->user()->hasRole('lgu focal')) {
             $userID = auth()->id();
             $centers = UserCenter::where('user_id', $userID)->get();
@@ -1282,9 +1266,9 @@ class PDFController extends Controller
         });
 
         $ageGroupsPerCenter = $fundedChildren->filter(function ($child) {
-            return $child->records->firstWhere('status', 'active') !== null;
+            return $child->records->firstWhere('action_type', 'active') !== null;
         })->groupBy(function ($child) {
-            $activeRecord = $child->records->firstWhere('status', 'active');
+            $activeRecord = $child->records->firstWhere('action_type', 'active');
             return $activeRecord->child_development_center_id;
         })->mapWithKeys(function ($childrenByCenter, $centerID) use ($nutritionalStatusOccurrences) {
             return [
@@ -1457,7 +1441,7 @@ class PDFController extends Controller
                 $query->where('implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIDs)
                     ->where('funded', 1)
-                    ->where('status', 'active');
+                    ->where('action_type', 'active');
             })
                 ->whereHas('nutritionalStatus', function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5])
@@ -1465,9 +1449,6 @@ class PDFController extends Controller
                 })
                 ->with('records')
                 ->get();
-
-            $centers = ChildDevelopmentCenter::paginate(15);
-            $centers->getCollection()->keyBy('id');
 
         } elseif (auth()->user()->hasRole('lgu focal')) {
 
@@ -1493,7 +1474,7 @@ class PDFController extends Controller
                 $query->where('implementation_id', $cycle->id)
                     ->whereIn('child_development_center_id', $centerIDs)
                     ->where('funded', 1)
-                    ->where('status', 'active');
+                    ->where('action_type', 'active');
             })
                 ->whereHas('nutritionalStatus', function ($query) {
                     $query->whereIn('age_in_years', [2, 3, 4, 5])

@@ -25,12 +25,7 @@ class UpdateChildRequest extends FormRequest
         $minDate = Carbon::now()->subYears(6)->addDay()->format('m-d-Y');
         $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('m-d-Y');
 
-        if(auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator')) {
-            return [
-            'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
-            ];
-
-        } elseif(auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder')){
+        if(auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder')){
             return [
                 'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
                 'firstname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
@@ -66,7 +61,6 @@ class UpdateChildRequest extends FormRequest
                 'is_indigenous_people' => ['required', 'boolean'],
                 'is_child_of_soloparent' => ['required', 'boolean'],
                 'is_lactose_intolerant' => ['required', 'boolean'],
-                'child_development_center_id' => ['required', 'exists:child_development_centers,id'],
                 'implementation_id' => ['nullable', 'exists:implementations,id'],
                 'is_funded' => ['required', 'boolean'],
             ];
@@ -102,7 +96,6 @@ class UpdateChildRequest extends FormRequest
             'is_child_of_soloparent.required' => 'Please select an option.',
             'is_lactose_intolerant.required' => 'Please select an option.',
 
-            'child_development_center_id.required' => 'Please select a CDC or SNP.',
             'is_funded.required' => 'Please select an option.',
         ];
     }

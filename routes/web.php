@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ChildController;
-use App\Http\Controllers\ChildCenterController;
+use App\Http\Controllers\ChildRecordController;
 use App\Http\Controllers\NutritionalStatusController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReportsController;
@@ -70,7 +70,7 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::get('/child/edit', [ChildController::class, 'edit'])->name('child.edit');
     Route::patch('/child/update', [ChildController::class, 'update'])->name('child.update');
 
-    Route::put('/child/update-status', [ChildCenterController::class, 'updateStatus'])->name('child.update-status');
+    Route::put('/child/update-status', [ChildRecordController::class, 'updateStatus'])->name('child.update-status');
 
     Route::resources([
         'roles' => RoleController::class
@@ -151,7 +151,7 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::get('/reports/print/undernourished-after-120', [PDFController::class, 'printUndernourishedAfter120'])->name('reports.print.undernourished-after-120');
 
     //focal ns reports
-    Route::post('/reports/show-{reportType}/{nsType}', [ReportsController::class, 'showNutritionalStatus'])->name('reports.show-nutritional-status');
+    Route::post('/reports/show/{reportType}/{nsType}', [ReportsController::class, 'showNutritionalStatus'])->name('reports.show-nutritional-status');
     Route::get('/reports/print/{reportType}/{nsType}', [ReportsController::class, 'nutritionalStatus'])->name('reports.print');
 
     Route::post('/export-report', [ReportsController::class, 'exportReport'])->name('export-report');

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\ChildCenter;
+use App\Models\ChildRecord;
 use App\Models\Implementation;
 use App\Models\NutritionalStatus;
 use App\Models\cgs_wfa_girls;
@@ -76,7 +76,7 @@ class NutritionalStatusController extends Controller
             $today = Carbon::today()->format('m-d-Y');
         }
 
-        $childStatus = ChildCenter::where('child_id', $child->id)
+        $childStatus = ChildRecord::where('child_id', $child->id)
             ->value('action_type');
 
         return view('nutritionalstatus.index', compact('child', 'implementation', 'minDate', 'maxDate', 'minDateExit', 'today', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData', 'childStatus'));
@@ -113,14 +113,14 @@ class NutritionalStatusController extends Controller
 
         $child = Child::where('id', $childID)->first();
 
-        $childcenter = ChildCenter::with('implementation')
+        $childrecord = ChildRecord::with('implementation')
             ->where('child_id', $child->id)
-            ->where('status', 'active')
+            ->where('action_type', 'active')
             ->first();
 
         $childSex = $child->sex_id;
 
-        $cycleID = $childcenter->implementation_id;
+        $cycleID = $childrecord->implementation_id;
 
         $childMilkFeeding = $child->milk_feeding_id ? $child->milk_feeding_id : null;
         $childBirthDate = Carbon::parse($child->date_of_birth);
@@ -296,14 +296,14 @@ class NutritionalStatusController extends Controller
     {
         $child = Child::where('id', $request->exitchild_id)->first();
 
-        $childcenter = ChildCenter::with('implementation')
+        $childrecord = ChildRecord::with('implementation')
             ->where('child_id', $child->id)
-            ->where('status', 'active')
+            ->where('action_type', 'active')
             ->first();
 
         $childSex = $child->sex_id;
 
-        $cycleID = $childcenter->implementation_id;
+        $cycleID = $childrecord->implementation_id;
 
         $exitRecord = NutritionalStatus::where('child_id', $request->exitchild_id)
             ->where('implementation_id', $cycleID)

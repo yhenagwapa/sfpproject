@@ -77,6 +77,7 @@
                                 @method('patch')
 
                                 <input type="hidden" name="child_id" value="{{ $child->id }}">
+                                <input type="hidden" name="child_status" value="{{ $childStatus }}">
 
                                 @if(auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder') || auth()->user()->hasRole('admin'))
                                     <div class='col-md-12 mt-3 text-gray-400 text-xs'>Personal Information<hr></div>
@@ -127,7 +128,7 @@
                                     <div class="col-md-6 mt-2 text-sm">
                                         <label for="date_of_birth">Date of Birth<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300 date-field" id="date_of_birth"
-                                            name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth)->format('m-d-Y') }}" min="{{ $minDate }}" max="{{ $maxDate }}">
+                                            name='date_of_birth' value="{{ old('date_of_birth', $child->date_of_birth->format('m-d-Y')) }}" min="{{ $minDate }}" max="{{ $maxDate }}">
                                         @error('date_of_birth')
                                             <span class="text-xs text-red-600">{{ $errors->first('date_of_birth') }}</span>
                                         @enderror
@@ -369,8 +370,7 @@
                                     </div>
                                 @endif
 
-                                @if(auth()->user()->hasRole('lgu focal') || auth()->user()->hasRole('sfp coordinator') || auth()->user()->hasRole('admin'))
-
+                                {{-- @if(auth()->user()->hasRole('admin'))
                                     <div class='col-md-12 mt-4 text-gray-400 text-xs'>Child Development Center or Supervised
                                         Neighborhood Play<hr>
                                     </div>
@@ -384,7 +384,7 @@
                                             <option value="" disabled selected>Select CDC or SNP</option>
                                             @foreach ($centerNames as $center)
                                                 <option value="{{ $center->id }}"
-                                                    {{ $center->id == old('child_development_center_id', $childCenterId->child_development_center_id) ? 'selected' : '' }}>
+                                                    {{ $center->id == old('child_development_center_id', $childCurrentCenter->id) ? 'selected' : '' }}>
                                                     {{ $center->center_name }}
                                                 </option>
                                             @endforeach
@@ -393,16 +393,13 @@
                                             <span class="text-xs text-red-600">{{ $message }}</span>
                                         @enderror
                                     </div>
-
                                     <div class="col-md-6 mt-2 text-sm" style="visibility: hidden">
                                         <input type="text"
                                             class="form-control rounded border-gray-300"
                                             name="spaceonly">
                                     </div>
+                                @endif --}}
 
-                                    <input type="hidden" name="implementation_id" value="{{ $childCenterId->implementation_id }}">
-                                    <input type="hidden" name="is_funded" value="{{ $childCenterId->funded }}" />
-                                @endif
                                 @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder'))
                                     <div class='col-md-12 mt-4 text-gray-400 text-xs'>Implementation<hr>
                                     </div>
@@ -417,43 +414,24 @@
                                             </option>
                                         </select>
                                         <input type="hidden" id="implementation_id" name="implementation_id"
-                                            value="{{ $childCenterId->implementation_id }}" />
-
-
+                                            value="{{ $childCycle }}" />
                                     </div>
                                 @endif
                                 @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder'))
                                     <div class="col-md-6 text-sm">
                                         <label for="is_funded">Is child funded?<b class="text-red-600">*</b></label><br>
                                         <input type="radio" class="ml-5" name="is_funded" id="is_funded_yes" value="1"
-                                            {{ old('is_funded', $childCenterId->funded) == '1' ? 'checked' : '' }}>
+                                            {{ old('is_funded', $childRecord->funded) == '1' ? 'checked' : '' }}>
                                         <label class="mt-2" for="is_funded_yes">Yes</label>
 
                                         <input type="radio" class="ml-5" name="is_funded" id="is_funded_no" value="0"
-                                            {{ old('is_funded', $childCenterId->funded) == '0' ? 'checked' : '' }}>
+                                            {{ old('is_funded', $childRecord->funded) == '0' ? 'checked' : '' }}>
                                         <label class="mt-2" for="is_funded_no">No</label>
                                         <div class="col-md-6 text-sm">
                                             @if ($errors->has('is_funded'))
                                                 <span class="text-xs text-red-600">{{ $errors->first('is_funded') }}</span>
                                             @endif
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6 mt-3 text-sm hidden">
-                                        <label for="milk_feeding_id">Milk Feeding Implementation</label>
-                                        <select
-                                            class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
-                                            id="milk_feeding_id" name='milk_feeding_id'>
-                                            @if ($milkFeeding)
-                                                <option value="{{ $milkFeeding->id }}"
-                                                    {{ $milkFeeding->id == old('milk_feeding_id', $childCenterId->milk_feeding_id) ? 'selected' : '' }}>
-                                                    {{ $milkFeeding->name }}
-                                                </option>
-                                            @else
-                                                <option value="" disabled selected>No active milk feeding implementation
-                                                </option>
-                                            @endif
-                                        </select>
                                     </div>
                                 @endif
 

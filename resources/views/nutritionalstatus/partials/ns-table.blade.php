@@ -13,7 +13,7 @@
                 <th>Height for Age</th>
                 <th>Malnourish</th>
                 <th>Undernourish</th>
-                <th class="@if (Route::is('nutritionalstatus.edit')) hidden @endif">Action</th>
+                <th class="@if (Route::is('nutritionalstatus.edit') || session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status') || ($childStatus != 'dropped') || ($childStatus != 'transferred')) hidden @endif">Action</th>
             </tr>
 
         </thead>
@@ -106,7 +106,7 @@
                 <th>Height for Age</th>
                 <th>Malnourish</th>
                 <th>Undernourish</th>
-                <th class="@if (Route::is('nutritionalstatus.edit')) hidden @endif">Action</th>
+                <th class="@if (Route::is('nutritionalstatus.edit') || session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status') || ($childStatus != 'dropped') || ($childStatus != 'transferred')) hidden @endif">Action</th>
             </tr>
         </thead>
         <tbody class="text-base">
@@ -141,7 +141,7 @@
                 <td class="{{ $exitDetails->is_undernourish ? 'text-red-500' : '' }}">{{ $exitDetails->is_undernourish ? 'Yes' : 'No' }}</td>
                 <td class="@if (Route::is('nutritionalstatus.edit')) hidden @endif">
                     @if(session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status'))
-                        @if( $childStatus != 'dropped')
+                        @if( $childStatus != 'dropped' || $childStatus != 'transferred')
                             @if(auth()->user()->hasRole('admin') || $exitDetails->edit_counter != 2)
                                 <form action="{{ route('nutritionalstatus.show') }}" method="POST" class="inline">
                                     @csrf

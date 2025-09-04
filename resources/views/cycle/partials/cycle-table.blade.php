@@ -115,6 +115,7 @@
                             <form id="reportForm-{{ $cycle->id }}" action="{{ route('reports.show') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="cycle_id" value="{{ $cycle->id }}">
+                                <input type="hidden" name="center_name" value="all_center">
                                 <button type="submit" class="flex relative group">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="2" stroke="#3968d2" class="w-5 h-5">
