@@ -62,7 +62,7 @@ class ReportsController extends Controller
             if ($cdcId == 'all_center') {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $childStatus) {
                         $query->where('implementation_id', $cycle->id)
-                        ->whereIn('status', $childStatus)
+                        ->whereIn('action_type', $childStatus)
                         ->where('funded', 1);
                     })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -77,7 +77,7 @@ class ReportsController extends Controller
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($request, $cycle, $childStatus) {
                     $query->where('child_development_center_id', $request->center_name)
                         ->where('implementation_id', $cycle->id)
-                        ->whereIn('status', $childStatus)
+                        ->whereIn('action_type', $childStatus)
                         ->where('funded', 1);
                     })
                     ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
@@ -157,7 +157,7 @@ class ReportsController extends Controller
         $fundedChildren = Child::with([
             'records' => function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id)
-                    ->where('status', 'active');
+                    ->where('action_type', 'active');
             },
             'sex',
             'records.center',
