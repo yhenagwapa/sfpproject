@@ -7,6 +7,7 @@
             <th>Date of Birth</th>
             <th>CDC/SNP</th>
             <th>Funded</th>
+            <th>Transferred</th>
             <th>Status</th>
             <th>Action</th>
         </tr>
@@ -34,6 +35,10 @@
                         <td>{{ $records->first()?->center?->center_name }}</td>
                         <td>
                             {{ $records->first()?->funded ? 'Yes' : 'No' }}
+                        </td>
+
+                        <td>
+                            {{ $child->has_transferred ? 'Yes' : 'No' }}
                         </td>
 
                         <td>

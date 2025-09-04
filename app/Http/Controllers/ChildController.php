@@ -49,7 +49,7 @@ class ChildController extends Controller
 
         $fundedChildren = Child::with(['records' => function ($query) use ($cycle) {
                 $query->where('implementation_id', $cycle->id)
-                    ->where('action_type', 'active');
+                    ->whereIn('action_type', ['active', 'transferred']);
             }, 'sex', 'records.center'])
             ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END");
 
@@ -128,6 +128,19 @@ class ChildController extends Controller
 
             }
         }
+
+        $implementationId = $cycle->id;
+        $children = Child::withCount([
+            'records as transfer_count' => function ($query) use ($implementationId) {
+                $query->where('implementation_id', $implementationId)
+                    ->where('action_type', 'transferred');
+            }
+        ])->get();
+
+        // Add a flag
+        $children->each(function ($child) {
+            $child->has_transferred = $child->transfer_count > 0;
+        });
 
         $childCount = $children->count();
 

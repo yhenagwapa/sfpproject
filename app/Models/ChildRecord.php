@@ -15,6 +15,7 @@ class ChildRecord extends Model
 
     protected $fillable = [
         'child_id',
+        'child_development_center_id',
         'implementation_id',
         'action_type',
         'action_date',

@@ -27,13 +27,14 @@ class ChildRecordController extends Controller
 
         if($status == 'dropped'){
             $childStatus->update([
-                'action_type' => $status,
+                'action_type' => 'dropped',
                 'action_date' => now(),
             ]);
 
         } elseif($status == 'transferred'){
             $childStatus->update([
-                'action_type' => $status,
+                'child_development_center_id' => $newCenter,
+                'action_type' => 'transferred',
                 'action_date' => now(),
             ]);
 
@@ -43,8 +44,9 @@ class ChildRecordController extends Controller
                 'implementation_id' => $cycle,
                 'action_type' => 'active',
                 'action_date' => now(),
-                'funded' => '1',
+                'funded' => 1,
             ]);
+
         }
         return redirect()->back()->withSuccess('Child status updated successfully.');
     }
