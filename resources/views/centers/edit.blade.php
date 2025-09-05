@@ -302,7 +302,7 @@
                                 data-bs-toggle="modal" data-bs-target="#verticalycentered">Save Changes</button>
 {{--                            <form id="cancel-form" method="GET" action="{{ route('centers.index') }}">--}}
 {{--                            </form>--}}
-                            <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="submitCancelForm()">
+                            <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" onclick="window.history.back()">
                                 Cancel
                             </button>
                         </div>
