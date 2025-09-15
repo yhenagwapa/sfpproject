@@ -43,7 +43,7 @@ class ChildController extends Controller
 
     public function index(Request $request)
     {
-        $cdcId = $request->input('center_name', 'all_center');
+        $cdcId = $request->input('center_name', 'all_center') ?? false;
 
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
@@ -54,8 +54,15 @@ class ChildController extends Controller
             ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END");
 
         $userID = auth()->id();
-        $center_name = null;
         $childCount = null;
+
+        $implementationId = $cycle->id;
+        $children = Child::withCount([
+            'records as transfer_count' => function ($query) use ($implementationId) {
+                $query->where('implementation_id', $implementationId)
+                    ->where('action_type', 'transferred');
+            }
+        ])->get();
 
         if (auth()->user()->hasRole('admin')) {
             $centers = UserCenter::all();
@@ -128,14 +135,6 @@ class ChildController extends Controller
 
             }
         }
-
-        $implementationId = $cycle->id;
-        $children = Child::withCount([
-            'records as transfer_count' => function ($query) use ($implementationId) {
-                $query->where('implementation_id', $implementationId)
-                    ->where('action_type', 'transferred');
-            }
-        ])->get();
 
         // Add a flag
         $children->each(function ($child) {
