@@ -159,3 +159,10 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::get('/activitylogs', [ActivityLogController::class, 'index'])->name('activitylogs.index');
 });
 
+Route::get('clear-cache', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    return 'Application cache has been cleared.';
+});
