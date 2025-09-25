@@ -16,9 +16,6 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
-import * as bootstrap from 'bootstrap';
-window.bootstrap = bootstrap;
-
 window.Alpine = Alpine;
 Alpine.start();
 
