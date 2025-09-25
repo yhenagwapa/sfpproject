@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Implementation;
-use App\Models\ChildCenter;
+use App\Models\ChildRecord as ChildCenter;
 use App\Http\Requests\StoreImplementationRequest;
 use App\Http\Requests\UpdateImplementationRequest;
 use App\Enums\CycleStatus;
@@ -78,9 +78,9 @@ class ImplementationController extends Controller
                 'status' => 'closed'
             ]);
 
-            ChildCenter::where('status', 'active')
+            ChildCenter::where('action_type', 'active')
                 ->where('implementation_id', $closeCycle->id)
-                ->update(['status' => 'inactive']);
+                ->update(['action_type' => 'inactive']);
 
                 // create cycle
             Implementation::create([
