@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\ChildRecord;
+use App\Models\ChildRecord as ChildCenter;
 use App\Models\Implementation;
 use App\Models\NutritionalStatus;
 use App\Models\cgs_wfa_girls;
@@ -76,7 +76,7 @@ class NutritionalStatusController extends Controller
             $today = Carbon::today()->format('m-d-Y');
         }
 
-        $childStatus = ChildRecord::where('child_id', $child->id)
+        $childStatus = ChildCenter::where('child_id', $child->id)
             ->value('action_type');
 
         return view('nutritionalstatus.index', compact('child', 'implementation', 'minDate', 'maxDate', 'minDateExit', 'today', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData', 'childStatus'));
@@ -562,7 +562,18 @@ class NutritionalStatusController extends Controller
 
         $nutritionalStatus = NutritionalStatus::where('child_id', $childID)->first();
 
-        $nutritionalStatus->fill($request->only(['child_id', 'weight', 'height','actual_weighing_date', 'deworming_date', 'vitamin_a_date']));
+        // Convert date format before filling the model
+        $data = $request->only(['child_id', 'weight', 'height','actual_weighing_date', 'deworming_date', 'vitamin_a_date']);
+
+        // Convert date fields from m-d-Y to Y-m-d format
+        $dateFields = ['actual_weighing_date', 'deworming_date', 'vitamin_a_date'];
+        foreach ($dateFields as $field) {
+            if (isset($data[$field]) && $data[$field]) {
+                $data[$field] = Carbon::createFromFormat('m-d-Y', $data[$field])->format('Y-m-d');
+            }
+        }
+
+        $nutritionalStatus->fill($data);
 
         if($nutritionalStatus->isClean()){
             return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');

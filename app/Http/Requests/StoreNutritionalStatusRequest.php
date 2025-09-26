@@ -32,7 +32,6 @@ class StoreNutritionalStatusRequest extends FormRequest
         $minWeighingDate = $year ? Carbon::parse($year . '-01-01')->format('m-d-Y') : null;
         $maxDate = $year ? Carbon::parse($year . '-12-31')->format('m-d-Y') : null;
 
-
         if ($this->input('form_type') === 'entry') {
             $childID = $this->input('child_id');
             $child = Child::findOrFail($childID);
@@ -42,9 +41,9 @@ class StoreNutritionalStatusRequest extends FormRequest
                 'child_id' => ['required', 'exists:children,id'],
                 'weight' => ['required', 'numeric'],
                 'height' => ['required', 'numeric'],
-                'actual_weighing_date' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:'. $minWeighingDate, 'before_or_equal:'. $maxDate],
-                'deworming_date' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
-                'vitamin_a_date' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
+                'actual_weighing_date' => ['required', 'date_format:m-d-Y', 'after_or_equal:'. $minWeighingDate, 'before_or_equal:'. $maxDate],
+                'deworming_date' => ['required', 'date_format:m-d-Y', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
+                'vitamin_a_date' => ['required', 'date_format:m-d-Y', 'after_or_equal:'. $childDOB, 'before_or_equal:'. $maxDate],
             ];
 
         } elseif($this->input('form_type') === 'exit') {
@@ -59,7 +58,7 @@ class StoreNutritionalStatusRequest extends FormRequest
                 'exitchild_id' => ['required', 'exists:children,id'],
                 'exitweight' => ['required', 'numeric'],
                 'exitheight' => ['required', 'numeric'],
-                'exitweighing_date' => ['required', 'date', 'date_format:m-d-Y', 'after_or_equal:'. $minDateForExit, 'before_or_equal:'. $maxDate],
+                'exitweighing_date' => ['required', 'date_format:m-d-Y', 'after_or_equal:'. $minDateForExit, 'before_or_equal:'. $maxDate],
             ];
         }
 

@@ -304,8 +304,13 @@
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     {{-- @vite(['resources/js/app.js']) --}}
     <script>
-        document.getElementById('statusAfter120Submit').addEventListener('click', function () {
-            document.getElementById('statusAfter120Form').submit();
+        document.addEventListener('DOMContentLoaded', function() {
+            const submitButton = document.getElementById('statusAfter120Submit');
+            if (submitButton) {
+                submitButton.addEventListener('click', function () {
+                    document.getElementById('statusAfter120Form').submit();
+                });
+            }
         });
     </script>
     <script>
@@ -315,7 +320,7 @@
             const weighing_date = document.getElementById('actual_weighing_date');
 
             if(deworming.value != null && vitamin_a.value != null){
-                weighing_date.min =
+                weighing_date.min = '';
             }
         });
     </script>

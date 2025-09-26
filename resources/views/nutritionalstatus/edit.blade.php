@@ -79,7 +79,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300 date-field" id="deworming_date" min="{{ $child->date_of_birth->addDay()->format('m-d-Y') }}" max="{{ date('m-d-Y') }}"
-                                            name='deworming_date' value="{{ old('deworming_date', $entryDetails->deworming_date)->format('m-d-Y') }}"
+                                            name='deworming_date' value="{{ old('deworming_date', $entryDetails->deworming_date->format('m-d-Y')) }}"
                                             >
                                         @if ($errors->has('deworming_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('deworming_date') }}</span>
@@ -88,7 +88,7 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="vitamin_a_date">Vitamin A Date:<b class="text-red-600">*</b></label>
                                         <input type="text" class="form-control rounded border-gray-300 date-field" id="vitamin_a_date" min="{{ $child->date_of_birth->addDay()->format('m-d-Y') }}" max="{{ date('m-d-Y') }}"
-                                            name='vitamin_a_date' value="{{ old('vitamin_a_date', $entryDetails->vitamin_a_date)->format('m-d-Y') }}"
+                                            name='vitamin_a_date' value="{{ old('vitamin_a_date', $entryDetails->vitamin_a_date->format('m-d-Y')) }}"
                                             >
                                         @if ($errors->has('vitamin_a_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('vitamin_a_date') }}</span>
@@ -119,7 +119,7 @@
                                         <input type="text"
                                             class="form-control rounded border-gray-300 date-field"
                                             id="actual_weighing_date" name='actual_weighing_date' min="{{ $minDate }}" max="{{ date('m-d-Y') }}"
-                                            value="{{ old('actual_weighing_date', $entryDetails->actual_weighing_date)->format('m-d-Y') }}">
+                                            value="{{ old('actual_weighing_date', $entryDetails->actual_weighing_date->format('m-d-Y')) }}">
                                         @if ($errors->has('actual_weighing_date'))
                                             <span class="text-xs text-red-600">{{ $errors->first('actual_weighing_date') }}</span>
                                         @endif
