@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\ChildRecord as ChildCenter;
+use App\Models\ChildRecord;
 use App\Models\Implementation;
 use App\Models\NutritionalStatus;
 use App\Models\cgs_wfa_girls;
@@ -76,7 +76,7 @@ class NutritionalStatusController extends Controller
             $today = Carbon::today()->format('m-d-Y');
         }
 
-        $childStatus = ChildCenter::where('child_id', $child->id)
+        $childStatus = ChildRecord::where('child_id', $child->id)
             ->value('action_type');
 
         return view('nutritionalstatus.index', compact('child', 'implementation', 'minDate', 'maxDate', 'minDateExit', 'today', 'entryWeighingDate', 'entryDetails', 'exitDetails', 'hasUponEntryData', 'hasUponExitData', 'childStatus'));
@@ -543,7 +543,7 @@ class NutritionalStatusController extends Controller
             $exitDetails = $entryData[1];
         }
 
-        $childStatus = ChildCenter::where('child_id', $child->id)
+        $childStatus = ChildRecord::where('child_id', $child->id)
             ->value('action_type');
 
         return view('nutritionalstatus.edit', compact('implementation', 'child', 'entryDetails', 'hasUponEntryData', 'exitDetails', 'hasUponExitData', 'minDate', 'maxDate', 'childStatus'));
