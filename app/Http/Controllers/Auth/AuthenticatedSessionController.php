@@ -63,14 +63,15 @@ class AuthenticatedSessionController extends Controller
 
         //COMMENT BELOW TO REMOVE OTP
         $request->authenticate();
-
         $request->session()->regenerate();
+        Auth::logoutOtherDevices($request->password);
 
         if (auth()->user()->hasRole('encoder')) {
             return redirect()->route('child.index');
         }
 
         return redirect()->route('child.index');
+        // END OTP COMMENT
     }
 
     /**
