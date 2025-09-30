@@ -255,7 +255,7 @@ class UserController extends Controller
 
     public function resetPassword(User $user)
     {
-        $user->password = bcrypt('Sfp@12345');
+        $user->password = bcrypt('Sfp@12345678');
         $user->save();
 
         return redirect()->back()

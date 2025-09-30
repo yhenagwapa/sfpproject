@@ -33,7 +33,7 @@ class StoreUserRequest extends FormRequest
             'city_name_psgc' => ['required'],
             'brgy_psgc' => ['required'],
             'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::min(8)->mixedCase()->numbers()->symbols()],
+            'password' => ['required', 'confirmed', Rules\Password::min(12)->mixedCase()->numbers()->symbols()],
             'privacy_notice' => ['required', 'boolean'],
             'service_agreement' => ['required', 'boolean'],
         ];
@@ -62,7 +62,7 @@ class StoreUserRequest extends FormRequest
 
             'password.required' => 'Please fill in this field.',
             'password.confirmed' => 'Password did not match.',
-            'password.min' => 'Password must be at least 8 characters long.',
+            'password.min' => 'Password must be at least 12 characters long.',
             'password.mixedCase' => 'Password must contain both uppercase and lowercase letters.',
             'password.numbers' => 'Password must contain at least one number.',
             'password.symbols' => 'Password must contain at least one special character.',
