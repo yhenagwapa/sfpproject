@@ -56,13 +56,15 @@ class ChildController extends Controller
         $userID = auth()->id();
         $childCount = null;
 
-        $implementationId = $cycle->id;
-        $children = Child::withCount([
-            'records as transfer_count' => function ($query) use ($implementationId) {
-                $query->where('implementation_id', $implementationId)
-                    ->where('action_type', 'transferred');
-            }
-        ])->get();
+        if (!auth()->user()->hasRole('admin')) {
+            $implementationId = $cycle->id;
+            $children = Child::withCount([
+                'records as transfer_count' => function ($query) use ($implementationId) {
+                    $query->where('implementation_id', $implementationId)
+                        ->where('action_type', 'transferred');
+                }
+            ])->get();
+        }
 
         if (auth()->user()->hasRole('admin')) {
             $centers = UserCenter::all();
