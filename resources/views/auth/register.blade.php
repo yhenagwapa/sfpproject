@@ -266,7 +266,7 @@
 
                                                 <div class="mt-1 text-xs text-gray-500">
                                                     <ul>
-                                                        <li>Must be at least 8 characters.</li>
+                                                        <li>Must be at least 12 characters.</li>
                                                         <li>Must include uppercase letter.</li>
                                                         <li>Must include number.</li>
                                                         <li>Must include special character.</li>
