@@ -53,7 +53,7 @@ class AuthenticatedSessionController extends Controller
          }
 
          // You can create an OTP model or just store it in session for simplicity
-         session(['otp_email' => $user->email, 'otp_code' => $otp, 'otp_expires_at' => now()->addMinutes(10)]);
+         session(['otp_email' => $user->email, 'otp_code' => $otp, 'otp_expires_at' => now()->addMinutes(5)]);
 
          // Send the OTP via email
          \Mail::to($user->email)->send(new \App\Mail\SendOtpMail($otp));
