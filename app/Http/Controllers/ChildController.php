@@ -7,6 +7,7 @@ use App\Models\Child;
 use App\Http\Requests\StoreChildRequest;
 use App\Http\Requests\UpdateChildRequest;
 use App\Models\ChildDevelopmentCenter;
+use App\Models\ChildHistory;
 use App\Models\NutritionalStatus;
 use App\Models\cgs_wfa_girls;
 use App\Models\cgs_wfa_boys;
@@ -48,12 +49,14 @@ class ChildController extends Controller
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
         $fundedChildren = Child::with(['records' => function ($query) use ($cycle) {
-                $query->where('implementation_id', $cycle->id)
-                    ->whereIn('action_type', ['active', 'transferred']);
-            }, 'sex', 'records.center'])
+            $query->where('implementation_id', $cycle->id)
+                ->whereIn('action_type', ['active', 'transferred']);
+        }, 'sex', 'records.center'])
             ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END");
 
         $userID = auth()->id();
+
+        $center_name = null;
         $childCount = null;
 
         if (!auth()->user()->hasRole('admin')) {
@@ -79,9 +82,9 @@ class ChildController extends Controller
 
             if ($cdcId === 'all_center') {
                 $children = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id)
-                            ->where('action_type', 'active');
-                    })
+                    $query->where('implementation_id', $cycle->id)
+                        ->where('action_type', 'active');
+                })
                     ->with('records')
                     ->orderBy('lastname', 'asc')
                     ->get();
@@ -93,7 +96,7 @@ class ChildController extends Controller
                     $query->where('implementation_id', $cycle->id)
                         ->where('action_type', 'active')
                         ->where('child_development_center_id', $cdcId);
-                    })
+                })
                     ->with('records')
                     ->orderBy('lastname', 'asc')
                     ->get();
@@ -116,7 +119,7 @@ class ChildController extends Controller
                     $query->where('implementation_id', $cycle->id)
                         ->where('action_type', 'active')
                         ->whereIn('child_development_center_id', $centerIDs);
-                    })
+                })
                     ->with('records')
                     ->orderBy('lastname', 'asc')
                     ->get();
@@ -128,7 +131,7 @@ class ChildController extends Controller
                     $query->where('implementation_id', $cycle->id)
                         ->where('action_type', 'active')
                         ->where('child_development_center_id', $cdcId);
-                    })
+                })
                     ->with('records')
                     ->orderBy('lastname', 'asc')
                     ->get();
@@ -294,7 +297,7 @@ class ChildController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-     public function view(Request $request)
+    public function view(Request $request)
     {
         session(['view_child_id' => $request->input('child_id')]);
 
@@ -431,7 +434,9 @@ class ChildController extends Controller
         }
 
         $childRecord = ChildRecord::where('child_id', $childID)
-            ->where('action_type', $childStatus)
+            ->when($childStatus, function ($query) use ($childStatus) {
+                return $query->where('action_type', $childStatus);
+            })
             ->first();
 
         $childCurrentCenter = $childRecord->centerTo ?? $childRecord->centerFrom;
@@ -645,8 +650,8 @@ class ChildController extends Controller
                     //weight for height
                     if ($childSex == '1') {
                         $getHeight = cgs_wfh_boys::where('length_from', '<=', $height)
-                                        ->where('length_to', '>=', $height)
-                                        ->first();
+                            ->where('length_to', '>=', $height)
+                            ->first();
 
                         if (!$getHeight) {
                             return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -668,8 +673,8 @@ class ChildController extends Controller
 
                     } else {
                         $getHeight = cgs_wfh_girls::where('length_from', '<=', $height)
-                                        ->where('length_to', '>=', $height)
-                                        ->first();
+                            ->where('length_to', '>=', $height)
+                            ->first();
 
                         if (!$getHeight) {
                             return redirect()->back()->withErrors(['ageError' => 'Height is out of range.']);
@@ -692,13 +697,13 @@ class ChildController extends Controller
                     }
 
                     $isMalnourished = in_array($weightForAge, ['Underweight', 'Severely Underweight', 'Overweight']) ||
-                            in_array($heightForAge, ['Stunted', 'Severely Stunted']) ||
-                            in_array($weightForHeight, ['Wasted', 'Severely Wasted', 'Overweight', 'Obese']);
+                        in_array($heightForAge, ['Stunted', 'Severely Stunted']) ||
+                        in_array($weightForHeight, ['Wasted', 'Severely Wasted', 'Overweight', 'Obese']);
 
 
                     $isUndernourished = in_array($weightForAge, ['Underweight', 'Severely Underweight']) ||
-                            in_array($heightForAge, ['Stunted', 'Severely Stunted']) ||
-                            in_array($weightForHeight, ['Wasted', 'Severely Wasted']);
+                        in_array($heightForAge, ['Stunted', 'Severely Stunted']) ||
+                        in_array($weightForHeight, ['Wasted', 'Severely Wasted']);
 
                     $nutrition->age_in_months = $age['months'];
                     $nutrition->age_in_years = $age['years'];
@@ -720,9 +725,16 @@ class ChildController extends Controller
             }
         }
 
-        $currentChildRecord = ChildRecord::where('child_id', $child->id)
-                ->where('action_type', $childStatus)->first();
+        // update cdc
+        ChildRecord::where('child_id', $child->id)->update(['child_development_center_id' => $request->child_development_center_id]);
 
+        $currentChildRecord = ChildRecord::where('child_id', $childID)
+            ->when($childStatus, function ($query) use ($childStatus) {
+                return $query->where('action_type', $childStatus);
+            })
+            ->first();
+
+        // update funded, if any
         if($request->is_funded != $currentChildRecord->funded){
             ChildRecord::where('child_id', $child->id)->update(['funded' => $request->is_funded]);
         }

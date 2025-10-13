@@ -25,6 +25,10 @@ class UpdateChildRequest extends FormRequest
         $minDate = Carbon::now()->subYears(6)->addDay()->format('m-d-Y');
         $maxDate = Carbon::create(null, 6, 30)->subYears(2)->format('m-d-Y');
 
+        if(auth()->user()->hasAnyRole(['lgu focal', 'sfp coordinator'])){
+            return [];
+        }
+
         if(auth()->user()->hasRole('child development worker') || auth()->user()->hasRole('encoder')){
             return [
                 'lastname' => ['required', 'string', 'regex:/^[a-zA-ZÑñ0-9\s.-]+$/'],
