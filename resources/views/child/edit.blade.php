@@ -443,7 +443,7 @@
                                     <select
                                         class="form-control required:border-red-500 invalid:border-red-500 rounded border-gray-300"
                                         id="milk_feeding_id" name='milk_feeding_id'>
-                                        @if ($milkFeeding)
+                                        @if (isset($milkFeeding) && $milkFeeding)
                                             <option value="{{ $milkFeeding->id }}"
                                                 {{ $milkFeeding->id == old('milk_feeding_id', $childCenterId->milk_feeding_id) ? 'selected' : '' }}>
                                                 {{ $milkFeeding->name }}
