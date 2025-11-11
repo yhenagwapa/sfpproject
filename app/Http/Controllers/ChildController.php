@@ -44,7 +44,7 @@ class ChildController extends Controller
 
     public function index(Request $request)
     {
-        $cdcId = $request->input('center_name', 'all_center') ?? false;
+        $cdcId = $request->input('center_name') ?? false;
 
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
