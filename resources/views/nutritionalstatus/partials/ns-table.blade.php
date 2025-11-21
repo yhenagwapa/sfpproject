@@ -13,7 +13,7 @@
                 <th>Height for Age</th>
                 <th>Malnourish</th>
                 <th>Undernourish</th>
-                <th class="@if (Route::is('nutritionalstatus.edit') || session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status') || ($childStatus != 'dropped') || ($childStatus != 'transferred')) hidden @endif">Action</th>
+                <th>Action</th>
             </tr>
 
         </thead>

@@ -205,9 +205,9 @@ class ImplementationController extends Controller
         ]);
 
         if($request->cycle_status === 'closed'){
-            ChildCenter::where('status', 'active')
+            ChildCenter::where('action_type', 'active')
             ->where('implementation_id', $cycleID)
-            ->update(['status' => 'inactive']);
+            ->update(['action_type' => 'inactive']);
         }
 
         return redirect()->back()->with('success', 'Implementation successfully updated.');

@@ -89,7 +89,7 @@
                                             <label for="center_name" class="text-base mt-2 mr-2">CDC/SNP:</label>
                                             <select class="form-control uppercase" name="center_name" id="center_name" onchange="this.form.submit()">
                                                 <option value="" selected>Select CDC/SNP</option>
-                                                <option value="all_center" {{ request('cdcId') == 'all_center' ? 'selected' : '' }}>All Child Development Center</option>
+                                                <option value="all_center" {{ request('cdcId') == 'all_center' ? 'selected' : '0' }}>All Child Development Center</option>
                                                 @foreach ($centerNames as $center)
                                                     <option value="{{ $center->id }}"
                                                         {{ old('center_name') == $center->id || $cdcId == $center->id ? 'selected' : '' }}>
@@ -103,7 +103,7 @@
 
 
                             <div class="table-responsive">
-                                @include('child.partials.children-table', ['children' => $children])
+                                @include('child.partials.children-table')
                             </div>
 
                         </div>
@@ -111,34 +111,4 @@
                 </div>
             </div>
         </section>
-
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-    {{-- @vite(['resources/js/app.js']) --}}
-    <script>
-        window.addEventListener('load', function () {
-            $(document).ready(function () {
-                $("#children-table").DataTable({
-                    paging: true,             // Enable paging
-                    pageLength: 10,           // Show 10 entries per page
-                    lengthChange: false,      // Hide the dropdown to change entry count
-                    searching: true,
-                    order: [[4, 'asc']],
-                    columnDefs: [
-                        {
-                            orderSequence: ["desc", "asc"]
-                        },
-                    ],
-                    info: false,
-                    rowCallback: function(row, data, index) {
-                        var table = $('#children-table').DataTable();
-                        if (data && Object.keys(data).length !== 0) {
-                            $('td:eq(0)', row).html(table.page.info().start + index + 1);
-                        } else {
-                            $('td:eq(0)', row).html('');
-                        }
-                    }
-                });
-            });
-        });
-    </script>
 @endsection <!-- End section -->

@@ -44,34 +44,15 @@ class ChildController extends Controller
 
     public function index(Request $request)
     {
-        $cdcId = $request->input('center_name') ?? false;
-
+        $cdcId = $request->input('center_name') ?? 'all_center';
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
-
-        $fundedChildren = Child::with(['records' => function ($query) use ($cycle) {
-            $query->where('implementation_id', $cycle->id)
-                ->whereIn('action_type', ['active', 'transferred']);
-        }, 'sex', 'records.center'])
-            ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END");
 
         $userID = auth()->id();
 
         $center_name = null;
-        $childCount = null;
-
-        if (!auth()->user()->hasRole('admin')) {
-            $implementationId = $cycle->id;
-            $children = Child::withCount([
-                'records as transfer_count' => function ($query) use ($implementationId) {
-                    $query->where('implementation_id', $implementationId)
-                        ->where('action_type', 'transferred');
-                }
-            ])->get();
-        }
 
         if (auth()->user()->hasRole('admin')) {
             $centers = UserCenter::all();
-            $centerIds = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::all()->keyBy('id');
 
             if (!$cycle) {
@@ -80,75 +61,42 @@ class ChildController extends Controller
                     ->with('error', 'No active implementation.');
             }
 
-            if ($cdcId === 'all_center') {
-                $children = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                    $query->where('implementation_id', $cycle->id)
-                        ->where('action_type', 'active');
-                })
-                    ->with('records')
-                    ->orderBy('lastname', 'asc')
-                    ->get();
-
-                $center_name = "All CDC/SNP";
-
+            // Handle center selection for admin
+            if ($cdcId === 'all_center' || !$cdcId) {
+                // Create a pseudo-object for "All CDC/SNP"
+                $center_name = (object) [
+                    'id' => 'all_center',
+                    'center_name' => 'All CDC/SNP'
+                ];
             } else {
-                $children = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
-                    $query->where('implementation_id', $cycle->id)
-                        ->where('action_type', 'active')
-                        ->where('child_development_center_id', $cdcId);
-                })
-                    ->with('records')
-                    ->orderBy('lastname', 'asc')
-                    ->get();
+                $center_name = ChildDevelopmentCenter::find($cdcId);
             }
-
-            $center_name = ChildDevelopmentCenter::where('id', $cdcId)->first();
 
         } else {
             $centers = UserCenter::where('user_id', $userID)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get()->keyBy('id');
 
-            if (!$cycle) {
-                $children = null;
-                return view('child.index', compact('children','centerNames', 'cdcId'))->with('error', 'No active implementation.');
-            }
-
-            if ($cdcId === 'all_center') {
-                $children = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
-                    $query->where('implementation_id', $cycle->id)
-                        ->where('action_type', 'active')
-                        ->whereIn('child_development_center_id', $centerIDs);
-                })
-                    ->with('records')
-                    ->orderBy('lastname', 'asc')
-                    ->get();
-
-                $center_name = "All CDC/SNP";
-
+            // Handle center selection for non-admin
+            if ($cdcId === 'all_center' || !$cdcId) {
+                // Create a pseudo-object for "All CDC/SNP"
+                $center_name = (object) [
+                    'id' => 'all_center',
+                    'center_name' => 'All CDC/SNP'
+                ];
             } else {
-                $children = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
-                    $query->where('implementation_id', $cycle->id)
-                        ->where('action_type', 'active')
-                        ->where('child_development_center_id', $cdcId);
-                })
-                    ->with('records')
-                    ->orderBy('lastname', 'asc')
-                    ->get();
-
-                $center_name = ChildDevelopmentCenter::where('id', $cdcId)->first();
-
+                // Verify user has access to this center
+                if ($centerIDs->contains($cdcId)) {
+                    $center_name = ChildDevelopmentCenter::find($cdcId);
+                } else {
+                    // User doesn't have access to this center
+                    return view('child.index', compact('centerNames', 'centers', 'cdcId'))
+                        ->with('error', 'You do not have access to this center.');
+                }
             }
         }
 
-        // Add a flag
-        $children->each(function ($child) {
-            $child->has_transferred = $child->transfer_count > 0;
-        });
-
-        $childCount = $children->count();
-
-        return view('child.index', compact('children', 'centerNames', 'centers', 'cdcId', 'center_name', 'childCount'));
+        return view('child.index', compact('centerNames', 'centers', 'cdcId', 'center_name'));
     }
 
     /**
