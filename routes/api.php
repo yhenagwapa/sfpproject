@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AccountApiController;
 use App\Http\Controllers\Api\ChildApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,4 +18,4 @@ use Illuminate\Support\Facades\Route;
 
 //Route::middleware('auth:sanctum')->group(function () {
     Route::get('/children', [ChildApiController::class, 'get']);
-//});
+Route::get('/users', [App\Http\Controllers\Api\AccountApiController::class, 'get']);//});

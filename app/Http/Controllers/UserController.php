@@ -29,45 +29,44 @@ class UserController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of users
+     *
+     * @return \Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
+        // Get all roles for the dropdown in the table
         $roles = Role::all()->sortBy('name');
 
-        $search = $request->get('search');
-        // Start with the query builder
-        $query = User::query();
+        // Get user count for display
+        $currentUser = auth()->user();
+        $isAdmin = $currentUser->hasRole('admin');
 
-        // If not admin, filter by city
-        if (!$request->user()->hasRole('admin')) {
-            $psgcCity = Psgc::find(auth()->user()->psgc_id)->city_name_psgc;
+        if ($isAdmin) {
+            // Admin sees all users
+            $userCount = User::count();
+        } else {
+            // Non-admin sees filtered users
+            $psgcCity = Psgc::find($currentUser->psgc_id)->city_name_psgc ?? null;
 
-            // if focal is from davao city, and has the role of sfp coordinator
-            if ($request->user()->hasRole('sfp coordinator')) {
+            if ($currentUser->hasRole('sfp coordinator')) {
+                $psgcDistrict = Psgc::find($currentUser->psgc_id)->subdistrict ?? null;
 
-                // get user's district
-                $psgcDistrict = Psgc::find(auth()->user()->psgc_id)->subdistrict;
-
-                // Apply left join and where clause
-                $query->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
-                    ->where('psgcs.subdistrict', $psgcDistrict)
-                    ->select('users.*'); // Optional: make sure only User columns are selected
-            }
-            else {
-                // Apply left join and where clause
-                $query->leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                if ($psgcDistrict) {
+                    $userCount = User::leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
+                        ->where('psgcs.subdistrict', $psgcDistrict)
+                        ->count();
+                } else {
+                    $userCount = 0;
+                }
+            } else {
+                $userCount = User::leftJoin('psgcs', 'psgcs.psgc_id', '=', 'users.psgc_id')
                     ->where('psgcs.city_name_psgc', $psgcCity)
-                    ->select('users.*'); // Optional: make sure only User columns are selected
+                    ->count();
             }
         }
 
-
-
-        // Get the result
-        $users = $query->get();
-
-        return view('users.index', compact('users', 'roles', 'search'));
+        return view('users.index', compact('roles', 'userCount'));
     }
 
     /**
@@ -222,15 +221,17 @@ class UserController extends Controller
     public function updateStatus(Request $request, User $user)
     {
         $request->validate([
-            'status' => 'required|string|in:inactive,active,deactivated',
+            'status' => 'required|string|in:inactive,active,deactivated,for activation',
         ]);
 
         $user->update([
             'status' => $request->status,
         ]);
 
-        return redirect()->back()
-                ->withSuccess('User status updated successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'User status updated successfully.'
+        ]);
     }
 
     public function updateRole(Request $request, User $user)
@@ -249,8 +250,10 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->back()
-                ->withSuccess('User role updated successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'User role updated successfully.'
+        ]);
     }
 
     public function resetPassword(User $user)

@@ -82,7 +82,6 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::get('/users/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/update', [UserController::class, 'update'])->name('users.update');
     Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
-    Route::put('/users/{user}/status', [UserController::class, 'updateStatus'])->name('users.update-status');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
     Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
 

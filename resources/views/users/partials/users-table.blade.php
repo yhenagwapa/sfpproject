@@ -1,233 +1,421 @@
-{{-- <div class="row">
-    <div class="col-md-8 mt-3 text-sm">
-    </div>
-    <div class="col-md-4 mt-3 justify-end">
-        <form class="flex" id="search-form" method="GET" action="{{ route('users.index') }}">
-            <label for="q-input" class="text-base mt-2 mr-2">Search:</label>
-            <input
-            type="text"
-            name="search"
-            id="q-input"
-            value="{{ request('search') }}"
-            placeholder="Search"
-            class="form-control rounded border-gray-300"
-            autocomplete="off">
-        </form>
-    </div>
-</div> --}}
-
-<table id='users-table' class="table datatable mt-3 text-sm">
-    <thead>
-        <tr>
-            <th>No.</th>
-            <th class="text-left" scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Email Verified?</th>
-            <th scope="col">Roles</th>
-            <th scope="col">Status</th>
-            @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal') )
-                <th scope="col">Action</th>
-            @endif
-        </tr>
+<table id='users-table' class="table datatable mt-3">
+    <thead class="text-base">
+    <tr>
+        <th>No.</th>
+        <th class="text-left">Name</th>
+        <th>Email</th>
+        <th>Email Verified?</th>
+        <th>Roles</th>
+        <th>Status</th>
+        @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+            <th>Action</th>
+        @endif
+    </tr>
     </thead>
-    <tbody class='users-table'>
-        @foreach ($users as $user)
-            <tr>
-                <td class="text-center"></td>
-                <td class="text-left">{{ $user->full_name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->email_verified_at ? 'Yes' : 'No' }}
-
-                <td class="justify-items-center items-center">
-                    <select class="form-control uppercase w-full border-none" id="role_id-{{ $user->id }}" name="role_id" @if (auth()->user()->id === $user->id) disabled @endif>
-                        <option value="" disabled>Select role</option>
-                        @foreach ($roles as $role)
-                            @if (!($role->name === 'admin' && !auth()->user()->hasRole('admin')) &&
-                                    !($role->name === 'pdo' && !auth()->user()->hasRole('admin')))
-                                <option value="{{ $role->id }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
-                                    {{ $role->name }}
-                                </option>
-                            @endif
-                        @endforeach
-                    </select>
-                </td>
-
-                <!-- Modal for role change -->
-                <div class="modal fade" id="role_idConfirmationModal-{{ $user->id }}" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-red-600">Confirmation</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to change <b class="text-red-600 uppercase">{{ $user->full_name }}</b>'s
-                                role?
-                            </div>
-                            <div class="modal-footer">
-                                <button id="confirmRoleChange-{{ $user->id }}" type="button"
-                                    class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                <button id="cancelRoleChange-{{ $user->id }}" type="button"
-                                    class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                    data-bs-dismiss="modal">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <form id="roleForm-{{ $user->id }}" method="POST"
-                    action="{{ route('users.update-role', $user->id) }}">
-                    @csrf
-
-                    <input type="hidden" name="_method" value="PUT">
-                    <input type="hidden" id="roleValue-{{ $user->id }}" name="role_id" value="">
-                </form>
-
-                <script>
-                    let selectedRole{{ $user->id }} = '';
-                    let originalRole{{ $user->id }} = document.getElementById('role_id-{{ $user->id }}').value;
-
-                    document.getElementById('role_id-{{ $user->id }}').addEventListener('change', function() {
-                        selectedRole{{ $user->id }} = this.value;
-                        let modal = new bootstrap.Modal(document.getElementById(
-                            'role_idConfirmationModal-{{ $user->id }}'));
-                        modal.show();
-                    });
-
-                    document.getElementById('confirmRoleChange-{{ $user->id }}').addEventListener('click', function() {
-                        document.getElementById('roleValue-{{ $user->id }}').value = selectedRole{{ $user->id }};
-                        document.getElementById('roleForm-{{ $user->id }}').submit();
-                    });
-
-                    document.getElementById('cancelRoleChange-{{ $user->id }}').addEventListener('click', function() {
-                        document.getElementById('role_id-{{ $user->id }}').value = originalRole{{ $user->id }};
-                    });
-                </script>
-
-                <td class="w-40">
-                    <select id="statusSelect-{{ $user->id }}" name="status" class="form-control w-40 border-none" @if (auth()->user()->id === $user->id) disabled @endif>
-                        <option value="" disabled>Select status</option>
-                        <option value="inactive" {{ $user->status == 'for activation' ? 'selected' : '' }}>
-                            For Activation
-                        </option>
-                        <option value="active" {{ $user->status == 'active' ? 'selected' : '' }}>
-                            Active
-                        </option>
-                        <option value="deactivated" {{ $user->status == 'deactivated' ? 'selected' : '' }}>
-                            Deactivated
-                        </option>
-                    </select>
-                </td>
-
-                <!-- Modal for status change -->
-                <div class="modal fade" id="statusConfirmationModal-{{ $user->id }}" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-red-600">Confirmation</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to change <b class="text-red-600 uppercase">{{ $user->full_name }}</b>'s
-                                status?
-                            </div>
-                            <div class="modal-footer">
-                                <button id="confirmStatusChange-{{ $user->id }}" type="button"
-                                    class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                <button id="cancelStatusChange-{{ $user->id }}" type="button"
-                                    class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                    data-bs-dismiss="modal">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <form id="statusForm-{{ $user->id }}" method="POST"
-                    action="{{ route('users.update-status', $user->id) }}">
-                    @csrf
-
-                    <input type="hidden" name="_method" value="PUT">
-                    <input type="hidden" id="statusValue-{{ $user->id }}" name="status" value="">
-                </form>
-
-                <script>
-                    let selectedStatus{{ $user->id }} = '';
-                    let originalStatus{{ $user->id }} = document.getElementById('statusSelect-{{ $user->id }}').value;
-
-                    document.getElementById('statusSelect-{{ $user->id }}').addEventListener('change', function() {
-                        selectedStatus{{ $user->id }} = this.value;
-                        let modal = new bootstrap.Modal(document.getElementById(
-                        'statusConfirmationModal-{{ $user->id }}'));
-                        modal.show();
-                    });
-
-                    document.getElementById('confirmStatusChange-{{ $user->id }}').addEventListener('click', function() {
-                        document.getElementById('statusValue-{{ $user->id }}').value = selectedStatus{{ $user->id }};
-                        document.getElementById('statusForm-{{ $user->id }}').submit();
-                    });
-
-                    document.getElementById('cancelStatusChange-{{ $user->id }}').addEventListener('click', function() {
-                        document.getElementById('statusSelect-{{ $user->id }}').value = originalStatus{{ $user->id }};
-                    });
-                </script>
-
-                <!-- Reset Password Button -->
-                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
-                    @if (auth()->user()->hasRole('lgu focal') && $user->hasRole('lgu focal'))
-                        <td></td>
-                    @else
-                        <td class="justify-items-center items-center">
-                            <button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9 custom-disabled-btn" data-bs-toggle="modal"
-                                    data-bs-target="#resetPasswordModal-{{ $user->id }}" @if (auth()->user()->id === $user->id) disabled  @endif>
-                                Reset Password
-                            </button>
-                        </td>
-
-                        <!-- Modal for Reset Password -->
-                        <div class="modal fade" id="resetPasswordModal-{{ $user->id }}" tabindex="-1">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title text-red-600">Confirmation</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to reset <b class="text-red-600 uppercase">{{ $user->full_name }}</b>'s
-                                        password?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button id="confirmResetPassword-{{ $user->id }}" type="button"
-                                                class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
-                                        <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
-                                                data-bs-dismiss="modal">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <form id="resetPasswordForm-{{ $user->id }}" method="POST"
-                              action="{{ route('users.reset-password', $user->id) }}">
-                            @csrf
-                            <input type="hidden" name="_method" value="PUT">
-                        </form>
-
-                        <script>
-                            document.getElementById('confirmResetPassword-{{ $user->id }}').addEventListener('click', function() {
-                                document.getElementById('resetPasswordForm-{{ $user->id }}').submit();
-                            });
-                        </script>
-                    @endif
-
-                @endif
-            </tr>
-        @endforeach
+    <tbody class="text-sm">
     </tbody>
 </table>
-{{--
-<div>
-    {{ $users->links() }}
+
+<!-- Role Change Confirmation Modal -->
+<div class="modal fade" id="roleConfirmationModal" tabindex="-1" aria-labelledby="roleConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-red-600" id="roleConfirmationModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to change <b class="text-red-600 uppercase" id="roleModalUserName"></b>'s role?
+            </div>
+            <div class="modal-footer">
+                <button id="confirmRoleChangeBtn" type="button" class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                <button id="cancelRoleChangeBtn" type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
---}}
+
+<!-- Status Change Confirmation Modal -->
+<div class="modal fade" id="statusConfirmationModal" tabindex="-1" aria-labelledby="statusConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-red-600" id="statusConfirmationModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to change <b class="text-red-600 uppercase" id="statusModalUserName"></b>'s status?
+            </div>
+            <div class="modal-footer">
+                <button id="confirmStatusChangeBtn" type="button" class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                <button id="cancelStatusChangeBtn" type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reset Password Confirmation Modal -->
+<div class="modal fade" id="resetPasswordConfirmationModal" tabindex="-1" aria-labelledby="resetPasswordConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-red-600" id="resetPasswordConfirmationModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reset <b class="text-red-600 uppercase" id="resetPasswordModalUserName"></b>'s password?
+            </div>
+            <div class="modal-footer">
+                <button id="confirmResetPasswordBtn" type="button" class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                <button id="cancelResetPasswordBtn" type="button" class="text-white bg-gray-600 rounded px-3 min-h-9" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function () {
+        $(document).ready(function () {
+            const canManageUsers = {{ (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal')) ? 'true' : 'false' }};
+            const isAdmin = {{ auth()->user()->hasRole('admin') ? 'true' : 'false' }};
+            const isLguFocal = {{ auth()->user()->hasRole('lgu focal') ? 'true' : 'false' }};
+            const currentUserId = {{ auth()->user()->id }};
+
+            // Get roles data
+            const rolesData = @json($roles ?? []);
+
+            const table = $("#users-table").DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    data: {
+                        user_id: {{ auth()->user()->id }}
+                    },
+                    error: function (xhr, error, code) {
+                        console.error('DataTables error:', error);
+                        console.error('Response:', xhr.responseText);
+                    },
+                    type: 'GET',
+                    url: '{{ url('/') }}/api/users'
+                },
+                columns: [
+                    {
+                        data: 'no',
+                        name: 'id',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name',
+                        className: 'text-left'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'email_verified_at',
+                        name: 'email_verified_at',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: null,
+                        name: 'roles',
+                        orderable: false,
+                        render: function(data, type, row) {
+                            const isCurrentUser = row.is_current_user;
+                            const disabled = isCurrentUser ? 'disabled' : '';
+
+                            let options = '<option value="" disabled>Select role</option>';
+
+                            let rolesDataArr = Object.values(rolesData);
+
+                            rolesDataArr.forEach(role => {
+                                // Hide admin and pdo roles from non-admins
+                                if ((role.name === 'admin' || role.name === 'pdo') && !isAdmin) {
+                                    return;
+                                }
+
+                                const selected = row.roles.includes(role.name) ? 'selected' : '';
+                                options += `<option value="${role.id}" ${selected}>${role.name}</option>`;
+                            });
+
+                            return `
+                                <select class="form-control uppercase w-full border-none role-select"
+                                        data-user-id="${row.id}"
+                                        data-original-role="${row.current_role_id}"
+                                        ${disabled}>
+                                    ${options}
+                                </select>
+                            `;
+                        }
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        className: 'w-40',
+                        render: function(data, type, row) {
+                            const isCurrentUser = row.is_current_user;
+                            const disabled = isCurrentUser ? 'disabled' : '';
+
+                            return `
+                                <select class="form-control w-40 border-none status-select"
+                                        data-user-id="${row.id}"
+                                        data-original-status="${row.status}"
+                                        ${disabled}>
+                                    <option value="" disabled>Select status</option>
+                                    <option value="inactive" ${row.status === 'for activation' ? 'selected' : ''}>For Activation</option>
+                                    <option value="active" ${row.status === 'active' ? 'selected' : ''}>Active</option>
+                                    <option value="deactivated" ${row.status === 'deactivated' ? 'selected' : ''}>Deactivated</option>
+                                </select>
+                            `;
+                        }
+                    },
+                        @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
+                    {
+                        data: null,
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        className: 'justify-items-center items-center',
+                        render: function(data, type, row) {
+                            const isCurrentUser = row.is_current_user;
+                            const isLguFocalUser = row.roles.includes('lgu focal');
+
+                            // LGU Focal cannot reset other LGU Focal's password
+                            if (isLguFocal && isLguFocalUser) {
+                                return '';
+                            }
+
+                            if (isCurrentUser) {
+                                return '<button type="button" class="text-white bg-blue-600 rounded px-3 min-h-9 custom-disabled-btn" disabled>Reset Password</button>';
+                            }
+
+                            return `
+                                <button type="button"
+                                        class="text-white bg-blue-600 rounded px-3 min-h-9 reset-password-btn"
+                                        data-user-id="${row.id}"
+                                        data-user-name="${row.full_name}">
+                                    Reset Password
+                                </button>
+                            `;
+                        }
+                    }
+                    @endif
+                ],
+                order: [[1, 'asc']], // Default sort by name
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                language: {
+                    processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>',
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ users",
+                    infoEmpty: "No users to display",
+                    infoFiltered: "(filtered from _MAX_ total users)",
+                    zeroRecords: "No matching users found",
+                    emptyTable: "No users available"
+                },
+                drawCallback: function(settings) {
+                    console.log('Users table redrawn');
+                    initializeEventHandlers();
+                }
+            });
+
+            // Initialize event handlers for dynamically created elements
+            function initializeEventHandlers() {
+                // Role change handler
+                $('.role-select').off('change').on('change', function() {
+                    const userId = $(this).data('user-id');
+                    const newRoleId = $(this).val();
+                    const originalRoleId = $(this).data('original-role');
+                    const selectElement = $(this);
+
+                    showRoleConfirmationModal(userId, newRoleId, originalRoleId, selectElement);
+                });
+
+                // Status change handler
+                $('.status-select').off('change').on('change', function() {
+                    const userId = $(this).data('user-id');
+                    const newStatus = $(this).val();
+                    const originalStatus = $(this).data('original-status');
+                    const selectElement = $(this);
+
+                    showStatusConfirmationModal(userId, newStatus, originalStatus, selectElement);
+                });
+
+                // Reset password handler
+                $('.reset-password-btn').off('click').on('click', function() {
+                    const userId = $(this).data('user-id');
+                    const userName = $(this).data('user-name');
+
+                    showResetPasswordModal(userId, userName);
+                });
+            }
+
+            // Role confirmation modal
+            let roleModalData = { userId: null, newRoleId: null, originalRoleId: null, selectElement: null };
+            let statusModalData = { userId: null, newStatus: null, originalStatus: null, selectElement: null };
+            let resetPasswordModalData = { userId: null, userName: null };
+
+            const roleConfirmationModalEl = document.getElementById('roleConfirmationModal');
+            const statusConfirmationModalEl = document.getElementById('statusConfirmationModal');
+            const resetPasswordConfirmationModalEl = document.getElementById('resetPasswordConfirmationModal');
+
+            const roleConfirmationModal = roleConfirmationModalEl ? new bootstrap.Modal(roleConfirmationModalEl) : null;
+            const statusConfirmationModal = statusConfirmationModalEl ? new bootstrap.Modal(statusConfirmationModalEl) : null;
+            const resetPasswordConfirmationModal = resetPasswordConfirmationModalEl ? new bootstrap.Modal(resetPasswordConfirmationModalEl) : null;
+
+            function showRoleConfirmationModal(userId, newRoleId, originalRoleId, selectElement) {
+                const userName = selectElement.closest('tr').find('td:eq(1)').text();
+                document.getElementById('roleModalUserName').textContent = userName;
+
+                roleModalData = { userId, newRoleId, originalRoleId, selectElement };
+
+                if (roleConfirmationModal) {
+                    roleConfirmationModal.show();
+                }
+            }
+
+            function showStatusConfirmationModal(userId, newStatus, originalStatus, selectElement) {
+                const userName = selectElement.closest('tr').find('td:eq(1)').text();
+                document.getElementById('statusModalUserName').textContent = userName;
+
+                statusModalData = { userId, newStatus, originalStatus, selectElement };
+
+                if (statusConfirmationModal) {
+                    statusConfirmationModal.show();
+                }
+            }
+
+            function showResetPasswordModal(userId, userName) {
+                document.getElementById('resetPasswordModalUserName').textContent = userName;
+
+                resetPasswordModalData = { userId, userName };
+
+                if (resetPasswordConfirmationModal) {
+                    resetPasswordConfirmationModal.show();
+                }
+            }
+
+            // Confirm / cancel button handlers for role change
+            $('#confirmRoleChangeBtn').off('click').on('click', function() {
+                const { userId, newRoleId, originalRoleId, selectElement } = roleModalData;
+                if (!userId || !newRoleId) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ url('/') }}/users/' + userId + '/role',
+                    type: 'PUT',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        role_id: newRoleId
+                    },
+                    success: function(response) {
+                        if (roleConfirmationModal) {
+                            roleConfirmationModal.hide();
+                        }
+                        // alert('Role updated successfully.');
+                        table.ajax.reload(null, false);
+                    },
+                    error: function(xhr) {
+                        if (roleConfirmationModal) {
+                            roleConfirmationModal.hide();
+                        }
+                        alert('Failed to update role.');
+                        if (selectElement) {
+                            selectElement.val(originalRoleId);
+                        }
+                    }
+                });
+            });
+
+            $('#cancelRoleChangeBtn').off('click').on('click', function() {
+                if (roleModalData.selectElement) {
+                    roleModalData.selectElement.val(roleModalData.originalRoleId);
+                }
+            });
+
+            // Confirm / cancel button handlers for status change
+            $('#confirmStatusChangeBtn').off('click').on('click', function() {
+                const { userId, newStatus, originalStatus, selectElement } = statusModalData;
+                if (!userId || !newStatus) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ url('/') }}/users/' + userId + '/status',
+                    type: 'PUT',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: newStatus
+                    },
+                    success: function(response) {
+                        if (statusConfirmationModal) {
+                            statusConfirmationModal.hide();
+                        }
+                        // alert('Status updated successfully.');
+                        table.ajax.reload(null, false);
+                    },
+                    error: function(xhr) {
+                        if (statusConfirmationModal) {
+                            statusConfirmationModal.hide();
+                        }
+                        alert('Failed to update status.');
+                        if (selectElement) {
+                            selectElement.val(originalStatus);
+                        }
+                    }
+                });
+            });
+
+            $('#cancelStatusChangeBtn').off('click').on('click', function() {
+                if (statusModalData.selectElement) {
+                    statusModalData.selectElement.val(statusModalData.originalStatus);
+                }
+            });
+
+            // Confirm / cancel button handlers for reset password
+            $('#confirmResetPasswordBtn').off('click').on('click', function() {
+                const { userId } = resetPasswordModalData;
+                if (!userId) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ url('/') }}/users/' + userId + '/reset-password',
+                    type: 'PUT',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (resetPasswordConfirmationModal) {
+                            resetPasswordConfirmationModal.hide();
+                        }
+                        alert('Password reset successfully.');
+                    },
+                    error: function(xhr) {
+                        if (resetPasswordConfirmationModal) {
+                            resetPasswordConfirmationModal.hide();
+                        }
+                        alert('Failed to reset password.');
+                    }
+                });
+            });
+
+            $('#cancelResetPasswordBtn').off('click').on('click', function() {
+                // No additional logic needed; modal simply closes.
+            });
+
+            // Optional: Refresh table function
+            window.refreshUsersTable = function() {
+                table.ajax.reload(null, false); // false = stay on current page
+            };
+        });
+    });
+</script>
