@@ -674,7 +674,9 @@ class ChildController extends Controller
         }
 
         // update cdc
-        ChildRecord::where('child_id', $child->id)->update(['child_development_center_id' => $request->child_development_center_id]);
+        if(!auth()->user()->hasAnyRole(['child development worker', 'encoder'])){ // allow admin and focal
+            ChildRecord::where('child_id', $child->id)->update(['child_development_center_id' => $request->child_development_center_id]);
+        }
 
         $currentChildRecord = ChildRecord::where('child_id', $childID)
             ->when($childStatus, function ($query) use ($childStatus) {
