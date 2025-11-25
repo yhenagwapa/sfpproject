@@ -550,11 +550,13 @@
         document.getElementById('privacy_notice').checked = true;
         const modal = bootstrap.Modal.getInstance(document.getElementById('privacyNoticeModal'));
         modal.hide();
+        $(".modal-backdrop").hide();
     }
     function agreeToUserService() {
         document.getElementById('service_agreement').checked = true;
         const modal = bootstrap.Modal.getInstance(document.getElementById('userServiceAgreementModal'));
         modal.hide();
+        $(".modal-backdrop").hide();
     }
 </script>
 
