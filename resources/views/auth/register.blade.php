@@ -547,18 +547,60 @@
 
 <script>
     function agreeToPrivacy() {
-        document.getElementById('privacy_notice').checked = true;
-        const modal = bootstrap.Modal.getInstance(document.getElementById('privacyNoticeModal'));
+        // 1. Check the checkbox
+        const checkbox = document.getElementById('privacy_notice');
+        if (checkbox) {
+            checkbox.checked = true;
+        }
+
+        // 2. Get Bootstrap modal instance and hide it
+        const modalEl = document.getElementById('privacyNoticeModal');
+        if (!modalEl) return;
+
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.hide();
-        $(".modal-backdrop").hide();
+
+        closeBackdrop(modalEl);
+        return false;
     }
+
     function agreeToUserService() {
-        document.getElementById('service_agreement').checked = true;
-        const modal = bootstrap.Modal.getInstance(document.getElementById('userServiceAgreementModal'));
+        // 1. Check the checkbox
+        const checkbox = document.getElementById('service_agreement');
+        if (checkbox) {
+            checkbox.checked = true;
+        }
+
+        // 2. Get Bootstrap modal instance and hide it
+        const modalEl = document.getElementById('userServiceAgreementModal');
+        if (!modalEl) return;
+
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.hide();
-        $(".modal-backdrop").hide();
+
+        closeBackdrop(modalEl);
+        return false;
+    }
+
+    function closeBackdrop(modalEl)
+    {
+        // 3. After the modal is fully hidden, clean up
+        modalEl.addEventListener(
+            'hidden.bs.modal',
+            function handler() {
+                modalEl.removeEventListener('hidden.bs.modal', handler);
+
+                // Remove leftover backdrops
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
+                // Re-enable scrolling
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            },
+            { once: true }
+        );
     }
 </script>
-
 
 </html>
