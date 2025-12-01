@@ -138,7 +138,7 @@
                                             </svg>
                                         </button>
                                     `;
-                                    } else if (!isAdmin && editCounter >= 2) {
+                                    } else if (!isAdmin && editCounter >= 1000) {
                                         // Edit counter reached limit - disabled for non-admin
                                         buttons += `
                                         <button class="flex relative group" disabled>
