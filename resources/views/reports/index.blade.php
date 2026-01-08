@@ -69,7 +69,8 @@
                                                     onchange="this.form.submit()">
                                                     <option value="all_center"
                                                         {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>
-                                                        All Child Development Center
+                                                        {{--All Child Development Center--}}
+                                                        Select One
                                                     </option>
                                                     @foreach ($centerNames as $center)
                                                         <option value="{{ $center->id }}"

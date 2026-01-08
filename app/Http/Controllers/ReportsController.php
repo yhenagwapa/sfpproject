@@ -56,18 +56,20 @@ class ReportsController extends Controller
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id)
-                        ->where('action_type', 'active')
-                        ->where('funded', 1);
-                    })
-                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id);
-                    })
-                    ->orderBy('lastname', 'asc')
-                    ->get();
+//                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
+//                        $query->where('implementation_id', $cycle->id)
+//                        ->where('action_type', 'active')
+//                        ->where('funded', 1);
+//                    })
+//                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+//                        $query->where('implementation_id', $cycle->id);
+//                    })
+//                    ->orderBy('lastname', 'asc')
+//                    ->get();
+                $isFunded = [];
 
-                $childCount = $isFunded->count();
+//                $childCount = $isFunded->count();
+                $childCount = 0;
 
             } else {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
@@ -96,19 +98,21 @@ class ReportsController extends Controller
             // dd($cdcId);
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
-                    if ($cycle) {
-                        $query->whereIn('child_development_center_id', $centerIDs)
-                            ->where('implementation_id', $cycle->id)
-                            ->where('action_type', 'active')
-                            ->where('funded', 1);
-                    }
-                    })
-                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id);
-                    })
-                    ->orderBy('lastname', 'asc')
-                    ->get();
+//                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
+//                    if ($cycle) {
+//                        $query->whereIn('child_development_center_id', $centerIDs)
+//                            ->where('implementation_id', $cycle->id)
+//                            ->where('action_type', 'active')
+//                            ->where('funded', 1);
+//                    }
+//                    })
+//                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+//                        $query->where('implementation_id', $cycle->id);
+//                    })
+//                    ->orderBy('lastname', 'asc')
+//                    ->get();
+
+                $isFunded = [];
 
                 $childCount = $isFunded->count();
             } else {
@@ -130,6 +134,7 @@ class ReportsController extends Controller
             }
 
         }
+
 
         return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames', 'childCount'));
     }
