@@ -123,9 +123,11 @@
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="actual_weighing_date">Actual date of weighing<b
                                                 class="text-red-600">*</b></label>
-                                        <input type="text" class="form-control rounded border-gray-300 date-field"
-                                            id="actual_weighing_date" name='actual_weighing_date'
-                                            value="{{ old('actual_weighing_date') }}" min="{{ $minDate }}" max="{{ date('m-d-Y') }}">
+                                        <input type="text"
+                                            class="form-control rounded border-gray-300 date-field"
+                                            id="actual_weighing_date" name='actual_weighing_date' min="{{ $minDate }}" max="{{ date('m-d-Y') }}">
+{{-- @dd($minDate)@enddd --}}
+
                                         @if ($errors->has('actual_weighing_date'))
                                             <span
                                                 class="text-xs text-red-600">{{ $errors->first('actual_weighing_date') }}</span>
@@ -320,7 +322,7 @@
             const weighing_date = document.getElementById('actual_weighing_date');
 
             if(deworming.value != null && vitamin_a.value != null){
-                weighing_date.min = '';
+                weighing_date.min = '{{ $minDate }}';
             }
         });
     </script>
