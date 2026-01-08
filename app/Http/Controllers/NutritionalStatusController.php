@@ -40,6 +40,7 @@ class NutritionalStatusController extends Controller
         $child = Child::findOrFail($childID);
 
         $entryData = NutritionalStatus::where('child_id', $childID)
+            ->where('implementation_id', $implementation->id)
             ->whereNotNull('weight')
             ->whereNotNull('height')
             ->whereNotNull('actual_weighing_date')
@@ -507,11 +508,12 @@ class NutritionalStatusController extends Controller
     {
         $childID = session('child_id');
 
-        $implementation = NutritionalStatus::with('implementation')->first();
+        $implementation = Implementation::where('status', 'active')->first();
 
         $child = Child::findOrFail($childID);
 
         $entryData = NutritionalStatus::where('child_id', $childID)
+            ->where('implementation_id', $implementation->id)
             ->whereNotNull('weight')
             ->whereNotNull('height')
             ->whereNotNull('actual_weighing_date')
