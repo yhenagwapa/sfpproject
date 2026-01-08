@@ -80,6 +80,54 @@
                                 </button>
                             </form>
                         @endcan
+                        @if (auth()->user()->hasRole('admin'))
+                            <button type="submit" class="flex relative group" data-bs-toggle="modal"
+                            data-bs-target="#deactivateCenterModal-{{ $center['center_id'] }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#AA4A44" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 scale-0 group-hover:scale-100 transition-all duration-200 bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10">
+                                    Deactivate
+                                </div>
+                            </button>
+                        @endif
+                        <!-- Modal to Deactivate Center -->
+                        <div class="modal fade" id="deactivateCenterModal-{{ $center['center_id'] }}" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-red-600">Confirmation</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        This center currently has
+                                        <b class="text-red-600">{{ $center['children_count'] }}</b>
+                                        children enrolled. Are you sure you want to deactivate
+                                        <b class="text-red-600">{{ $center['center_name'] }}</b>?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="confirmCenterDeactivation-{{ $center['center_id'] }}" type="button"
+                                            class="text-white bg-blue-600 rounded px-3 min-h-9">Confirm</button>
+                                        <button type="button" class="text-white bg-gray-600 rounded px-3 min-h-9"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form id="deactivateCenterForm-{{ $center['center_id'] }}" method="POST"
+                            action="{{ route('centers.deactivate-center') }}">
+                            @csrf
+                            <input type="hidden" name="_method" value="PATCH">
+                            <input type="hidden" name="center_id" value="{{ $center['center_id'] }}">
+                        </form>
+
+                        <script>
+                            document.getElementById('confirmCenterDeactivation-{{ $center["center_id"] }}').addEventListener('click', function() {
+                                document.getElementById('deactivateCenterForm-{{ $center["center_id"] }}').submit();
+                            });
+                        </script>
                     </div>
                 </td>
             </tr>
