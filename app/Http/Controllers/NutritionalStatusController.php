@@ -577,9 +577,9 @@ class NutritionalStatusController extends Controller
 
         $nutritionalStatus->fill($data);
 
-        if($nutritionalStatus->isClean()){
-            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
-        }
+//        if($nutritionalStatus->isClean()){
+//            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
+//        }
 
         $entryWeightForAge = null;
         $entryHeightForAge = null;
@@ -787,9 +787,9 @@ class NutritionalStatusController extends Controller
             'actual_weighing_date' =>$request->input('exitweighing_date')
         ]);
 
-        if($nutritionalStatus->isClean()){
-            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
-        }
+//        if($nutritionalStatus->isClean()){
+//            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
+//        }
 
             $exitWeightForAge = null;
             $exitHeightForAge = null;
