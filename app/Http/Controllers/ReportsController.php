@@ -114,7 +114,8 @@ class ReportsController extends Controller
 
                 $isFunded = [];
 
-                $childCount = $isFunded->count();
+                // $childCount = $isFunded->count();
+                $childCount = 0;
             } else {
 
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
