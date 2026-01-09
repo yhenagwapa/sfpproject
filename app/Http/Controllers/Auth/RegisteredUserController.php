@@ -45,15 +45,15 @@ class RegisteredUserController extends Controller
         $request->validated();
 
         // CAPTCHA START
-        // $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-        //     'secret' => config('services.recaptcha.secret_key'),
-        //     'response' => $request->input('g-recaptcha-response'),
-        //     'remoteip' => $request->ip(),
-        // ]);
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret_key'),
+            'response' => $request->input('g-recaptcha-response'),
+            'remoteip' => $request->ip(),
+        ]);
 
-        // if (! $response->json('success')) {
-        //     return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA failed.'])->withInput();
-        // }
+        if (! $response->json('success')) {
+            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA failed.'])->withInput();
+        }
         // CAPTCHA END
 
         $psgc = Psgc::where('region_psgc', $request->input('region_psgc'))
