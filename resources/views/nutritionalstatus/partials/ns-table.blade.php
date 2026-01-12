@@ -51,7 +51,7 @@
                     <td class="@if (Route::is('nutritionalstatus.edit')) hidden @endif">
                     @if(session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status'))
                         @if( $childStatus != 'dropped')
-                            @if(auth()->user()->hasRole('admin') || $entryDetails->edit_counter != 2)
+                            @if(auth()->user()->hasRole('admin') || $entryDetails->edit_counter != 1000)
                                 <form action="{{ route('nutritionalstatus.show') }}" method="POST" class="inline">
                                     @csrf
                                     <input type="hidden" name="child_id" value="{{ $child->id }}">
@@ -142,7 +142,7 @@
                 <td class="@if (Route::is('nutritionalstatus.edit')) hidden @endif">
                     @if(session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status'))
                         @if( $childStatus != 'dropped' || $childStatus != 'transferred')
-                            @if(auth()->user()->hasRole('admin') || $exitDetails->edit_counter != 2)
+                            @if(auth()->user()->hasRole('admin') || $exitDetails->edit_counter != 1000)
                                 <form action="{{ route('nutritionalstatus.show') }}" method="POST" class="inline">
                                     @csrf
                                     <input type="hidden" name="child_id" value="{{ $child->id }}">
