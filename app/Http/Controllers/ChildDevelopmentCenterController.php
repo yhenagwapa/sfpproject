@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ChildDevelopmentCenter;
 use App\Http\Requests\StoreChildDevelopmentCenterRequest;
 use App\Http\Requests\UpdateChildDevelopmentCenterRequest;
+use App\Models\ChildRecord;
+use App\Models\Implementation;
 use App\Models\UserCenter;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -24,13 +26,14 @@ class ChildDevelopmentCenterController extends Controller
 
     public function index(Request $request)
     {
+        $implementation = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
         if (auth()->user()->hasRole('admin')) {
-            $centers = ChildDevelopmentCenter::all();
+            $centers = ChildDevelopmentCenter::where('status', 'active')->get();
         } else {
             $userCenters = UserCenter::where('user_id', auth()->id())->get();
             $centerIDs = $userCenters->pluck('child_development_center_id');
-            $centers = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+            $centers = ChildDevelopmentCenter::whereIn('id', $centerIDs)->where('status', 'active')->get();
         }
 
         $centersWithRoles = [];
@@ -47,6 +50,11 @@ class ChildDevelopmentCenterController extends Controller
             $coordinator = $users->firstWhere(fn($user) => $user->hasRole('sfp coordinator'));
             $pdo = $users->firstWhere(fn($user) => $user->hasRole('pdo'));
 
+           $childrenCount = $center->records()
+                            ->where('implementation_id', $implementation->id)
+                            ->distinct('child_id') // only count unique children
+                            ->count('child_id');
+
             $centersWithRoles[$center->id] = [
                 'center_id' => $center->id,
                 'center_name' => $center->center_name,
@@ -57,6 +65,7 @@ class ChildDevelopmentCenterController extends Controller
                 'coordinator' => $coordinator,
                 'pdo' => $pdo,
                 'address' => $center->getfulladdress(),
+                'children_count' => $childrenCount,
             ];
         }
 
@@ -382,5 +391,25 @@ class ChildDevelopmentCenterController extends Controller
         $psgcRecord = Psgc::where('psgc_id', $center->psgc_id)->first();
 
         return view('centers.view', compact('center', 'assignedWorker', 'assignedFocal', 'assignedCoordinator', 'assignedEncoder', 'psgc', 'psgcRecord',));
+    }
+
+    public function deactivateCenter(Request $request)
+    {
+        $center = ChildDevelopmentCenter::findOrFail($request->center_id);
+
+        $implementation = Implementation::where('status', 'active')->where('type', 'regular')->first();
+
+        if (!$implementation) {
+            return back()->with('error', 'No active regular implementation found.');
+        }
+
+        ChildRecord::where('child_development_center_id', $center->id)
+            ->where('implementation_id', $implementation->id)
+            ->update(['action_type' => 'center deactivated']);
+
+        $center->status = 'deactivated';
+        $center->save();
+
+        return back()->with('success', 'Center has been deactivated and child records updated.');
     }
 }
