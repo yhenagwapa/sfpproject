@@ -53,7 +53,7 @@ class ChildController extends Controller
 
         if (auth()->user()->hasRole('admin')) {
             $centers = UserCenter::all();
-            $centerNames = ChildDevelopmentCenter::all()->keyBy('id');
+            $centerNames = ChildDevelopmentCenter::where('status', 'active')->get()->keyBy('id');
 
             if (!$cycle) {
                 $children = null;
@@ -75,7 +75,7 @@ class ChildController extends Controller
         } else {
             $centers = UserCenter::where('user_id', $userID)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get()->keyBy('id');
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->where('status', 'active')->get()->keyBy('id');
 
             // Handle center selection for non-admin
             if ($cdcId === 'all_center' || !$cdcId) {
@@ -116,13 +116,13 @@ class ChildController extends Controller
             $centers = UserCenter::where('user_id', $userID)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
 
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->where('status', 'active')->get();
 
         } elseif (auth()->user()->hasRole('encoder')) {
             $centers = UserCenter::where('user_id', $userID)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
 
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->where('status', 'active')->get();
         }
 
         $minDate = Carbon::now()->subYears(6)->addDay()->format('m-d-Y');
@@ -186,7 +186,14 @@ class ChildController extends Controller
         $existingChild = $child->first();
 
         if ($existingChild) {
-            return redirect()->back()->with('error', 'Child already exist.');
+            $childRecord = ChildRecord::where('child_id', $existingChild->id)
+                ->where('implementation_id', $currentCycle->id)
+                ->whereIn('action_type', ['active','transferred'])
+                ->first();
+
+            if($childRecord){
+                return redirect()->back()->with('error', 'Child already exist.');
+            }
         }
 
         $psgc = Psgc::where('region_psgc', $validatedData['region_psgc'])
@@ -317,13 +324,14 @@ class ChildController extends Controller
         $centers = UserCenter::where('user_id', $userID)->get();
         $centerIDs = $centers->pluck('child_development_center_id');
 
-        $centerNames = ChildDevelopmentCenter::all();
+        $centerNames = ChildDevelopmentCenter::where('status', 'active')->get();
+
 
         if (!auth()->user()->hasRole('admin')) {
-            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
+            $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->where('status', 'active')->get();
         }
 
-        $centers = ChildDevelopmentCenter::all();
+        $centers = ChildDevelopmentCenter::where('status', 'active')->get();
 
         $psgc = new Psgc();
 
