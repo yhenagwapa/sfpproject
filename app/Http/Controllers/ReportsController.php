@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ChildDevelopmentCenter;
 use App\Models\ChildRecord;
 use App\Models\Psgc;
+use App\Models\ReportQueue;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -14,6 +15,7 @@ use App\Models\UserCenter;
 use App\Models\Implementation;
 use Carbon\Carbon;
 use Clegginabox\PDFMerger\PDFMerger;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Str;
 use Storage;
@@ -1180,5 +1182,24 @@ class ReportsController extends Controller
         }
 
         return response()->download($filePath);
+    }
+
+    public function generateMasterlistReport(Request $request)
+    {
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => Auth::id(),
+            'report' => 'masterlist',
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return response()->json([
+            'message' => 'Report queued successfully',
+            'report_id' => $reportQueue->id,
+            'status' => 'pending',
+        ], 201);
     }
 }
