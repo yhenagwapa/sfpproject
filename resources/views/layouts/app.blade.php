@@ -219,9 +219,10 @@
                     <a class="nav-link collapsed" href="{{ route('reports.generated') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="#899bbd" class="mr-2 size-5">
-                            <path d="M19.5 16.5H6M5.5 8.5L19 8.5"/><path d="M16 13L19.5 16.5L16 20M9 12L5.5 8.5L9 5"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                         </svg>
-                        <span class="text-sm">Request</span>
+
+                        <span class="text-sm">Generated Reports</span>
                     </a>
                 </li><!-- End Request Nav -->
 
