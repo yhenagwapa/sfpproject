@@ -1142,7 +1142,7 @@ class ReportsController extends Controller
             'cdc_id'  => $cdcId
             ]);
 
-        return back()->with('success', 'Forwarded to command.');
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
     }
     public function viewGeneratedReports()
     {
@@ -1164,15 +1164,17 @@ class ReportsController extends Controller
         return view('reports.generated', compact('pdfFiles'));
     }
 
-    public function download($fileName)
-    {
-        $userId = auth()->id();
-        $filePath = public_path("generated_reports/{$userId}/{$fileName}");
+    public function download(Request $request)
+{
+    $fileName = $request->input('fileName');
+    $userId = auth()->id();
+    $filePath = public_path("generated_reports/{$userId}/{$fileName}");
 
-        if (!file_exists($filePath)) {
-            abort(404, 'File not found');
-        }
-
-        return response()->download($filePath);
+    if (!file_exists($filePath)) {
+        abort(404, 'File not found');
     }
+
+    return response()->download($filePath)->deleteFileAfterSend(true);
+}
+
 }

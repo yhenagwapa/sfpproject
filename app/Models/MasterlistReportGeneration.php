@@ -111,7 +111,7 @@ class MasterlistReportGeneration extends Model
             mkdir($folder, 0755, true);
         }
 
-        $fileName = "Masterlist_" . now()->format('m_d_Y') . ".pdf";
+        $fileName = "Masterlist_" . now()->format('m_d_Y_H_m_s') . ".pdf";
         $filePath = $folder . '/' . $fileName;
 
         // 4️⃣ Save PDF

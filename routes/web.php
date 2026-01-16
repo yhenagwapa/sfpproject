@@ -117,7 +117,7 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::patch('/cycle/update-milkfeeding-status', [ImplementationController::class, 'updateMilkFeedingStatus'])->name(name: 'cycle.update-milkfeeding-status');
 
     Route::post('/reports/show', [ReportsController::class, 'show'])->name('reports.show');
-    // Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
 
     //worker reports
@@ -159,7 +159,7 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
 
     Route::post('/reports/generate-masterlist', [ReportsController::class, 'generateMasterlist'])->name('reports.generate-masterlist');
     Route::get('/reports/generated', [ReportsController::class, 'viewGeneratedReports'])->name('reports.generated');
-    Route::get('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');
+    Route::post('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');
 
 });
 
