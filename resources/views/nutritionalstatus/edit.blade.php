@@ -60,7 +60,7 @@
         <div class="row">
             <div class="col-lg-3">
                 @if(session('temp_can_edit') || auth()->user()?->can('edit-nutritional-status'))
-                    @if(auth()->user()->hasRole('admin') || $entryDetails->edit_counter != 2)
+                    @if(auth()->user()->hasRole('admin') || $entryDetails->edit_counter != 1000)
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title">
@@ -74,7 +74,7 @@
                                     <input type="hidden" name="form_type" value="entry">
                                     <input type="hidden" name="child_id" value="{{ $child->id }}">
                                     <input type="hidden" name="exitWeighing" value="{{ $exitDetails ? $exitDetails->actual_weighing_date : null }}">
-                                    <input type="hidden" name="implementation_id" value="{{ $implementation->implementation_id }}">
+                                    <input type="hidden" name="implementation_id" value="{{ $implementation->id }}">
 
                                     <div class="col-md-12 mt-2 text-sm">
                                         <label for="deworming_date">Deworming Date:<b class="text-red-600">*</b></label>
@@ -161,7 +161,7 @@
                         </div>
                     @endif
                     @if($hasUponExitData)
-                        @if(auth()->user()->hasRole('admin') || $exitDetails->edit_counter != 2)
+                        @if(auth()->user()->hasRole('admin') || $exitDetails->edit_counter != 1000)
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-title">

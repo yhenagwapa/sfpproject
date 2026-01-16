@@ -105,6 +105,7 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::get('/centers/edit', [ChildDevelopmentCenterController::class, 'edit'])->name(name: 'centers.edit');
     Route::post('/centers/update', [ChildDevelopmentCenterController::class, 'update'])->name(name: 'centers.update');
     Route::post('/centers/view', [ChildDevelopmentCenterController::class, 'view'])->name(name: 'centers.view');
+    Route::patch('/centers/deactivate-center', [ChildDevelopmentCenterController::class, 'deactivateCenter'])->name(name: 'centers.deactivate-center');
 
     Route::get('/cycle', [ImplementationController::class, 'index'])->name(name: 'cycle.index');
     Route::get('/cycle/create', [ImplementationController::class, 'create'])->name(name: 'cycle.create');

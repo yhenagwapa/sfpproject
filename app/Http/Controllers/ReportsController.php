@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ChildDevelopmentCenter;
 use App\Models\ChildRecord;
 use App\Models\Psgc;
+use App\Models\ReportQueue;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -14,6 +15,7 @@ use App\Models\UserCenter;
 use App\Models\Implementation;
 use Carbon\Carbon;
 use Clegginabox\PDFMerger\PDFMerger;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Str;
 use Storage;
@@ -58,18 +60,20 @@ class ReportsController extends Controller
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id)
-                        ->where('action_type', 'active')
-                        ->where('funded', 1);
-                    })
-                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id);
-                    })
-                    ->orderBy('lastname', 'asc')
-                    ->get();
+//                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
+//                        $query->where('implementation_id', $cycle->id)
+//                        ->where('action_type', 'active')
+//                        ->where('funded', 1);
+//                    })
+//                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+//                        $query->where('implementation_id', $cycle->id);
+//                    })
+//                    ->orderBy('lastname', 'asc')
+//                    ->get();
+                $isFunded = [];
 
-                $childCount = $isFunded->count();
+//                $childCount = $isFunded->count();
+                $childCount = 0;
 
             } else {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
@@ -98,21 +102,24 @@ class ReportsController extends Controller
             // dd($cdcId);
 
             if ($cdcId == 'all_center') {
-                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
-                    if ($cycle) {
-                        $query->whereIn('child_development_center_id', $centerIDs)
-                            ->where('implementation_id', $cycle->id)
-                            ->where('action_type', 'active')
-                            ->where('funded', 1);
-                    }
-                    })
-                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
-                        $query->where('implementation_id', $cycle->id);
-                    })
-                    ->orderBy('lastname', 'asc')
-                    ->get();
+//                $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
+//                    if ($cycle) {
+//                        $query->whereIn('child_development_center_id', $centerIDs)
+//                            ->where('implementation_id', $cycle->id)
+//                            ->where('action_type', 'active')
+//                            ->where('funded', 1);
+//                    }
+//                    })
+//                    ->whereHas('nutritionalStatus', function ($query) use ($cycle) {
+//                        $query->where('implementation_id', $cycle->id);
+//                    })
+//                    ->orderBy('lastname', 'asc')
+//                    ->get();
 
-                $childCount = $isFunded->count();
+                $isFunded = [];
+
+                // $childCount = $isFunded->count();
+                $childCount = 0;
             } else {
 
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cdcId, $cycle) {
@@ -132,6 +139,7 @@ class ReportsController extends Controller
             }
 
         }
+
 
         return view('reports.index', compact('isFunded', 'centers', 'cdcId', 'selectedCenter', 'cycle', 'centerNames', 'childCount'));
     }
@@ -1174,7 +1182,22 @@ class ReportsController extends Controller
         abort(404, 'File not found');
     }
 
-    return response()->download($filePath)->deleteFileAfterSend(true);
-}
+    public function generateMasterlistReport(Request $request)
+    {
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => Auth::id(),
+            'report' => 'masterlist',
+            'status' => 'pending',
+        ]);
 
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return response()->json([
+            'message' => 'Report queued successfully',
+            'report_id' => $reportQueue->id,
+            'status' => 'pending',
+        ], 201);
+    }
 }

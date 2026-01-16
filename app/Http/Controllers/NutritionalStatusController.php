@@ -40,6 +40,7 @@ class NutritionalStatusController extends Controller
         $child = Child::findOrFail($childID);
 
         $entryData = NutritionalStatus::where('child_id', $childID)
+            ->where('implementation_id', $implementation->id)
             ->whereNotNull('weight')
             ->whereNotNull('height')
             ->whereNotNull('actual_weighing_date')
@@ -507,11 +508,12 @@ class NutritionalStatusController extends Controller
     {
         $childID = session('child_id');
 
-        $implementation = NutritionalStatus::with('implementation')->first();
+        $implementation = Implementation::where('status', 'active')->first();
 
         $child = Child::findOrFail($childID);
 
         $entryData = NutritionalStatus::where('child_id', $childID)
+            ->where('implementation_id', $implementation->id)
             ->whereNotNull('weight')
             ->whereNotNull('height')
             ->whereNotNull('actual_weighing_date')
@@ -575,9 +577,9 @@ class NutritionalStatusController extends Controller
 
         $nutritionalStatus->fill($data);
 
-        if($nutritionalStatus->isClean()){
-            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
-        }
+//        if($nutritionalStatus->isClean()){
+//            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
+//        }
 
         $entryWeightForAge = null;
         $entryHeightForAge = null;
@@ -785,9 +787,9 @@ class NutritionalStatusController extends Controller
             'actual_weighing_date' =>$request->input('exitweighing_date')
         ]);
 
-        if($nutritionalStatus->isClean()){
-            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
-        }
+//        if($nutritionalStatus->isClean()){
+//            return redirect()->route('nutritionalstatus.index')->with('warning', 'No changes were made.');
+//        }
 
             $exitWeightForAge = null;
             $exitHeightForAge = null;
