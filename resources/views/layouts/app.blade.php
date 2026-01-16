@@ -215,15 +215,15 @@
                     </li><!-- End Cycle Nav -->
                 @endcanany
 
-                {{-- <li class="nav-item">
-                    <a class="nav-link collapsed" href="{{ route('child.index') }}">
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ route('reports.generated') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="#899bbd" class="mr-2 size-5">
                             <path d="M19.5 16.5H6M5.5 8.5L19 8.5"/><path d="M16 13L19.5 16.5L16 20M9 12L5.5 8.5L9 5"/>
                         </svg>
                         <span class="text-sm">Request</span>
                     </a>
-                </li><!-- End Request Nav --> --}}
+                </li><!-- End Request Nav -->
 
 
 
