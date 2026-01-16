@@ -17,6 +17,8 @@ use Clegginabox\PDFMerger\PDFMerger;
 use Illuminate\Support\Facades\DB;
 use Str;
 use Storage;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 class ReportsController extends Controller
 {
@@ -1124,5 +1126,53 @@ class ReportsController extends Controller
             ]);
 
         return $pdf->stream();
+    }
+    public function generateMasterlist(Request $request)
+    {
+        $cdcId = $request->input('center_name', 'all_center');
+        $cycleID = $request->cycle_id;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+
+        Artisan::call('reports:masterlist', [
+            'user_id' => auth()->user()->id,
+            'cdc_id'  => $cdcId
+            ]);
+
+        return back()->with('success', 'Forwarded to command.');
+    }
+    public function viewGeneratedReports()
+    {
+        $userId = auth()->id();
+        $folder = public_path("generated_reports/{$userId}");
+
+        $pdfFiles = [];
+        if (file_exists($folder)) {
+            $files = File::files($folder);
+            foreach ($files as $file) {
+                $fileName = $file->getFilename(); // e.g., masterlist_2026_01_15_12_00_00.pdf
+                $pdfFiles[] = [
+                    'name' => $fileName,
+                    'url'  => asset("generated_reports/{$userId}/{$fileName}") // public URL
+                ];
+            }
+        }
+
+        return view('reports.generated', compact('pdfFiles'));
+    }
+
+    public function download($fileName)
+    {
+        $userId = auth()->id();
+        $filePath = public_path("generated_reports/{$userId}/{$fileName}");
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        return response()->download($filePath);
     }
 }
