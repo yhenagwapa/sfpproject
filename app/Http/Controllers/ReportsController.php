@@ -1193,6 +1193,24 @@ class ReportsController extends Controller
 
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
     }
+
+    public function generateAgeBracketAfter120(Request $request)
+    {
+        $cdcId = $request->input('center_name', 'all_center');
+        $cycleID = $request->cycle_id;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+
+        Artisan::call('reports:age-bracket-after-120', [
+            'user_id' => auth()->user()->id,
+            'cdc_id'  => $cdcId
+            ]);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+    }
     public function viewGeneratedReports()
     {
         $userId = auth()->id();
