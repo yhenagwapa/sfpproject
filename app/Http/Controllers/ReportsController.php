@@ -1204,10 +1204,22 @@ class ReportsController extends Controller
             'center_name' => $cdcId
         ]);
 
-        Artisan::call('reports:age-bracket-after-120', [
+
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
             'user_id' => auth()->user()->id,
-            'cdc_id'  => $cdcId
-            ]);
+            'report' => 'age-bracket-after-120',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+//        Artisan::call('reports:age-bracket-after-120', [
+//            'user_id' => auth()->user()->id,
+//            'cdc_id'  => $cdcId
+//            ]);
 
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
     }

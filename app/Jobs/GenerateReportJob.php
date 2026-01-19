@@ -47,11 +47,17 @@ class GenerateReportJob implements ShouldQueue
                 ]);
             }
             elseif ($reportQueue->report === 'age-bracket-upon-entry') {
-                 Artisan::call('reports:age-bracket-upon-entry', [
-                     'user_id' => $reportQueue->user_id,
-                     'cdc_id'  => $reportQueue->cdc_id
-                 ]);
-             }
+                Artisan::call('reports:age-bracket-upon-entry', [
+                    'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id
+                ]);
+            }
+            elseif ($reportQueue->report === 'age-bracket-after-120') {
+                Artisan::call('reports:age-bracket-after-120', [
+                    'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id
+                ]);
+            }
 
             // Update status to ready
             $reportQueue->update([

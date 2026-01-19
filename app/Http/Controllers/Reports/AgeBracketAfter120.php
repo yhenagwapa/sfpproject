@@ -18,7 +18,7 @@ class AgeBracketAfter120 extends Controller
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
         if (!$cycle) {
-            return back()->with('error', 'No active regular cycle found.');
+            throw new \Exception('No active regular cycle found.');
         }
 
         $selectedCenter = null;
@@ -26,7 +26,7 @@ class AgeBracketAfter120 extends Controller
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
         $allCountsPerNutritionalStatus = collect();
 
-        if (auth()->user()->hasRole('admin')) {
+        if ($user->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
             $centerIDs = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
@@ -355,6 +355,5 @@ class AgeBracketAfter120 extends Controller
         // 4️⃣ Save PDF
         $pdf->save($filePath);
 
-        return back()->with('success', 'Age Bracket Upon Entry Report is now available for download.');
     }
 }
