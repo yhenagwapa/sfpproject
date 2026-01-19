@@ -1,15 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers\Reports;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\Controller;
+use App\Models\Child;
+use App\Models\ChildDevelopmentCenter;
+use App\Models\Implementation;
+use App\Models\User;
+use App\Models\UserCenter;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class AgeBracketAfter120 extends Model
+class AgeBracketAfter120 extends Controller
 {
     public static function generateAgeBracketAfter120Report($userId, $cdcId)
     {
+        $user = User::find($userId);
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
         if (!$cycle) {
@@ -71,8 +76,7 @@ class AgeBracketAfter120 extends Model
             }
 
         } else {
-            $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
+            $centers = UserCenter::where('user_id', $userId)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();

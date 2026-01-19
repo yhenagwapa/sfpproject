@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\AgeBracketAfter120;
+use App\Http\Controllers\Reports\AgeBracketAfter120;
 use Illuminate\Console\Command;
 
 class AgeBracketAfter120Command extends Command
