@@ -18,3 +18,4 @@ yarn-error.log
 /.vscode
 /public/hot
 /public/reports
+/public/generated_reports

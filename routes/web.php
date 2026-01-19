@@ -118,8 +118,8 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::patch('/cycle/update-milkfeeding-status', [ImplementationController::class, 'updateMilkFeedingStatus'])->name(name: 'cycle.update-milkfeeding-status');
 
     Route::post('/reports/show', [ReportsController::class, 'show'])->name('reports.show');
-    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-    Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::get('/reportss', [ReportsController::class, 'index'])->name('reports.index');
+    Route::post('/reportss', [ReportsController::class, 'index'])->name('reports.index');
 
     //worker reports
     Route::post('/reports/show-masterlist', [PDFController::class, 'showMasterlist'])->name('reports.show-masterlist');

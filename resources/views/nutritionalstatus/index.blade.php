@@ -179,8 +179,10 @@
                         $today = \Carbon\Carbon::today()->format('m-d-Y');
                     @endphp
 
-                    @if ($today === $minDateExit)
-                        @if ($hasUponEntryData && !$hasUponExitData && $childStatus != 'dropped')
+{{--                    @if ($today === $minDateExit)--}}
+                    @if (true)
+{{--                        @if ($hasUponEntryData && !$hasUponExitData && $childStatus != 'dropped')--}}
+                        @if($hasUponEntryData)
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-title">
@@ -269,13 +271,13 @@
             </div>
 
             <div class="@if (auth()->user()->hasAnyRole(['admin', 'sfp coordinator', 'lgu focal']))
-                    col-lg-12
+                    col-lg-9
                 @elseif ( $today == $minDateExit || !$hasUponEntryData)
                     col-lg-9
                 @elseif ($hasUponExitData)
                     col-lg-9
                 @else
-                    col-lg-12
+                    col-lg-9
                 @endif">
                 <div class="card">
                     <div class="card-body">

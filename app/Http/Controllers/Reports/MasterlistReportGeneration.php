@@ -1,15 +1,22 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers\Reports;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Child;
+use App\Models\ChildDevelopmentCenter;
+use App\Models\Implementation;
+use App\Models\User;
+use App\Models\UserCenter;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Model;
 
 class MasterlistReportGeneration extends Model
 {
     public static function generateMasterlistReport($userId, $cdcId)
     {
+
+        $user = User::find($userId);
+
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
         if (!$cycle) {
@@ -22,7 +29,7 @@ class MasterlistReportGeneration extends Model
             ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
             ->orderByRaw("LOWER(lastname) ASC");
 
-        if (auth()->user()->hasRole('admin')) {
+        if ($user->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
             $centerIDs = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
@@ -57,8 +64,7 @@ class MasterlistReportGeneration extends Model
             }
 
         } else {
-            $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
+            $centers = UserCenter::where('user_id', $userId)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
