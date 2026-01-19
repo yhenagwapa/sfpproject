@@ -159,8 +159,10 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::get('/activitylogs', [ActivityLogController::class, 'index'])->name('activitylogs.index');
 
     Route::post('/reports/generate-masterlist', [ReportsController::class, 'generateMasterlist'])->name('reports.generate-masterlist');
+    Route::post('/reports/generate-age-bracket-upon-entry', [ReportsController::class, 'generateAgeBracketUponEntry'])->name('reports.generate-age-bracket-upon-entry');
+
     Route::get('/reports/generated', [ReportsController::class, 'viewGeneratedReports'])->name('reports.generated');
-    Route::post('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');
+    Route::get('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');
 
 });
 

@@ -14,13 +14,10 @@
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $file['name'] }}</td>
                 <td>
-                    <form method="POST" action="{{ route('reports.download', $file['name']) }}">
-                        @csrf
-                        <input type="hidden" name="fileName" value="{{ $file['name'] }}">
-                        <button type="submit" class="btn btn-sm btn-primary">
-                            Download
-                        </button>
-                    </form>
+                    <a href="{{ route('reports.download', $file['name']) }}"
+                    class="btn btn-sm btn-primary" onclick="setTimeout(() => window.location.reload(), 1000)">
+                        Download
+                    </a>
                 </td>
             </tr>
         @empty

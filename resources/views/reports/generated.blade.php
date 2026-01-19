@@ -60,7 +60,7 @@
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     {{-- @vite(['resources/js/app.js']) --}}
 
-    <script>
+    {{-- <script>
         (function(){
           let timer;
           $('#q-input').on('keyup', function(){
@@ -75,7 +75,7 @@
     <script>
         window.addEventListener('load', function () {
             $(document).ready(function () {
-                $("#centers-table").DataTable({
+                $("#generated-table").DataTable({
                     paging: true,             // Enable paging
                     pageLength: 10,           // Show 10 entries per page
                     lengthChange: false,      // Hide the dropdown to change entry count
@@ -88,7 +88,7 @@
                     ],
                     info: false,
                     rowCallback: function(row, data, index) {
-                        var table = $('#centers-table').DataTable();
+                        var table = $('#generated-table').DataTable();
                         if (data && Object.keys(data).length !== 0) {
                             $('td:eq(0)', row).html(table.page.info().start + index + 1);
                         } else {
@@ -98,5 +98,5 @@
                 });
             });
         });
-    </script>
+    </script> --}}
 @endsection
