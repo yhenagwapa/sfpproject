@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Reports;
 
+use App\Http\Controllers\Controller;
 use App\Models\Child;
 use App\Models\ChildDevelopmentCenter;
 use App\Models\Implementation;
 use App\Models\User;
 use App\Models\UserCenter;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Database\Eloquent\Model;
 
-class MasterlistReportGeneration extends Model
+class MasterlistReportGeneration extends Controller
 {
     public static function generateMasterlistReport($userId, $cdcId)
     {
@@ -20,7 +20,7 @@ class MasterlistReportGeneration extends Model
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
         if (!$cycle) {
-            return back()->with('error', 'No active regular cycle found.');
+            throw new \Exception('No active regular cycle found.');
         }
 
         $selectedCenter = null;
@@ -123,6 +123,5 @@ class MasterlistReportGeneration extends Model
         // 4️⃣ Save PDF
         $pdf->save($filePath);
 
-        return back()->with('success', 'Masterlist report is now available for download.');
     }
 }

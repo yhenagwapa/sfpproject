@@ -15,6 +15,7 @@ class ReportQueue extends Model
         'user_id',
         'report',
         'status',
+        'cdc_id',
         'file_path',
         'generated_at',
         'downloaded_at',

@@ -46,13 +46,12 @@ class GenerateReportJob implements ShouldQueue
                     'cdc_id'  => $reportQueue->cdc_id
                 ]);
             }
-            // Add more report types here as needed
-            // elseif ($reportQueue->report === 'inventory') {
-            //     Artisan::call('reports:inventory', [
-            //         'user_id' => $reportQueue->user_id,
-            //         // other parameters
-            //     ]);
-            // }
+            elseif ($reportQueue->report === 'age-bracket-upon-entry') {
+                 Artisan::call('reports:age-bracket-upon-entry', [
+                     'user_id' => $reportQueue->user_id,
+                     'cdc_id'  => $reportQueue->cdc_id
+                 ]);
+             }
 
             // Update status to ready
             $reportQueue->update([

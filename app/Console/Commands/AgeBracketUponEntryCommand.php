@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\AgeBracketUponEntry;
+use App\Http\Controllers\Reports\AgeBracketUponEntry;
 use Illuminate\Console\Command;
 
 class AgeBracketUponEntryCommand extends Command
