@@ -1,19 +1,26 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers\Reports;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\Controller;
+use App\Models\Child;
+use App\Models\ChildDevelopmentCenter;
+use App\Models\Implementation;
+use App\Models\User;
+use App\Models\UserCenter;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class MasterlistReportGeneration extends Model
+class MasterlistReportGeneration extends Controller
 {
     public static function generateMasterlistReport($userId, $cdcId)
     {
+
+        $user = User::find($userId);
+
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
         if (!$cycle) {
-            return back()->with('error', 'No active regular cycle found.');
+            throw new \Exception('No active regular cycle found.');
         }
 
         $selectedCenter = null;
@@ -22,7 +29,7 @@ class MasterlistReportGeneration extends Model
             ->orderByRaw("CASE WHEN sex_id = 1 THEN 0 ELSE 1 END")
             ->orderByRaw("LOWER(lastname) ASC");
 
-        if (auth()->user()->hasRole('admin')) {
+        if ($user->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
             $centerIDs = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
@@ -57,8 +64,7 @@ class MasterlistReportGeneration extends Model
             }
 
         } else {
-            $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
+            $centers = UserCenter::where('user_id', $userId)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
@@ -117,6 +123,5 @@ class MasterlistReportGeneration extends Model
         // 4️⃣ Save PDF
         $pdf->save($filePath);
 
-        return back()->with('success', 'Masterlist report is now available for download.');
     }
 }

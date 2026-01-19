@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\MasterlistReportGeneration;
+use App\Http\Controllers\Reports\MasterlistReportGeneration;
 use Illuminate\Console\Command;
 
 

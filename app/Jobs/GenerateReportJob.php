@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Artisan;
 
 class GenerateReportJob implements ShouldQueue
 {
@@ -38,18 +39,24 @@ class GenerateReportJob implements ShouldQueue
             // Update status to generating
             $reportQueue->update(['status' => 'generating']);
 
-            // Call the appropriate report generation method
-            $method = 'generate' . ucfirst($reportQueue->report) . 'Report';
-
-            // Here you'll call your actual report generation logic
-            // For now, just a placeholder
-            sleep(2); // Simulate report generation
+            // Call the appropriate artisan command based on report type
+            if ($reportQueue->report === 'masterlist') {
+                Artisan::call('reports:masterlist', [
+                    'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id
+                ]);
+            }
+            elseif ($reportQueue->report === 'age-bracket-upon-entry') {
+                 Artisan::call('reports:age-bracket-upon-entry', [
+                     'user_id' => $reportQueue->user_id,
+                     'cdc_id'  => $reportQueue->cdc_id
+                 ]);
+             }
 
             // Update status to ready
             $reportQueue->update([
                 'status' => 'ready',
                 'generated_at' => now(),
-                'file_path' => 'reports/' . $reportQueue->report . '_' . time() . '.pdf', // example
             ]);
 
         } catch (\Exception $e) {

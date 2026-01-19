@@ -1,80 +1,35 @@
 <?php
 
-namespace App\Console\Commands;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use Illuminate\Console\Command;
-use App\Models\ReportQueue;
-
-class ReportController extends Command
+return new class extends Migration
 {
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
+     * Run the migrations.
      */
-    protected $signature = 'report:generate {type}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generate various types of reports';
-
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    public function up(): void
     {
-        $type = $this->argument('type');
-
-        $method = 'get' . ucfirst($type);
-
-        if (method_exists($this, $method)) {
-            return $this->$method();
-        }
-
-        $this->error("Report type '{$type}' not found.");
-        return 1;
+        Schema::create('report_queue', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('report'); // masterlist, inventory, sales, etc.
+            $table->enum('status', ['pending', 'generating', 'ready', 'downloaded', 'failed'])->default('pending');
+            $table->integer('cdc_id')->default(0);
+            $table->string('file_path')->nullable(); // where the generated file is stored
+            $table->timestamp('generated_at')->nullable(); // when report generation completed
+            $table->timestamp('downloaded_at')->nullable(); // when user downloaded the report
+            $table->text('error_message')->nullable(); // if generation fails
+            $table->timestamps();
+        });
     }
 
     /**
-     * Generate masterlist report
+     * Reverse the migrations.
      */
-    protected function getMasterlist()
+    public function down(): void
     {
-        // Get the oldest pending masterlist report from the queue
-        $report = ReportQueue::where('report', 'masterlist')
-            ->where('status', 'pending')
-            ->oldest()
-            ->first();
-
-        if (!$report) {
-            $this->info('No pending masterlist reports in the queue.');
-            return 0;
-        }
-
-        // Update status to generating
-        $report->update(['status' => 'generating']);
-
-        // Display the report details
-        $this->info('Processing Masterlist Report:');
-        $this->newLine();
-        $this->line("Report ID: {$report->id}");
-        $this->line("User ID: {$report->user_id}");
-        $this->line("Report Type: {$report->report}");
-        $this->line("Status: {$report->status}");
-        $this->line("Created At: {$report->created_at}");
-        $this->newLine();
-
-        // Update status to ready
-        $report->update([
-            'status' => 'ready',
-            'generated_at' => now(),
-        ]);
-
-        $this->info('Report generation completed!');
-
-        return 0;
+        Schema::dropIfExists('report_queue');
     }
-}
+};

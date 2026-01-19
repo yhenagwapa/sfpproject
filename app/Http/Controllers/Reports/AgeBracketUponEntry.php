@@ -1,25 +1,30 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers\Reports;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\Controller;
+use App\Models\Child;
+use App\Models\ChildDevelopmentCenter;
+use App\Models\Implementation;
+use App\Models\User;
+use App\Models\UserCenter;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class AgeBracketUponEntry extends Model
+class AgeBracketUponEntry extends Controller
 {
     public static function generateAgeBracketUponEntryReport($userId, $cdcId)
     {
+        $user = User::find($userId);
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
 
         if (!$cycle) {
-            return back()->with('error', 'No active regular cycle found.');
+            throw new \Exception('No active regular cycle found.');
         }
         $selectedCenter = null;
 
         $fundedChildren = Child::with('records', 'nutritionalStatus', 'sex');
 
-        if (auth()->user()->hasRole('admin')) {
+        if ($user->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
             $centerIDs = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
@@ -53,8 +58,7 @@ class AgeBracketUponEntry extends Model
             }
 
         } else {
-            $userID = auth()->id();
-            $centers = UserCenter::where('user_id', $userID)->get();
+            $centers = UserCenter::where('user_id', $userId)->get();
             $centerIDs = $centers->pluck('child_development_center_id');
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
@@ -302,6 +306,6 @@ class AgeBracketUponEntry extends Model
         // 4️⃣ Save PDF
         $pdf->save($filePath);
 
-        return back()->with('success', 'Age Bracket Upon Entry Report is now available for download.');
+//        return back()->with('success', 'Age Bracket Upon Entry Report is now available for download.');
     }
 }
