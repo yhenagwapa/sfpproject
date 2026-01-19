@@ -1223,6 +1223,30 @@ class ReportsController extends Controller
 
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
     }
+    public function generateMonitoring(Request $request)
+    {
+        $cdcId = $request->input('center_name', 'all_center');
+        $cycleID = $request->cycle_id;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+
+
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'monitoring',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+    }
     public function viewGeneratedReports()
     {
         $userId = auth()->id();

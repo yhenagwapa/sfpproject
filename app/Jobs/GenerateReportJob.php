@@ -58,6 +58,12 @@ class GenerateReportJob implements ShouldQueue
                     'cdc_id'  => $reportQueue->cdc_id
                 ]);
             }
+            elseif ($reportQueue->report === 'monitoring') {
+                Artisan::call('reports:monitoring', [
+                    'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id
+                ]);
+            }
 
             // Update status to ready
             $reportQueue->update([
