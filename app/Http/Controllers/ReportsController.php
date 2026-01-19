@@ -1152,6 +1152,24 @@ class ReportsController extends Controller
 
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
     }
+
+    public function generateAgeBracketUponEntry(Request $request)
+    {
+        $cdcId = $request->input('center_name', 'all_center');
+        $cycleID = $request->cycle_id;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+
+        Artisan::call('reports:age-bracket-upon-entry', [
+            'user_id' => auth()->user()->id,
+            'cdc_id'  => $cdcId
+            ]);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+    }
     public function viewGeneratedReports()
     {
         $userId = auth()->id();
@@ -1172,14 +1190,17 @@ class ReportsController extends Controller
         return view('reports.generated', compact('pdfFiles'));
     }
 
-    public function download(Request $request)
-{
-    $fileName = $request->input('fileName');
-    $userId = auth()->id();
-    $filePath = public_path("generated_reports/{$userId}/{$fileName}");
+    public function download(string $fileName)
+    {
+        $fileName = basename($fileName);
+        $userId = auth()->id();
+        $filePath = public_path("generated_reports/{$userId}/{$fileName}");
 
-    if (!file_exists($filePath)) {
-        abort(404, 'File not found');
+            if (!file_exists($filePath)) {
+                abort(404, 'File not found');
+            }
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
     }
 
     public function generateMasterlistReport(Request $request)
