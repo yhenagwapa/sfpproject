@@ -155,6 +155,8 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
 
     Route::post('/reports/generate-disabilities', [ReportsController::class, 'generateDisability'])->name('reports.generate-disabilities');
 
+    Route::post('/reports/generate-undernourished-upon-entry', [ReportsController::class, 'generateUndernourishedUponEntry'])->name('reports.generate-undernourished-upon-entry');
+
     Route::get('/reports/generated', [ReportsController::class, 'viewGeneratedReports'])->name('reports.generated');
     Route::get('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');
 
