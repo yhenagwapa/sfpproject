@@ -64,6 +64,12 @@ class GenerateReportJob implements ShouldQueue
                     'cdc_id'  => $reportQueue->cdc_id
                 ]);
             }
+            elseif ($reportQueue->report === 'malnourished') {
+                Artisan::call('reports:malnourished', [
+                    'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id
+                ]);
+            }
             elseif ($reportQueue->report === 'unfunded') {
                 Artisan::call('reports:unfunded', [
                     'user_id' => $reportQueue->user_id,
