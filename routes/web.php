@@ -121,22 +121,6 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
 
-    //worker reports
-    Route::post('/reports/show-masterlist', [PDFController::class, 'showMasterlist'])->name('reports.show-masterlist');
-    Route::get('/reports/print/masterlist', [PDFController::class, 'printMasterlist'])->name('reports.print.masterlist');
-
-    Route::post('/reports/show-age-bracket-upon-entry', [PDFController::class, 'showAgeBracketUponEntry'])->name('reports.show-age-bracket-upon-entry');
-    Route::get('/reports/print/age-bracket-upon-entry', [PDFController::class, 'printAgeBracketUponEntry'])->name('reports.print.age-bracket-upon-entry');
-
-    Route::post('/reports/show-age-bracket-after-120', [PDFController::class, 'showAgeBracketAfter120'])->name('reports.show-age-bracket-after-120');
-    Route::get('/reports/print/age-bracket-after-120', [PDFController::class, 'printAgeBracketAfter120'])->name('reports.print.age-bracket-after-120');
-
-    Route::post('/reports/show-monitoring', [PDFController::class, 'showMonitoring'])->name('reports.show-monitoring');
-    Route::get('/reports/print/monitoring', [PDFController::class, 'printMonitoring'])->name('reports.print.monitoring');
-
-    Route::post('/reports/show-unfunded', [PDFController::class, 'showUnfunded'])->name('reports.show-unfunded');
-    Route::get('/reports/print/unfunded', [PDFController::class, 'printUnfunded'])->name('reports.print.unfunded');
-
     //focal reports
     Route::post('/reports/show-malnourished', [PDFController::class, 'showMalnourished'])->name('reports.show-malnourished');
     Route::get('/reports/print/malnourished', [PDFController::class, 'printMalnourish'])->name('reports.print.malnourished');
@@ -158,10 +142,14 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
 
     Route::get('/activitylogs', [ActivityLogController::class, 'index'])->name('activitylogs.index');
 
+    //worker reports
     Route::post('/reports/generate-masterlist', [ReportsController::class, 'generateMasterlist'])->name('reports.generate-masterlist');
     Route::post('/reports/generate-age-bracket-upon-entry', [ReportsController::class, 'generateAgeBracketUponEntry'])->name('reports.generate-age-bracket-upon-entry');
     Route::post('/reports/generate-age-bracket-after-120', [ReportsController::class, 'generateAgeBracketAfter120'])->name('reports.generate-age-bracket-after-120');
     Route::post('/reports/generate-monitoring', [ReportsController::class, 'generateMonitoring'])->name('reports.generate-monitoring');
+
+    //focal reports
+    Route::post('/reports/generate-malnourished', [ReportsController::class, 'generateMalnourished'])->name('reports.generate-malnourished');
 
     Route::get('/reports/generated', [ReportsController::class, 'viewGeneratedReports'])->name('reports.generated');
     Route::get('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');
