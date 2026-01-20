@@ -64,6 +64,12 @@ class GenerateReportJob implements ShouldQueue
                     'cdc_id'  => $reportQueue->cdc_id
                 ]);
             }
+            elseif ($reportQueue->report === 'undernourished-after-120') {
+                Artisan::call('reports:undernourished-after-120', [
+                    'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id
+                ]);
+            }
 
             // Update status to ready
             $reportQueue->update([
