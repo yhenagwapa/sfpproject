@@ -152,6 +152,9 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     //focal reports
     Route::post('/reports/generate-malnourished', [ReportsController::class, 'generateMalnourished'])->name('reports.generate-malnourished');
 
+
+    Route::post('/reports/generate-disabilities', [ReportsController::class, 'generateDisability'])->name('reports.generate-disabilities');
+
     Route::get('/reports/generated', [ReportsController::class, 'viewGeneratedReports'])->name('reports.generated');
     Route::get('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');
 
