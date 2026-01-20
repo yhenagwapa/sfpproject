@@ -163,6 +163,9 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::post('/reports/generate-age-bracket-after-120', [ReportsController::class, 'generateAgeBracketAfter120'])->name('reports.generate-age-bracket-after-120');
     Route::post('/reports/generate-monitoring', [ReportsController::class, 'generateMonitoring'])->name('reports.generate-monitoring');
 
+
+    Route::post('/reports/generate-disabilities', [ReportsController::class, 'generateDisability'])->name('reports.generate-disabilities');
+
     Route::get('/reports/generated', [ReportsController::class, 'viewGeneratedReports'])->name('reports.generated');
     Route::get('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');
 
