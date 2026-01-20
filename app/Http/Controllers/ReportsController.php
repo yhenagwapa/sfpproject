@@ -1164,7 +1164,6 @@ class ReportsController extends Controller
 
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
     }
-
     public function generateAgeBracketUponEntry(Request $request)
     {
         $cdcId = $request->input('center_name', 'all_center');
@@ -1193,7 +1192,6 @@ class ReportsController extends Controller
 
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
     }
-
     public function generateAgeBracketAfter120(Request $request)
     {
         $cdcId = $request->input('center_name', 'all_center');
@@ -1247,7 +1245,7 @@ class ReportsController extends Controller
 
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
     }
-    public function generateUndernourishedUponEntry(Request $request)
+    public function generateMalnourished(Request $request)
     {
         $cdcId = $request->input('center_name', 'all_center');
         $cycleID = $request->cycle_id;
@@ -1257,10 +1255,83 @@ class ReportsController extends Controller
             'center_name' => $cdcId
         ]);
 
+
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'unfunded',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+
+    }
+    public function generateDisability(Request $request)
+    {
+        $cdcId = $request->input('center_name', 'all_center');
+        $cycleID = $request->cycle_id;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+
+
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'disabilities',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+
+    }
+    public function generateUndernourishedUponEntry(Request $request)
+    {
+        $cdcId = $request->input('center_name', 'all_center');
+        $cycleID = $request->cycle_id;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
         // Create a new report queue entry
         $reportQueue = ReportQueue::create([
             'user_id' => auth()->user()->id,
             'report' => 'undernourished-upon-entry',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+    }
+    public function generateUnfunded(Request $request)
+    {
+        $cdcId = $request->input('center_name', 'all_center');
+        $cycleID = $request->cycle_id;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+
+
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'unfunded',
             'cdc_id'  => $cdcId,
             'status' => 'pending',
         ]);
@@ -1289,7 +1360,6 @@ class ReportsController extends Controller
 
         return view('reports.generated', compact('pdfFiles'));
     }
-
     public function download(string $fileName)
     {
         $fileName = basename($fileName);
@@ -1301,24 +1371,5 @@ class ReportsController extends Controller
             }
 
             return response()->download($filePath)->deleteFileAfterSend(true);
-    }
-
-    public function generateMasterlistReport(Request $request)
-    {
-        // Create a new report queue entry
-        $reportQueue = ReportQueue::create([
-            'user_id' => Auth::id(),
-            'report' => 'masterlist',
-            'status' => 'pending',
-        ]);
-
-        // Dispatch the job to the queue
-        GenerateReportJob::dispatch($reportQueue->id);
-
-        return response()->json([
-            'message' => 'Report queued successfully',
-            'report_id' => $reportQueue->id,
-            'status' => 'pending',
-        ], 201);
     }
 }
