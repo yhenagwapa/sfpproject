@@ -147,6 +147,7 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::post('/reports/generate-age-bracket-upon-entry', [ReportsController::class, 'generateAgeBracketUponEntry'])->name('reports.generate-age-bracket-upon-entry');
     Route::post('/reports/generate-age-bracket-after-120', [ReportsController::class, 'generateAgeBracketAfter120'])->name('reports.generate-age-bracket-after-120');
     Route::post('/reports/generate-monitoring', [ReportsController::class, 'generateMonitoring'])->name('reports.generate-monitoring');
+    Route::post('/reports/generate-unfunded', [ReportsController::class, 'generateUnfunded'])->name('reports.generate-unfunded');
 
     //focal reports
     Route::post('/reports/generate-malnourished', [ReportsController::class, 'generateMalnourished'])->name('reports.generate-malnourished');
