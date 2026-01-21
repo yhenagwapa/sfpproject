@@ -15,7 +15,7 @@ use App\Models\Implementation;
 
 class DisabilityReportGeneration extends Controller
 {
-    public static function generateDisabilityReport($userId, $cdcId)
+    public static function generateDisabilityReport($userId)
     {
         $user = User::find($userId);
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();

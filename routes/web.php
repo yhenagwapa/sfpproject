@@ -151,12 +151,8 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
 
     //focal reports
     Route::post('/reports/generate-malnourished', [ReportsController::class, 'generateMalnourished'])->name('reports.generate-malnourished');
-
-
     Route::post('/reports/generate-disabilities', [ReportsController::class, 'generateDisability'])->name('reports.generate-disabilities');
-
     Route::post('/reports/generate-undernourished-upon-entry', [ReportsController::class, 'generateUndernourishedUponEntry'])->name('reports.generate-undernourished-upon-entry');
-
     Route::post('/reports/generate-undernourished-after-120', [ReportsController::class, 'generateUndernourishedAfter120'])->name('reports.generate-undernourished-after-120');
 
     Route::get('/reports/generated', [ReportsController::class, 'viewGeneratedReports'])->name('reports.generated');

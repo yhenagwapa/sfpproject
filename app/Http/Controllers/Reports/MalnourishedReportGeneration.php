@@ -13,7 +13,7 @@ use App\Models\Implementation;
 
 class MalnourishedReportGeneration extends Controller
 {
-    public static function generateMalnourishedReport($userId, $cdcId)
+    public static function generateMalnourishedReport($userId)
     {
         $user = User::find($userId);
 

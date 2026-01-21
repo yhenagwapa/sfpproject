@@ -12,7 +12,7 @@ class DisabilityGenerationCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'reports:disabilities {user_id} {cdc_id}';
+    protected $signature = 'reports:disabilities {user_id}';
 
     /**
      * The console command description.
@@ -29,7 +29,7 @@ class DisabilityGenerationCommand extends Command
         $userId = $this->argument('user_id');  // authenticated user ID
         $cdcId  = $this->argument('cdc_id');   // selected CDC
 
-        DisabilityReportGeneration::generateDisabilityReport($userId, $cdcId);
+        DisabilityReportGeneration::generateDisabilityReport($userId);
 
         $this->info('Generating masterlist report.');
     }

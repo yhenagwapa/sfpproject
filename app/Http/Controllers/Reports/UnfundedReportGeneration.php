@@ -34,7 +34,7 @@ class UnfundedReportGeneration extends Controller
         if ($user->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
-            if ($cdcId == 'all_center') {
+            if ((int)$cdcId === 0) {
                 $isNotFunded = $unfundedChildren->paginate(20);
             } else {
                 $isNotFunded = $unfundedChildren->whereHas('records', function ($query) use ($cycle, $cdcId) {
@@ -50,7 +50,7 @@ class UnfundedReportGeneration extends Controller
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId == 'all_center') {
+            if ((int)$cdcId === 0) {
                 $isNotFunded = $unfundedChildren->whereHas('records', function ($query) use ($cycle, $centerIDs) {
                     $query->whereIn('child_development_center_id', $centerIDs);
                 })

@@ -67,8 +67,8 @@
                                                 <label for="center_name">Select Center:</label>
                                                 <select class="form-control uppercase" name="center_name" id="center_name"
                                                     onchange="this.form.submit()">
-                                                    <option value="all_center"
-                                                        {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>
+                                                    <option value="0"
+                                                        {{ old('center_name', $cdcId) == 0 ? 'selected' : '' }}>
                                                         {{--All Child Development Center--}}
                                                         Select One
                                                     </option>
