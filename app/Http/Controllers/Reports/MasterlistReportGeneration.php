@@ -34,7 +34,7 @@ class MasterlistReportGeneration extends Controller
             $centerIDs = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId == 'all_center') {
+            if ((int)$cdcId === 0) {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
                     if ($cycle) {
                         $query->where('implementation_id', $cycle->id)
@@ -69,7 +69,7 @@ class MasterlistReportGeneration extends Controller
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId == 'all_center') {
+            if ((int)$cdcId === 0) {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($centerIDs, $cycle) {
                     if ($cycle) {
                         $query->where('implementation_id', $cycle->id)

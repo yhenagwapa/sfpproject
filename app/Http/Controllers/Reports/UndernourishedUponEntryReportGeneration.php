@@ -15,7 +15,7 @@ use App\Models\Implementation;
 
 class UndernourishedUponEntryReportGeneration extends Controller
 {
-    public static function generateUndernourishedUponEntry($userId, $cdcId)
+    public static function generateUndernourishedUponEntry($userId)
     {
         $user = User::find($userId);
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();

@@ -12,7 +12,7 @@ class UndernourishedUponEntryCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'reports:undernourished-upon-entry {user_id} {cdc_id}';
+    protected $signature = 'reports:undernourished-upon-entry {user_id}';
 
     /**
      * The console command description.
@@ -29,7 +29,7 @@ class UndernourishedUponEntryCommand extends Command
         $userId = $this->argument('user_id');  // authenticated user ID
         $cdcId  = $this->argument('cdc_id');   // selected CDC
 
-        UndernourishedUponEntryReportGeneration::generateUndernourishedUponEntryReport($userId, $cdcId);
+        UndernourishedUponEntryReportGeneration::generateUndernourishedUponEntryReport($userId);
 
         $this->info('Generating masterlist report.');
     }

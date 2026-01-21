@@ -29,7 +29,7 @@ class AgeBracketUponEntry extends Controller
             $centerIDs = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId == 'all_center') {
+            if ((int)$cdcId === 0) {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
                     $query->where('implementation_id', $cycle->id)
                         ->where('funded', 1)
@@ -63,7 +63,7 @@ class AgeBracketUponEntry extends Controller
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId == 'all_center') {
+            if ((int)$cdcId === 0) {
                 $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle, $centerIDs) {
                     $query->where('implementation_id', $cycle->id)
                         ->whereIn('child_development_center_id', $centerIDs)

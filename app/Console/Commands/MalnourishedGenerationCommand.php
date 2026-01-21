@@ -12,7 +12,7 @@ class MalnourishedGenerationCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'reports:malnourished {user_id} {cdc_id}';
+    protected $signature = 'reports:malnourished {user_id}';
 
     /**
      * The console command description.
@@ -29,7 +29,7 @@ class MalnourishedGenerationCommand extends Command
         $userId = $this->argument('user_id');  // authenticated user ID
         $cdcId  = $this->argument('cdc_id');   // selected CDC
 
-        MalnourishedReportGeneration::generateMalnourishedReport($userId, $cdcId);
+        MalnourishedReportGeneration::generateMalnourishedReport($userId);
 
         $this->info('Generating masterlist report.');
     }

@@ -12,7 +12,7 @@ class UndernourishedAfter120Command extends Command
      *
      * @var string
      */
-    protected $signature = 'reports:undernourished-after120 {user_id} {cdc_id}';
+    protected $signature = 'reports:undernourished-after120 {user_id}';
 
     /**
      * The console command description.
@@ -29,7 +29,7 @@ class UndernourishedAfter120Command extends Command
         $userId = $this->argument('user_id');
         $cdcId = $this->argument('cdc_id');
 
-        UndernourishedAfter120ReportGeneration::generateUndernourishedAfter120Report($userId, $cdcId);
+        UndernourishedAfter120ReportGeneration::generateUndernourishedAfter120Report($userId);
 
         $this->info('Generating report for undernourished children after 120 feedings.');
     }

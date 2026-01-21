@@ -15,7 +15,7 @@ use App\Models\Implementation;
 
 class UndernourishedAfter120ReportGeneration extends Controller
 {
-    public static function generateUndernourishedAfter120Report($userId, $cdcId)
+    public static function generateUndernourishedAfter120Report($userId)
     {
         $user = User::find($userId);
         $cycle = Implementation::where('status', 'active')->where('type', 'regular')->first();
