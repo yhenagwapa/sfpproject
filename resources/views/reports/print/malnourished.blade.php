@@ -229,8 +229,8 @@
                     <br>
                     <br>
                     <p>
-                        @if (auth()->user()->hasRole('lgu focal'))
-                            <u>{{ auth()->user()->full_name }}</u>
+                        @if ($user->hasRole('lgu focal'))
+                            <u>{{ $user->full_name }}</u>
                         @else
                             ______________________________________
                         @endif

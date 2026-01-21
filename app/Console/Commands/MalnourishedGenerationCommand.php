@@ -27,10 +27,9 @@ class MalnourishedGenerationCommand extends Command
     public function handle()
     {
         $userId = $this->argument('user_id');  // authenticated user ID
-        $cdcId  = $this->argument('cdc_id');   // selected CDC
 
         MalnourishedReportGeneration::generateMalnourishedReport($userId);
 
-        $this->info('Generating masterlist report.');
+        $this->info('Generating malnourished report.');
     }
 }

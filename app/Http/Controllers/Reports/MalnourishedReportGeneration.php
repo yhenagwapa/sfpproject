@@ -48,7 +48,7 @@ class MalnourishedReportGeneration extends Controller
             ];
         }
 
-        if (auth()->user()->hasRole('admin')) {
+        if ($user->hasRole('admin')) {
             $centers = ChildDevelopmentCenter::all()->keyBy('id');
 
             $isFunded = $fundedChildren->whereHas('records', function ($query) use ($cycle) {
@@ -93,7 +93,7 @@ class MalnourishedReportGeneration extends Controller
                 ->get();
         }
 
-        $pdf = Pdf::loadView('reports.print.malnourished', compact('cycle', 'isFunded', 'centers', 'province', 'city'))
+        $pdf = Pdf::loadView('reports.print.malnourished', compact('user', 'cycle', 'isFunded', 'centers', 'province', 'city'))
             ->setPaper('folio', 'landscape')
             ->setOptions([
                 'margin-top' => 0.5,

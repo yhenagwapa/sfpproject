@@ -1255,11 +1255,10 @@ class ReportsController extends Controller
             'center_name' => $cdcId
         ]);
 
-
         // Create a new report queue entry
         $reportQueue = ReportQueue::create([
             'user_id' => auth()->user()->id,
-            'report' => 'unfunded',
+            'report' => 'malnourished',
             'cdc_id'  => $cdcId,
             'status' => 'pending',
         ]);
