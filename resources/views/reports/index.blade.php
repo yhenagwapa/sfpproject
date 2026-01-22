@@ -67,8 +67,8 @@
                                                 <label for="center_name">Select Center:</label>
                                                 <select class="form-control uppercase" name="center_name" id="center_name"
                                                     onchange="this.form.submit()">
-                                                    <option value="all_center"
-                                                        {{ old('center_name', $cdcId) == 'all_center' ? 'selected' : '' }}>
+                                                    <option value="0"
+                                                        {{ old('center_name', $cdcId) == 0 ? 'selected' : '' }}>
                                                         {{--All Child Development Center--}}
                                                         Select One
                                                     </option>
@@ -222,8 +222,7 @@
                                                             <ul id="dropdown-focal" x-show="open" x-transition
                                                                 class="absolute left-0 mt-2 px-2 w-60 bg-white rounded-md shadow-lg z-50 profile"
                                                                 @click.away="open = false">
-                                                                <form id="printFocalForm" action="" method="POST"
-                                                                    target="_blank">
+                                                                <form id="printFocalForm" action="" method="POST">
                                                                     @csrf
                                                                     <input type="hidden" name="cycle_id2" id="cycle_id2"
                                                                         value="{{ $cycle->id }}">

@@ -1247,8 +1247,8 @@ class ReportsController extends Controller
     }
     public function generateMalnourished(Request $request)
     {
-        $cdcId = $request->input('center_name', 'all_center');
-        $cycleID = $request->cycle_id;
+        $cdcId = $request->input('center_name', 0);
+        $cycleID = $request->cycle_id2;
 
         session([
             'report_cycle_id' => $cycleID,
@@ -1259,7 +1259,7 @@ class ReportsController extends Controller
         // Create a new report queue entry
         $reportQueue = ReportQueue::create([
             'user_id' => auth()->user()->id,
-            'report' => 'unfunded',
+            'report' => 'malnourished',
             'cdc_id'  => $cdcId,
             'status' => 'pending',
         ]);
@@ -1268,7 +1268,7 @@ class ReportsController extends Controller
         GenerateReportJob::dispatch($reportQueue->id);
 
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
-    
+
     }
 
     public function generateUnfunded(Request $request)
