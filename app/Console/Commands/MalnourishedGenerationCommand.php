@@ -28,8 +28,17 @@ class MalnourishedGenerationCommand extends Command
     {
         $userId = $this->argument('user_id');  // authenticated user ID
 
-        MalnourishedReportGeneration::generateMalnourishedReport($userId);
+        try {
+            // Generate and store report data
+            // Status will be set to 'pending' for cron job to process
+            $this->info('Fetching and storing malnourished children data...');
+            $reportId = MalnourishedReportGeneration::generateMalnourishedReport($userId);
+            $this->info("Data stored successfully. Report ID: {$reportId}");
+            $this->info("Status: pending (will be processed by cron job)");
 
-        $this->info('Generating malnourished report.');
+        } catch (\Exception $e) {
+            $this->error('Error generating malnourished report: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }
