@@ -261,8 +261,10 @@ class UserController extends Controller
         $user->password = bcrypt('Sfp@12345678');
         $user->save();
 
-        return redirect()->back()
-                ->withSuccess('Password reset successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Password reset successfully.'
+        ]);
     }
 
     /**
