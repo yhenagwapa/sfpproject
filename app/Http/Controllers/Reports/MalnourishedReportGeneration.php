@@ -306,44 +306,44 @@ class MalnourishedReportGeneration extends Controller
             $html = '<h3 style="text-align:center; font-size:11px; line-height:1.2;">
                 Department of Social Welfare and Development, Field Office XI<br>
                 Supplementary Feeding Program<br>
-                ' . htmlspecialchars($cycle->name) . ' ( CY ' . htmlspecialchars($cycle->school_year_from) . ' )<br>
+                ' . mb_strtoupper(htmlspecialchars($cycle->name, ENT_QUOTES, 'UTF-8')) . ' ( CY ' . htmlspecialchars($cycle->school_year_from) . ' )<br>
                 <b>LIST OF MALNOURISHED CHILDREN</b>
             </h3>';
 
             $html .= '<p style="font-size:9px;">Province: <u>' . htmlspecialchars($provinceNames) . '</u><br>
-                City / Municipality: <u>' . htmlspecialchars($cityNames) . '</u></p>';
+            City / Municipality: <u>' . htmlspecialchars($cityNames) . '</u></p>';
 
             // Build complete table HTML at once
-            $html .= '<table border="1" cellpadding="2" cellspacing="0" style="font-size:7px; border-collapse:collapse; width:100%;">
+            $html .= '<table border="1" cellpadding="2" cellspacing="0" style="font-size:7px; border-collapse:collapse; width:100%;" align="center">
                 <thead>
-                    <tr style="background-color:#f0f0f0; font-weight:bold; text-align:center;">
-                        <th rowspan="2" style="width:2.5%; text-align:center;">No.</th>
-                        <th rowspan="2" style="width:18%; text-align:center;">Name</th>
-                        <th rowspan="2" style="width:15%; text-align:center;">Center</th>
-                        <th rowspan="2" style="width:2.5%; text-align:center;">Sex</th>
-                        <th rowspan="2" style="width:5%; text-align:center;">DOB</th>
-                        <th rowspan="2" style="width:5%; text-align:center;">Entry Date</th>
-                        <th rowspan="2" style="width:3.5%; text-align:center;">Wt(kg)</th>
-                        <th rowspan="2" style="width:3.5%; text-align:center;">Ht(cm)</th>
-                        <th colspan="2" style="width:5%; text-align:center;">Age</th>
-                        <th colspan="3" style="width:10.5%; text-align:center;">NS Entry</th>
-                        <th rowspan="2" style="width:5%; text-align:center;">Exit Date</th>
-                        <th rowspan="2" style="width:3.5%; text-align:center;">Wt(kg)</th>
-                        <th rowspan="2" style="width:3.5%; text-align:center;">Ht(cm)</th>
-                        <th colspan="2" style="width:5%; text-align:center;">Age</th>
-                        <th colspan="3" style="width:10.5%; text-align:center;">NS Exit</th>
+                    <tr style="background-color:#f0f0f0; font-weight:bold;">
+                        <th rowspan="2" width="2.5%;">No.</th>
+                        <th rowspan="2" width="18%;">Name of Child</th>
+                        <th rowspan="2" width="15%;">Name of Child Development Center</th>
+                        <th rowspan="2" width="2.5%;">Sex</th>
+                        <th rowspan="2" width="5%;">Date of Birth</th>
+                        <th rowspan="2" width="5%;">Actual Date of Weighing</th>
+                        <th rowspan="2" width="3.5%;">Weight in kg</th>
+                        <th rowspan="2" width="3.5%;">Height in cm</th>
+                        <th colspan="2" width="6%;">Age in Month/Year</th>
+                        <th colspan="3" width="10.5%;">NS Upon Entry</th>
+                        <th rowspan="2" width="5%;">Actual Date of Weighing</th>
+                        <th rowspan="2" width="3.5%;">Weight in kg</th>
+                        <th rowspan="2" width="3.5%;">Height in cm</th>
+                        <th colspan="2" width="6%;">Age in Month/Year</th>
+                        <th colspan="3" width="10.5%;">NS After 120 Feedings</th>
                     </tr>
-                    <tr style="background-color:#f0f0f0; font-weight:bold; text-align:center;">
-                        <th style="width:2.5%; text-align:center;">M</th>
-                        <th style="width:2.5%; text-align:center;">Y</th>
-                        <th style="width:3.5%; text-align:center;">W/A</th>
-                        <th style="width:3.5%; text-align:center;">W/H</th>
-                        <th style="width:3.5%; text-align:center;">H/A</th>
-                        <th style="width:2.5%; text-align:center;">M</th>
-                        <th style="width:2.5%; text-align:center;">Y</th>
-                        <th style="width:3.5%; text-align:center;">W/A</th>
-                        <th style="width:3.5%; text-align:center;">W/H</th>
-                        <th style="width:3.5%; text-align:center;">H/A</th>
+                    <tr style="background-color:#f0f0f0; font-weight:bold;">
+                        <th width="3%;">Month</th>
+                        <th width="3%;">Year</th>
+                        <th width="3.5%;">Weight for Age</th>
+                        <th width="3.5%;">Weight for Height</th>
+                        <th width="3.5%;">Height for Age</th>
+                        <th width="3%;">Month</th>
+                        <th width="3%;">Year</th>
+                        <th width="3.5%;">Weight for Age</th>
+                        <th width="3.5%;">Weight for Height</th>
+                        <th width="3.5%;">Height for Age</th>
                     </tr>
                 </thead>
                 <tbody>';
@@ -362,27 +362,27 @@ class MalnourishedReportGeneration extends Controller
                         );
 
                         $html .= '<tr>';
-                        $html .= '<td style="width:2.5%; text-align:center;">' . $counter++ . '</td>';
-                        $html .= '<td style="width:18%; text-align:center;">' . htmlspecialchars($fullName) . '</td>';
-                        $html .= '<td style="width:15%; text-align:center;">' . htmlspecialchars($child->center_name ?? 'N/A') . '</td>';
-                        $html .= '<td style="width:2.5%; text-align:center;">' . ($child->sex_name == 'Male' ? 'M' : 'F') . '</td>';
-                        $html .= '<td style="width:5%; text-align:center;">' . ($child->date_of_birth ? \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') : '') . '</td>';
-                        $html .= '<td style="width:5%; text-align:center;">' . ($child->entry_weighing_date ? \Carbon\Carbon::parse($child->entry_weighing_date)->format('m-d-Y') : '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->entry_weight ? number_format($child->entry_weight, 1) : '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->entry_height ? number_format($child->entry_height, 1) : '') . '</td>';
-                        $html .= '<td style="width:2.5%; text-align:center;">' . ($child->entry_age_months ?? '') . '</td>';
-                        $html .= '<td style="width:2.5%; text-align:center;">' . ($child->entry_age_years ?? '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->entry_weight_for_age ?? '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->entry_weight_for_height ?? '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->entry_height_for_age ?? '') . '</td>';
-                        $html .= '<td style="width:5%; text-align:center;">' . ($child->exit_weighing_date ? \Carbon\Carbon::parse($child->exit_weighing_date)->format('m-d-Y') : '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->exit_weight ? number_format($child->exit_weight, 1) : '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->exit_height ? number_format($child->exit_height, 1) : '') . '</td>';
-                        $html .= '<td style="width:2.5%; text-align:center;">' . ($child->exit_age_months ?? '') . '</td>';
-                        $html .= '<td style="width:2.5%; text-align:center;">' . ($child->exit_age_years ?? '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->exit_weight_for_age ?? '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->exit_weight_for_height ?? '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->exit_height_for_age ?? '') . '</td>';
+                        $html .= '<td width="2.5%">' . $counter++ . '</td>';
+                        $html .= '<td width="18%">' . mb_strtoupper(htmlspecialchars($fullName, ENT_QUOTES, 'UTF-8')) . '</td>';
+                        $html .= '<td width="15%">' . mb_strtoupper(htmlspecialchars($child->center_name ?? 'N/A', ENT_QUOTES, 'UTF-8')) . '</td>';
+                        $html .= '<td width="2.5%">' . ($child->sex_name == 'Male' ? 'M' : 'F') . '</td>';
+                        $html .= '<td width="5%">' . ($child->date_of_birth ? \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') : '') . '</td>';
+                        $html .= '<td width="5%">' . ($child->entry_weighing_date ? \Carbon\Carbon::parse($child->entry_weighing_date)->format('m-d-Y') : '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->entry_weight ? number_format($child->entry_weight, 1) : '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->entry_height ? number_format($child->entry_height, 1) : '') . '</td>';
+                        $html .= '<td width="3%">' . ($child->entry_age_months ?? '') . '</td>';
+                        $html .= '<td width="3%">' . ($child->entry_age_years ?? '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->entry_weight_for_age ?? '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->entry_weight_for_height ?? '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->entry_height_for_age ?? '') . '</td>';
+                        $html .= '<td width="5%">' . ($child->exit_weighing_date ? \Carbon\Carbon::parse($child->exit_weighing_date)->format('m-d-Y') : '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->exit_weight ? number_format($child->exit_weight, 1) : '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->exit_height ? number_format($child->exit_height, 1) : '') . '</td>';
+                        $html .= '<td width="3%">' . ($child->exit_age_months ?? '') . '</td>';
+                        $html .= '<td width="3%">' . ($child->exit_age_years ?? '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->exit_weight_for_age ?? '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->exit_weight_for_height ?? '') . '</td>';
+                        $html .= '<td width="3.5%">' . ($child->exit_height_for_age ?? '') . '</td>';
                         $html .= '</tr>';
                     }
                 });
@@ -394,7 +394,7 @@ class MalnourishedReportGeneration extends Controller
                 <tr>
                     <td width="50%">
                         <p>Noted by:</p><br><br>
-                        <p><u>' . ($user->hasRole('lgu focal') ? htmlspecialchars($user->full_name) : str_repeat('_', 40)) . '</u></p>
+                        <p><u>' . ($user->hasRole('lgu focal') ? mb_strtoupper(htmlspecialchars($user->full_name, ENT_QUOTES, 'UTF-8')) : str_repeat('_', 40)) . '</u></p>
                         <p>SFP Focal Person</p>
                     </td>
                     <td width="50%">
