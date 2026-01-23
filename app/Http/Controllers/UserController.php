@@ -258,6 +258,7 @@ class UserController extends Controller
 
     public function resetPassword(User $user)
     {
+        $user = User::findOrFail($user->id);
         $user->password = bcrypt('Sfp@12345678');
         $user->save();
 
