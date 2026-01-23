@@ -279,8 +279,17 @@ class MalnourishedReportGeneration extends Controller
                 $cityNames = $cities->implode(', ') ?: 'All Cities';
             }
 
-            // Create TCPDF instance
-            $pdf = new \TCPDF('L', 'mm', 'FOLIO', true, 'UTF-8', false);
+            // Create custom TCPDF instance with pagination footer
+            $pdf = new class('L', 'mm', 'FOLIO', true, 'UTF-8', false) extends \TCPDF {
+                public function Footer() {
+                    // Position at 15 mm from bottom (5mm higher)
+                    $this->SetY(-15);
+                    // Set font
+                    $this->SetFont('helvetica', '', 8);
+                    // Page number
+                    $this->Cell(0, 10, 'Page ' . $this->getAliasNumPage() . ' of ' . $this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+                }
+            };
 
             // Set document information
             $pdf->SetCreator('SFP System');
@@ -288,13 +297,13 @@ class MalnourishedReportGeneration extends Controller
             $pdf->SetTitle('List of Malnourished Children');
             $pdf->SetSubject('Malnourished Children Report');
 
-            // Remove default header/footer
+            // Remove default header but keep footer for pagination
             $pdf->setPrintHeader(false);
-            $pdf->setPrintFooter(false);
+            $pdf->setPrintFooter(true);
 
-            // Set margins
+            // Set margins (increased bottom margin for footer)
             $pdf->SetMargins(10, 10, 10);
-            $pdf->SetAutoPageBreak(true, 15);
+            $pdf->SetAutoPageBreak(true, 20);
 
             // Set font
             $pdf->SetFont('helvetica', '', 8);
@@ -318,7 +327,7 @@ class MalnourishedReportGeneration extends Controller
                 <thead>
                     <tr style="background-color:#f0f0f0; font-weight:bold; text-align:center;">
                         <th rowspan="2" style="width:2.5%; text-align:center;">No.</th>
-                        <th rowspan="2" style="width:18%; text-align:center;">Name</th>
+                        <th rowspan="2" style="width:15%; text-align:center;">Name</th>
                         <th rowspan="2" style="width:15%; text-align:center;">Center</th>
                         <th rowspan="2" style="width:2.5%; text-align:center;">Sex</th>
                         <th rowspan="2" style="width:5%; text-align:center;">DOB</th>
@@ -326,7 +335,7 @@ class MalnourishedReportGeneration extends Controller
                         <th rowspan="2" style="width:3.5%; text-align:center;">Wt(kg)</th>
                         <th rowspan="2" style="width:3.5%; text-align:center;">Ht(cm)</th>
                         <th colspan="2" style="width:5%; text-align:center;">Age</th>
-                        <th colspan="3" style="width:10.5%; text-align:center;">NS Entry</th>
+                        <th colspan="3" style="width:15%; text-align:center;">NS Entry</th>
                         <th rowspan="2" style="width:5%; text-align:center;">Exit Date</th>
                         <th rowspan="2" style="width:3.5%; text-align:center;">Wt(kg)</th>
                         <th rowspan="2" style="width:3.5%; text-align:center;">Ht(cm)</th>
@@ -336,9 +345,9 @@ class MalnourishedReportGeneration extends Controller
                     <tr style="background-color:#f0f0f0; font-weight:bold; text-align:center;">
                         <th style="width:2.5%; text-align:center;">M</th>
                         <th style="width:2.5%; text-align:center;">Y</th>
-                        <th style="width:3.5%; text-align:center;">W/A</th>
-                        <th style="width:3.5%; text-align:center;">W/H</th>
-                        <th style="width:3.5%; text-align:center;">H/A</th>
+                        <th style="width:5%; text-align:center;">W/A</th>
+                        <th style="width:5%; text-align:center;">W/H</th>
+                        <th style="width:5%; text-align:center;">H/A</th>
                         <th style="width:2.5%; text-align:center;">M</th>
                         <th style="width:2.5%; text-align:center;">Y</th>
                         <th style="width:3.5%; text-align:center;">W/A</th>
@@ -350,21 +359,79 @@ class MalnourishedReportGeneration extends Controller
 
             // Process data in chunks to manage memory
             $counter = 1;
+            $rowsOnCurrentPage = 0;
+            $isFirstPage = true;
+            $maxRowsFirstPage = 20;
+            $maxRowsPerPage = 25;
+
             DB::table('malnourished_report_data')
                 ->where('malnourished_report_id', $report->id)
                 ->orderBy('id')
-                ->chunk(100, function ($children) use (&$html, &$counter) {
+                ->chunk(100, function ($children) use (&$html, &$counter, &$rowsOnCurrentPage, &$isFirstPage, &$pdf, $maxRowsFirstPage, $maxRowsPerPage) {
                     foreach ($children as $child) {
-                        $fullName = trim(
+                        // Check if we need to add a new page
+                        $maxRows = $isFirstPage ? $maxRowsFirstPage : $maxRowsPerPage;
+                        if ($rowsOnCurrentPage >= $maxRows) {
+                            // Close current table
+                            $html .= '</tbody></table>';
+
+                            // Write current page HTML
+                            $pdf->writeHTML($html, true, false, true, false, '');
+
+                            // Add new page
+                            $pdf->AddPage();
+
+                            // Reset HTML and start new table with header
+                            $html = '<table border="1" cellpadding="2" cellspacing="0" style="font-size:7px; border-collapse:collapse; width:100%;">
+                                <thead>
+                                    <tr style="background-color:#f0f0f0; font-weight:bold; text-align:center;">
+                                        <th rowspan="2" style="width:2.5%; text-align:center;">No.</th>
+                                        <th rowspan="2" style="width:15%; text-align:center;">Name</th>
+                                        <th rowspan="2" style="width:15%; text-align:center;">Center</th>
+                                        <th rowspan="2" style="width:2.5%; text-align:center;">Sex</th>
+                                        <th rowspan="2" style="width:5%; text-align:center;">DOB</th>
+                                        <th rowspan="2" style="width:5%; text-align:center;">Entry Date</th>
+                                        <th rowspan="2" style="width:3.5%; text-align:center;">Wt(kg)</th>
+                                        <th rowspan="2" style="width:3.5%; text-align:center;">Ht(cm)</th>
+                                        <th colspan="2" style="width:5%; text-align:center;">Age</th>
+                                        <th colspan="3" style="width:15%; text-align:center;">NS Entry</th>
+                                        <th rowspan="2" style="width:5%; text-align:center;">Exit Date</th>
+                                        <th rowspan="2" style="width:3.5%; text-align:center;">Wt(kg)</th>
+                                        <th rowspan="2" style="width:3.5%; text-align:center;">Ht(cm)</th>
+                                        <th colspan="2" style="width:5%; text-align:center;">Age</th>
+                                        <th colspan="3" style="width:10.5%; text-align:center;">NS Exit</th>
+                                    </tr>
+                                    <tr style="background-color:#f0f0f0; font-weight:bold; text-align:center;">
+                                        <th style="width:2.5%; text-align:center;">M</th>
+                                        <th style="width:2.5%; text-align:center;">Y</th>
+                                        <th style="width:5%; text-align:center;">W/A</th>
+                                        <th style="width:5%; text-align:center;">W/H</th>
+                                        <th style="width:5%; text-align:center;">H/A</th>
+                                        <th style="width:2.5%; text-align:center;">M</th>
+                                        <th style="width:2.5%; text-align:center;">Y</th>
+                                        <th style="width:3.5%; text-align:center;">W/A</th>
+                                        <th style="width:3.5%; text-align:center;">W/H</th>
+                                        <th style="width:3.5%; text-align:center;">H/A</th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
+
+                            $rowsOnCurrentPage = 0;
+                            $isFirstPage = false;
+                        }
+
+                        $fullName = strtoupper(trim(
                             $child->lastname . ', ' . $child->firstname . ' ' .
                             ($child->middlename ? strtoupper(substr($child->middlename, 0, 1)) . '.' : '') . ' ' .
                             ($child->extension_name ?? '')
-                        );
+                        ));
+
+                        $centerName = strtoupper($child->center_name ?? 'N/A');
 
                         $html .= '<tr>';
                         $html .= '<td style="width:2.5%; text-align:center;">' . $counter++ . '</td>';
-                        $html .= '<td style="width:18%; text-align:center;">' . htmlspecialchars($fullName) . '</td>';
-                        $html .= '<td style="width:15%; text-align:center;">' . htmlspecialchars($child->center_name ?? 'N/A') . '</td>';
+                        $html .= '<td style="width:15%; text-align:center;">' . htmlspecialchars($fullName) . '</td>';
+                        $html .= '<td style="width:15%; text-align:center;">' . htmlspecialchars($centerName) . '</td>';
                         $html .= '<td style="width:2.5%; text-align:center;">' . ($child->sex_name == 'Male' ? 'M' : 'F') . '</td>';
                         $html .= '<td style="width:5%; text-align:center;">' . ($child->date_of_birth ? \Carbon\Carbon::parse($child->date_of_birth)->format('m-d-Y') : '') . '</td>';
                         $html .= '<td style="width:5%; text-align:center;">' . ($child->entry_weighing_date ? \Carbon\Carbon::parse($child->entry_weighing_date)->format('m-d-Y') : '') . '</td>';
@@ -372,9 +439,9 @@ class MalnourishedReportGeneration extends Controller
                         $html .= '<td style="width:3.5%; text-align:center;">' . ($child->entry_height ? number_format($child->entry_height, 1) : '') . '</td>';
                         $html .= '<td style="width:2.5%; text-align:center;">' . ($child->entry_age_months ?? '') . '</td>';
                         $html .= '<td style="width:2.5%; text-align:center;">' . ($child->entry_age_years ?? '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->entry_weight_for_age ?? '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->entry_weight_for_height ?? '') . '</td>';
-                        $html .= '<td style="width:3.5%; text-align:center;">' . ($child->entry_height_for_age ?? '') . '</td>';
+                        $html .= '<td style="width:5%; text-align:center;">' . ($child->entry_weight_for_age ?? '') . '</td>';
+                        $html .= '<td style="width:5%; text-align:center;">' . ($child->entry_weight_for_height ?? '') . '</td>';
+                        $html .= '<td style="width:5%; text-align:center;">' . ($child->entry_height_for_age ?? '') . '</td>';
                         $html .= '<td style="width:5%; text-align:center;">' . ($child->exit_weighing_date ? \Carbon\Carbon::parse($child->exit_weighing_date)->format('m-d-Y') : '') . '</td>';
                         $html .= '<td style="width:3.5%; text-align:center;">' . ($child->exit_weight ? number_format($child->exit_weight, 1) : '') . '</td>';
                         $html .= '<td style="width:3.5%; text-align:center;">' . ($child->exit_height ? number_format($child->exit_height, 1) : '') . '</td>';
@@ -384,23 +451,25 @@ class MalnourishedReportGeneration extends Controller
                         $html .= '<td style="width:3.5%; text-align:center;">' . ($child->exit_weight_for_height ?? '') . '</td>';
                         $html .= '<td style="width:3.5%; text-align:center;">' . ($child->exit_height_for_age ?? '') . '</td>';
                         $html .= '</tr>';
+
+                        $rowsOnCurrentPage++;
                     }
                 });
 
             $html .= '</tbody></table>';
 
             // Footer section
-            $html .= '<br><br><table border="0" cellpadding="5" style="font-size:9px;">
+            $html .= '<table border="0" cellpadding="5" style="font-size:9px; margin-top:5px;">
                 <tr>
                     <td width="50%">
-                        <p>Noted by:</p><br><br>
-                        <p><u>' . ($user->hasRole('lgu focal') ? htmlspecialchars($user->full_name) : str_repeat('_', 40)) . '</u></p>
-                        <p>SFP Focal Person</p>
+                        <p style="margin:0;">Noted by:</p><br><br>
+                        <p style="margin:0;"><u>' . ($user->hasRole('lgu focal') ? htmlspecialchars($user->full_name) : str_repeat('_', 40)) . '</u></p>
+                        <p style="margin:0;">SFP Focal Person</p>
                     </td>
                     <td width="50%">
-                        <p>Approved by:</p><br><br>
-                        <p><u>' . str_repeat('_', 40) . '</u></p>
-                        <p>C/MSWDO/District Head</p>
+                        <p style="margin:0;">Approved by:</p><br><br>
+                        <p style="margin:0;"><u>' . str_repeat('_', 40) . '</u></p>
+                        <p style="margin:0;">C/MSWDO/District Head</p>
                     </td>
                 </tr>
             </table>';
