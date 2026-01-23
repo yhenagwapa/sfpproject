@@ -118,8 +118,8 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::patch('/cycle/update-milkfeeding-status', [ImplementationController::class, 'updateMilkFeedingStatus'])->name(name: 'cycle.update-milkfeeding-status');
 
     Route::post('/reports/show', [ReportsController::class, 'show'])->name('reports.show');
-    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-    Route::post('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::get('/reportss', [ReportsController::class, 'index'])->name('reports.index');
+    Route::post('/reportss', [ReportsController::class, 'index'])->name('reports.index');
 
     //focal reports
     Route::post('/reports/show-malnourished', [PDFController::class, 'showMalnourished'])->name('reports.show-malnourished');
@@ -151,6 +151,9 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
 
     //focal reports
     Route::post('/reports/generate-malnourished', [ReportsController::class, 'generateMalnourished'])->name('reports.generate-malnourished');
+    Route::post('/reports/generate-disabilities', [ReportsController::class, 'generateDisability'])->name('reports.generate-disabilities');
+    Route::post('/reports/generate-undernourished-upon-entry', [ReportsController::class, 'generateUndernourishedUponEntry'])->name('reports.generate-undernourished-upon-entry');
+    Route::post('/reports/generate-undernourished-after-120', [ReportsController::class, 'generateUndernourishedAfter120'])->name('reports.generate-undernourished-after-120');
 
     Route::get('/reports/generated', [ReportsController::class, 'viewGeneratedReports'])->name('reports.generated');
     Route::get('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');

@@ -1255,7 +1255,6 @@ class ReportsController extends Controller
             'center_name' => $cdcId
         ]);
 
-
         // Create a new report queue entry
         $reportQueue = ReportQueue::create([
             'user_id' => auth()->user()->id,
@@ -1270,7 +1269,75 @@ class ReportsController extends Controller
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
 
     }
+    public function generateDisability(Request $request)
+    {
+        $cdcId = $request->input('center_name', 0);
+        $cycleID = $request->cycle_id2;
 
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+
+
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'disabilities',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+
+    }
+    public function generateUndernourishedUponEntry(Request $request)
+    {
+        $cdcId = $request->input('center_name', 0);
+        $cycleID = $request->cycle_id2;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'undernourished-upon-entry',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+    }
+    public function generateUndernourishedAfter120(Request $request)
+    {
+        $cdcId = $request->input('center_name', 0);
+        $cycleID = $request->cycle_id2;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'undernourished-after-120',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+    }
     public function generateUnfunded(Request $request)
     {
         $cdcId = $request->input('center_name', 'all_center');

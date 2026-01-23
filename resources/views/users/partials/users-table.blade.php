@@ -199,7 +199,7 @@
                                 <button type="button"
                                         class="text-white bg-blue-600 rounded px-3 min-h-9 reset-password-btn"
                                         data-user-id="${row.id}"
-                                        data-user-name="${row.full_name}">
+                                        data-user-name="${row.name}">
                                     Reset Password
                                 </button>
                             `;
@@ -381,11 +381,14 @@
             });
 
             // Confirm / cancel button handlers for reset password
-            $('#confirmResetPasswordBtn').off('click').on('click', function() {
+            $('#confirmResetPasswordBtn').off('click').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
                 const { userId } = resetPasswordModalData;
-                if (!userId) {
-                    return;
-                }
+
+                // Disable button to prevent double-clicks
+                $(this).prop('disabled', true);
 
                 $.ajax({
                     url: '{{ url('/') }}/users/' + userId + '/reset-password',
@@ -404,6 +407,10 @@
                             resetPasswordConfirmationModal.hide();
                         }
                         alert('Failed to reset password.');
+                    },
+                    complete: function() {
+                        // Re-enable button
+                        $('#confirmResetPasswordBtn').prop('disabled', false);
                     }
                 });
             });

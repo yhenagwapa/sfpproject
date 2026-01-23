@@ -15,7 +15,8 @@
         "league/csv": "^9.16",
         "livewire/livewire": "*",
         "spatie/laravel-activitylog": "^4.9",
-        "spatie/laravel-permission": "^6.9"
+        "spatie/laravel-permission": "^6.9",
+        "tecnickcom/tcpdf": "^6.10"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

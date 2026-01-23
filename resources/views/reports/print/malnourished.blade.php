@@ -158,51 +158,57 @@
         </thead>
         <tbody class="malnourished-table text-xs ">
             @foreach ($isFunded as $fundedChild)
+                @php
+                    $middleInitial = $fundedChild->middlename ? strtoupper(substr($fundedChild->middlename, 0, 1)) . '.' : '';
+                    $extension = $fundedChild->extension_name ?? '';
+                    $fullName = trim("{$fundedChild->lastname}, {$fundedChild->firstname} {$middleInitial} {$extension}");
+                @endphp
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td class="first">{{ $fundedChild->full_name }}</td>
-                    <td class="first">{{ optional($fundedChild->records->first()->center)->center_name ?? 'N/A' }}</td>
-                    <td>{{ $fundedChild->sex->name == 'Male' ? 'M' : 'F' }}</td>
-                    <td class="no-wrap">{{ $fundedChild->date_of_birth->format('m-d-Y') }}</td>
+                    <td class="first">{{ $fullName }}</td>
+                    <td class="first">{{ $fundedChild->center_name ?? 'N/A' }}</td>
+                    <td>{{ $fundedChild->sex_name == 'Male' ? 'M' : 'F' }}</td>
+                    <td class="no-wrap">{{ \Carbon\Carbon::parse($fundedChild->date_of_birth)->format('m-d-Y') }}</td>
 
-                    @if ($fundedChild->nutritionalStatus->first() === null)
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        @else
-                            <td class="no-wrap">{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->actual_weighing_date->format('m-d-Y') : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? number_format($fundedChild->nutritionalStatus->first()->weight, 1) : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? number_format($fundedChild->nutritionalStatus->first()->height, 1) : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_months : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->age_in_years : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight_for_age : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->weight_for_height : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->first() ? $fundedChild->nutritionalStatus->first()->height_for_age : 'N/A' }}</td>
-                        @endif
-                        @if (isset($fundedChild->nutritionalStatus[1]))
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->actual_weighing_date->format('m-d-Y') : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? number_format($fundedChild->nutritionalStatus[1]->weight, 1) : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? number_format($fundedChild->nutritionalStatus[1]->height, 1) : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->age_in_months : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->age_in_years : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight_for_age : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->weight_for_height : 'N/A' }}</td>
-                            <td>{{ $fundedChild->nutritionalStatus->count() > 1 ? $fundedChild->nutritionalStatus[1]->height_for_age : 'N/A' }}</td>
-                        @else
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        @endif
+                    @if ($fundedChild->entry_weighing_date)
+                        <td class="no-wrap">{{ \Carbon\Carbon::parse($fundedChild->entry_weighing_date)->format('m-d-Y') }}</td>
+                        <td>{{ number_format($fundedChild->entry_weight, 1) }}</td>
+                        <td>{{ number_format($fundedChild->entry_height, 1) }}</td>
+                        <td>{{ $fundedChild->entry_age_months }}</td>
+                        <td>{{ $fundedChild->entry_age_years }}</td>
+                        <td>{{ $fundedChild->entry_weight_for_age }}</td>
+                        <td>{{ $fundedChild->entry_weight_for_height }}</td>
+                        <td>{{ $fundedChild->entry_height_for_age }}</td>
+                    @else
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    @endif
+
+                    @if ($fundedChild->exit_weighing_date)
+                        <td class="no-wrap">{{ \Carbon\Carbon::parse($fundedChild->exit_weighing_date)->format('m-d-Y') }}</td>
+                        <td>{{ number_format($fundedChild->exit_weight, 1) }}</td>
+                        <td>{{ number_format($fundedChild->exit_height, 1) }}</td>
+                        <td>{{ $fundedChild->exit_age_months }}</td>
+                        <td>{{ $fundedChild->exit_age_years }}</td>
+                        <td>{{ $fundedChild->exit_weight_for_age }}</td>
+                        <td>{{ $fundedChild->exit_weight_for_height }}</td>
+                        <td>{{ $fundedChild->exit_height_for_age }}</td>
+                    @else
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    @endif
                 </tr>
             @endforeach
             @if (count($isFunded) <= 0)
@@ -229,8 +235,8 @@
                     <br>
                     <br>
                     <p>
-                        @if (auth()->user()->hasRole('lgu focal'))
-                            <u>{{ auth()->user()->full_name }}</u>
+                        @if ($user->hasRole('lgu focal'))
+                            <u>{{ $user->full_name }}</u>
                         @else
                             ______________________________________
                         @endif

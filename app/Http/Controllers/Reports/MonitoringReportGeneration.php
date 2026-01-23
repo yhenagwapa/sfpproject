@@ -55,7 +55,7 @@ class MonitoringReportGeneration extends Controller
             $centerIDs = $centers->pluck('id');
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if($cdcId == 'all_center') {
+            if((int)$cdcId === 0) {
 
                 $isFunded = Child::with('records', 'nutritionalStatus', 'sex')
                     ->whereHas('records', function ($query) use ($cycle) {
@@ -90,7 +90,7 @@ class MonitoringReportGeneration extends Controller
 
             $centerNames = ChildDevelopmentCenter::whereIn('id', $centerIDs)->get();
 
-            if ($cdcId == 'all_center') {
+            if ((int)$cdcId === 0) {
                 $isFunded = Child::with('records', 'nutritionalStatus', 'sex')
                     ->whereHas('records', function ($query) use ($cycle, $centerIDs) {
                         $query->where('implementation_id', $cycle->id)
