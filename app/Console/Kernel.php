@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('report:generate masterlist')->everyFifteenMinutes();
+        $schedule->command('queue:work --stop-when-empty')->everyMinute();
     }
 
     /**
