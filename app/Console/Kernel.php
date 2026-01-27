@@ -13,7 +13,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // Process one job from the queue every 5 minutes
+        // This handles report generation (generates PDFs for most reports, populates data for malnourished)
         $schedule->command('queue:work --stop-when-empty --max-jobs=1')->everyFiveMinutes();
+
+        // Process pending malnourished reports and generate PDFs from the data
+        $schedule->command('reports:process-pending-malnourished')->everyFiveMinutes();
     }
 
     /**
