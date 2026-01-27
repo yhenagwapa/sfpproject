@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // Process one job from the queue every 5 minutes
         // This handles report generation (generates PDFs for most reports, populates data for malnourished)
-        $schedule->command('queue:work --stop-when-empty --max-jobs=1')->everyFiveMinutes();
+        $schedule->command('queue:work --stop-when-empty --max-jobs=1')->everyMinute();
 
         // Process pending malnourished reports and generate PDFs from the data
         $schedule->command('reports:process-pending-malnourished')->everyFiveMinutes();
