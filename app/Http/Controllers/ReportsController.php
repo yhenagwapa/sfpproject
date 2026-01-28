@@ -1247,7 +1247,7 @@ class ReportsController extends Controller
     }
     public function generateMalnourished(Request $request)
     {
-        $cdcId = $request->input('center_name', 0);
+        $cdcId = $request->input('center_name2', 0);
         $cycleID = $request->cycle_id2;
 
         session([
@@ -1271,7 +1271,7 @@ class ReportsController extends Controller
     }
     public function generateDisability(Request $request)
     {
-        $cdcId = $request->input('center_name', 0);
+        $cdcId = $request->input('center_name2', 0);
         $cycleID = $request->cycle_id2;
 
         session([
@@ -1296,7 +1296,7 @@ class ReportsController extends Controller
     }
     public function generateUndernourishedUponEntry(Request $request)
     {
-        $cdcId = $request->input('center_name', 0);
+        $cdcId = $request->input('center_name2', 0);
         $cycleID = $request->cycle_id2;
 
         session([
@@ -1318,7 +1318,7 @@ class ReportsController extends Controller
     }
     public function generateUndernourishedAfter120(Request $request)
     {
-        $cdcId = $request->input('center_name', 0);
+        $cdcId = $request->input('center_name2', 0);
         $cycleID = $request->cycle_id2;
 
         session([

@@ -77,6 +77,7 @@ class GenerateReportJob implements ShouldQueue
              elseif ($reportQueue->report === 'disabilities') {
                 Artisan::call('reports:disabilities', [
                     'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id,
                 ]);
             }
             elseif ($reportQueue->report === 'malnourished') {

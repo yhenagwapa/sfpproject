@@ -401,11 +401,10 @@
                                                                             </button>
                                                                         </li>
                                                                     @endif
+                                                                </form>
                                                             </ul>
                                                         </li>
                                                     </ul>
-
-                                                    </form>
                                                 @endif
                                                 <form action="{{ route('export-report') }}" method="POST"
                                                     target="_blank">
@@ -470,10 +469,10 @@
                                         function focalReport(reportType) {
                                             let printFocalForm = document.getElementById('printFocalForm');
                                             let centerInput = document.getElementById('center_name');
-                                            let centerHiddenInput = document.getElementById('center_id');
-                                            let cycle_id = document.getElementById('cycle_id2');
+                                            let centerHiddenInput = document.getElementById('center_id2');
 
                                             let center_name = centerInput.value;
+                                            centerHiddenInput.value = center_name;
 
                                             printFocalForm.action = `{{ url('') }}/reports/generate-${reportType}`;
                                             printFocalForm.submit();
