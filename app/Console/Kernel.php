@@ -21,6 +21,12 @@ class Kernel extends ConsoleKernel
 
         // Process pending disability reports and generate PDFs from the data
         $schedule->command('reports:process-pending-disabilities')->everyFiveMinutes();
+
+        // Process pending undernourished upon entry reports and generate PDFs from the data
+        $schedule->command('reports:process-pending-undernourished-upon-entry')->everyFiveMinutes();
+
+        // Process pending undernourished after 120 reports and generate PDFs from the data
+        $schedule->command('reports:process-pending-undernourished-after-120')->everyFiveMinutes();
     }
 
     /**

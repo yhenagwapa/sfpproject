@@ -12,7 +12,7 @@ class UndernourishedAfter120Command extends Command
      *
      * @var string
      */
-    protected $signature = 'reports:undernourished-after120 {user_id}';
+    protected $signature = 'reports:undernourished-after-120 {user_id} {cdc_id=0}';
 
     /**
      * The console command description.
@@ -29,8 +29,15 @@ class UndernourishedAfter120Command extends Command
         $userId = $this->argument('user_id');
         $cdcId = $this->argument('cdc_id');
 
-        UndernourishedAfter120ReportGeneration::generateUndernourishedAfter120Report($userId);
+        try {
+            $this->info('Fetching and storing undernourished after 120 data...');
+            $reportId = UndernourishedAfter120ReportGeneration::generateReport($userId, $cdcId);
+            $this->info("Data stored successfully. Report ID: {$reportId}");
+            $this->info("Status: pending (will be processed by cron job)");
 
-        $this->info('Generating report for undernourished children after 120 feedings.');
+        } catch (\Exception $e) {
+            $this->error('Error generating undernourished after 120 report: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }

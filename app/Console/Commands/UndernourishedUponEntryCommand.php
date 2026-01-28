@@ -12,7 +12,7 @@ class UndernourishedUponEntryCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'reports:undernourished-upon-entry {user_id}';
+    protected $signature = 'reports:undernourished-upon-entry {user_id} {cdc_id=0}';
 
     /**
      * The console command description.
@@ -26,11 +26,18 @@ class UndernourishedUponEntryCommand extends Command
      */
     public function handle()
     {
-        $userId = $this->argument('user_id');  // authenticated user ID
-        $cdcId  = $this->argument('cdc_id');   // selected CDC
+        $userId = $this->argument('user_id');
+        $cdcId = $this->argument('cdc_id');
 
-        UndernourishedUponEntryReportGeneration::generateUndernourishedUponEntryReport($userId);
+        try {
+            $this->info('Fetching and storing undernourished upon entry data...');
+            $reportId = UndernourishedUponEntryReportGeneration::generateReport($userId, $cdcId);
+            $this->info("Data stored successfully. Report ID: {$reportId}");
+            $this->info("Status: pending (will be processed by cron job)");
 
-        $this->info('Generating masterlist report.');
+        } catch (\Exception $e) {
+            $this->error('Error generating undernourished upon entry report: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }
