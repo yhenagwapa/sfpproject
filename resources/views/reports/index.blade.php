@@ -106,10 +106,10 @@
                                                                 @click.away="open = false">
                                                                 <form id="printCDWForm" action="" method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="cycle_id" id="cycle_id"
-                                                                        value="{{ $cycle->id }}">
-                                                                    <input type="hidden" name="center_name" id="center_id"
-                                                                        value="">
+                                                                    <input type="hidden" name="cycle_id" id="cycle_id" value="{{ $cycle->id }}">
+                                                                    <input type="hidden" name="center_name" id="center_id" value="">
+                                                                    <input type="hidden" name="ns_type" id="ns_type" value="">
+                                                                    <input type="hidden" name="report_type" id="report_type" value="">
                                                                     <li>
                                                                         <button
                                                                             class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
@@ -224,10 +224,11 @@
                                                                 @click.away="open = false">
                                                                 <form id="printFocalForm" action="" method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="cycle_id2" id="cycle_id2"
-                                                                        value="{{ $cycle->id }}">
-                                                                    <input type="hidden" name="center_name2"
-                                                                        id="center_id2" value="">
+                                                                    <input type="hidden" name="cycle_id2" id="cycle_id2" value="{{ $cycle->id }}">
+                                                                    <input type="hidden" name="center_name2" id="center_id2" value="">
+                                                                    <input type="hidden" name="ns_type" id="focal_ns_type" value="">
+                                                                    <input type="hidden" name="report_type" id="focal_report_type" value="">
+
                                                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('lgu focal'))
                                                                         <li>
                                                                             <button
@@ -307,7 +308,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
-                                                                                onclick="nsReport('weight-for-age', 'upon-entry'); return false;">
+                                                                                onclick="nsReport('ns-wfa', 'upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -322,7 +323,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
-                                                                                onclick="nsReport('height-for-age', 'upon-entry'); return false;">
+                                                                                onclick="nsReport('ns-hfa', 'upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -337,7 +338,7 @@
                                                                         <li>
                                                                             <button
                                                                                 class="w-full text-left px-2 py-2 text-sm hover:bg-gray-100 flex rounded-md mt-1 items-center"
-                                                                                onclick="nsReport('weight-for-height', 'upon-entry'); return false;">
+                                                                                onclick="nsReport('ns-wfh', 'upon-entry'); return false;">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     fill="none" viewBox="0 0 24 24"
                                                                                     stroke-width="2" stroke="currentColor"
@@ -479,20 +480,16 @@
                                         }
 
                                         function nsReport(reportType, nsType) {
-                                            let printNSForm = document.getElementById('printNSForm');
-                                            let centerInput = document.getElementById('center_name');
-                                            let centerHiddenInput = document.getElementById('ns_center_id');
-                                            let cycle_id = document.getElementById('ns_cycle_id');
-                                            let ns_type = document.getElementById('ns_type');
-                                            let report_type = document.getElementById('report_type');
+                                            let printNSForm = document.getElementById('printFocalForm');
+                                            let centerHiddenInput = document.getElementById('center_id2');
+                                            let centerSelect = document.getElementById('center_name');
 
-                                            let center_name = centerInput.value;
+                                            centerHiddenInput.value = centerSelect.value;
 
-                                            ns_type.value = nsType;
-                                            report_type.value = reportType;
+                                            document.getElementById('focal_ns_type').value = nsType;
+                                            document.getElementById('focal_report_type').value = reportType;
 
-                                            printNSForm.action = `{{ url('') }}/reports/generate/${reportType}/${nsType}`;
-                                            printNSForm.method = "POST";
+                                            printNSForm.action = `{{ url('') }}/reports/generate-${reportType}`;
                                             printNSForm.submit();
                                         }
                                     </script>

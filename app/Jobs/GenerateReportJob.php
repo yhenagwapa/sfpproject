@@ -93,6 +93,24 @@ class GenerateReportJob implements ShouldQueue
                     'cdc_id'  => $reportQueue->cdc_id
                 ]);
             }
+            elseif ($reportQueue->report === 'ns-wfa') {
+                Artisan::call('reports:ns-wfa', [
+                    'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id,
+                ]);
+            }
+            elseif ($reportQueue->report === 'ns-hfa') {
+                Artisan::call('reports:ns-hfa', [
+                    'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id,
+                ]);
+            }
+            elseif ($reportQueue->report === 'ns-wfh') {
+                Artisan::call('reports:ns-wfh', [
+                    'user_id' => $reportQueue->user_id,
+                    'cdc_id'  => $reportQueue->cdc_id,
+                ]);
+            }
 
             // Update status to ready
             $reportQueue->update([

@@ -155,6 +155,11 @@ Route::middleware(['auth','verified', 'temp.edit'])->group(function () {
     Route::post('/reports/generate-undernourished-upon-entry', [ReportsController::class, 'generateUndernourishedUponEntry'])->name('reports.generate-undernourished-upon-entry');
     Route::post('/reports/generate-undernourished-after-120', [ReportsController::class, 'generateUndernourishedAfter120'])->name('reports.generate-undernourished-after-120');
 
+    // ns reports
+    Route::post('/reports/generate-ns-wfa', [ReportsController::class, 'generateNutritionalStatusWeightForAge'])->name('reports.generate-ns-wfa');
+    Route::post('/reports/generate-ns-hfa', [ReportsController::class, 'generateNutritionalStatusHeightForAge'])->name('reports.generate-ns-fha');
+    Route::post('/reports/generate-ns-wfh', [ReportsController::class, 'generateNutritionalStatusWeightForHeight'])->name('reports.generate-ns-wfh');
+
     Route::get('/reports/generated', [ReportsController::class, 'viewGeneratedReports'])->name('reports.generated');
     Route::get('/reports/download/{fileName}', [ReportsController::class, 'download'])->name('reports.download');
 

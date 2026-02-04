@@ -27,6 +27,11 @@ class Kernel extends ConsoleKernel
 
         // Process pending undernourished after 120 reports and generate PDFs from the data
         $schedule->command('reports:process-pending-undernourished-after-120')->everyFiveMinutes();
+
+        // Process pending nutritional status reports and generate PDFs from the data
+        $schedule->command('reports:process-pending-ns-wfa')->everyFiveMinutes();
+        $schedule->command('reports:process-pending-ns-hfa')->everyFiveMinutes();
+        $schedule->command('reports:process-pending-ns-wfh')->everyFiveMinutes();
     }
 
     /**

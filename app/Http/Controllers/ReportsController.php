@@ -430,12 +430,12 @@ class ReportsController extends Controller
 
         return response()->download($filepath)->deleteFileAfterSend(true);
     }
-    public function showNutritionalStatus(Request $request, $reportType, $nsType)
+    public function showNutritionalStatus($reportType, $nsType, Request $request)
     {
         session(['report_cycle_id' => $request->input(key: 'ns_cycle_id')]);
 
-        $nsType = $request->input('ns_type');
-        $reportType = $request->input('report_type');
+//        $nsType = $request->input('ns_type');
+//        $reportType = $request->input('report_type');
 
         return redirect()->route('reports.print', ['reportType' => $reportType,'nsType' => $nsType]);
     }
@@ -1362,6 +1362,76 @@ class ReportsController extends Controller
 
         return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
     }
+
+    public function generateNutritionalStatusWeightForAge(Request $request)
+    {
+        $cdcId = $request->input('center_name2', 0) ?? 0;
+        $cycleID = $request->cycle_id2;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'ns-wfa',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+    }
+
+    public function generateNutritionalStatusHeightForAge(Request $request)
+    {
+        $cdcId = $request->input('center_name2', 0) ?? 0;
+        $cycleID = $request->cycle_id2;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'ns-hfa',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+    }
+
+    public function generateNutritionalStatusWeightForHeight(Request $request)
+    {
+        $cdcId = $request->input('center_name2', 0) ?? 0;
+        $cycleID = $request->cycle_id2;
+
+        session([
+            'report_cycle_id' => $cycleID,
+            'center_name' => $cdcId
+        ]);
+        // Create a new report queue entry
+        $reportQueue = ReportQueue::create([
+            'user_id' => auth()->user()->id,
+            'report' => 'ns-wfh',
+            'cdc_id'  => $cdcId,
+            'status' => 'pending',
+        ]);
+
+        // Dispatch the job to the queue
+        GenerateReportJob::dispatch($reportQueue->id);
+
+        return back()->with('success', 'Generating report. Please check the Generated Reports page once it’s ready.');
+    }
+
     public function viewGeneratedReports()
     {
         $userId = auth()->id();

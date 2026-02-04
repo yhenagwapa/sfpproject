@@ -45,7 +45,7 @@
                     <p>
                         City / Municipality:
                         <u>
-                            @if(auth()->user()->hasRole('sfp coordinator'))
+                            @if($user->hasRole('sfp coordinator'))
                                 {{ $adminDistrict ? $adminDistrict->implode(', ') : null }}
                             @endif
                             {{ $city ? $city->implode(', ') : 'All Cities' }}
@@ -262,8 +262,8 @@
                     <br>
                     <br>
                     <p>
-                        @if (auth()->user()->hasRole('lgu focal'))
-                            <u>{{ auth()->user()->full_name }}</u>
+                        @if ($user->hasRole('lgu focal'))
+                            <u>{{ $user->full_name }}</u>
                         @else
                             ______________________________________
                         @endif
