@@ -15,7 +15,9 @@
     <!-- Favicons -->
     <link href="{{ asset('img/SFP-LOGO-2024.png') }}" rel="icon">
 
+    @if(Str::is('*.dswd.gov.ph', request()->getHost()))
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
 
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -325,12 +327,14 @@
                                             </div>
                                         </div>
 
-                                     <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                                    @if(Str::is('*.dswd.gov.ph', request()->getHost()))
+                                        <div class="g-recaptcha mt-3 mb-5" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
 
-                                    @if ($errors->has('g-recaptcha-response'))
-                                        <span class="text-red-500 text-sm">
-                                            {{ $errors->first('g-recaptcha-response') }}
-                                        </span>
+                                        @if ($errors->has('g-recaptcha-response'))
+                                            <span class="text-red-500 text-sm">
+                                                {{ $errors->first('g-recaptcha-response') }}
+                                            </span>
+                                        @endif
                                     @endif
 
                                         <div class="flex flex-wrap justify-end w-full md:w-full">
